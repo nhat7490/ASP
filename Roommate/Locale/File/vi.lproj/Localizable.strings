@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  Roommate
+
+  Created by TrinhHC on 9/21/18.
+  Copyright © 2018 TrinhHC. All rights reserved.
+*/
+"KEY"="Vietnamese";
+"ROMMATE_RIGHT_PRICE"="Mức giá";
+"ROMMATE_RIGHT_POSITION"="Vị trí tìm kiếm";
+"ROMMATE_RIGHT_CITY"="Thành Phố";
+"SEGMENTED_CONTROL_ROOM"="Phòng ở ghép";
+"SEGMENTED_CONTROL_ROOMMATE"="Người ở ghép";
