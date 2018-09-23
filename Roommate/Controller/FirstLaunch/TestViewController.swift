@@ -15,13 +15,6 @@ class TestViewController: UIViewController {
         super.viewDidLoad()
         //1
         //2
-        //3
-<<<<<<< HEAD
-		//4
-=======
-=======
-        //5
->>>>>>> 682d999326de196ff093b4e49c4f7bfc6d2f299e
     }
 
     override func didReceiveMemoryWarning() {
