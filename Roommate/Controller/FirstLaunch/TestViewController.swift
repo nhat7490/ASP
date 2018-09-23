@@ -18,6 +18,7 @@ class TestViewController: UIViewController {
 <<<<<<< HEAD
 		//3
 =======
+>>>>>>> 2e62aef0d1ab69d0b459abc36a47714cd5d7b632
     }
 
     override func didReceiveMemoryWarning() {
