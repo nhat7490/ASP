@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04D77E41215760610045C45C /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D77E40215760610045C45C /* TestViewController.swift */; };
 		49F10E7F55F74E1AAF766134 /* Pods_RoommateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21C268CD383168680C632F50 /* Pods_RoommateUITests.framework */; };
 		691727B0215509D100104A19 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 691727B2215509D100104A19 /* Localizable.strings */; };
 		691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B62155122D00104A19 /* NotificationCVCell.swift */; };
@@ -82,6 +83,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04D77E40215760610045C45C /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		21C268CD383168680C632F50 /* Pods_RoommateUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RoommateUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		41835EF4FE3232DFE8139CB0 /* Pods_Roommate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roommate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		44539B1D1E5FCA86520743E2 /* Pods-RoommateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoommateTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RoommateTests/Pods-RoommateTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				6943D9772153F0C9002CFEBB /* FirstLaunchVC.swift */,
 				6943D9932153F3BE002CFEBB /* ResetPasswordVC.swift */,
 				6943D9A92153F65E002CFEBB /* RoleVC.swift */,
+				04D77E40215760610045C45C /* TestViewController.swift */,
 			);
 			path = FirstLaunch;
 			sourceTree = "<group>";
@@ -735,6 +738,7 @@
 				6943D9762153F0B7002CFEBB /* BookmarkVC.swift in Sources */,
 				6943D9A22153F572002CFEBB /* IntroduceVC.swift in Sources */,
 				6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */,
+				04D77E41215760610045C45C /* TestViewController.swift in Sources */,
 				6943D97E2153F100002CFEBB /* SearchVC.swift in Sources */,
 				695309F9215631980004BDE9 /* RoommateModel.swift in Sources */,
 				69A02FB521538C930087897F /* AppDelegate.swift in Sources */,

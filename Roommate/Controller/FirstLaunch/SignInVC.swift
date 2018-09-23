@@ -12,7 +12,7 @@ class SignInVC: UIViewController {
     var btnSignIn:UIButton={
         let btn = UIButton()
         btn.backgroundColor = .red
-        btn.setTitle("Sign In", for: .normal)
+        btn.setTitle("SIGNIN_TITLE".localized, for: .normal)
         return btn
     }()
     override func viewDidLoad() {
@@ -34,4 +34,9 @@ class SignInVC: UIViewController {
     @objc func onBtnSignInClick(sender:UIButton) {
         print("Btn Sign in Click")
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.view.onUpdateLocale()
+    }
+    
 }
