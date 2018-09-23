@@ -14,14 +14,6 @@ class TestViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view. test 
-		//additional
-		//after
-        // Do any additional setup after loading the view. test
-        //dasdasded
-        //dasdasdeduujjj
-        //asdasd/
-        //875727dedde
     }
 
     override func didReceiveMemoryWarning() {
