@@ -11,3 +11,7 @@ import UIKit
 enum CellSide :Int{
     case left=0,right
 }
+enum CollectionDisplayDataType :Int{
+    case Room=0,Roommate
+}
+

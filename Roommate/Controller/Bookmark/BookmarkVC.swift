@@ -18,11 +18,11 @@ class BookmarkVC:UIViewController,UICollectionViewDataSource,UICollectionViewDel
     lazy var segmentControl:UISegmentedControl={
         let sg = UISegmentedControl(items: ["SEGMENTED_CONTROL_ROOM".localized,"SEGMENTED_CONTROL_ROOMMATE".localized])
         sg.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
-        sg.selectedSegmentIndex = 1
+        sg.selectedSegmentIndex = 0
         return sg
     }()
     
-    lazy var roommateCollectionView:UICollectionView = {
+    lazy var collectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -48,13 +48,13 @@ class BookmarkVC:UIViewController,UICollectionViewDataSource,UICollectionViewDel
         //For segmentbar
         navigationItem.titleView = segmentControl
         
-        view.addSubview(roommateCollectionView)
+        view.addSubview(collectionView)
         
-        _ = roommateCollectionView.anchorCenterXAndY(view.centerXAnchor, view.centerYAnchor, view.frame.width-Constants.MARGIN_5*2, view.frame.height)
+        _ = collectionView.anchorCenterXAndY(view.centerXAnchor, view.centerYAnchor, view.frame.width-Constants.MARGIN_5*2, view.frame.height)
         
-        roommateCollectionView.delegate = self
-        roommateCollectionView.dataSource = self
-        roommateCollectionView.register(RoommateCVCell.self, forCellWithReuseIdentifier: Constants.CELL_ROOMMATECV)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(RoommateCVCell.self, forCellWithReuseIdentifier: Constants.CELL_ROOMMATECV)
         
         
     }
@@ -65,10 +65,18 @@ class BookmarkVC:UIViewController,UICollectionViewDataSource,UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMMATECV, for: indexPath) as! RoommateCVCell
-        cell.setModel(roommate: model[indexPath.row])
-        cell.layoutSubviews()
-        return cell
+        if segmentControl.selectedSegmentIndex == 0{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMMATECV, for: indexPath) as! RoomCVCell
+            cell.setModel(roommate: model[indexPath.row])
+            cell.layoutSubviews()
+            return cell
+        }else{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMMATECV, for: indexPath) as! RoommateCVCell
+            cell.setModel(roommate: model[indexPath.row])
+            cell.layoutSubviews()
+            return cell
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -80,10 +88,10 @@ class BookmarkVC:UIViewController,UICollectionViewDataSource,UICollectionViewDel
 //        default://more than 7,9 inch
 //            return CGSize(width: view.frame.width, height: 120)
 //        }
-        return CGSize(width: roommateCollectionView.frame.width/2, height: 140)
+        return CGSize(width: collectionView.frame.width/2, height: 140)
     }
     @objc func segmentChanged() {
-        
+        collectionView.reloadData()
     }
     
 }
