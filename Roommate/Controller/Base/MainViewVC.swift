@@ -21,11 +21,11 @@ class MainViewVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //Check Login
-        if true{
-            self.add(mainTabBarVC)
-        }else{
-            self.add(signInVC)
-        }
+//        if true{
+//            self.add(mainTabBarVC)
+//        }else{
+//            self.add(signInVC)
+//        }
     }
 
 
