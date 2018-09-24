@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -299,10 +300,12 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="93.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lqf-bK-o7T" customClass="RoundButton" customModule="Roommate" customModuleProvider="target">
-                                                    <rect key="frame" x="78" y="26" width="218" height="40"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lqf-bK-o7T" customClass="RoundButton" customModule="Roommate" customModuleProvider="target">
+                                                    <rect key="frame" x="116" y="26" width="142" height="40"/>
                                                     <color key="backgroundColor" red="0.23137254900000001" green="0.68627450980000004" blue="0.65098039220000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="142" id="svc-U0-phn"/>
+                                                    </constraints>
                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Sign Out"/>
                                                     <userDefinedRuntimeAttributes>
@@ -318,6 +321,11 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </button>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="lqf-bK-o7T" firstAttribute="top" secondItem="dPK-ii-DTh" secondAttribute="topMargin" constant="15" id="eIb-DZ-G6b"/>
+                                                <constraint firstItem="lqf-bK-o7T" firstAttribute="centerX" secondItem="dPK-ii-DTh" secondAttribute="centerX" id="fqE-vc-1Ir"/>
+                                                <constraint firstItem="lqf-bK-o7T" firstAttribute="centerY" secondItem="dPK-ii-DTh" secondAttribute="centerY" id="gbV-cN-LMr"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
