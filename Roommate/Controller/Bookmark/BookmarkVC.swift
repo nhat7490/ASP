@@ -10,10 +10,10 @@ import Foundation
 import UIKit
 class BookmarkVC:UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
     
-    let model = [RoommateModel(id: 1, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice:  500_000, maxPrice: 1_000_000_000, location:["Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4"], city: "HCM"),
-                 RoommateModel(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM"),
-                 RoommateModel(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM"),
-                 RoommateModel(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM")]
+    let model = [RoommateModel(id: 1, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice:  500_000, maxPrice: 1_000_000_000, location:["Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4"], city: "HCM",isBookmark:true),
+                 RoommateModel(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false),
+                 RoommateModel(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
+                 RoommateModel(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false)]
     
     lazy var segmentControl:UISegmentedControl={
         let sg = UISegmentedControl(items: ["SEGMENTED_CONTROL_ROOM".localized,"SEGMENTED_CONTROL_ROOMMATE".localized])
@@ -29,6 +29,8 @@ class BookmarkVC:UIViewController,UICollectionViewDataSource,UICollectionViewDel
         let cv = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
         cv.alwaysBounceVertical = true //when reach  bottom element it still scroll down or up a size
         cv.backgroundColor = .white
+        cv.layer.borderWidth = 1
+        cv.layer.borderColor = UIColor(hexString: "777").cgColor
         return cv
     }()
     
@@ -38,6 +40,8 @@ class BookmarkVC:UIViewController,UICollectionViewDataSource,UICollectionViewDel
     }
     
     func setupUI(){
+        view.backgroundColor = .white
+        
         //For Tabar
         tabBarItem = UITabBarItem(title: "Bookmark", image: UIImage(named: "icons8-home-page-51")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "icons8-home-page-50"))
         
@@ -51,6 +55,8 @@ class BookmarkVC:UIViewController,UICollectionViewDataSource,UICollectionViewDel
         roommateCollectionView.delegate = self
         roommateCollectionView.dataSource = self
         roommateCollectionView.register(RoommateCVCell.self, forCellWithReuseIdentifier: Constants.CELL_ROOMMATECV)
+        
+        
     }
     
     //MARK: UICollectionView DataSourse and Delegate
@@ -74,7 +80,7 @@ class BookmarkVC:UIViewController,UICollectionViewDataSource,UICollectionViewDel
 //        default://more than 7,9 inch
 //            return CGSize(width: view.frame.width, height: 120)
 //        }
-        return CGSize(width: roommateCollectionView.frame.width/2, height: 160)
+        return CGSize(width: roommateCollectionView.frame.width/2, height: 140)
     }
     @objc func segmentChanged() {
         
