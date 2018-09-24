@@ -35,8 +35,6 @@ class SignInVC: UIViewController {
         print("Btn Sign in Click")
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.view.onUpdateLocale()
-    }
+
     
 }

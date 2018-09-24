@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		046853D82158C8F500C9CA6C /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046853D72158C8F500C9CA6C /* TableViewController.swift */; };
 		04D77E41215760610045C45C /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D77E40215760610045C45C /* TestViewController.swift */; };
+		04D77E432158A3060045C45C /* RoundButotn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D77E422158A3060045C45C /* RoundButotn.swift */; };
+		04D77E452158AFD70045C45C /* CustomSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D77E442158AFD70045C45C /* CustomSegmentedControl.swift */; };
 		49F10E7F55F74E1AAF766134 /* Pods_RoommateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21C268CD383168680C632F50 /* Pods_RoommateUITests.framework */; };
 		691727B0215509D100104A19 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 691727B2215509D100104A19 /* Localizable.strings */; };
 		691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B62155122D00104A19 /* NotificationCVCell.swift */; };
@@ -83,7 +86,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		046853D72158C8F500C9CA6C /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		04D77E40215760610045C45C /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		04D77E422158A3060045C45C /* RoundButotn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButotn.swift; sourceTree = "<group>"; };
+		04D77E442158AFD70045C45C /* CustomSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControl.swift; sourceTree = "<group>"; };
 		21C268CD383168680C632F50 /* Pods_RoommateUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RoommateUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		41835EF4FE3232DFE8139CB0 /* Pods_Roommate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roommate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		44539B1D1E5FCA86520743E2 /* Pods-RoommateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoommateTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RoommateTests/Pods-RoommateTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -468,6 +474,9 @@
 			isa = PBXGroup;
 			children = (
 				69A030092153923E0087897F /* Extension.swift */,
+				04D77E422158A3060045C45C /* RoundButotn.swift */,
+				04D77E442158AFD70045C45C /* CustomSegmentedControl.swift */,
+				046853D72158C8F500C9CA6C /* TableViewController.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -717,6 +726,7 @@
 				69834F5E2153977D00845AB8 /* Utilities.swift in Sources */,
 				69A02FB721538C930087897F /* MainViewVC.swift in Sources */,
 				6943D9782153F0C9002CFEBB /* FirstLaunchVC.swift in Sources */,
+				04D77E452158AFD70045C45C /* CustomSegmentedControl.swift in Sources */,
 				6943D97C2153F0EC002CFEBB /* RoommateDetailVC.swift in Sources */,
 				6943D9982153F462002CFEBB /* SuggestVC.swift in Sources */,
 				6943D9942153F3BE002CFEBB /* ResetPasswordVC.swift in Sources */,
@@ -725,6 +735,7 @@
 				6943D9822153F121002CFEBB /* CERoommateVC.swift in Sources */,
 				6943D9962153F452002CFEBB /* NotificationDetailVC.swift in Sources */,
 				6943D99C2153F484002CFEBB /* LanguageVC.swift in Sources */,
+				04D77E432158A3060045C45C /* RoundButotn.swift in Sources */,
 				6943D9722153F0A6002CFEBB /* AllVC.swift in Sources */,
 				6943D9A42153F5B8002CFEBB /* FeedbackVC.swift in Sources */,
 				6943D97A2153F0DE002CFEBB /* RoomDetailVC.swift in Sources */,
@@ -751,6 +762,7 @@
 				6943D9742153F0AE002CFEBB /* NotificationVC.swift in Sources */,
 				6943D9A62153F5E6002CFEBB /* ListRoomVC.swift in Sources */,
 				6943D9882153F1A7002CFEBB /* RoomFilterVC.swift in Sources */,
+				046853D82158C8F500C9CA6C /* TableViewController.swift in Sources */,
 				69834F6321539AD800845AB8 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -931,7 +943,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8JB8P4DX7G;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Roommate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -951,7 +963,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8JB8P4DX7G;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Roommate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
