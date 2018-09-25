@@ -9,7 +9,7 @@
 
 import UIKit
 
-class TestViewController: UIViewController {
+class TestViewController: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SnD-RP-s9I">
     <device id="retina4_0" orientation="portrait">
+=======
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="DEW-Tu-VtD">
+    <device id="retina4_7" orientation="portrait">
+>>>>>>> 7515d270bc2fced36bf4029e48684ba42a2f58e9
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -24,7 +29,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uJg-zZ-Owv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2223" y="-431"/>
+            <point key="canvasLocation" x="-2766" y="-392"/>
         </scene>
         <!--FirstLaunchVC-->
         <scene sceneID="61w-Qu-I6W">
@@ -178,7 +183,43 @@
                                     <constraint firstAttribute="height" constant="528" id="kj6-zy-zRK"/>
                                     <constraint firstItem="vwc-0u-Fan" firstAttribute="top" secondItem="4d8-gC-LJb" secondAttribute="top" constant="255" id="qGn-Cb-0gE"/>
                                 </constraints>
+<<<<<<< HEAD
                             </scrollView>
+=======
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="app_icon_small" translatesAutoresizingMaskIntoConstraints="NO" id="BIO-sH-uee">
+                                <rect key="frame" x="125.5" y="133" width="124" height="124"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="124" id="g2e-mM-usW"/>
+                                    <constraint firstAttribute="height" constant="124" id="ocT-fy-IHb"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3CZ-n4-CEZ" customClass="RoundButton" customModule="Roommate" customModuleProvider="target">
+                                <rect key="frame" x="76.5" y="415" width="223" height="40"/>
+                                <color key="backgroundColor" red="0.23137254900000001" green="0.68627450980000004" blue="0.65098039220000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="223" id="7o8-C4-MJK"/>
+                                    <constraint firstAttribute="height" constant="40" id="bfd-az-bUS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Sign Up"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" red="0.23137254900000001" green="0.68627450980000004" blue="0.65098039220000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+>>>>>>> 7515d270bc2fced36bf4029e48684ba42a2f58e9
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -352,6 +393,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+<<<<<<< HEAD
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pfX-SE-t8g">
                                 <rect key="frame" x="32" y="0.0" width="256" height="528"/>
                                 <subviews>
@@ -406,6 +448,29 @@
                                         </constraints>
                                     </imageView>
                                 </subviews>
+=======
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="app_icon_small" translatesAutoresizingMaskIntoConstraints="NO" id="8RX-eF-HiU">
+                                <rect key="frame" x="125.5" y="102" width="124" height="124"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="124" id="F7A-nX-UQg"/>
+                                    <constraint firstAttribute="height" constant="124" id="XS7-mJ-TgQ"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="124" id="lPI-G8-Mxh"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="124" id="qWM-fF-a86"/>
+                                </constraints>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Please enter your email address, We will send password reset instructions." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="RjR-3N-eGn">
+                                <rect key="frame" x="67.5" y="281" width="240" height="98"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="Gud-48-KJE"/>
+                                    <constraint firstAttribute="height" constant="98" id="ldD-kE-cbK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u1o-6m-ku1">
+                                <rect key="frame" x="82.5" y="393" width="210" height="30"/>
+>>>>>>> 7515d270bc2fced36bf4029e48684ba42a2f58e9
                                 <constraints>
                                     <constraint firstItem="8RX-eF-HiU" firstAttribute="top" secondItem="pfX-SE-t8g" secondAttribute="top" constant="53" id="17w-J9-v3b"/>
                                     <constraint firstItem="u1o-6m-ku1" firstAttribute="trailing" secondItem="60j-Xn-hgM" secondAttribute="trailing" id="CiL-2g-YcH"/>

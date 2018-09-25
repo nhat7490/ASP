@@ -12,6 +12,7 @@ class SignInVC: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     
+class SignInVC: BaseVC {
     var btnSignIn:UIButton={
         let btn = UIButton()
         btn.backgroundColor = .red
