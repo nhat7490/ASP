@@ -9,6 +9,9 @@
 import UIKit
 
 class SignUpVC: UIViewController {
+    
+    
+    @IBOutlet weak var scrollView: UIScrollView!
     var btnSignUp:UIButton={
         let btn = UIButton()
         btn.backgroundColor = .red
@@ -29,8 +32,23 @@ class SignUpVC: UIViewController {
         btnSignUp.heightAnchor.constraint(equalToConstant: 50)
         btnSignUp.addTarget(self, action: #selector(onBtnSignUpClick(sender:)), for:.touchUpInside)
         
+        //scrollviewkeyboard
+        NotificationCenter.default.addObserver(self, selector: #selector(Keyboard), name: Notification.Name.UIKeyboardWillHide, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(Keyboard), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
     @objc func onBtnSignUpClick(sender:UIButton) {
         print("Btn Sign Up Click")
+    }
+    @objc func Keyboard(notification: Notification){
+        let userInfo = notification.userInfo!
+        let keyboardScreenEndFrame =  (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame,from: view.window)
+        if notification.name == Notification.Name.UIKeyboardWillHide{
+            scrollView.contentInset = UIEdgeInsets.zero
+        }else{
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+        }
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
     }
 }
