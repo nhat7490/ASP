@@ -47,8 +47,9 @@
 		6943D9A82153F5F3002CFEBB /* ListRoommateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A72153F5F3002CFEBB /* ListRoommateVC.swift */; };
 		6943D9AA2153F65E002CFEBB /* RoleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A92153F65E002CFEBB /* RoleVC.swift */; };
 		6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9AD2153FA14002CFEBB /* LocalizationPreferences.swift */; };
-		695309F9215631980004BDE9 /* RoommateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695309F8215631980004BDE9 /* RoommateModel.swift */; };
+		695309F9215631980004BDE9 /* Roommate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695309F8215631980004BDE9 /* Roommate.swift */; };
 		695309FC215633B70004BDE9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695309FB215633B70004BDE9 /* User.swift */; };
+		6965A7FF2158EC41009DE53E /* RoomUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965A7FE2158EC41009DE53E /* RoomUtility.swift */; };
 		69834F5E2153977D00845AB8 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69834F5D2153977D00845AB8 /* Utilities.swift */; };
 		69834F612153989900845AB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69834F602153989900845AB8 /* Main.storyboard */; };
 		69834F6321539AD800845AB8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69834F6221539AD800845AB8 /* Constants.swift */; };
@@ -133,8 +134,9 @@
 		6943D9A72153F5F3002CFEBB /* ListRoommateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRoommateVC.swift; sourceTree = "<group>"; };
 		6943D9A92153F65E002CFEBB /* RoleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleVC.swift; sourceTree = "<group>"; };
 		6943D9AD2153FA14002CFEBB /* LocalizationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationPreferences.swift; sourceTree = "<group>"; };
-		695309F8215631980004BDE9 /* RoommateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoommateModel.swift; sourceTree = "<group>"; };
+		695309F8215631980004BDE9 /* Roommate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Roommate.swift; sourceTree = "<group>"; };
 		695309FB215633B70004BDE9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		6965A7FE2158EC41009DE53E /* RoomUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomUtility.swift; sourceTree = "<group>"; };
 		69834F5D2153977D00845AB8 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		69834F602153989900845AB8 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		69834F6221539AD800845AB8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -338,7 +340,7 @@
 		695309F7215631800004BDE9 /* Roommate */ = {
 			isa = PBXGroup;
 			children = (
-				695309F8215631980004BDE9 /* RoommateModel.swift */,
+				695309F8215631980004BDE9 /* Roommate.swift */,
 			);
 			path = Roommate;
 			sourceTree = "<group>";
@@ -347,6 +349,7 @@
 			isa = PBXGroup;
 			children = (
 				695309FB215633B70004BDE9 /* User.swift */,
+				6965A7FE2158EC41009DE53E /* RoomUtility.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -766,7 +769,7 @@
 				6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */,
 				04D77E41215760610045C45C /* TestViewController.swift in Sources */,
 				6943D97E2153F100002CFEBB /* SearchVC.swift in Sources */,
-				695309F9215631980004BDE9 /* RoommateModel.swift in Sources */,
+				695309F9215631980004BDE9 /* Roommate.swift in Sources */,
 				69A02FB521538C930087897F /* AppDelegate.swift in Sources */,
 				6943D9AA2153F65E002CFEBB /* RoleVC.swift in Sources */,
 				69A03003215390EF0087897F /* SignInVC.swift in Sources */,
@@ -777,6 +780,7 @@
 				6943D9742153F0AE002CFEBB /* NotificationVC.swift in Sources */,
 				6943D9A62153F5E6002CFEBB /* ListRoomVC.swift in Sources */,
 				6943D9882153F1A7002CFEBB /* RoomFilterVC.swift in Sources */,
+				6965A7FF2158EC41009DE53E /* RoomUtility.swift in Sources */,
 				046853D82158C8F500C9CA6C /* TableViewController.swift in Sources */,
 				69E496832158D81600444211 /* RoomCVCell.swift in Sources */,
 				69834F6321539AD800845AB8 /* Constants.swift in Sources */,
@@ -959,9 +963,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8JB8P4DX7G;
 				INFOPLIST_FILE = Roommate/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -979,9 +983,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8JB8P4DX7G;
 				INFOPLIST_FILE = Roommate/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

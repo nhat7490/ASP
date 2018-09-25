@@ -26,7 +26,7 @@ class RoommateCVCell:UICollectionViewCell{
             return v
         }()
     
-        lazy var imgvTopAvatar:UIImageView = {
+        lazy var imgvAvatar:UIImageView = {
             let iv = UIImageView()
             iv.contentMode = .scaleAspectFit
             //        iv.layer.masksToBounds = true
@@ -34,7 +34,7 @@ class RoommateCVCell:UICollectionViewCell{
             return iv
         }()
     
-        lazy var imgvTopBookmark:UIImageView = {
+        lazy var imgvBookmark:UIImageView = {
             let iv = UIImageView()
             iv.contentMode = .scaleAspectFit
             //        iv.layer.masksToBounds = true
@@ -42,7 +42,7 @@ class RoommateCVCell:UICollectionViewCell{
             return iv
         }()
     
-        lazy var lblBottomName:UILabel = {
+        lazy var lblName:UILabel = {
             let lbl = UILabel()
             lbl.font = UIFont.boldSystemFont(ofSize:.medium)
             //        lbl.lineBreakMode = .byWordWrapping
@@ -51,45 +51,45 @@ class RoommateCVCell:UICollectionViewCell{
             return lbl
         }()
     
-        lazy var lblBottomPrice:UILabel = {
+        lazy var lblPrice:UILabel = {
             let lbl = UILabel()
-            lbl.font = UIFont.systemFont(ofSize: .verySmall)
+            lbl.font = UIFont.systemFont(ofSize: .small)
             lbl.textColor = .normalTitle
             return lbl
         }()
     
-        lazy var lblBottomPriceValue:UILabel = {
+        lazy var lblPriceValue:UILabel = {
             let lbl = UILabel()
-            lbl.font = UIFont.boldSystemFont(ofSize: .verySmall)
+            lbl.font = UIFont.boldSystemFont(ofSize: .small)
             lbl.numberOfLines = 0
             return lbl
         }()
     
-        lazy var lblBottomPosition:UILabel = {
+        lazy var lblPosition:UILabel = {
             let lbl = UILabel()
-            lbl.font = UIFont.systemFont(ofSize:.verySmall)
+            lbl.font = UIFont.systemFont(ofSize:.small)
             //        lbl.sizeToFit()
             return lbl
         }()
     
-        lazy var lblBottomPositionValue:UILabel = {
+        lazy var lblPositionValue:UILabel = {
             let lbl = UILabel()
-            lbl.font = UIFont.boldSystemFont(ofSize: .verySmall)
+            lbl.font = UIFont.boldSystemFont(ofSize: .small)
             lbl.numberOfLines = 0
             //        lbl.sizeToFit()
             return lbl
         }()
     
-        lazy var lblBottomCity:UILabel = {
+        lazy var lblCity:UILabel = {
             let lbl = UILabel()
-            lbl.font = UIFont.systemFont(ofSize:.verySmall)
+            lbl.font = UIFont.systemFont(ofSize:.small)
             lbl.numberOfLines = 0
             return lbl
         }()
     
-        lazy var lblBottomCityValue:UILabel = {
+        lazy var lblCityValue:UILabel = {
             let lbl = UILabel()
-            lbl.font = UIFont.boldSystemFont(ofSize: .verySmall)
+            lbl.font = UIFont.boldSystemFont(ofSize: .small)
             //        lbl.sizeToFit()
             lbl.numberOfLines = 0
             return lbl
@@ -113,7 +113,7 @@ class RoommateCVCell:UICollectionViewCell{
             let topContainerWidth = mainContainerWidth
             let topContainerHeight = CGFloat(50)
     
-            let bottomContainerWidth = mainContainerWidth-2*Constants.MARGIN_6
+            let bottomContainerWidth = mainContainerWidth
             let bottomContainerHeight = mainContainerHeight - topContainerHeight
     
             addSubview(mainContainerView)
@@ -123,7 +123,7 @@ class RoommateCVCell:UICollectionViewCell{
             _ = line.anchorTopLeft(mainContainerView.bottomAnchor, mainContainerView.leftAnchor, mainContainerWidth, 0.5)
     
     
-            //Setup ui for containerview left and right
+            //Setup ui for containerview top and bottom
     
             mainContainerView.addSubview(topContainerView)
             mainContainerView.addSubview(bottomContainerView)
@@ -134,37 +134,37 @@ class RoommateCVCell:UICollectionViewCell{
             _ = bottomContainerView.anchorTopLeft( topContainerView.bottomAnchor,  mainContainerView.leftAnchor,0,Constants.MARGIN_6,bottomContainerWidth,  bottomContainerHeight)
     
             //Setup ui for leftContainer
-            topContainerView.addSubview(imgvTopAvatar)
-            _ = imgvTopAvatar.anchorTopLeft(topContainerView.topAnchor, topContainerView.leftAnchor, Constants.MARGIN_6/2, 0, topContainerHeight-Constants.MARGIN_6, topContainerHeight - Constants.MARGIN_6)
+            topContainerView.addSubview(imgvAvatar)
+            _ = imgvAvatar.anchorTopLeft(topContainerView.topAnchor, topContainerView.leftAnchor, Constants.MARGIN_6/2, 0, topContainerHeight-Constants.MARGIN_6, topContainerHeight - Constants.MARGIN_6)
     
-            topContainerView.addSubview(lblBottomName)
-            _ = lblBottomName.anchorTopLeft( topContainerView.topAnchor,  imgvTopAvatar.rightAnchor, 0, 2*Constants.MARGIN_6, topContainerWidth -  (topContainerHeight+2*Constants.MARGIN_6)-16, topContainerHeight)
+            topContainerView.addSubview(lblName)
+            _ = lblName.anchorTopLeft( topContainerView.topAnchor,  imgvAvatar.rightAnchor, 0, 2*Constants.MARGIN_6, topContainerWidth -  (topContainerHeight+2*Constants.MARGIN_6)-16, topContainerHeight)
     
-            topContainerView.addSubview(imgvTopBookmark)
-            _ = imgvTopBookmark.anchorTopRight(topContainerView.topAnchor, topContainerView.rightAnchor,Constants.MARGIN_6/2,-Constants.MARGIN_5/2, 16, 16)
+            topContainerView.addSubview(imgvBookmark)
+            _ = imgvBookmark.anchorTopRight(topContainerView.topAnchor, topContainerView.rightAnchor,Constants.MARGIN_6/2,-Constants.MARGIN_5/2, 24, 24)
     
-            //Setup ui for rightContainer
+            //Setup ui for bottomContainer
     
             //For price
-            bottomContainerView.addSubview(lblBottomPrice)
-            _ = lblBottomPrice.anchorTopLeft( lblBottomName.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.1)
+            bottomContainerView.addSubview(lblPrice)
+            _ = lblPrice.anchorTopLeft( lblName.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.1)
     
-            bottomContainerView.addSubview(lblBottomPriceValue)
-            _ = lblBottomPriceValue.anchorTopLeft( lblBottomPrice.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.2)
+            bottomContainerView.addSubview(lblPriceValue)
+            _ = lblPriceValue.anchorTopLeft( lblPrice.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.2)
     
             //For Position
-            bottomContainerView.addSubview(lblBottomPosition)
-            _ = lblBottomPosition.anchorTopLeft( lblBottomPriceValue.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.1)
+            bottomContainerView.addSubview(lblPosition)
+            _ = lblPosition.anchorTopLeft( lblPriceValue.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.1)
     
-            bottomContainerView.addSubview(lblBottomPositionValue)
-            _ = lblBottomPositionValue.anchorTopLeft( lblBottomPosition.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.2)
+            bottomContainerView.addSubview(lblPositionValue)
+            _ = lblPositionValue.anchorTopLeft( lblPosition.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.3)
     
             //For City
-            bottomContainerView.addSubview(lblBottomCity)
-            _ = lblBottomCity.anchorTopLeft( lblBottomPositionValue.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.1)
+            bottomContainerView.addSubview(lblCity)
+            _ = lblCity.anchorTopLeft( lblPositionValue.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.1)
     
-            bottomContainerView.addSubview(lblBottomCityValue)
-            _ = lblBottomCityValue.anchorTopLeft( lblBottomCity.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.1)
+            bottomContainerView.addSubview(lblCityValue)
+            _ = lblCityValue.anchorTopLeft( lblCity.bottomAnchor,  bottomContainerView.leftAnchor,  bottomContainerWidth, bottomContainerHeight*0.2)
             //        layoutSubviews()
             layoutIfNeeded()
     
@@ -174,19 +174,19 @@ class RoommateCVCell:UICollectionViewCell{
             fatalError("init(coder:) has not been implemented")
         }
     
-        func setModel(roommate:RoommateModel)  {
-            self.imgvTopAvatar.image = roommate.user.image
-            self.lblBottomName.text = roommate.user.name
-            self.lblBottomPrice.text = "ROMMATE_RIGHT_PRICE".localized
-            self.lblBottomPriceValue.text = "\(roommate.minPrice)vnd - \(roommate.maxPrice)vnd"
-            self.lblBottomPosition.text = "ROMMATE_RIGHT_POSITION".localized
-            self.lblBottomPositionValue.text = roommate.location.joined(separator: ",")
-            self.lblBottomCity.text = "ROMMATE_RIGHT_CITY".localized
-            self.lblBottomCityValue.text = roommate.city
-            self.imgvTopBookmark.image = roommate.isBookMark ? UIImage(named: "bookmarked"):UIImage(named: "bookmark")
+        func setModel(roommate:Roommate)  {
+            self.imgvAvatar.image = roommate.user.image
+            self.lblName.text = roommate.user.name
+            self.lblPrice.text = "ROMMATE_RIGHT_PRICE".localized
+            self.lblPriceValue.text = "\(roommate.minPrice)vnd - \(roommate.maxPrice)vnd"
+            self.lblPosition.text = "ROMMATE_RIGHT_POSITION".localized
+            self.lblPositionValue.text = roommate.location.joined(separator: ",")
+            self.lblCity.text = "ROMMATE_RIGHT_CITY".localized
+            self.lblCityValue.text = roommate.city
+            self.imgvBookmark.image = roommate.isBookMark ? UIImage(named: "bookmarked"):UIImage(named: "bookmark")
         }
         override func layoutSubviews() {
-            imgvTopAvatar.layer.cornerRadius = (topContainerView.frame.height - Constants.MARGIN_6)/2
+            imgvAvatar.layer.cornerRadius = (topContainerView.frame.height - Constants.MARGIN_6)/2
         }
 //
 //    let mainContainerView:UIView = {

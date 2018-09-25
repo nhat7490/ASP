@@ -36,7 +36,8 @@ class Constants{
     
     //MARK: Constant for UICollectionViewCell
     static let CELL_NOTIFICATIONCV = "NotificationCVCell"
-    static let CELL_ROOMMATECV = "NotificationCVCell"
+    static let CELL_ROOMMATECV = "RoommateCell"
+    static let CELL_ROOMCV = "RoomCell"
     
     //MARK: Constant for DateFormatter
     static let DD_MM_YY_HH_MM_A = "dd-MM-yyyy HH:mm a"
@@ -46,7 +47,10 @@ class Constants{
     //MARK: Constant for Font color
     static let COLOR_SUB_TITLE = "555"
     static let COLOR_MAIN_TITLE = "000"
+    static let COLOR_SUB_TITLE_DEFAULT = "00A8B5"
     
     static let MARGIN_5:CGFloat = 5
     static let MARGIN_6:CGFloat = 6
+    
+    //MARK: Constant for Font color
 }

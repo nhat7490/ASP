@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class RoommateModel{
+class Roommate{
     var id:Int?
     var user:User
     var minPrice:Int

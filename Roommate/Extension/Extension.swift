@@ -98,6 +98,18 @@ extension UIView{
                        widthConstant, heightConstant)
     }
     
+    func anchorBottomRight(_ bottom:NSLayoutYAxisAnchor?,_ right:NSLayoutXAxisAnchor?,
+                        _ bottomConstant:CGFloat = 0,_ rightConstant:CGFloat = 0,
+                        _ widthConstant:CGFloat,_ heightConstant:CGFloat) -> [NSLayoutConstraint]{
+        return anchor( nil ,  nil,
+                       nil, nil,
+                       bottom,right,
+                       nil, nil,
+                       0, 0,
+                       bottomConstant, rightConstant,
+                       widthConstant, heightConstant)
+    }
+    
     func anchor(_ centerX:NSLayoutXAxisAnchor?,_ centerY:NSLayoutYAxisAnchor?,
                 _ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
                 _ bottom:NSLayoutYAxisAnchor?,_ right:NSLayoutXAxisAnchor?,
@@ -205,8 +217,8 @@ extension UIView{
         }
         
         if heightConstant>0{
-//            anchor.append(heightAnchor.constraint(greaterThanOrEqualToConstant: heightConstant))
-            anchor.append(heightAnchor.constraint(equalToConstant: heightConstant))
+            anchor.append(heightAnchor.constraint(greaterThanOrEqualToConstant: heightConstant))
+//            anchor.append(heightAnchor.constraint(equalToConstant: heightConstant))
         }
         
         anchor.forEach({$0.isActive=true})
