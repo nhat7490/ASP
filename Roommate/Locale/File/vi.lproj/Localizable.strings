@@ -19,6 +19,11 @@
 "PRICE_OF_ROOM"="%d VND/%@";
 "PERSON"="Người";
 
+//MARK: OrderType
+"LOW_TO_HIGH_PRICE"="Giá từ thấp đến cao";
+"HIGH_TO_LOW_PRICE"="Giá từ cao đến thấp";
+"ORDER_TITLE"="Sắp xếp theo : ";
+
 
 //MARK: Utilies
 "FEMALE"="Nữ";

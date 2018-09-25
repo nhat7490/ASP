@@ -15,6 +15,7 @@
 		691727B0215509D100104A19 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 691727B2215509D100104A19 /* Localizable.strings */; };
 		691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B62155122D00104A19 /* NotificationCVCell.swift */; };
 		691727BA2155129700104A19 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B92155129700104A19 /* NotificationModel.swift */; };
+		691F7F67215A473B00BE1416 /* OrderTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691F7F66215A473B00BE1416 /* OrderTVCell.swift */; };
 		6943D9622153E769002CFEBB /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9612153E769002CFEBB /* BaseVC.swift */; };
 		6943D9642153EBDF002CFEBB /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6943D9632153EBDF002CFEBB /* Home.storyboard */; };
 		6943D9662153EBF7002CFEBB /* All.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6943D9652153EBF7002CFEBB /* All.storyboard */; };
@@ -102,6 +103,7 @@
 		691727B3215509D300104A19 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		691727B62155122D00104A19 /* NotificationCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCVCell.swift; sourceTree = "<group>"; };
 		691727B92155129700104A19 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
+		691F7F66215A473B00BE1416 /* OrderTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTVCell.swift; sourceTree = "<group>"; };
 		6943D9612153E769002CFEBB /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		6943D9632153EBDF002CFEBB /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		6943D9652153EBF7002CFEBB /* All.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = All.storyboard; sourceTree = "<group>"; };
@@ -494,6 +496,7 @@
 			children = (
 				69A1ECC82155F38900BC10D4 /* RoommateCVCell.swift */,
 				69E496822158D81600444211 /* RoomCVCell.swift */,
+				691F7F66215A473B00BE1416 /* OrderTVCell.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -766,6 +769,7 @@
 				691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */,
 				6943D9762153F0B7002CFEBB /* BookmarkVC.swift in Sources */,
 				6943D9A22153F572002CFEBB /* IntroduceVC.swift in Sources */,
+				691F7F67215A473B00BE1416 /* OrderTVCell.swift in Sources */,
 				6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */,
 				04D77E41215760610045C45C /* TestViewController.swift in Sources */,
 				6943D97E2153F100002CFEBB /* SearchVC.swift in Sources */,
@@ -965,7 +969,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8JB8P4DX7G;
 				INFOPLIST_FILE = Roommate/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -985,7 +989,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8JB8P4DX7G;
 				INFOPLIST_FILE = Roommate/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

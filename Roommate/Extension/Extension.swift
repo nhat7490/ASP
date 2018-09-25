@@ -64,17 +64,6 @@ extension UIView{
                        0,  0,
                        widthConstant,  heightConstant)
     }
-//    func anchorTopLeft(_ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
-//                       _ widthConstant:CGFloat,_ heightConstant:CGFloat,_ isMultiLine:Bool) -> [NSLayoutConstraint]{
-//        return anchor( nil ,  nil,
-//                       top,  left,
-//                       nil,  nil,
-//                       nil, nil,
-//                       0,  0,
-//                       0,  0,
-//                       widthConstant,  heightConstant,
-//                        isMultiLine)
-//    }
     
     func anchorTopLeft(_ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
                        _ width:NSLayoutDimension?,_ height:NSLayoutDimension?) -> [NSLayoutConstraint]{
@@ -87,7 +76,7 @@ extension UIView{
                        0, 0)
     }
     func anchorTopRight(_ top:NSLayoutYAxisAnchor?,_ right:NSLayoutXAxisAnchor?,
-                        _ topConstant:CGFloat = 0,_ rightConstant:CGFloat = 0,
+                        _ topConstant:CGFloat,_ rightConstant:CGFloat,
                        _ widthConstant:CGFloat,_ heightConstant:CGFloat) -> [NSLayoutConstraint]{
         return anchor( nil ,  nil,
                        top, nil,
@@ -95,6 +84,17 @@ extension UIView{
                        nil, nil,
                        topConstant, 0,
                        0, rightConstant,
+                       widthConstant, heightConstant)
+    }
+    
+    func anchorTopRight(_ top:NSLayoutYAxisAnchor?,_ right:NSLayoutXAxisAnchor?,
+                        _ widthConstant:CGFloat,_ heightConstant:CGFloat) -> [NSLayoutConstraint]{
+        return anchor( nil ,  nil,
+                       top, nil,
+                       nil,right,
+                       nil, nil,
+                       0, 0,
+                       0, 0,
                        widthConstant, heightConstant)
     }
     

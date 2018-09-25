@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SignUpVC: UIViewController {
+class SignUpVC: BaseVC {
     var btnSignUp:UIButton={
         let btn = UIButton()
         btn.backgroundColor = .red

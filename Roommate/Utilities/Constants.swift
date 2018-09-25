@@ -36,8 +36,9 @@ class Constants{
     
     //MARK: Constant for UICollectionViewCell
     static let CELL_NOTIFICATIONCV = "NotificationCVCell"
-    static let CELL_ROOMMATECV = "RoommateCell"
-    static let CELL_ROOMCV = "RoomCell"
+    static let CELL_ROOMMATECV = "RoommateCVCell"
+    static let CELL_ROOMCV = "RoomCVCell"
+    static let CELL_ORDERTV = "OrderTVCell"
     
     //MARK: Constant for DateFormatter
     static let DD_MM_YY_HH_MM_A = "dd-MM-yyyy HH:mm a"

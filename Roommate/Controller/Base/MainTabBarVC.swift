@@ -23,8 +23,8 @@ class MainTabBarVC: UITabBarController,UITabBarControllerDelegate{
         
         viewControllers = vcs.map({UINavigationController(rootViewController: $0)})
         self.selectedIndex = 1
-    UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor(hexString: "555")], for: .normal)
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor(hexString: "00A8B5")], for: .selected)
+//    UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor(hexString: "555")], for: .normal)
+//        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor(hexString: "00A8B5")], for: .selected)
 //        UITabBarItem.appearance().set
 //        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.backgroundColor : UIColor(hexString: "00A8B5")], for: .selected)
     }

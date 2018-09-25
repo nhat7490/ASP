@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="DEW-Tu-VtD">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -23,7 +23,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uJg-zZ-Owv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2223" y="-431"/>
+            <point key="canvasLocation" x="-2766" y="-392"/>
         </scene>
         <!--FirstLaunchVC-->
         <scene sceneID="61w-Qu-I6W">
@@ -127,6 +127,10 @@
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="app_icon_small" translatesAutoresizingMaskIntoConstraints="NO" id="BIO-sH-uee">
                                 <rect key="frame" x="125.5" y="133" width="124" height="124"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="124" id="g2e-mM-usW"/>
+                                    <constraint firstAttribute="height" constant="124" id="ocT-fy-IHb"/>
+                                </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3CZ-n4-CEZ" customClass="RoundButton" customModule="Roommate" customModuleProvider="target">
                                 <rect key="frame" x="76.5" y="415" width="223" height="40"/>
@@ -297,6 +301,12 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="app_icon_small" translatesAutoresizingMaskIntoConstraints="NO" id="8RX-eF-HiU">
                                 <rect key="frame" x="125.5" y="102" width="124" height="124"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="124" id="F7A-nX-UQg"/>
+                                    <constraint firstAttribute="height" constant="124" id="XS7-mJ-TgQ"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="124" id="lPI-G8-Mxh"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="124" id="qWM-fF-a86"/>
+                                </constraints>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Please enter your email address, We will send password reset instructions." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="RjR-3N-eGn">
                                 <rect key="frame" x="67.5" y="281" width="240" height="98"/>

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainViewVC: UIViewController {
+class MainViewVC: BaseVC {
     private lazy var mainTabBarVC:MainTabBarVC =  {
         let vc = MainTabBarVC()
         return vc
