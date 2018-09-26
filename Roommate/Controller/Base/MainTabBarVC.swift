@@ -20,7 +20,7 @@ class MainTabBarVC: UITabBarController,UITabBarControllerDelegate{
         vcs.append(NotificationVC())
         vcs.append(BookmarkVC())
         vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_IN, sbName: Constants.STORYBOARD_MAIN))
-        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
+       vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
         vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_RESET_PASSWORD, sbName: Constants.STORYBOARD_MAIN))
 //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
         
