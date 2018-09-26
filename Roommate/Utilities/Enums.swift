@@ -15,5 +15,5 @@ enum CollectionDisplayDataType :Int{
     case Room=0,Roommate
 }
 enum OrderType:Int{
-    case lowToHightPrice=0,hightToLowPrice
+    case newest=0,lowToHightPrice,hightToLowPrice
 }

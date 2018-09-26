@@ -19,6 +19,8 @@ class MainTabBarVC: UITabBarController,UITabBarControllerDelegate{
         var vcs = [UIViewController]()
         vcs.append(NotificationVC())
         vcs.append(BookmarkVC())
+        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_IN, sbName: Constants.STORYBOARD_MAIN))
+        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_IN, sbName: Constants.STORYBOARD_MAIN))
 //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
         
         viewControllers = vcs.map({UINavigationController(rootViewController: $0)})

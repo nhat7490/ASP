@@ -8,11 +8,8 @@
 
 import UIKit
 //This class for sign up
-class SignInVC: UIViewController {
-    
-    @IBOutlet weak var scrollView: UIScrollView!
-    
 class SignInVC: BaseVC {
+    @IBOutlet weak var scrollView: UIScrollView!
     var btnSignIn:UIButton={
         let btn = UIButton()
         btn.backgroundColor = .red

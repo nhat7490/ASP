@@ -1,10 +1,10 @@
-/* 
-  Localizable.strings
-  Roommate
-
-  Created by TrinhHC on 9/21/18.
-  Copyright © 2018 TrinhHC. All rights reserved.
-*/
+/*
+ Localizable.strings
+ Roommate
+ 
+ Created by TrinhHC on 9/21/18.
+ Copyright © 2018 TrinhHC. All rights reserved.
+ */
 //MARK: Roommate cell
 "ROMMATE_RIGHT_PRICE"="Mức giá";
 "ROMMATE_RIGHT_POSITION"="Vị trí tìm kiếm";
@@ -20,6 +20,7 @@
 "PERSON"="Người";
 
 //MARK: OrderType
+"NEWEST"="Mới nhất";
 "LOW_TO_HIGH_PRICE"="Giá từ thấp đến cao";
 "HIGH_TO_LOW_PRICE"="Giá từ cao đến thấp";
 "ORDER_TITLE"="Sắp xếp theo : ";

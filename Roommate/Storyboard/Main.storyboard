@@ -105,7 +105,7 @@
         <!--Sign InVC-->
         <scene sceneID="kb1-Jh-KIF">
             <objects>
-                <viewController storyboardIdentifier="SignInVC" id="nAU-RN-N6A" customClass="SignInVC" customModule="Roommate" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SignInVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nAU-RN-N6A" customClass="SignInVC" customModule="Roommate" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FSH-Bn-EXG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -177,7 +177,7 @@
         <!--Sign UpVC-->
         <scene sceneID="kab-lz-Qf1">
             <objects>
-                <viewController storyboardIdentifier="SignUpVC" id="ChH-2I-RTI" customClass="SignUpVC" customModule="Roommate" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SignUpVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ChH-2I-RTI" customClass="SignUpVC" customModule="Roommate" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pEs-M8-xgP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

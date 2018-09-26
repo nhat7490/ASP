@@ -39,21 +39,21 @@ extension UIView{
                        nil, nil,
                        0,  0,
                        0,  0,
-                      widthConstant,  heightConstant)
+                       widthConstant,  heightConstant)
     }
     
     func anchorTopLeft(_ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
                        _ topConstant:CGFloat = 0,_ leftConstant:CGFloat = 0,
                        _ widthConstant:CGFloat = 0,_ heightConstant:CGFloat = 0) -> [NSLayoutConstraint]{
         return anchor(nil , nil,
-                       top,  left,
-                       nil,  nil,
-                       nil,nil,
-                       topConstant,  leftConstant,
-                       0,  0,
-                       widthConstant,  heightConstant)
+                      top,  left,
+                      nil,  nil,
+                      nil,nil,
+                      topConstant,  leftConstant,
+                      0,  0,
+                      widthConstant,  heightConstant)
     }
-   
+    
     func anchorTopLeft(_ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
                        _ widthConstant:CGFloat,_ heightConstant:CGFloat) -> [NSLayoutConstraint]{
         return anchor( nil ,  nil,
@@ -77,7 +77,7 @@ extension UIView{
     }
     func anchorTopRight(_ top:NSLayoutYAxisAnchor?,_ right:NSLayoutXAxisAnchor?,
                         _ topConstant:CGFloat,_ rightConstant:CGFloat,
-                       _ widthConstant:CGFloat,_ heightConstant:CGFloat) -> [NSLayoutConstraint]{
+                        _ widthConstant:CGFloat,_ heightConstant:CGFloat) -> [NSLayoutConstraint]{
         return anchor( nil ,  nil,
                        top, nil,
                        nil,right,
@@ -99,8 +99,8 @@ extension UIView{
     }
     
     func anchorBottomRight(_ bottom:NSLayoutYAxisAnchor?,_ right:NSLayoutXAxisAnchor?,
-                        _ bottomConstant:CGFloat = 0,_ rightConstant:CGFloat = 0,
-                        _ widthConstant:CGFloat,_ heightConstant:CGFloat) -> [NSLayoutConstraint]{
+                           _ bottomConstant:CGFloat = 0,_ rightConstant:CGFloat = 0,
+                           _ widthConstant:CGFloat,_ heightConstant:CGFloat) -> [NSLayoutConstraint]{
         return anchor( nil ,  nil,
                        nil, nil,
                        bottom,right,
@@ -218,7 +218,7 @@ extension UIView{
         
         if heightConstant>0{
             anchor.append(heightAnchor.constraint(greaterThanOrEqualToConstant: heightConstant))
-//            anchor.append(heightAnchor.constraint(equalToConstant: heightConstant))
+            //            anchor.append(heightAnchor.constraint(equalToConstant: heightConstant))
         }
         
         anchor.forEach({$0.isActive=true})
@@ -252,7 +252,7 @@ extension UIViewController{
         
     }
 }
- 
+
 //MARK: Extension String
 extension String{
     //Ex : "KEY_IN_LOCALE_STRING_FILE".localized
@@ -260,7 +260,7 @@ extension String{
         let currentLocale = LocalizationPreferences.shared.currentLocale()
         guard let bundlePath = Bundle.main.path(forResource: currentLocale, ofType: ".lproj"),
             let bundle = Bundle(path: bundlePath) else {
-            return self
+                return self
         }
         return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
     }
@@ -298,9 +298,9 @@ extension UIColor {
 }
 
 extension CGFloat{
-    static let verySmall:CGFloat = UIScreen.main.bounds.width > 768 ? 10 : 8
-    static let  small:CGFloat  = UIScreen.main.bounds.width > 768 ? 12 : 10
-    static let medium:CGFloat  = UIScreen.main.bounds.width > 768 ? 14 : 12
-    static let large:CGFloat  = UIScreen.main.bounds.width > 768 ? 24 : 22
+    static let verySmall:CGFloat = UIScreen.main.bounds.width > 768 ? 11 : 9
+    static let  small:CGFloat  = UIScreen.main.bounds.width > 768 ? 13 : 11
+    static let medium:CGFloat  = UIScreen.main.bounds.width > 768 ? 16 : 14
+    static let large:CGFloat  = UIScreen.main.bounds.width > 768 ? 25 : 23
     static let extraLarge:CGFloat  = 28
 }
