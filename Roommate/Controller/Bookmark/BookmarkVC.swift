@@ -8,20 +8,26 @@
 
 import Foundation
 import UIKit
-class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UITableViewDataSource,UITableViewDelegate{
+class BookmarkVC:BaseVC,UICollectionViewDataSource,
+    UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,
+    UITableViewDataSource,UITableViewDelegate,
+RoomCVCellDelegate{
     
-    //MARK: model for collectionview and table view
+    
+    
+    //MARK: Data for UICollectionView And UITableView
     let roommates = [Roommate(id: 1, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice:  500_000, maxPrice: 1_000_000_000, location:["Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4"], city: "HCM",isBookmark:true),
-                 Roommate(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false),
-                 Roommate(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
-                 Roommate(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false)]
+                     Roommate(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false),
+                     Roommate(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
+                     Roommate(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false)]
     let rooms = [Room(numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(numberPerson: 3,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 1,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: false,isCertificate: false),Room(numberPerson: 1,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 2,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: false,isCertificate: false)]
     let orders = [
+        OrderType.newest:"NEWEST",
         OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
         OrderType.hightToLowPrice:"HIGH_TO_LOW_PRICE"
     ]
     
-    //MARK: UI for navigation bar
+    //MARK: Components for Nav
     lazy var segmentControl:UISegmentedControl={
         let sg = UISegmentedControl(items: ["SEGMENTED_CONTROL_ROOM".localized,"SEGMENTED_CONTROL_ROOMMATE".localized])
         sg.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
@@ -35,25 +41,26 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
         return item
     }()
     
-    //MARK: UI for Orderby
+    //MARK: Components for  Orderby
     lazy var lblOrderBy:UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont.systemFont(ofSize:.small)
         lbl.textAlignment = .right
-//        lbl.backgroundColor = .red
+        //        lbl.backgroundColor = .red
         lbl.text = "ORDER_TITLE".localized
         return lbl
     }()
+    
     lazy var btnOrderBy:UIButton = {
         let btn = UIButton()
-//        btn.titleLabel?.textColor  = UIColor(hexString: "00A8B5")
-        btn.setTitle("LOW_TO_HIGH_PRICE".localized, for: .normal)
+        btn.contentHorizontalAlignment = .left
+        btn.contentVerticalAlignment = .center
+        btn.titleLabel?.textAlignment = .left
+        btn.setTitle(orders[selectedOrder]?.localized, for: .normal)
         btn.setTitleColor(UIColor(hexString: "00A8B5"), for: .normal)
         btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: .small)
         btn.setImage(UIImage(named: "down-arrow"), for: .normal)
-//        btn.tintColor = .red//UIColor(hexString: "00A8B5")
-//        btn.addTarget(self, action: #selector(onClickBtnFilter), for: .touchUpInside)
-//        btn.imageView?.contentMode = .scaleAspectFill
+        btn.addTarget(self, action: #selector(onClickBtnOrder), for: .touchUpInside)
         btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 24)
         btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 126, bottom: 0, right: 0)
         return btn
@@ -62,10 +69,18 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
     lazy var tableView:UITableView = {
         let tv = UITableView()
         tv.backgroundColor = .white
+        tv.showsVerticalScrollIndicator = false
+        tv.layer.cornerRadius = 5
+        tv.clipsToBounds = true
         return tv
     }()
     
-    //MARK: UI for navigation bar room and roommate collectionview
+    var isTableVisible =  false
+    var selectedOrder = OrderType.newest//default
+    var tableHeightLayoutConstraint : NSLayoutConstraint?
+    
+    
+    //MARK: Components for UICollectionView
     lazy var collectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
@@ -73,8 +88,9 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
         let cv = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
         cv.alwaysBounceVertical = true //when reach  bottom element it still scroll down or up a size
         cv.backgroundColor = .white
-//        cv.layer.borderWidth = 1
-//        cv.layer.borderColor = UIColor(hexString: "777").cgColor
+        cv.showsVerticalScrollIndicator = false
+        //        cv.layer.borderWidth = 1
+        //        cv.layer.borderColor = UIColor(hexString: "777").cgColor
         return cv
     }()
     
@@ -82,14 +98,14 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
         super.viewDidLoad()
         setupUI()
     }
-    //MARK: UI for entire ViewController
+    //MARK: Setup UI
     func setupUI(){
         view.backgroundColor = .white
         
         //For tabbar
         tabBarItem = UITabBarItem(title: "Bookmark", image: UIImage(named: "icons8-home-page-51")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "icons8-home-page-50"))
         
-
+        
         
         //UI for navigation bar
         navigationItem.titleView = segmentControl
@@ -102,12 +118,13 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
         btnFilter.addTarget(self, action: #selector(onClickBtnFilter), for: .touchUpInside)
         btnFilter.imageView?.contentMode = .scaleAspectFill
         
-        let bbtniFilter = UIBarButtonItem(customView: btnFilter)
-        let width = bbtniFilter.customView?.widthAnchor.constraint(equalToConstant: (navigationItem.titleView?.frame.height)!)
+        let btniFilter = UIBarButtonItem(customView: btnFilter)
+        btnFilter.translatesAutoresizingMaskIntoConstraints = false
+        let width = btniFilter.customView?.widthAnchor.constraint(equalToConstant: (navigationItem.titleView?.frame.height)!)
         width?.isActive = true
-        let height = bbtniFilter.customView?.heightAnchor.constraint(equalToConstant: (navigationItem.titleView?.frame.height)!)
+        let height = btniFilter.customView?.heightAnchor.constraint(equalToConstant: (navigationItem.titleView?.frame.height)!)
         height?.isActive = true
-        navigationItem.rightBarButtonItem = bbtniFilter
+        navigationItem.rightBarButtonItem = btniFilter
         
         //UI for orderBy
         let orderByViewHeight = CGFloat(30.0)
@@ -123,12 +140,10 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
         _ = lblOrderBy.anchorTopRight(orderByView.topAnchor, btnOrderBy.leftAnchor, orderByViewWidth-150.0, orderByViewHeight)
         
         
-        
-        
         //UI for navigation bar
         view.addSubview(collectionView)
         
-        _ = collectionView.anchorTopLeft(orderByView.bottomAnchor, view.leftAnchor,0,Constants.MARGIN_5*2,view.frame.width-Constants.MARGIN_5*4, view.frame.height-orderByViewHeight)
+        _ = collectionView.anchorTopLeft(orderByView.bottomAnchor, view.leftAnchor,0,Constants.MARGIN_5*3,view.frame.width-Constants.MARGIN_5*6, view.frame.height-orderByViewHeight)
         
         //Register delegate , datasource & cell collectionview
         collectionView.delegate = self
@@ -138,12 +153,11 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
         
         //Register delegate , datasource & cell tableview
         view.addSubview(tableView)
-        _ = tableView.anchorTopRight(orderByView.bottomAnchor, btnOrderBy.rightAnchor, 150.0, 150.0)
+        tableHeightLayoutConstraint = tableView.anchorTopRight(orderByView.bottomAnchor, btnOrderBy.rightAnchor, 150.0, 1)[3]
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(OrderTVCell.self, forCellReuseIdentifier: Constants.CELL_ORDERTV)
-        
         view.layoutIfNeeded()
     }
     
@@ -155,33 +169,35 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if segmentControl.selectedSegmentIndex == 0{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMCV, for: indexPath) as! RoomCVCell
-            cell.setModel(room: rooms[indexPath.row])
-            cell.layoutSubviews()
+            cell.delegate = self
+            cell.setData(room: rooms[indexPath.row],isEvenCell:indexPath.row%2==0)
             return cell
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMMATECV, for: indexPath) as! RoommateCVCell
-            cell.setModel(roommate: roommates[indexPath.row])
-            cell.layoutSubviews()
+            cell.setData(roommate: roommates[indexPath.row])
             return cell
         }
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        switch UIScreen.main.bounds.width {
-//        case 0...375: //4 to less than 4.7 inch
-//            return CGSize(width: view.frame.width, height: 80)
-//        case 376..<768://more than 4,7 to  7.9 inch
-//            return CGSize(width: view.frame.width, height: 100)
-//        default://more than 7,9 inch
-//            return CGSize(width: view.frame.width, height: 120)
-//        }
-         if segmentControl.selectedSegmentIndex == 0{
-            return CGSize(width: collectionView.frame.width/2, height: 200)
-         }else{
-            return CGSize(width: collectionView.frame.width/2, height: 160)
-        }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //        switch UIScreen.main.bounds.width {
+        //        case 0...375: //4 to less than 4.7 inch
+        //            return CGSize(width: view.frame.width, height: 80)
+        //        case 376..<768://more than 4,7 to  7.9 inch
+        //            return CGSize(width: view.frame.width, height: 100)
+        //        default://more than 7,9 inch
+        //            return CGSize(width: view.frame.width, height: 120)
+        //        }
+        if segmentControl.selectedSegmentIndex == 0{
+            return CGSize(width: collectionView.frame.width/2, height: 240)
+        }else{
+            return CGSize(width: collectionView.frame.width, height: 120)
+        }
     }
     
     //MARK: UITableView DataSourse and Delegate
@@ -200,15 +216,18 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_ORDERTV, for: indexPath) as! OrderTVCell
-        if indexPath.row == OrderType.lowToHightPrice.rawValue{
-            cell.setOrderTitle(title: orders[OrderType.lowToHightPrice]!, orderType: OrderType.lowToHightPrice)
-        }else if  indexPath.row == OrderType.hightToLowPrice.rawValue{
-            cell.setOrderTitle(title: orders[OrderType.hightToLowPrice]!, orderType: OrderType.hightToLowPrice)
-        }else{
-            //for future order type
-        }
+        setCellValueBaseOnIndexPath(cell: cell,indexPath:indexPath)
+        cell.selectionStyle = .none
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //        self.isTableVisible = true
+        selectedOrder = OrderType(rawValue: indexPath.row)!
+        btnOrderBy.setTitle(orders[selectedOrder]?.localized, for: .normal)
+        onClickBtnOrder()
+    }
+    
     
     
     //MARK: Others delegate method
@@ -220,6 +239,44 @@ class BookmarkVC:BaseVC,UICollectionViewDataSource,UICollectionViewDelegate,UICo
     //Filter bar button item event
     @objc func onClickBtnFilter(){
         
+    }
+    //Order button item event
+    @objc func onClickBtnOrder(){
+        
+        UIView.animate(withDuration: 0.1) {
+            if !self.isTableVisible{
+                self.isTableVisible = true
+                self.tableHeightLayoutConstraint?.constant = 150
+            }else{
+                self.isTableVisible = false
+                self.tableHeightLayoutConstraint?.constant = 0
+            }
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    
+    
+    func roomCVCellDelegate(cell: RoomCVCell, onClickUIImageView imageView: UIImageView) {
+        if (cell.room?.isBookMark)!{
+            cell.room?.isBookMark = false
+        }else{
+            cell.room?.isBookMark = true
+        }
+        imageView.image = cell.room!.isBookMark ? UIImage(named: "bookmarked") : UIImage(named: "bookmark-white")
+    }
+    
+    //MARK: Others custom method
+    func setCellValueBaseOnIndexPath(cell:OrderTVCell,indexPath:IndexPath){
+        if indexPath.row == OrderType.newest.rawValue{
+            cell.setOrderTitle(title: orders[OrderType.newest]!, orderType: OrderType.newest)
+        }else if indexPath.row == OrderType.lowToHightPrice.rawValue{
+            cell.setOrderTitle(title: orders[OrderType.lowToHightPrice]!, orderType: OrderType.lowToHightPrice)
+        }else if  indexPath.row == OrderType.hightToLowPrice.rawValue{
+            cell.setOrderTitle(title: orders[OrderType.hightToLowPrice]!, orderType: OrderType.hightToLowPrice)
+        }else{
+            //for future order type
+        }
     }
     
 }
