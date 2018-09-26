@@ -32,7 +32,7 @@ class OrderTVCell : UITableViewCell{
     func setupUI() {
         addSubview(lblOrderType)
         
-        _ = lblOrderType.anchorTopLeft(topAnchor, leftAnchor, widthAnchor, heightAnchor)
+        _ = lblOrderType.anchorTopLeft(topAnchor, leftAnchor,0,Constants.MARGIN_6, self.frame.width-Constants.MARGIN_6,self.frame.height)
     }
     
     func setOrderTitle(title:String,orderType:OrderType){
