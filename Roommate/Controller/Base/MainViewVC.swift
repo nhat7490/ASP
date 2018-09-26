@@ -17,12 +17,16 @@ class MainViewVC: BaseVC {
         let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_IN, sbName: Constants.STORYBOARD_MAIN) as! SignInVC
         return vc
     }()
-    
+    private lazy var roomDetailVC:RoomDetailForOwnerVC = {
+        let vc = RoomDetailForOwnerVC()
+        return vc
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         //Check Login
         if true{
-            self.add(mainTabBarVC)
+            self.add(UINavigationController(rootViewController:roomDetailVC))
+//            self.add(mainTabBarVC)
         }else{
             self.add(signInVC)
         }

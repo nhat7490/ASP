@@ -167,64 +167,6 @@ extension UIView{
         return anchor
     }
     
-    func anchor(_ centerX:NSLayoutXAxisAnchor?,_ centerY:NSLayoutYAxisAnchor?,
-                _ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
-                _ bottom:NSLayoutYAxisAnchor?,_ right:NSLayoutXAxisAnchor?,
-                _ width:NSLayoutDimension?,_ height:NSLayoutDimension?,
-                _ topConstant:CGFloat = 0,_ leftConstant:CGFloat = 0,
-                _ bottomConstant:CGFloat = 0,_ rightConstant:CGFloat = 0,
-                _ widthConstant:CGFloat = 0,_ heightConstant:CGFloat = 0,
-                _ isMultiLine:Bool) -> [NSLayoutConstraint] {
-        
-        var anchor = [NSLayoutConstraint]()
-        
-        translatesAutoresizingMaskIntoConstraints = false
-        
-        if let centerX = centerX{
-            anchor.append(centerXAnchor.constraint(equalTo: centerX))
-        }
-        
-        if let centerY = centerY{
-            anchor.append(centerYAnchor.constraint(equalTo: centerY))
-        }
-        
-        if let top = top{
-            anchor.append(topAnchor.constraint(equalTo: top, constant: topConstant))
-        }
-        
-        if let left = left{
-            anchor.append(leftAnchor.constraint(equalTo: left, constant: leftConstant))
-        }
-        
-        if let bottom = bottom{
-            anchor.append(bottomAnchor.constraint(equalTo: bottom, constant: bottomConstant))
-        }
-        
-        if let right = right{
-            anchor.append(rightAnchor.constraint(equalTo: right, constant: rightConstant))
-        }
-        
-        if let width = width{
-            anchor.append(widthAnchor.constraint(equalTo: width))
-        }
-        
-        if let height = height{
-            anchor.append(heightAnchor.constraint(equalTo: height))
-        }
-        
-        if widthConstant>0{
-            anchor.append(widthAnchor.constraint(equalToConstant: widthConstant))
-        }
-        
-        if heightConstant>0{
-            anchor.append(heightAnchor.constraint(greaterThanOrEqualToConstant: heightConstant))
-            //            anchor.append(heightAnchor.constraint(equalToConstant: heightConstant))
-        }
-        
-        anchor.forEach({$0.isActive=true})
-        
-        return anchor
-    }
 }
 
 //MARK: Extension UIViewController
