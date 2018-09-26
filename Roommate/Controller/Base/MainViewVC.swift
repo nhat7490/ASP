@@ -25,8 +25,8 @@ class MainViewVC: BaseVC {
         super.viewDidLoad()
         //Check Login
         if true{
-            self.add(UINavigationController(rootViewController:roomDetailVC))
-//            self.add(mainTabBarVC)
+            // self.add(UINavigationController(rootViewController:roomDetailVC))
+            self.add(mainTabBarVC)
         }else{
             self.add(signInVC)
         }
