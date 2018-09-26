@@ -8,6 +8,7 @@
 
 import Foundation
 struct Room{
+    var id:Int
     var numberPerson:Int
     var name:String
     var price:Int

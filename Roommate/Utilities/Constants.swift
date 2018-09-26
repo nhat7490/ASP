@@ -27,6 +27,7 @@ class Constants{
     static let VC_ACCOUNT = "AccountVC"
     static let VC_SIGN_IN = "SignInVC"
     static let VC_SIGN_UP = "SignUpVC"
+    static let VC_RESET_PASSWORD = "ResetPasswordVC"
     static let VC_FIRST_LAUNCH = "FirstLaunchVC"
     
     //MARK: Constant for Locale

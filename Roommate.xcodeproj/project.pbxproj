@@ -12,6 +12,8 @@
 		04D77E432158A3060045C45C /* RoundButotn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D77E422158A3060045C45C /* RoundButotn.swift */; };
 		04D77E452158AFD70045C45C /* CustomSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D77E442158AFD70045C45C /* CustomSegmentedControl.swift */; };
 		49F10E7F55F74E1AAF766134 /* Pods_RoommateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21C268CD383168680C632F50 /* Pods_RoommateUITests.framework */; };
+		690B2065215BA0DE00DAD053 /* RoomDetailForMasterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */; };
+		690B2067215BA14500DAD053 /* RoomDetailForFinderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690B2066215BA14500DAD053 /* RoomDetailForFinderVC.swift */; };
 		691727B0215509D100104A19 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 691727B2215509D100104A19 /* Localizable.strings */; };
 		691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B62155122D00104A19 /* NotificationCVCell.swift */; };
 		691727BA2155129700104A19 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B92155129700104A19 /* NotificationModel.swift */; };
@@ -29,7 +31,7 @@
 		6943D9742153F0AE002CFEBB /* NotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9732153F0AE002CFEBB /* NotificationVC.swift */; };
 		6943D9762153F0B7002CFEBB /* BookmarkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9752153F0B7002CFEBB /* BookmarkVC.swift */; };
 		6943D9782153F0C9002CFEBB /* FirstLaunchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9772153F0C9002CFEBB /* FirstLaunchVC.swift */; };
-		6943D97A2153F0DE002CFEBB /* RoomDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9792153F0DE002CFEBB /* RoomDetailVC.swift */; };
+		6943D97A2153F0DE002CFEBB /* RoomDetailForOwnerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9792153F0DE002CFEBB /* RoomDetailForOwnerVC.swift */; };
 		6943D97C2153F0EC002CFEBB /* RoommateDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D97B2153F0EC002CFEBB /* RoommateDetailVC.swift */; };
 		6943D97E2153F100002CFEBB /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D97D2153F100002CFEBB /* SearchVC.swift */; };
 		6943D9802153F10F002CFEBB /* CERoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D97F2153F10F002CFEBB /* CERoomVC.swift */; };
@@ -98,6 +100,8 @@
 		21C268CD383168680C632F50 /* Pods_RoommateUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RoommateUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		41835EF4FE3232DFE8139CB0 /* Pods_Roommate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roommate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		44539B1D1E5FCA86520743E2 /* Pods-RoommateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoommateTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RoommateTests/Pods-RoommateTests.release.xcconfig"; sourceTree = "<group>"; };
+		690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailForMasterVC.swift; sourceTree = "<group>"; };
+		690B2066215BA14500DAD053 /* RoomDetailForFinderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailForFinderVC.swift; sourceTree = "<group>"; };
 		691727AC2155099700104A19 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		691727AD2155099C00104A19 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		691727B1215509D100104A19 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -118,7 +122,7 @@
 		6943D9732153F0AE002CFEBB /* NotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationVC.swift; sourceTree = "<group>"; };
 		6943D9752153F0B7002CFEBB /* BookmarkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkVC.swift; sourceTree = "<group>"; };
 		6943D9772153F0C9002CFEBB /* FirstLaunchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchVC.swift; sourceTree = "<group>"; };
-		6943D9792153F0DE002CFEBB /* RoomDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailVC.swift; sourceTree = "<group>"; };
+		6943D9792153F0DE002CFEBB /* RoomDetailForOwnerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailForOwnerVC.swift; sourceTree = "<group>"; };
 		6943D97B2153F0EC002CFEBB /* RoommateDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoommateDetailVC.swift; sourceTree = "<group>"; };
 		6943D97D2153F100002CFEBB /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		6943D97F2153F10F002CFEBB /* CERoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CERoomVC.swift; sourceTree = "<group>"; };
@@ -213,6 +217,16 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		690B2068215BA26500DAD053 /* Room */ = {
+			isa = PBXGroup;
+			children = (
+				6943D9792153F0DE002CFEBB /* RoomDetailForOwnerVC.swift */,
+				690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */,
+				690B2066215BA14500DAD053 /* RoomDetailForFinderVC.swift */,
+			);
+			path = Room;
+			sourceTree = "<group>";
+		};
 		691727B42155118A00104A19 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -253,7 +267,6 @@
 		6943D98C2153F27D002CFEBB /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				6943D9792153F0DE002CFEBB /* RoomDetailVC.swift */,
 				6943D97B2153F0EC002CFEBB /* RoommateDetailVC.swift */,
 				6943D9872153F1A7002CFEBB /* RoomFilterVC.swift */,
 				6943D9892153F1B1002CFEBB /* RoomateFilterVC.swift */,
@@ -432,6 +445,7 @@
 		69A02FE221538D010087897F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				690B2068215BA26500DAD053 /* Room */,
 				6943D98D2153F29E002CFEBB /* FirstLaunch */,
 				6943D98E2153F2B3002CFEBB /* Base */,
 				6943D98B2153F253002CFEBB /* Home */,
@@ -756,6 +770,7 @@
 				6943D9942153F3BE002CFEBB /* ResetPasswordVC.swift in Sources */,
 				69A1ECC92155F38900BC10D4 /* RoommateCVCell.swift in Sources */,
 				6943D99A2153F46E002CFEBB /* ProfileVC.swift in Sources */,
+				690B2067215BA14500DAD053 /* RoomDetailForFinderVC.swift in Sources */,
 				6943D9822153F121002CFEBB /* CERoommateVC.swift in Sources */,
 				6943D9962153F452002CFEBB /* NotificationDetailVC.swift in Sources */,
 				69E496862158DF3D00444211 /* Room.swift in Sources */,
@@ -764,12 +779,13 @@
 				69225641215B27100040213A /* OrderTVCell.swift in Sources */,
 				6943D9722153F0A6002CFEBB /* AllVC.swift in Sources */,
 				6943D9A42153F5B8002CFEBB /* FeedbackVC.swift in Sources */,
-				6943D97A2153F0DE002CFEBB /* RoomDetailVC.swift in Sources */,
+				6943D97A2153F0DE002CFEBB /* RoomDetailForOwnerVC.swift in Sources */,
 				6943D9802153F10F002CFEBB /* CERoomVC.swift in Sources */,
 				695309FC215633B70004BDE9 /* User.swift in Sources */,
 				691727BA2155129700104A19 /* NotificationModel.swift in Sources */,
 				6943D9622153E769002CFEBB /* BaseVC.swift in Sources */,
 				69A0300A2153923E0087897F /* Extension.swift in Sources */,
+				690B2065215BA0DE00DAD053 /* RoomDetailForMasterVC.swift in Sources */,
 				6943D96E2153F07C002CFEBB /* AccountVC.swift in Sources */,
 				691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */,
 				6943D9762153F0B7002CFEBB /* BookmarkVC.swift in Sources */,

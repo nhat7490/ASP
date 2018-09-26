@@ -294,7 +294,7 @@
         <!--Reset PasswordVC Scene-->
         <scene sceneID="4fq-jl-EKD">
             <objects>
-                <viewController title="Reset PasswordVC Scene" id="SnD-RP-s9I" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ResetPasswordVC" title="Reset PasswordVC Scene" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SnD-RP-s9I" customClass="ResetPasswordVC" customModule="Roommate" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sHQ-M7-pj6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

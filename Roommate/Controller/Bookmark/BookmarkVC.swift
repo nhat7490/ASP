@@ -20,7 +20,7 @@ RoomCVCellDelegate{
                      Roommate(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false),
                      Roommate(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
                      Roommate(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false)]
-    let rooms = [Room(numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(numberPerson: 3,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 1,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: false,isCertificate: false),Room(numberPerson: 1,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 2,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: false,isCertificate: false)]
+    var rooms = [Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 1,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false),Room(id:1,numberPerson: 3,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 2,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:4,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false)]
     let orders = [
         OrderType.newest:"NEWEST",
         OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
@@ -258,12 +258,17 @@ RoomCVCellDelegate{
     
     
     func roomCVCellDelegate(cell: RoomCVCell, onClickUIImageView imageView: UIImageView) {
-        if (cell.room?.isBookMark)!{
-            cell.room?.isBookMark = false
-        }else{
-            cell.room?.isBookMark = true
+//        if (cell.room?.isBookMark)!{
+//            cell.room?.isBookMark = false
+//        }else{
+//            cell.room?.isBookMark = true
+//        }
+//        imageView.image = cell.room!.isBookMark ? UIImage(named: "bookmarked") : UIImage(named: "bookmark-white")
+        let index = rooms.index { (room) -> Bool in
+            room.id == cell.room?.id
         }
-        imageView.image = cell.room!.isBookMark ? UIImage(named: "bookmarked") : UIImage(named: "bookmark-white")
+        rooms.remove(at: index!)
+        collectionView.reloadData()
     }
     
     //MARK: Others custom method
