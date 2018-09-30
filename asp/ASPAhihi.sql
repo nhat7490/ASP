@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: asp
+-- Host: localhost    Database: roomate
 -- ------------------------------------------------------
 -- Server version	5.7.18-log
 
@@ -169,7 +169,7 @@ CREATE TABLE `tb_role` (
   `role_id` int(11) NOT NULL AUTO_INCREMENT,
   `rolename` varchar(45) COLLATE utf8_icelandic_ci DEFAULT NULL,
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,6 +178,7 @@ CREATE TABLE `tb_role` (
 
 LOCK TABLES `tb_role` WRITE;
 /*!40000 ALTER TABLE `tb_role` DISABLE KEYS */;
+INSERT INTO `tb_role` VALUES (1,'Admin'),(2,'Room Owner'),(3,'Room Master'),(4,'Member');
 /*!40000 ALTER TABLE `tb_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -367,14 +368,14 @@ CREATE TABLE `tb_user` (
   `email` varchar(100) COLLATE utf8_icelandic_ci NOT NULL,
   `fullname` varchar(100) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `image_profile` varchar(255) COLLATE utf8_icelandic_ci DEFAULT NULL,
-  `dob` datetime DEFAULT NULL,
+  `dob` date DEFAULT NULL,
   `phone` varchar(15) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `gender` tinyint(4) DEFAULT NULL,
   `role_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`role_id`),
   KEY `fk_tb_user_tb_role1_idx` (`role_id`),
   CONSTRAINT `fk_tb_user_tb_role1` FOREIGN KEY (`role_id`) REFERENCES `tb_role` (`role_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -383,6 +384,7 @@ CREATE TABLE `tb_user` (
 
 LOCK TABLES `tb_user` WRITE;
 /*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
+INSERT INTO `tb_user` VALUES (1,'dominhduc','0123456','dominhduc@gmail.com','Do Minh Duc',NULL,'1996-12-30',NULL,NULL,1),(2,'quangnhat','123456','quangnhat@gmail.com','Quang Nhat',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -440,7 +442,7 @@ LOCK TABLES `tb_utilities_reference` WRITE;
 UNLOCK TABLES;
 
 --
--- Dumping events for database 'asp'
+-- Dumping events for database 'roomate'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -452,4 +454,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-29 11:12:33
+-- Dump completed on 2018-09-30 11:14:06
