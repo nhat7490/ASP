@@ -265,7 +265,6 @@
 		690B2068215BA26500DAD053 /* Room */ = {
 			isa = PBXGroup;
 			children = (
-				69CB7827216081A7003FA0F9 /* CollectionView */,
 				6943D9792153F0DE002CFEBB /* RoomDetailForOwnerVC.swift */,
 				690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */,
 				690B2066215BA14500DAD053 /* RoomDetailForFinderVC.swift */,
@@ -543,13 +542,6 @@
 				69232A2021614AC700C782F9 /* BaseHorizontalCollectionViewFlowLayout.swift */,
 			);
 			path = Base;
-			sourceTree = "<group>";
-		};
-		69CB7827216081A7003FA0F9 /* CollectionView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CollectionView;
 			sourceTree = "<group>";
 		};
 		69CB783A216091ED003FA0F9 /* SourceEditorCommand */ = {
