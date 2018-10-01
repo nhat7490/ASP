@@ -12,6 +12,10 @@ import UIKit
 //MARK: Extension UIView
 extension UIView{
     
+    class func fromNib<T:UIView>() -> T {
+        return Bundle.main.loadNibNamed(String(describing: T.self), owner: nil, options: nil)?.first as! T
+    }
+    
     //For localization
     func onUpdateLocale(){
         for subview in self.subviews {
@@ -66,6 +70,17 @@ extension UIView{
     }
     
     func anchorTopLeft(_ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
+                       _ width:NSLayoutDimension,_ heightConstant:CGFloat) -> [NSLayoutConstraint]{
+        return anchor( nil ,  nil,
+                       top,  left,
+                       nil,  nil,
+                       width, nil,
+                       0,  0,
+                       0,  0,
+                       0,  heightConstant)
+    }
+    
+    func anchorTopLeft(_ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
                        _ width:NSLayoutDimension?,_ height:NSLayoutDimension?) -> [NSLayoutConstraint]{
         return anchor( nil ,  nil,
                        top, left,
@@ -108,6 +123,36 @@ extension UIView{
                        0, 0,
                        bottomConstant, rightConstant,
                        widthConstant, heightConstant)
+    }
+    func anchorEntire(view:UIView) -> [NSLayoutConstraint]{
+        return anchor( nil ,  nil,
+                       view.topAnchor, view.leftAnchor,
+                       view.bottomAnchor,view.rightAnchor,
+                       nil, nil,
+                       0, 0,
+                       0, 0,
+                       0, 0)
+    }
+    func anchorEntire(_ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
+                      _ bottom:NSLayoutYAxisAnchor?,_ right:NSLayoutXAxisAnchor?) -> [NSLayoutConstraint]{
+        return anchor( nil ,  nil,
+                       top, left,
+                       bottom,right,
+                       nil, nil,
+                       0, 0,
+                       0, 0,
+                       0, 0)
+    }
+    func anchorEntire(_ centerX:NSLayoutXAxisAnchor?,_ centerY:NSLayoutYAxisAnchor?,
+                      _ top:NSLayoutYAxisAnchor?,_ left:NSLayoutXAxisAnchor?,
+                      _ bottom:NSLayoutYAxisAnchor?,_ right:NSLayoutXAxisAnchor?) -> [NSLayoutConstraint]{
+        return anchor( centerX ,centerY,
+                       top, left,
+                       bottom,right,
+                       nil, nil,
+                       0, 0,
+                       0, 0,
+                       0, 0)
     }
     
     func anchor(_ centerX:NSLayoutXAxisAnchor?,_ centerY:NSLayoutYAxisAnchor?,
@@ -237,6 +282,7 @@ extension UIColor {
     }
     static let lightSubTitle:UIColor!  = UIColor(hexString: "555")
     static let normalTitle:UIColor!  = UIColor(hexString: "000")
+    static let defaultBlue:UIColor!  = UIColor(hexString: "00A8B5")
 }
 
 extension CGFloat{
@@ -245,4 +291,5 @@ extension CGFloat{
     static let medium:CGFloat  = UIScreen.main.bounds.width > 768 ? 16 : 14
     static let large:CGFloat  = UIScreen.main.bounds.width > 768 ? 25 : 23
     static let extraLarge:CGFloat  = 28
+    static let subtitle:CGFloat  = UIScreen.main.bounds.width > 768 ? 15 : 13
 }

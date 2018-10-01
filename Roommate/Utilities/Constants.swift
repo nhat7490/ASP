@@ -40,6 +40,8 @@ class Constants{
     static let CELL_ROOMMATECV = "RoommateCVCell"
     static let CELL_ROOMCV = "RoomCVCell"
     static let CELL_ORDERTV = "OrderTVCell"
+    static let CELL_UTILITYCV = "UtilityCVCell"
+    static let CELL_IMAGECV = "ImageCVCell"
     
     //MARK: Constant for DateFormatter
     static let DD_MM_YY_HH_MM_A = "dd-MM-yyyy HH:mm a"

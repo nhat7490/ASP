@@ -17,3 +17,7 @@ enum CollectionDisplayDataType :Int{
 enum OrderType:Int{
     case newest=0,lowToHightPrice,hightToLowPrice
 }
+
+enum UtilityForSC:Int{
+    case showDetail=0,other
+}

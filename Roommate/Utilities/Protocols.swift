@@ -8,6 +8,6 @@
 
 import Foundation
 import UIKit
-protocol RoomCVCellDelegate:class {
-    func roomCVCellDelegate(cell roomCVCell:RoomCVCell,onClickUIImageView imgvBookmark:UIImageView);
-}
+//protocol RoomCVCellDelegate:class {
+//    func roomCVCellDelegate(cell roomCVCell:RoomCVCell,onClickUIImageView imgvBookmark:UIImageView);
+//}

@@ -16,10 +16,10 @@ RoomCVCellDelegate{
     
     
     //MARK: Data for UICollectionView And UITableView
-    let roommates = [Roommate(id: 1, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice:  500_000, maxPrice: 1_000_000_000, location:["Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4"], city: "HCM",isBookmark:true),
-                     Roommate(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false),
-                     Roommate(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
-                     Roommate(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false)]
+    let roommates = [RoommateModel(id: 1, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice:  500_000, maxPrice: 1_000_000_000, location:["Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4"], city: "HCM",isBookmark:true),
+                     RoommateModel(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false),
+                     RoommateModel(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
+                     RoommateModel(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: ""), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:false)]
     var rooms = [Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 1,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false),Room(id:1,numberPerson: 3,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 2,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:4,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false)]
     let orders = [
         OrderType.newest:"NEWEST",
@@ -82,16 +82,7 @@ RoomCVCellDelegate{
     
     //MARK: Components for UICollectionView
     lazy var collectionView:UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        let cv = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
-        cv.alwaysBounceVertical = true //when reach  bottom element it still scroll down or up a size
-        cv.backgroundColor = .white
-        cv.showsVerticalScrollIndicator = false
-        //        cv.layer.borderWidth = 1
-        //        cv.layer.borderColor = UIColor(hexString: "777").cgColor
-        return cv
+        return BaseVerticalCollectionView()
     }()
     
     override func viewDidLoad() {
@@ -185,14 +176,6 @@ RoomCVCellDelegate{
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //        switch UIScreen.main.bounds.width {
-        //        case 0...375: //4 to less than 4.7 inch
-        //            return CGSize(width: view.frame.width, height: 80)
-        //        case 376..<768://more than 4,7 to  7.9 inch
-        //            return CGSize(width: view.frame.width, height: 100)
-        //        default://more than 7,9 inch
-        //            return CGSize(width: view.frame.width, height: 120)
-        //        }
         if segmentControl.selectedSegmentIndex == 0{
             return CGSize(width: collectionView.frame.width/2, height: 240)
         }else{

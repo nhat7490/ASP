@@ -9,6 +9,7 @@ target 'Roommate' do
 	pod 'Alamofire'
 	pod 'AlamofireObjectMapper'
 	pod 'ObjectMapper'
+	pod 'SDWebImage'
   target 'RoommateTests' do
     inherit! :search_paths
     # Pods for testing
