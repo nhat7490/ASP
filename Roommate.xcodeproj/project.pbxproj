@@ -373,6 +373,54 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		6977C7EE21622586003C58F4 /* RoomDetail */ = {
+			isa = PBXGroup;
+			children = (
+				69DA16A92160DBAD00F9EDA0 /* UtilityView.swift */,
+				6907E89E2160E42B009A5F25 /* UtilitiesView.xib */,
+				69CB782D216083E7003FA0F9 /* UtilityCVCell.swift */,
+				69CB782E216083E7003FA0F9 /* UtilityCVCell.xib */,
+				69232A2221614C4E00C782F9 /* ImageCVCell.swift */,
+				69232A2421614C5E00C782F9 /* ImageCVCell.xib */,
+				6923A8DF21621DE300068B4B /* AddressView.swift */,
+			);
+			path = RoomDetail;
+			sourceTree = "<group>";
+		};
+		6977C7EF21622594003C58F4 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				69D00ED62160B93100FF034E /* PopupSelectListCell.swift */,
+				69D00ED72160B93100FF034E /* PopupSelectListCell.xib */,
+				69225640215B27100040213A /* OrderTVCell.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		6977C7F0216225C0003C58F4 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				691727B62155122D00104A19 /* NotificationCVCell.swift */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
+		6977C7F1216225D0003C58F4 /* Roommate */ = {
+			isa = PBXGroup;
+			children = (
+				69A1ECC82155F38900BC10D4 /* RoommateCVCell.swift */,
+			);
+			path = Roommate;
+			sourceTree = "<group>";
+		};
+		6977C7F2216225E8003C58F4 /* Room */ = {
+			isa = PBXGroup;
+			children = (
+				69E496822158D81600444211 /* RoomCVCell.swift */,
+			);
+			path = Room;
+			sourceTree = "<group>";
+		};
 		69834F6421539CCC00845AB8 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -482,19 +530,11 @@
 		69A02FE421538D140087897F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				69D00ED62160B93100FF034E /* PopupSelectListCell.swift */,
-				69D00ED72160B93100FF034E /* PopupSelectListCell.xib */,
-				69225640215B27100040213A /* OrderTVCell.swift */,
-				69A1ECC82155F38900BC10D4 /* RoommateCVCell.swift */,
-				69DA16A92160DBAD00F9EDA0 /* UtilityView.swift */,
-				6907E89E2160E42B009A5F25 /* UtilitiesView.xib */,
-				69CB782D216083E7003FA0F9 /* UtilityCVCell.swift */,
-				69CB782E216083E7003FA0F9 /* UtilityCVCell.xib */,
-				69232A2221614C4E00C782F9 /* ImageCVCell.swift */,
-				69232A2421614C5E00C782F9 /* ImageCVCell.xib */,
-				6923A8DF21621DE300068B4B /* AddressView.swift */,
-				69E496822158D81600444211 /* RoomCVCell.swift */,
-				691727B62155122D00104A19 /* NotificationCVCell.swift */,
+				6977C7F2216225E8003C58F4 /* Room */,
+				6977C7F1216225D0003C58F4 /* Roommate */,
+				6977C7F0216225C0003C58F4 /* Notification */,
+				6977C7EF21622594003C58F4 /* Common */,
+				6977C7EE21622586003C58F4 /* RoomDetail */,
 			);
 			path = View;
 			sourceTree = "<group>";
