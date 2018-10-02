@@ -11,7 +11,7 @@ public class TbFavourite {
     private int postId;
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
     }
@@ -21,7 +21,7 @@ public class TbFavourite {
     }
 
     @Id
-    @Column(name = "post_id")
+    @Column(name = "post_id", nullable = false)
     public int getPostId() {
         return postId;
     }

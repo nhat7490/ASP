@@ -11,7 +11,7 @@ public class TbRoomReference {
     private int userId;
 
     @Id
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     public int getRoomId() {
         return roomId;
     }
@@ -21,7 +21,7 @@ public class TbRoomReference {
     }
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
     }

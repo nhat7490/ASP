@@ -16,7 +16,7 @@ public class TbRoomHasUser {
     private int roomId;
 
     @Id
-    @Column(name = "room_has_user_id")
+    @Column(name = "room_has_user_id", nullable = false)
     public int getRoomHasUserId() {
         return roomHasUserId;
     }
@@ -26,7 +26,7 @@ public class TbRoomHasUser {
     }
 
     @Basic
-    @Column(name = "date_in")
+    @Column(name = "date_in", nullable = true)
     public Timestamp getDateIn() {
         return dateIn;
     }
@@ -36,7 +36,7 @@ public class TbRoomHasUser {
     }
 
     @Basic
-    @Column(name = "date_out")
+    @Column(name = "date_out", nullable = true)
     public Timestamp getDateOut() {
         return dateOut;
     }
@@ -46,7 +46,7 @@ public class TbRoomHasUser {
     }
 
     @Basic
-    @Column(name = "status")
+    @Column(name = "status", nullable = true)
     public Byte getStatus() {
         return status;
     }
@@ -56,7 +56,7 @@ public class TbRoomHasUser {
     }
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
     }
@@ -66,7 +66,7 @@ public class TbRoomHasUser {
     }
 
     @Id
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     public int getRoomId() {
         return roomId;
     }

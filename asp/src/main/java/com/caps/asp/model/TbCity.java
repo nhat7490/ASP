@@ -10,7 +10,7 @@ public class TbCity {
     private String name;
 
     @Id
-    @Column(name = "city_id")
+    @Column(name = "city_id", nullable = false)
     public int getCityId() {
         return cityId;
     }
@@ -20,7 +20,7 @@ public class TbCity {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 45)
     public String getName() {
         return name;
     }

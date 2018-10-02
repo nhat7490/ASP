@@ -24,7 +24,7 @@ public class TbPost {
     private int roomId;
 
     @Id
-    @Column(name = "post_id")
+    @Column(name = "post_id", nullable = false)
     public int getPostId() {
         return postId;
     }
@@ -34,7 +34,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 45)
     public String getName() {
         return name;
     }
@@ -44,7 +44,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "price")
+    @Column(name = "price", nullable = true, precision = 0)
     public Double getPrice() {
         return price;
     }
@@ -54,7 +54,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "area")
+    @Column(name = "area", nullable = true)
     public Integer getArea() {
         return area;
     }
@@ -64,7 +64,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "address")
+    @Column(name = "address", nullable = true, length = 45)
     public String getAddress() {
         return address;
     }
@@ -74,7 +74,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "phone_contact")
+    @Column(name = "phone_contact", nullable = true, length = 15)
     public String getPhoneContact() {
         return phoneContact;
     }
@@ -84,7 +84,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "number_partner")
+    @Column(name = "number_partner", nullable = true)
     public Integer getNumberPartner() {
         return numberPartner;
     }
@@ -94,7 +94,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = true, length = 255)
     public String getDescription() {
         return description;
     }
@@ -104,7 +104,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "gender_partner")
+    @Column(name = "gender_partner", nullable = true)
     public Byte getGenderPartner() {
         return genderPartner;
     }
@@ -114,7 +114,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "admin_feedback")
+    @Column(name = "admin_feedback", nullable = true, length = 255)
     public String getAdminFeedback() {
         return adminFeedback;
     }
@@ -124,7 +124,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "date_created")
+    @Column(name = "date_created", nullable = true)
     public Timestamp getDateCreated() {
         return dateCreated;
     }
@@ -134,7 +134,7 @@ public class TbPost {
     }
 
     @Id
-    @Column(name = "type_id")
+    @Column(name = "type_id", nullable = false)
     public int getTypeId() {
         return typeId;
     }
@@ -144,7 +144,7 @@ public class TbPost {
     }
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
     }
@@ -154,7 +154,7 @@ public class TbPost {
     }
 
     @Id
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     public int getRoomId() {
         return roomId;
     }

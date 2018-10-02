@@ -10,7 +10,7 @@ public class TbRoomHasUserPK implements Serializable {
     private int userId;
     private int roomId;
 
-    @Column(name = "room_has_user_id")
+    @Column(name = "room_has_user_id", nullable = false)
     @Id
     public int getRoomHasUserId() {
         return roomHasUserId;
@@ -20,7 +20,7 @@ public class TbRoomHasUserPK implements Serializable {
         this.roomHasUserId = roomHasUserId;
     }
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
     public int getUserId() {
         return userId;
@@ -30,7 +30,7 @@ public class TbRoomHasUserPK implements Serializable {
         this.userId = userId;
     }
 
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     @Id
     public int getRoomId() {
         return roomId;

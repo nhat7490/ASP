@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: roomate
+-- Host: localhost    Database: asp
 -- ------------------------------------------------------
--- Server version	5.7.18-log
+-- Server version	5.7.21-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -169,7 +169,7 @@ CREATE TABLE `tb_role` (
   `role_id` int(11) NOT NULL AUTO_INCREMENT,
   `rolename` varchar(45) COLLATE utf8_icelandic_ci DEFAULT NULL,
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +178,6 @@ CREATE TABLE `tb_role` (
 
 LOCK TABLES `tb_role` WRITE;
 /*!40000 ALTER TABLE `tb_role` DISABLE KEYS */;
-INSERT INTO `tb_role` VALUES (1,'Admin'),(2,'Room Owner'),(3,'Room Master'),(4,'Member');
 /*!40000 ALTER TABLE `tb_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,6 +260,9 @@ DROP TABLE IF EXISTS `tb_room_has_utility`;
 CREATE TABLE `tb_room_has_utility` (
   `room_id` int(11) NOT NULL,
   `utility_id` int(11) NOT NULL,
+  `brand` varchar(45) COLLATE utf8_icelandic_ci DEFAULT NULL,
+  `description` varchar(45) COLLATE utf8_icelandic_ci DEFAULT NULL,
+  `quality` int(11) DEFAULT NULL,
   PRIMARY KEY (`room_id`,`utility_id`),
   KEY `fk_tb_utilities_has_tb_room_tb_room1_idx` (`room_id`),
   KEY `fk_tb_utilities_has_tb_room_tb_utilities1_idx` (`utility_id`),
@@ -368,14 +370,14 @@ CREATE TABLE `tb_user` (
   `email` varchar(100) COLLATE utf8_icelandic_ci NOT NULL,
   `fullname` varchar(100) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `image_profile` varchar(255) COLLATE utf8_icelandic_ci DEFAULT NULL,
-  `dob` date DEFAULT NULL,
+  `dob` datetime DEFAULT NULL,
   `phone` varchar(15) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `gender` tinyint(4) DEFAULT NULL,
   `role_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`role_id`),
   KEY `fk_tb_user_tb_role1_idx` (`role_id`),
   CONSTRAINT `fk_tb_user_tb_role1` FOREIGN KEY (`role_id`) REFERENCES `tb_role` (`role_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -384,7 +386,6 @@ CREATE TABLE `tb_user` (
 
 LOCK TABLES `tb_user` WRITE;
 /*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
-INSERT INTO `tb_user` VALUES (1,'dominhduc','0123456','dominhduc@gmail.com','Do Minh Duc',NULL,'1996-12-30',NULL,NULL,1),(2,'quangnhat','123456','quangnhat@gmail.com','Quang Nhat',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,9 +399,6 @@ DROP TABLE IF EXISTS `tb_utilities`;
 CREATE TABLE `tb_utilities` (
   `utility_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_icelandic_ci DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL,
-  `brand` varchar(45) COLLATE utf8_icelandic_ci DEFAULT NULL,
-  `value` varchar(255) COLLATE utf8_icelandic_ci DEFAULT NULL,
   PRIMARY KEY (`utility_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -440,10 +438,6 @@ LOCK TABLES `tb_utilities_reference` WRITE;
 /*!40000 ALTER TABLE `tb_utilities_reference` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tb_utilities_reference` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'roomate'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -454,4 +448,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-30 11:14:06
+-- Dump completed on 2018-10-02 20:29:40

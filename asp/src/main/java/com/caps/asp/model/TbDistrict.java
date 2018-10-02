@@ -12,7 +12,7 @@ public class TbDistrict {
     private int cityId;
 
     @Id
-    @Column(name = "district_id")
+    @Column(name = "district_id", nullable = false)
     public int getDistrictId() {
         return districtId;
     }
@@ -22,7 +22,7 @@ public class TbDistrict {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 45)
     public String getName() {
         return name;
     }
@@ -32,7 +32,7 @@ public class TbDistrict {
     }
 
     @Id
-    @Column(name = "city_id")
+    @Column(name = "city_id", nullable = false)
     public int getCityId() {
         return cityId;
     }

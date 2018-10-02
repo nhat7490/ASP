@@ -9,9 +9,12 @@ import java.util.Objects;
 public class TbRoomHasUtility {
     private int roomId;
     private int utilityId;
+    private String brand;
+    private String description;
+    private Integer quality;
 
     @Id
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     public int getRoomId() {
         return roomId;
     }
@@ -21,7 +24,7 @@ public class TbRoomHasUtility {
     }
 
     @Id
-    @Column(name = "utility_id")
+    @Column(name = "utility_id", nullable = false)
     public int getUtilityId() {
         return utilityId;
     }
@@ -30,18 +33,51 @@ public class TbRoomHasUtility {
         this.utilityId = utilityId;
     }
 
+    @Basic
+    @Column(name = "brand", nullable = true, length = 45)
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    @Basic
+    @Column(name = "description", nullable = true, length = 45)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Basic
+    @Column(name = "quality", nullable = true)
+    public Integer getQuality() {
+        return quality;
+    }
+
+    public void setQuality(Integer quality) {
+        this.quality = quality;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomHasUtility that = (TbRoomHasUtility) o;
         return roomId == that.roomId &&
-                utilityId == that.utilityId;
+                utilityId == that.utilityId &&
+                Objects.equals(brand, that.brand) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(quality, that.quality);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(roomId, utilityId);
+        return Objects.hash(roomId, utilityId, brand, description, quality);
     }
 }

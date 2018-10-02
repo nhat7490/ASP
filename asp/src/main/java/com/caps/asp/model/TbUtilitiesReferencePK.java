@@ -9,7 +9,7 @@ public class TbUtilitiesReferencePK implements Serializable {
     private int utilityId;
     private int userId;
 
-    @Column(name = "utility_id")
+    @Column(name = "utility_id", nullable = false)
     @Id
     public int getUtilityId() {
         return utilityId;
@@ -19,7 +19,7 @@ public class TbUtilitiesReferencePK implements Serializable {
         this.utilityId = utilityId;
     }
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
     public int getUserId() {
         return userId;

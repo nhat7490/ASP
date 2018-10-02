@@ -9,7 +9,7 @@ public class TbFavouritePK implements Serializable {
     private int userId;
     private int postId;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
     public int getUserId() {
         return userId;
@@ -19,7 +19,7 @@ public class TbFavouritePK implements Serializable {
         this.userId = userId;
     }
 
-    @Column(name = "post_id")
+    @Column(name = "post_id", nullable = false)
     @Id
     public int getPostId() {
         return postId;

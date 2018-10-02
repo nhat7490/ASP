@@ -12,7 +12,7 @@ public class TbStatus {
     private int roomId;
 
     @Id
-    @Column(name = "status_id")
+    @Column(name = "status_id", nullable = false)
     public int getStatusId() {
         return statusId;
     }
@@ -22,7 +22,7 @@ public class TbStatus {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 45)
     public String getName() {
         return name;
     }
@@ -32,7 +32,7 @@ public class TbStatus {
     }
 
     @Id
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     public int getRoomId() {
         return roomId;
     }

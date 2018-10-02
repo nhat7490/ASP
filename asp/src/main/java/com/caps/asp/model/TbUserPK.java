@@ -9,7 +9,7 @@ public class TbUserPK implements Serializable {
     private int userId;
     private int roleId;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
     public int getUserId() {
         return userId;
@@ -19,7 +19,7 @@ public class TbUserPK implements Serializable {
         this.userId = userId;
     }
 
-    @Column(name = "role_id")
+    @Column(name = "role_id", nullable = false)
     @Id
     public int getRoleId() {
         return roleId;

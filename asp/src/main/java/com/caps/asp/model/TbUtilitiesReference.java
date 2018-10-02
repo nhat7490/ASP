@@ -11,7 +11,7 @@ public class TbUtilitiesReference {
     private int userId;
 
     @Id
-    @Column(name = "utility_id")
+    @Column(name = "utility_id", nullable = false)
     public int getUtilityId() {
         return utilityId;
     }
@@ -21,7 +21,7 @@ public class TbUtilitiesReference {
     }
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
     }

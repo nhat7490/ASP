@@ -10,7 +10,7 @@ public class TbType {
     private String name;
 
     @Id
-    @Column(name = "type_id")
+    @Column(name = "type_id", nullable = false)
     public int getTypeId() {
         return typeId;
     }
@@ -20,7 +20,7 @@ public class TbType {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 45)
     public String getName() {
         return name;
     }

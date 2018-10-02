@@ -9,7 +9,7 @@ public class TbImagePK implements Serializable {
     private int imageId;
     private int roomId;
 
-    @Column(name = "image_id")
+    @Column(name = "image_id", nullable = false)
     @Id
     public int getImageId() {
         return imageId;
@@ -19,7 +19,7 @@ public class TbImagePK implements Serializable {
         this.imageId = imageId;
     }
 
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     @Id
     public int getRoomId() {
         return roomId;

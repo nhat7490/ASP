@@ -20,7 +20,7 @@ public class TbUser {
     private int roleId;
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
     }
@@ -30,7 +30,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, length = 45)
     public String getUsername() {
         return username;
     }
@@ -40,7 +40,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "password")
+    @Column(name = "password", nullable = false, length = 45)
     public String getPassword() {
         return password;
     }
@@ -50,7 +50,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, length = 100)
     public String getEmail() {
         return email;
     }
@@ -60,7 +60,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "fullname")
+    @Column(name = "fullname", nullable = true, length = 100)
     public String getFullname() {
         return fullname;
     }
@@ -70,7 +70,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "image_profile")
+    @Column(name = "image_profile", nullable = true, length = 255)
     public String getImageProfile() {
         return imageProfile;
     }
@@ -80,7 +80,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "dob")
+    @Column(name = "dob", nullable = true)
     public Timestamp getDob() {
         return dob;
     }
@@ -90,7 +90,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "phone")
+    @Column(name = "phone", nullable = true, length = 15)
     public String getPhone() {
         return phone;
     }
@@ -100,7 +100,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = true)
     public Byte getGender() {
         return gender;
     }
@@ -110,7 +110,7 @@ public class TbUser {
     }
 
     @Id
-    @Column(name = "role_id")
+    @Column(name = "role_id", nullable = false)
     public int getRoleId() {
         return roleId;
     }

@@ -9,7 +9,7 @@ public class TbStatusPK implements Serializable {
     private int statusId;
     private int roomId;
 
-    @Column(name = "status_id")
+    @Column(name = "status_id", nullable = false)
     @Id
     public int getStatusId() {
         return statusId;
@@ -19,7 +19,7 @@ public class TbStatusPK implements Serializable {
         this.statusId = statusId;
     }
 
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     @Id
     public int getRoomId() {
         return roomId;

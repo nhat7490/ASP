@@ -9,7 +9,7 @@ public class TbDistrictPK implements Serializable {
     private int districtId;
     private int cityId;
 
-    @Column(name = "district_id")
+    @Column(name = "district_id", nullable = false)
     @Id
     public int getDistrictId() {
         return districtId;
@@ -19,7 +19,7 @@ public class TbDistrictPK implements Serializable {
         this.districtId = districtId;
     }
 
-    @Column(name = "city_id")
+    @Column(name = "city_id", nullable = false)
     @Id
     public int getCityId() {
         return cityId;

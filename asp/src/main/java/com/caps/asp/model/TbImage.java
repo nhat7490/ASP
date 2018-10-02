@@ -12,7 +12,7 @@ public class TbImage {
     private int roomId;
 
     @Id
-    @Column(name = "image_id")
+    @Column(name = "image_id", nullable = false)
     public int getImageId() {
         return imageId;
     }
@@ -22,7 +22,7 @@ public class TbImage {
     }
 
     @Basic
-    @Column(name = "link_url")
+    @Column(name = "link_url", nullable = true, length = 255)
     public String getLinkUrl() {
         return linkUrl;
     }
@@ -32,7 +32,7 @@ public class TbImage {
     }
 
     @Id
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     public int getRoomId() {
         return roomId;
     }

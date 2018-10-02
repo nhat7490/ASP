@@ -20,7 +20,7 @@ public class TbRoom {
     private int districtId;
 
     @Id
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     public int getRoomId() {
         return roomId;
     }
@@ -30,7 +30,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 45)
     public String getName() {
         return name;
     }
@@ -40,7 +40,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "price")
+    @Column(name = "price", nullable = true, precision = 0)
     public Double getPrice() {
         return price;
     }
@@ -50,7 +50,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "area")
+    @Column(name = "area", nullable = true)
     public Integer getArea() {
         return area;
     }
@@ -60,7 +60,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "address")
+    @Column(name = "address", nullable = true, length = 255)
     public String getAddress() {
         return address;
     }
@@ -70,7 +70,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "max_guest")
+    @Column(name = "max_guest", nullable = true)
     public Integer getMaxGuest() {
         return maxGuest;
     }
@@ -80,7 +80,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "current_number")
+    @Column(name = "current_number", nullable = true)
     public Integer getCurrentNumber() {
         return currentNumber;
     }
@@ -90,7 +90,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = true, length = 255)
     public String getDescription() {
         return description;
     }
@@ -100,7 +100,7 @@ public class TbRoom {
     }
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
     }
@@ -110,7 +110,7 @@ public class TbRoom {
     }
 
     @Id
-    @Column(name = "city_id")
+    @Column(name = "city_id", nullable = false)
     public int getCityId() {
         return cityId;
     }
@@ -120,7 +120,7 @@ public class TbRoom {
     }
 
     @Id
-    @Column(name = "district_id")
+    @Column(name = "district_id", nullable = false)
     public int getDistrictId() {
         return districtId;
     }

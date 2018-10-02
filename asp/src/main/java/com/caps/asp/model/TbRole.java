@@ -10,7 +10,7 @@ public class TbRole {
     private String rolename;
 
     @Id
-    @Column(name = "role_id")
+    @Column(name = "role_id", nullable = false)
     public int getRoleId() {
         return roleId;
     }
@@ -20,7 +20,7 @@ public class TbRole {
     }
 
     @Basic
-    @Column(name = "rolename")
+    @Column(name = "rolename", nullable = true, length = 45)
     public String getRolename() {
         return rolename;
     }

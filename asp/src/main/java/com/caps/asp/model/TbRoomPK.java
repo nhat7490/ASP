@@ -11,7 +11,7 @@ public class TbRoomPK implements Serializable {
     private int cityId;
     private int districtId;
 
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     @Id
     public int getRoomId() {
         return roomId;
@@ -21,7 +21,7 @@ public class TbRoomPK implements Serializable {
         this.roomId = roomId;
     }
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
     public int getUserId() {
         return userId;
@@ -31,7 +31,7 @@ public class TbRoomPK implements Serializable {
         this.userId = userId;
     }
 
-    @Column(name = "city_id")
+    @Column(name = "city_id", nullable = false)
     @Id
     public int getCityId() {
         return cityId;
@@ -41,7 +41,7 @@ public class TbRoomPK implements Serializable {
         this.cityId = cityId;
     }
 
-    @Column(name = "district_id")
+    @Column(name = "district_id", nullable = false)
     @Id
     public int getDistrictId() {
         return districtId;

@@ -9,7 +9,7 @@ public class TbRoomHasUtilityPK implements Serializable {
     private int roomId;
     private int utilityId;
 
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     @Id
     public int getRoomId() {
         return roomId;
@@ -19,7 +19,7 @@ public class TbRoomHasUtilityPK implements Serializable {
         this.roomId = roomId;
     }
 
-    @Column(name = "utility_id")
+    @Column(name = "utility_id", nullable = false)
     @Id
     public int getUtilityId() {
         return utilityId;
