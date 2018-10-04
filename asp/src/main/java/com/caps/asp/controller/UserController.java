@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class UserController {
     public final UserService userService;
@@ -19,6 +21,21 @@ public class UserController {
         try {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(userService.findByUsername(username));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    //Test 
+    @RequestMapping("/")
+    public String home(){
+        return "redirect:/user";
+    }
+    //Test
+    @GetMapping("/users")
+    public ResponseEntity<List<TbUser>> getAllUsers() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(userService.getAllUsers());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

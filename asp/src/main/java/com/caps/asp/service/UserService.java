@@ -4,6 +4,8 @@ import com.caps.asp.model.TbUser;
 import com.caps.asp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     public final UserRepository userRepository;
@@ -42,4 +44,10 @@ public class UserService {
             userRepository.save(user);
         }
     }
+
+    //For test in heroku
+    public List<TbUser> getAllUsers(){
+        return userRepository.findAll();
+    }
+
 }
