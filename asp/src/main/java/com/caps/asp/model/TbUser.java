@@ -8,7 +8,7 @@ import java.util.Objects;
 @Table(name = "tb_user", schema = "asp", catalog = "")
 @IdClass(TbUserPK.class)
 public class TbUser {
-    private int userId;
+    private Integer userId;
     private String username;
     private String password;
     private String email;
@@ -17,15 +17,15 @@ public class TbUser {
     private Timestamp dob;
     private String phone;
     private Byte gender;
-    private int roleId;
+    private Integer roleId;
 
     @Id
     @Column(name = "user_id", nullable = false)
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -111,11 +111,11 @@ public class TbUser {
 
     @Id
     @Column(name = "role_id", nullable = false)
-    public int getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 
@@ -124,8 +124,7 @@ public class TbUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbUser tbUser = (TbUser) o;
-        return userId == tbUser.userId &&
-                roleId == tbUser.roleId &&
+        return Objects.equals(userId, tbUser.userId) &&
                 Objects.equals(username, tbUser.username) &&
                 Objects.equals(password, tbUser.password) &&
                 Objects.equals(email, tbUser.email) &&
@@ -133,7 +132,8 @@ public class TbUser {
                 Objects.equals(imageProfile, tbUser.imageProfile) &&
                 Objects.equals(dob, tbUser.dob) &&
                 Objects.equals(phone, tbUser.phone) &&
-                Objects.equals(gender, tbUser.gender);
+                Objects.equals(gender, tbUser.gender) &&
+                Objects.equals(roleId, tbUser.roleId);
     }
 
     @Override

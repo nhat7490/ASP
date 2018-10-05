@@ -6,16 +6,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_role", schema = "asp", catalog = "")
 public class TbRole {
-    private int roleId;
+    private Integer roleId;
     private String rolename;
 
     @Id
     @Column(name = "role_id", nullable = false)
-    public int getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 
@@ -34,7 +34,7 @@ public class TbRole {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRole tbRole = (TbRole) o;
-        return roleId == tbRole.roleId &&
+        return Objects.equals(roleId, tbRole.roleId) &&
                 Objects.equals(rolename, tbRole.rolename);
     }
 

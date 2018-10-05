@@ -7,26 +7,26 @@ import java.util.Objects;
 @Table(name = "tb_favourite", schema = "asp", catalog = "")
 @IdClass(TbFavouritePK.class)
 public class TbFavourite {
-    private int userId;
-    private int postId;
+    private Integer userId;
+    private Integer postId;
 
     @Id
     @Column(name = "user_id", nullable = false)
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
     @Id
     @Column(name = "post_id", nullable = false)
-    public int getPostId() {
+    public Integer getPostId() {
         return postId;
     }
 
-    public void setPostId(int postId) {
+    public void setPostId(Integer postId) {
         this.postId = postId;
     }
 
@@ -35,8 +35,8 @@ public class TbFavourite {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbFavourite that = (TbFavourite) o;
-        return userId == that.userId &&
-                postId == that.postId;
+        return Objects.equals(userId, that.userId) &&
+                Objects.equals(postId, that.postId);
     }
 
     @Override

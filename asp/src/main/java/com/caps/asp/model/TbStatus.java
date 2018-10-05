@@ -5,19 +5,17 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_status", schema = "asp", catalog = "")
-@IdClass(TbStatusPK.class)
 public class TbStatus {
-    private int statusId;
+    private Integer statusId;
     private String name;
-    private int roomId;
 
     @Id
     @Column(name = "status_id", nullable = false)
-    public int getStatusId() {
+    public Integer getStatusId() {
         return statusId;
     }
 
-    public void setStatusId(int statusId) {
+    public void setStatusId(Integer statusId) {
         this.statusId = statusId;
     }
 
@@ -31,29 +29,18 @@ public class TbStatus {
         this.name = name;
     }
 
-    @Id
-    @Column(name = "room_id", nullable = false)
-    public int getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbStatus tbStatus = (TbStatus) o;
-        return statusId == tbStatus.statusId &&
-                roomId == tbStatus.roomId &&
+        return Objects.equals(statusId, tbStatus.statusId) &&
                 Objects.equals(name, tbStatus.name);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(statusId, name, roomId);
+        return Objects.hash(statusId, name);
     }
 }

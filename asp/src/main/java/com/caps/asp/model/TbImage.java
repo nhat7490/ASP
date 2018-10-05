@@ -7,17 +7,17 @@ import java.util.Objects;
 @Table(name = "tb_image", schema = "asp", catalog = "")
 @IdClass(TbImagePK.class)
 public class TbImage {
-    private int imageId;
+    private Integer imageId;
     private String linkUrl;
-    private int roomId;
+    private Integer roomId;
 
     @Id
     @Column(name = "image_id", nullable = false)
-    public int getImageId() {
+    public Integer getImageId() {
         return imageId;
     }
 
-    public void setImageId(int imageId) {
+    public void setImageId(Integer imageId) {
         this.imageId = imageId;
     }
 
@@ -33,11 +33,11 @@ public class TbImage {
 
     @Id
     @Column(name = "room_id", nullable = false)
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
@@ -46,9 +46,9 @@ public class TbImage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbImage tbImage = (TbImage) o;
-        return imageId == tbImage.imageId &&
-                roomId == tbImage.roomId &&
-                Objects.equals(linkUrl, tbImage.linkUrl);
+        return Objects.equals(imageId, tbImage.imageId) &&
+                Objects.equals(linkUrl, tbImage.linkUrl) &&
+                Objects.equals(roomId, tbImage.roomId);
     }
 
     @Override

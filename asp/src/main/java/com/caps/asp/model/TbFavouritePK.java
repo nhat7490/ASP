@@ -6,26 +6,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbFavouritePK implements Serializable {
-    private int userId;
-    private int postId;
+    private Integer userId;
+    private Integer postId;
 
     @Column(name = "user_id", nullable = false)
     @Id
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
     @Column(name = "post_id", nullable = false)
     @Id
-    public int getPostId() {
+    public Integer getPostId() {
         return postId;
     }
 
-    public void setPostId(int postId) {
+    public void setPostId(Integer postId) {
         this.postId = postId;
     }
 
@@ -34,8 +34,8 @@ public class TbFavouritePK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbFavouritePK that = (TbFavouritePK) o;
-        return userId == that.userId &&
-                postId == that.postId;
+        return Objects.equals(userId, that.userId) &&
+                Objects.equals(postId, that.postId);
     }
 
     @Override

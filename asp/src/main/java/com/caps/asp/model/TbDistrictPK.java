@@ -6,26 +6,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbDistrictPK implements Serializable {
-    private int districtId;
-    private int cityId;
+    private Integer districtId;
+    private Integer cityId;
 
     @Column(name = "district_id", nullable = false)
     @Id
-    public int getDistrictId() {
+    public Integer getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(int districtId) {
+    public void setDistrictId(Integer districtId) {
         this.districtId = districtId;
     }
 
     @Column(name = "city_id", nullable = false)
     @Id
-    public int getCityId() {
+    public Integer getCityId() {
         return cityId;
     }
 
-    public void setCityId(int cityId) {
+    public void setCityId(Integer cityId) {
         this.cityId = cityId;
     }
 
@@ -34,8 +34,8 @@ public class TbDistrictPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbDistrictPK that = (TbDistrictPK) o;
-        return districtId == that.districtId &&
-                cityId == that.cityId;
+        return Objects.equals(districtId, that.districtId) &&
+                Objects.equals(cityId, that.cityId);
     }
 
     @Override

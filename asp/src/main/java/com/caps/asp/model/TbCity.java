@@ -6,16 +6,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_city", schema = "asp", catalog = "")
 public class TbCity {
-    private int cityId;
+    private Integer cityId;
     private String name;
 
     @Id
     @Column(name = "city_id", nullable = false)
-    public int getCityId() {
+    public Integer getCityId() {
         return cityId;
     }
 
-    public void setCityId(int cityId) {
+    public void setCityId(Integer cityId) {
         this.cityId = cityId;
     }
 
@@ -34,7 +34,7 @@ public class TbCity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbCity tbCity = (TbCity) o;
-        return cityId == tbCity.cityId &&
+        return Objects.equals(cityId, tbCity.cityId) &&
                 Objects.equals(name, tbCity.name);
     }
 

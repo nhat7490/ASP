@@ -7,26 +7,26 @@ import java.util.Objects;
 @Table(name = "tb_utilities_reference", schema = "asp", catalog = "")
 @IdClass(TbUtilitiesReferencePK.class)
 public class TbUtilitiesReference {
-    private int utilityId;
-    private int userId;
+    private Integer utilityId;
+    private Integer userId;
 
     @Id
     @Column(name = "utility_id", nullable = false)
-    public int getUtilityId() {
+    public Integer getUtilityId() {
         return utilityId;
     }
 
-    public void setUtilityId(int utilityId) {
+    public void setUtilityId(Integer utilityId) {
         this.utilityId = utilityId;
     }
 
     @Id
     @Column(name = "user_id", nullable = false)
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -35,8 +35,8 @@ public class TbUtilitiesReference {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbUtilitiesReference that = (TbUtilitiesReference) o;
-        return utilityId == that.utilityId &&
-                userId == that.userId;
+        return Objects.equals(utilityId, that.utilityId) &&
+                Objects.equals(userId, that.userId);
     }
 
     @Override

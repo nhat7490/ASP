@@ -6,49 +6,60 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbRoomPK implements Serializable {
-    private int roomId;
-    private int userId;
-    private int cityId;
-    private int districtId;
+    private Integer roomId;
+    private Integer userId;
+    private Integer cityId;
+    private Integer districtId;
+    private Integer tbStatusStatusId;
 
     @Column(name = "room_id", nullable = false)
     @Id
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
     @Column(name = "user_id", nullable = false)
     @Id
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
     @Column(name = "city_id", nullable = false)
     @Id
-    public int getCityId() {
+    public Integer getCityId() {
         return cityId;
     }
 
-    public void setCityId(int cityId) {
+    public void setCityId(Integer cityId) {
         this.cityId = cityId;
     }
 
     @Column(name = "district_id", nullable = false)
     @Id
-    public int getDistrictId() {
+    public Integer getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(int districtId) {
+    public void setDistrictId(Integer districtId) {
         this.districtId = districtId;
+    }
+
+    @Column(name = "tb_status_status_id", nullable = false)
+    @Id
+    public Integer getTbStatusStatusId() {
+        return tbStatusStatusId;
+    }
+
+    public void setTbStatusStatusId(Integer tbStatusStatusId) {
+        this.tbStatusStatusId = tbStatusStatusId;
     }
 
     @Override
@@ -56,15 +67,16 @@ public class TbRoomPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomPK tbRoomPK = (TbRoomPK) o;
-        return roomId == tbRoomPK.roomId &&
-                userId == tbRoomPK.userId &&
-                cityId == tbRoomPK.cityId &&
-                districtId == tbRoomPK.districtId;
+        return Objects.equals(roomId, tbRoomPK.roomId) &&
+                Objects.equals(userId, tbRoomPK.userId) &&
+                Objects.equals(cityId, tbRoomPK.cityId) &&
+                Objects.equals(districtId, tbRoomPK.districtId) &&
+                Objects.equals(tbStatusStatusId, tbRoomPK.tbStatusStatusId);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(roomId, userId, cityId, districtId);
+        return Objects.hash(roomId, userId, cityId, districtId, tbStatusStatusId);
     }
 }

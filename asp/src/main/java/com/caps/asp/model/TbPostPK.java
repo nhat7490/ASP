@@ -6,48 +6,48 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbPostPK implements Serializable {
-    private int postId;
-    private int typeId;
-    private int userId;
-    private int roomId;
+    private Integer postId;
+    private Integer typeId;
+    private Integer userId;
+    private Integer roomId;
 
     @Column(name = "post_id", nullable = false)
     @Id
-    public int getPostId() {
+    public Integer getPostId() {
         return postId;
     }
 
-    public void setPostId(int postId) {
+    public void setPostId(Integer postId) {
         this.postId = postId;
     }
 
     @Column(name = "type_id", nullable = false)
     @Id
-    public int getTypeId() {
+    public Integer getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(int typeId) {
+    public void setTypeId(Integer typeId) {
         this.typeId = typeId;
     }
 
     @Column(name = "user_id", nullable = false)
     @Id
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
     @Column(name = "room_id", nullable = false)
     @Id
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
@@ -56,10 +56,10 @@ public class TbPostPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbPostPK tbPostPK = (TbPostPK) o;
-        return postId == tbPostPK.postId &&
-                typeId == tbPostPK.typeId &&
-                userId == tbPostPK.userId &&
-                roomId == tbPostPK.roomId;
+        return Objects.equals(postId, tbPostPK.postId) &&
+                Objects.equals(typeId, tbPostPK.typeId) &&
+                Objects.equals(userId, tbPostPK.userId) &&
+                Objects.equals(roomId, tbPostPK.roomId);
     }
 
     @Override

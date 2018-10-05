@@ -6,37 +6,37 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbRoomHasUserPK implements Serializable {
-    private int roomHasUserId;
-    private int userId;
-    private int roomId;
+    private Integer roomHasUserId;
+    private Integer userId;
+    private Integer roomId;
 
     @Column(name = "room_has_user_id", nullable = false)
     @Id
-    public int getRoomHasUserId() {
+    public Integer getRoomHasUserId() {
         return roomHasUserId;
     }
 
-    public void setRoomHasUserId(int roomHasUserId) {
+    public void setRoomHasUserId(Integer roomHasUserId) {
         this.roomHasUserId = roomHasUserId;
     }
 
     @Column(name = "user_id", nullable = false)
     @Id
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
     @Column(name = "room_id", nullable = false)
     @Id
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
@@ -45,9 +45,9 @@ public class TbRoomHasUserPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomHasUserPK that = (TbRoomHasUserPK) o;
-        return roomHasUserId == that.roomHasUserId &&
-                userId == that.userId &&
-                roomId == that.roomId;
+        return Objects.equals(roomHasUserId, that.roomHasUserId) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(roomId, that.roomId);
     }
 
     @Override

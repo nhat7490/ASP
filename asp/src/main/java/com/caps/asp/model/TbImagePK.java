@@ -6,26 +6,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbImagePK implements Serializable {
-    private int imageId;
-    private int roomId;
+    private Integer imageId;
+    private Integer roomId;
 
     @Column(name = "image_id", nullable = false)
     @Id
-    public int getImageId() {
+    public Integer getImageId() {
         return imageId;
     }
 
-    public void setImageId(int imageId) {
+    public void setImageId(Integer imageId) {
         this.imageId = imageId;
     }
 
     @Column(name = "room_id", nullable = false)
     @Id
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
@@ -34,8 +34,8 @@ public class TbImagePK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbImagePK tbImagePK = (TbImagePK) o;
-        return imageId == tbImagePK.imageId &&
-                roomId == tbImagePK.roomId;
+        return Objects.equals(imageId, tbImagePK.imageId) &&
+                Objects.equals(roomId, tbImagePK.roomId);
     }
 
     @Override
