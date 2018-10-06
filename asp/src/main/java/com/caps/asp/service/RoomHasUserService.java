@@ -4,6 +4,8 @@ import com.caps.asp.model.TbRoomHasUser;
 import com.caps.asp.repository.RoomHasUserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoomHasUserService {
     public final RoomHasUserRepository roomHasUserRepository;
@@ -13,6 +15,10 @@ public class RoomHasUserService {
     }
 
     public void addRoomMember(TbRoomHasUser tbRoomHasUser) {
-        roomHasUserRepository.save(tbRoomHasUser);
+        roomHasUserRepository.save(tbRoomHasUser)
+    }
+
+    public List<TbRoomHasUser> getAllByRoomId(int roomId){
+        return roomHasUserRepository.findAllByRoomId(roomId);
     }
 }

@@ -45,10 +45,10 @@ public class TbImage {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TbImage tbImage = (TbImage) o;
-        return Objects.equals(imageId, tbImage.imageId) &&
-                Objects.equals(linkUrl, tbImage.linkUrl) &&
-                Objects.equals(roomId, tbImage.roomId);
+        TbImage image = (TbImage) o;
+        return Objects.equals(imageId, image.imageId) &&
+                Objects.equals(linkUrl, image.linkUrl) &&
+                Objects.equals(roomId, image.roomId);
     }
 
     @Override

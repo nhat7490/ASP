@@ -1,7 +1,7 @@
 package com.caps.asp.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -9,8 +9,8 @@ import java.util.Objects;
 @IdClass(TbRoomHasUserPK.class)
 public class TbRoomHasUser {
     private Integer roomHasUserId;
-    private Timestamp dateIn;
-    private Timestamp dateOut;
+    private Date dateIn;
+    private Date dateOut;
     private Byte status;
     private Integer userId;
     private Integer roomId;
@@ -27,21 +27,21 @@ public class TbRoomHasUser {
 
     @Basic
     @Column(name = "date_in", nullable = true)
-    public Timestamp getDateIn() {
+    public Date getDateIn() {
         return dateIn;
     }
 
-    public void setDateIn(Timestamp dateIn) {
+    public void setDateIn(Date dateIn) {
         this.dateIn = dateIn;
     }
 
     @Basic
     @Column(name = "date_out", nullable = true)
-    public Timestamp getDateOut() {
+    public Date getDateOut() {
         return dateOut;
     }
 
-    public void setDateOut(Timestamp dateOut) {
+    public void setDateOut(Date dateOut) {
         this.dateOut = dateOut;
     }
 

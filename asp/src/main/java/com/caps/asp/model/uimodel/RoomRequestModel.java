@@ -1,6 +1,6 @@
 package com.caps.asp.model.uimodel;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 public class RoomRequestModel {

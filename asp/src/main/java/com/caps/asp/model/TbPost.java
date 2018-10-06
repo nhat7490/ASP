@@ -1,7 +1,7 @@
 package com.caps.asp.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -13,10 +13,12 @@ public class TbPost {
     private String phoneContact;
     private Integer numberPartner;
     private Byte genderPartner;
-    private Timestamp date;
+    private Date date;
     private Integer typeId;
     private Integer userId;
     private Integer roomId;
+    private Double longtitude;
+    private Double lattitude;
 
     @Id
     @Column(name = "post_id", nullable = false)
@@ -70,11 +72,11 @@ public class TbPost {
 
     @Basic
     @Column(name = "date", nullable = true)
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -108,6 +110,26 @@ public class TbPost {
         this.roomId = roomId;
     }
 
+    @Basic
+    @Column(name = "longtitude", nullable = true, precision = 0)
+    public Double getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(Double longtitude) {
+        this.longtitude = longtitude;
+    }
+
+    @Basic
+    @Column(name = "lattitude", nullable = true, precision = 0)
+    public Double getLattitude() {
+        return lattitude;
+    }
+
+    public void setLattitude(Double lattitude) {
+        this.lattitude = lattitude;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,12 +143,14 @@ public class TbPost {
                 Objects.equals(date, tbPost.date) &&
                 Objects.equals(typeId, tbPost.typeId) &&
                 Objects.equals(userId, tbPost.userId) &&
-                Objects.equals(roomId, tbPost.roomId);
+                Objects.equals(roomId, tbPost.roomId) &&
+                Objects.equals(longtitude, tbPost.longtitude) &&
+                Objects.equals(lattitude, tbPost.lattitude);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(postId, name, phoneContact, numberPartner, genderPartner, date, typeId, userId, roomId);
+        return Objects.hash(postId, name, phoneContact, numberPartner, genderPartner, date, typeId, userId, roomId, longtitude, lattitude);
     }
 }

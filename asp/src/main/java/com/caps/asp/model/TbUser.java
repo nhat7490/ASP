@@ -1,7 +1,7 @@
 package com.caps.asp.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -14,7 +14,7 @@ public class TbUser {
     private String email;
     private String fullname;
     private String imageProfile;
-    private Timestamp dob;
+    private Date dob;
     private String phone;
     private Byte gender;
     private Integer roleId;
@@ -81,11 +81,11 @@ public class TbUser {
 
     @Basic
     @Column(name = "dob", nullable = true)
-    public Timestamp getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(Timestamp dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
     }
 
@@ -123,17 +123,17 @@ public class TbUser {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TbUser tbUser = (TbUser) o;
-        return Objects.equals(userId, tbUser.userId) &&
-                Objects.equals(username, tbUser.username) &&
-                Objects.equals(password, tbUser.password) &&
-                Objects.equals(email, tbUser.email) &&
-                Objects.equals(fullname, tbUser.fullname) &&
-                Objects.equals(imageProfile, tbUser.imageProfile) &&
-                Objects.equals(dob, tbUser.dob) &&
-                Objects.equals(phone, tbUser.phone) &&
-                Objects.equals(gender, tbUser.gender) &&
-                Objects.equals(roleId, tbUser.roleId);
+        TbUser user = (TbUser) o;
+        return Objects.equals(userId, user.userId) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(fullname, user.fullname) &&
+                Objects.equals(imageProfile, user.imageProfile) &&
+                Objects.equals(dob, user.dob) &&
+                Objects.equals(phone, user.phone) &&
+                Objects.equals(gender, user.gender) &&
+                Objects.equals(roleId, user.roleId);
     }
 
     @Override

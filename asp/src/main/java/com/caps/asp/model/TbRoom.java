@@ -1,7 +1,7 @@
 package com.caps.asp.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -19,8 +19,10 @@ public class TbRoom {
     private Integer userId;
     private Integer cityId;
     private Integer districtId;
-    private Timestamp date;
+    private Date date;
     private Integer tbStatusStatusId;
+    private Double longtitude;
+    private Double lattitude;
 
     @Id
     @Column(name = "room_id", nullable = false)
@@ -134,11 +136,11 @@ public class TbRoom {
 
     @Basic
     @Column(name = "date", nullable = true)
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -150,6 +152,26 @@ public class TbRoom {
 
     public void setTbStatusStatusId(Integer tbStatusStatusId) {
         this.tbStatusStatusId = tbStatusStatusId;
+    }
+
+    @Basic
+    @Column(name = "longtitude", nullable = true, precision = 0)
+    public Double getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(Double longtitude) {
+        this.longtitude = longtitude;
+    }
+
+    @Basic
+    @Column(name = "lattitude", nullable = true, precision = 0)
+    public Double getLattitude() {
+        return lattitude;
+    }
+
+    public void setLattitude(Double lattitude) {
+        this.lattitude = lattitude;
     }
 
     @Override
@@ -169,12 +191,14 @@ public class TbRoom {
                 Objects.equals(cityId, room.cityId) &&
                 Objects.equals(districtId, room.districtId) &&
                 Objects.equals(date, room.date) &&
-                Objects.equals(tbStatusStatusId, room.tbStatusStatusId);
+                Objects.equals(tbStatusStatusId, room.tbStatusStatusId) &&
+                Objects.equals(longtitude, room.longtitude) &&
+                Objects.equals(lattitude, room.lattitude);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(roomId, name, price, area, address, maxGuest, currentNumber, description, userId, cityId, districtId, date, tbStatusStatusId);
+        return Objects.hash(roomId, name, price, area, address, maxGuest, currentNumber, description, userId, cityId, districtId, date, tbStatusStatusId, longtitude, lattitude);
     }
 }

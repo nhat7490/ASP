@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -40,7 +44,7 @@ public class RoomController {
             room.setArea(roomRequestModel.getArea());
             room.setAddress(roomRequestModel.getAddress());
             room.setMaxGuest(roomRequestModel.getMaxGuest());
-            room.setDate((Timestamp) roomRequestModel.getDateCreated());
+            room.setDate(roomRequestModel.getDateCreated());
             room.setCurrentNumber(roomRequestModel.getCurrentNumber());
             room.setDescription(roomRequestModel.getDescription());
             room.setTbStatusStatusId(roomRequestModel.getStatus());
@@ -84,7 +88,7 @@ public class RoomController {
                 room.setArea(roomRequestModel.getArea());
                 room.setAddress(roomRequestModel.getAddress());
                 room.setMaxGuest(roomRequestModel.getMaxGuest());
-                room.setDate((Timestamp) roomRequestModel.getDateCreated());
+                room.setDate(roomRequestModel.getDateCreated());
                 room.setCurrentNumber(roomRequestModel.getCurrentNumber());
                 room.setDescription(roomRequestModel.getDescription());
                 room.setTbStatusStatusId(roomRequestModel.getStatus());
@@ -138,7 +142,7 @@ public class RoomController {
         try {
             if (roomId != null) {
                 return ResponseEntity.status(OK).body(roomService.findAllRoom());
-            }else{
+            } else {
                 return ResponseEntity.status(OK).body(roomService.findRoomById(Integer.parseInt(roomId)));
             }
         } catch (Exception e) {
@@ -146,20 +150,45 @@ public class RoomController {
         }
     }
 
-    @PostMapping("rom/addMember/{roomId}&{username}")
-    public ResponseEntity addMember(@PathVariable int roomId, String username){
+    @PostMapping("rom/addMember/{roomId}&{username}&{dateout}")
+    public ResponseEntity addMember(@PathVariable int roomId, String username, Date dateout) {
         try {
             TbUser user = userService.findByUsername(username);
-            if(user!=null){
+            if (user != null) {
                 return ResponseEntity.status(CONFLICT).build();
-            }else{
+            } else {
                 TbRoomHasUser tbRoomHasUser = new TbRoomHasUser();
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
                 LocalDateTime now = LocalDateTime.now();
-//                tbRoomHasUser.setDateIn(dtf.format(now));
-//                roomHasUserService.addRoomMember(roomId, user.getUserId());
+                String startDate = dtf.format(now);
+                SimpleDateFormat sdf1 = new SimpleDateFormat("dd-mm-yyyy");
+                java.util.Date date = sdf1.parse(startDate);
+                java.sql.Date sqlStartDate = new java.sql.Date(date.getTime());
+                tbRoomHasUser.setDateIn(sqlStartDate);
+                tbRoomHasUser.setDateOut(dateout);
+                tbRoomHasUser.setRoomId(roomId);
+                tbRoomHasUser.setUserId(user.getUserId());
+                roomHasUserService.addRoomMember(tbRoomHasUser);
+
+                List<TbRoomHasUser> roomHasUsers = roomHasUserService.getAllByRoomId(roomId);
+                List<Long> milis = new ArrayList<>();
+
+                for (TbRoomHasUser roomHasUser : roomHasUsers) {
+                    milis.add(roomHasUser.getDateIn().getTime());
+                }
+
+                Collections.sort(milis);
+                for (TbRoomHasUser roomHasUser : roomHasUsers) {
+                    if (roomHasUser.getDateIn().getTime() == milis.get(milis.size()-1)){
+                        TbUser tbUser = userService.findById(roomHasUser.getUserId());
+                        tbUser.setRoleId(3);
+                        userService.updateUserById(tbUser);
+                    }
+                }
+                return ResponseEntity.status(OK).build();
+
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
         }
     }
