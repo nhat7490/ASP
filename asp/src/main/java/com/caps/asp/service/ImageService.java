@@ -16,4 +16,8 @@ public class ImageService {
     public void saveImage(TbImage image){
         imageRepository.save(image);
     }
+
+    public void deleteAllImageByRoomId(int roomId){
+        imageRepository.deleteAllByRoomId(roomId);
+    }
 }

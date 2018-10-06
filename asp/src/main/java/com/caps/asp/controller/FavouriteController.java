@@ -4,11 +4,12 @@ import com.caps.asp.model.TbFavourite;
 import com.caps.asp.service.FavouriteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 public class FavouriteController {
@@ -19,7 +20,17 @@ public class FavouriteController {
         this.favouriteService = favouriteService;
     }
 
-    @GetMapping("/favourites/{userId}")
+    @PostMapping("/favourites/createFavourite")
+    public ResponseEntity addFavorite(@RequestBody TbFavourite favourite){
+        try {
+            favouriteService.addFavourite(favourite);
+            return ResponseEntity.status(OK).build();
+        }catch (Exception e){
+            return ResponseEntity.status(CONFLICT).build();
+        }
+    }
+
+    @GetMapping("/favourites/getFavourite/{userId}")
     public ResponseEntity<List<TbFavourite>> findAllFavouritesByUserId(@PathVariable int userId){
         try {
             return ResponseEntity.status(HttpStatus.OK)

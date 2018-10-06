@@ -18,4 +18,8 @@ public class FavouriteService {
     public List<TbFavourite> findAllByUserId(int userId){
         return favouriteRepository.findAllByUserId(userId);
     }
+
+    public void addFavourite(TbFavourite tbFavourite){
+        favouriteRepository.save(tbFavourite);
+    }
 }

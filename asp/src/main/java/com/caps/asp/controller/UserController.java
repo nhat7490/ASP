@@ -16,7 +16,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/findByUsername/{username}")
+    @GetMapping("/user/findByUsername/{username}")
     public ResponseEntity<TbUser> findByUsername(@PathVariable String username) {
         try {
             return ResponseEntity.status(HttpStatus.OK)
@@ -31,7 +31,7 @@ public class UserController {
         return "redirect:/user";
     }
     //Test
-    @GetMapping("/users")
+    @GetMapping("/user/listUser")
     public ResponseEntity<List<TbUser>> getAllUsers() {
         try {
             return ResponseEntity.status(HttpStatus.OK)
@@ -41,7 +41,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/findById/{id}")
+    @GetMapping("/user/findById/{id}")
     public ResponseEntity<TbUser> findById(@PathVariable int id) {
         try {
             return ResponseEntity.status(HttpStatus.OK)
@@ -51,7 +51,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/updateUser")
+    @PutMapping("/user/updateUser")
     public ResponseEntity updateUSerById(@RequestBody TbUser user) {
         try {
             userService.updateUserById(user);
@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/createUser")
+    @PostMapping("/user/createUser")
     public ResponseEntity createUSer(@RequestBody TbUser user) {
         try {
             userService.createUser(user);
