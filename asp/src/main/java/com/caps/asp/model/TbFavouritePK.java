@@ -9,7 +9,7 @@ public class TbFavouritePK implements Serializable {
     private Integer userId;
     private Integer postId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     @Id
     public Integer getUserId() {
         return userId;
@@ -19,7 +19,7 @@ public class TbFavouritePK implements Serializable {
         this.userId = userId;
     }
 
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "post_id")
     @Id
     public Integer getPostId() {
         return postId;
@@ -40,7 +40,6 @@ public class TbFavouritePK implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(userId, postId);
     }
 }

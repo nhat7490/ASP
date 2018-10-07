@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_user", schema = "asp", catalog = "")
+@Table(name = "tb_user", schema = "roomate", catalog = "")
 @IdClass(TbUserPK.class)
 public class TbUser {
     private Integer userId;
@@ -20,7 +20,7 @@ public class TbUser {
     private Integer roleId;
 
     @Id
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     public Integer getUserId() {
         return userId;
     }
@@ -30,7 +30,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "username", nullable = false, length = 45)
+    @Column(name = "username")
     public String getUsername() {
         return username;
     }
@@ -40,7 +40,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 45)
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -50,7 +50,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email")
     public String getEmail() {
         return email;
     }
@@ -60,7 +60,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "fullname", nullable = true, length = 100)
+    @Column(name = "fullname")
     public String getFullname() {
         return fullname;
     }
@@ -70,7 +70,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "image_profile", nullable = true, length = 255)
+    @Column(name = "image_profile")
     public String getImageProfile() {
         return imageProfile;
     }
@@ -80,7 +80,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "dob", nullable = true)
+    @Column(name = "dob")
     public Date getDob() {
         return dob;
     }
@@ -90,7 +90,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "phone", nullable = true, length = 15)
+    @Column(name = "phone")
     public String getPhone() {
         return phone;
     }
@@ -100,7 +100,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "gender", nullable = true)
+    @Column(name = "gender")
     public Byte getGender() {
         return gender;
     }
@@ -110,7 +110,7 @@ public class TbUser {
     }
 
     @Id
-    @Column(name = "role_id", nullable = false)
+    @Column(name = "role_id")
     public Integer getRoleId() {
         return roleId;
     }
@@ -123,22 +123,21 @@ public class TbUser {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TbUser user = (TbUser) o;
-        return Objects.equals(userId, user.userId) &&
-                Objects.equals(username, user.username) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(fullname, user.fullname) &&
-                Objects.equals(imageProfile, user.imageProfile) &&
-                Objects.equals(dob, user.dob) &&
-                Objects.equals(phone, user.phone) &&
-                Objects.equals(gender, user.gender) &&
-                Objects.equals(roleId, user.roleId);
+        TbUser tbUser = (TbUser) o;
+        return Objects.equals(userId, tbUser.userId) &&
+                Objects.equals(username, tbUser.username) &&
+                Objects.equals(password, tbUser.password) &&
+                Objects.equals(email, tbUser.email) &&
+                Objects.equals(fullname, tbUser.fullname) &&
+                Objects.equals(imageProfile, tbUser.imageProfile) &&
+                Objects.equals(dob, tbUser.dob) &&
+                Objects.equals(phone, tbUser.phone) &&
+                Objects.equals(gender, tbUser.gender) &&
+                Objects.equals(roleId, tbUser.roleId);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(userId, username, password, email, fullname, imageProfile, dob, phone, gender, roleId);
     }
 }

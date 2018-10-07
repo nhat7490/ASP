@@ -4,30 +4,30 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_post_has_tb_district", schema = "asp", catalog = "")
+@Table(name = "tb_post_has_tb_district", schema = "roomate", catalog = "")
 @IdClass(TbPostHasTbDistrictPK.class)
 public class TbPostHasTbDistrict {
-    private Integer tbPostPostId;
-    private Integer tbDistrictDistrictId;
+    private Integer postId;
+    private Integer districtId;
 
     @Id
-    @Column(name = "tb_post_post_id", nullable = false)
-    public Integer getTbPostPostId() {
-        return tbPostPostId;
+    @Column(name = "post_id")
+    public Integer getPostId() {
+        return postId;
     }
 
-    public void setTbPostPostId(Integer tbPostPostId) {
-        this.tbPostPostId = tbPostPostId;
+    public void setPostId(Integer postId) {
+        this.postId = postId;
     }
 
     @Id
-    @Column(name = "tb_district_district_id", nullable = false)
-    public Integer getTbDistrictDistrictId() {
-        return tbDistrictDistrictId;
+    @Column(name = "district_id")
+    public Integer getDistrictId() {
+        return districtId;
     }
 
-    public void setTbDistrictDistrictId(Integer tbDistrictDistrictId) {
-        this.tbDistrictDistrictId = tbDistrictDistrictId;
+    public void setDistrictId(Integer districtId) {
+        this.districtId = districtId;
     }
 
     @Override
@@ -35,13 +35,12 @@ public class TbPostHasTbDistrict {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbPostHasTbDistrict that = (TbPostHasTbDistrict) o;
-        return Objects.equals(tbPostPostId, that.tbPostPostId) &&
-                Objects.equals(tbDistrictDistrictId, that.tbDistrictDistrictId);
+        return Objects.equals(postId, that.postId) &&
+                Objects.equals(districtId, that.districtId);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(tbPostPostId, tbDistrictDistrictId);
+        return Objects.hash(postId, districtId);
     }
 }

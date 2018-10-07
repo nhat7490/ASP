@@ -11,7 +11,7 @@ public class TbPostPK implements Serializable {
     private Integer userId;
     private Integer roomId;
 
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "post_id")
     @Id
     public Integer getPostId() {
         return postId;
@@ -21,7 +21,7 @@ public class TbPostPK implements Serializable {
         this.postId = postId;
     }
 
-    @Column(name = "type_id", nullable = false)
+    @Column(name = "type_id")
     @Id
     public Integer getTypeId() {
         return typeId;
@@ -31,7 +31,7 @@ public class TbPostPK implements Serializable {
         this.typeId = typeId;
     }
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     @Id
     public Integer getUserId() {
         return userId;
@@ -41,7 +41,7 @@ public class TbPostPK implements Serializable {
         this.userId = userId;
     }
 
-    @Column(name = "room_id", nullable = false)
+    @Column(name = "room_id")
     @Id
     public Integer getRoomId() {
         return roomId;
@@ -64,7 +64,6 @@ public class TbPostPK implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(postId, typeId, userId, roomId);
     }
 }

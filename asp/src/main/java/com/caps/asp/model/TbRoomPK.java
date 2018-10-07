@@ -12,7 +12,7 @@ public class TbRoomPK implements Serializable {
     private Integer districtId;
     private Integer tbStatusStatusId;
 
-    @Column(name = "room_id", nullable = false)
+    @Column(name = "room_id")
     @Id
     public Integer getRoomId() {
         return roomId;
@@ -22,7 +22,7 @@ public class TbRoomPK implements Serializable {
         this.roomId = roomId;
     }
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     @Id
     public Integer getUserId() {
         return userId;
@@ -32,7 +32,7 @@ public class TbRoomPK implements Serializable {
         this.userId = userId;
     }
 
-    @Column(name = "city_id", nullable = false)
+    @Column(name = "city_id")
     @Id
     public Integer getCityId() {
         return cityId;
@@ -42,7 +42,7 @@ public class TbRoomPK implements Serializable {
         this.cityId = cityId;
     }
 
-    @Column(name = "district_id", nullable = false)
+    @Column(name = "district_id")
     @Id
     public Integer getDistrictId() {
         return districtId;
@@ -52,7 +52,7 @@ public class TbRoomPK implements Serializable {
         this.districtId = districtId;
     }
 
-    @Column(name = "tb_status_status_id", nullable = false)
+    @Column(name = "tb_status_status_id")
     @Id
     public Integer getTbStatusStatusId() {
         return tbStatusStatusId;
@@ -76,7 +76,6 @@ public class TbRoomPK implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(roomId, userId, cityId, districtId, tbStatusStatusId);
     }
 }

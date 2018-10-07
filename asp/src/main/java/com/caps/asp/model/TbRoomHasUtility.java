@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_room_has_utility", schema = "asp", catalog = "")
+@Table(name = "tb_room_has_utility", schema = "roomate", catalog = "")
 @IdClass(TbRoomHasUtilityPK.class)
 public class TbRoomHasUtility {
     private Integer roomId;
@@ -14,7 +14,7 @@ public class TbRoomHasUtility {
     private Integer quality;
 
     @Id
-    @Column(name = "room_id", nullable = false)
+    @Column(name = "room_id")
     public Integer getRoomId() {
         return roomId;
     }
@@ -24,7 +24,7 @@ public class TbRoomHasUtility {
     }
 
     @Id
-    @Column(name = "utility_id", nullable = false)
+    @Column(name = "utility_id")
     public Integer getUtilityId() {
         return utilityId;
     }
@@ -34,7 +34,7 @@ public class TbRoomHasUtility {
     }
 
     @Basic
-    @Column(name = "brand", nullable = true, length = 45)
+    @Column(name = "brand")
     public String getBrand() {
         return brand;
     }
@@ -44,7 +44,7 @@ public class TbRoomHasUtility {
     }
 
     @Basic
-    @Column(name = "description", nullable = true, length = 45)
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -54,7 +54,7 @@ public class TbRoomHasUtility {
     }
 
     @Basic
-    @Column(name = "quality", nullable = true)
+    @Column(name = "quality")
     public Integer getQuality() {
         return quality;
     }
@@ -77,7 +77,6 @@ public class TbRoomHasUtility {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(roomId, utilityId, brand, description, quality);
     }
 }

@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_room_has_user", schema = "asp", catalog = "")
+@Table(name = "tb_room_has_user", schema = "roomate", catalog = "")
 @IdClass(TbRoomHasUserPK.class)
 public class TbRoomHasUser {
     private Integer roomHasUserId;
@@ -16,7 +16,7 @@ public class TbRoomHasUser {
     private Integer roomId;
 
     @Id
-    @Column(name = "room_has_user_id", nullable = false)
+    @Column(name = "room_has_user_id")
     public Integer getRoomHasUserId() {
         return roomHasUserId;
     }
@@ -26,7 +26,7 @@ public class TbRoomHasUser {
     }
 
     @Basic
-    @Column(name = "date_in", nullable = true)
+    @Column(name = "date_in")
     public Date getDateIn() {
         return dateIn;
     }
@@ -36,7 +36,7 @@ public class TbRoomHasUser {
     }
 
     @Basic
-    @Column(name = "date_out", nullable = true)
+    @Column(name = "date_out")
     public Date getDateOut() {
         return dateOut;
     }
@@ -46,7 +46,7 @@ public class TbRoomHasUser {
     }
 
     @Basic
-    @Column(name = "status", nullable = true)
+    @Column(name = "status")
     public Byte getStatus() {
         return status;
     }
@@ -56,7 +56,7 @@ public class TbRoomHasUser {
     }
 
     @Id
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     public Integer getUserId() {
         return userId;
     }
@@ -66,7 +66,7 @@ public class TbRoomHasUser {
     }
 
     @Id
-    @Column(name = "room_id", nullable = false)
+    @Column(name = "room_id")
     public Integer getRoomId() {
         return roomId;
     }
@@ -90,7 +90,6 @@ public class TbRoomHasUser {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(roomHasUserId, dateIn, dateOut, status, userId, roomId);
     }
 }

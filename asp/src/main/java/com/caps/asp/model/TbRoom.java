@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_room", schema = "asp", catalog = "")
+@Table(name = "tb_room", schema = "roomate", catalog = "")
 @IdClass(TbRoomPK.class)
 public class TbRoom {
     private Integer roomId;
@@ -25,7 +25,7 @@ public class TbRoom {
     private Double lattitude;
 
     @Id
-    @Column(name = "room_id", nullable = false)
+    @Column(name = "room_id")
     public Integer getRoomId() {
         return roomId;
     }
@@ -35,7 +35,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 45)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -45,7 +45,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "price", nullable = true, precision = 0)
+    @Column(name = "price")
     public Double getPrice() {
         return price;
     }
@@ -55,7 +55,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "area", nullable = true)
+    @Column(name = "area")
     public Integer getArea() {
         return area;
     }
@@ -65,7 +65,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "address", nullable = false, length = 255)
+    @Column(name = "address")
     public String getAddress() {
         return address;
     }
@@ -75,7 +75,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "max_guest", nullable = true)
+    @Column(name = "max_guest")
     public Integer getMaxGuest() {
         return maxGuest;
     }
@@ -85,7 +85,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "current_number", nullable = true)
+    @Column(name = "current_number")
     public Integer getCurrentNumber() {
         return currentNumber;
     }
@@ -95,7 +95,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "description", nullable = true, length = 255)
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -105,7 +105,7 @@ public class TbRoom {
     }
 
     @Id
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     public Integer getUserId() {
         return userId;
     }
@@ -115,7 +115,7 @@ public class TbRoom {
     }
 
     @Id
-    @Column(name = "city_id", nullable = false)
+    @Column(name = "city_id")
     public Integer getCityId() {
         return cityId;
     }
@@ -125,7 +125,7 @@ public class TbRoom {
     }
 
     @Id
-    @Column(name = "district_id", nullable = false)
+    @Column(name = "district_id")
     public Integer getDistrictId() {
         return districtId;
     }
@@ -135,7 +135,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "date", nullable = true)
+    @Column(name = "date")
     public Date getDate() {
         return date;
     }
@@ -145,7 +145,7 @@ public class TbRoom {
     }
 
     @Id
-    @Column(name = "tb_status_status_id", nullable = false)
+    @Column(name = "tb_status_status_id")
     public Integer getTbStatusStatusId() {
         return tbStatusStatusId;
     }
@@ -155,7 +155,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "longtitude", nullable = true, precision = 0)
+    @Column(name = "longtitude")
     public Double getLongtitude() {
         return longtitude;
     }
@@ -165,7 +165,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "lattitude", nullable = true, precision = 0)
+    @Column(name = "lattitude")
     public Double getLattitude() {
         return lattitude;
     }
@@ -178,27 +178,26 @@ public class TbRoom {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TbRoom room = (TbRoom) o;
-        return Objects.equals(roomId, room.roomId) &&
-                Objects.equals(name, room.name) &&
-                Objects.equals(price, room.price) &&
-                Objects.equals(area, room.area) &&
-                Objects.equals(address, room.address) &&
-                Objects.equals(maxGuest, room.maxGuest) &&
-                Objects.equals(currentNumber, room.currentNumber) &&
-                Objects.equals(description, room.description) &&
-                Objects.equals(userId, room.userId) &&
-                Objects.equals(cityId, room.cityId) &&
-                Objects.equals(districtId, room.districtId) &&
-                Objects.equals(date, room.date) &&
-                Objects.equals(tbStatusStatusId, room.tbStatusStatusId) &&
-                Objects.equals(longtitude, room.longtitude) &&
-                Objects.equals(lattitude, room.lattitude);
+        TbRoom tbRoom = (TbRoom) o;
+        return Objects.equals(roomId, tbRoom.roomId) &&
+                Objects.equals(name, tbRoom.name) &&
+                Objects.equals(price, tbRoom.price) &&
+                Objects.equals(area, tbRoom.area) &&
+                Objects.equals(address, tbRoom.address) &&
+                Objects.equals(maxGuest, tbRoom.maxGuest) &&
+                Objects.equals(currentNumber, tbRoom.currentNumber) &&
+                Objects.equals(description, tbRoom.description) &&
+                Objects.equals(userId, tbRoom.userId) &&
+                Objects.equals(cityId, tbRoom.cityId) &&
+                Objects.equals(districtId, tbRoom.districtId) &&
+                Objects.equals(date, tbRoom.date) &&
+                Objects.equals(tbStatusStatusId, tbRoom.tbStatusStatusId) &&
+                Objects.equals(longtitude, tbRoom.longtitude) &&
+                Objects.equals(lattitude, tbRoom.lattitude);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(roomId, name, price, area, address, maxGuest, currentNumber, description, userId, cityId, districtId, date, tbStatusStatusId, longtitude, lattitude);
     }
 }

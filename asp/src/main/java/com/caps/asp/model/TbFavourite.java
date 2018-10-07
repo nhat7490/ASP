@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_favourite", schema = "asp", catalog = "")
+@Table(name = "tb_favourite", schema = "roomate", catalog = "")
 @IdClass(TbFavouritePK.class)
 public class TbFavourite {
     private Integer userId;
     private Integer postId;
 
     @Id
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     public Integer getUserId() {
         return userId;
     }
@@ -21,7 +21,7 @@ public class TbFavourite {
     }
 
     @Id
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "post_id")
     public Integer getPostId() {
         return postId;
     }
@@ -41,7 +41,6 @@ public class TbFavourite {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(userId, postId);
     }
 }

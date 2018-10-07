@@ -9,7 +9,7 @@ public class TbUserPK implements Serializable {
     private Integer userId;
     private Integer roleId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     @Id
     public Integer getUserId() {
         return userId;
@@ -19,7 +19,7 @@ public class TbUserPK implements Serializable {
         this.userId = userId;
     }
 
-    @Column(name = "role_id", nullable = false)
+    @Column(name = "role_id")
     @Id
     public Integer getRoleId() {
         return roleId;
@@ -40,7 +40,6 @@ public class TbUserPK implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(userId, roleId);
     }
 }

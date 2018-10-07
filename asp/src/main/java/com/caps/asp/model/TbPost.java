@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_post", schema = "asp", catalog = "")
+@Table(name = "tb_post", schema = "roomate", catalog = "")
 @IdClass(TbPostPK.class)
 public class TbPost {
     private Integer postId;
@@ -21,7 +21,7 @@ public class TbPost {
     private Double lattitude;
 
     @Id
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "post_id")
     public Integer getPostId() {
         return postId;
     }
@@ -31,7 +31,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 45)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -41,7 +41,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "phone_contact", nullable = true, length = 15)
+    @Column(name = "phone_contact")
     public String getPhoneContact() {
         return phoneContact;
     }
@@ -51,7 +51,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "number_partner", nullable = true)
+    @Column(name = "number_partner")
     public Integer getNumberPartner() {
         return numberPartner;
     }
@@ -61,7 +61,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "gender_partner", nullable = true)
+    @Column(name = "gender_partner")
     public Byte getGenderPartner() {
         return genderPartner;
     }
@@ -71,7 +71,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "date", nullable = true)
+    @Column(name = "date")
     public Date getDate() {
         return date;
     }
@@ -81,7 +81,7 @@ public class TbPost {
     }
 
     @Id
-    @Column(name = "type_id", nullable = false)
+    @Column(name = "type_id")
     public Integer getTypeId() {
         return typeId;
     }
@@ -91,7 +91,7 @@ public class TbPost {
     }
 
     @Id
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     public Integer getUserId() {
         return userId;
     }
@@ -101,7 +101,7 @@ public class TbPost {
     }
 
     @Id
-    @Column(name = "room_id", nullable = false)
+    @Column(name = "room_id")
     public Integer getRoomId() {
         return roomId;
     }
@@ -111,7 +111,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "longtitude", nullable = true, precision = 0)
+    @Column(name = "longtitude")
     public Double getLongtitude() {
         return longtitude;
     }
@@ -121,7 +121,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "lattitude", nullable = true, precision = 0)
+    @Column(name = "lattitude")
     public Double getLattitude() {
         return lattitude;
     }
@@ -150,7 +150,6 @@ public class TbPost {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(postId, name, phoneContact, numberPartner, genderPartner, date, typeId, userId, roomId, longtitude, lattitude);
     }
 }

@@ -4,13 +4,13 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_city", schema = "asp", catalog = "")
+@Table(name = "tb_city", schema = "roomate", catalog = "")
 public class TbCity {
     private Integer cityId;
     private String name;
 
     @Id
-    @Column(name = "city_id", nullable = false)
+    @Column(name = "city_id")
     public Integer getCityId() {
         return cityId;
     }
@@ -20,7 +20,7 @@ public class TbCity {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 45)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -40,7 +40,6 @@ public class TbCity {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(cityId, name);
     }
 }

@@ -9,7 +9,7 @@ public class TbRatePK implements Serializable {
     private Integer tbUserUserId;
     private Integer tbRoomRoomId;
 
-    @Column(name = "tb_user_user_id", nullable = false)
+    @Column(name = "tb_user_user_id")
     @Id
     public Integer getTbUserUserId() {
         return tbUserUserId;
@@ -19,7 +19,7 @@ public class TbRatePK implements Serializable {
         this.tbUserUserId = tbUserUserId;
     }
 
-    @Column(name = "tb_room_room_id", nullable = false)
+    @Column(name = "tb_room_room_id")
     @Id
     public Integer getTbRoomRoomId() {
         return tbRoomRoomId;
@@ -40,7 +40,6 @@ public class TbRatePK implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(tbUserUserId, tbRoomRoomId);
     }
 }

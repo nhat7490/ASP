@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_district", schema = "asp", catalog = "")
+@Table(name = "tb_district", schema = "roomate", catalog = "")
 @IdClass(TbDistrictPK.class)
 public class TbDistrict {
     private Integer districtId;
@@ -12,7 +12,7 @@ public class TbDistrict {
     private Integer cityId;
 
     @Id
-    @Column(name = "district_id", nullable = false)
+    @Column(name = "district_id")
     public Integer getDistrictId() {
         return districtId;
     }
@@ -22,7 +22,7 @@ public class TbDistrict {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 45)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -32,7 +32,7 @@ public class TbDistrict {
     }
 
     @Id
-    @Column(name = "city_id", nullable = false)
+    @Column(name = "city_id")
     public Integer getCityId() {
         return cityId;
     }
@@ -53,7 +53,6 @@ public class TbDistrict {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(districtId, name, cityId);
     }
 }

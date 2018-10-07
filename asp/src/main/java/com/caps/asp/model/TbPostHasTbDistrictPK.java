@@ -6,27 +6,27 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbPostHasTbDistrictPK implements Serializable {
-    private Integer tbPostPostId;
-    private Integer tbDistrictDistrictId;
+    private Integer postId;
+    private Integer districtId;
 
-    @Column(name = "tb_post_post_id", nullable = false)
+    @Column(name = "post_id")
     @Id
-    public Integer getTbPostPostId() {
-        return tbPostPostId;
+    public Integer getPostId() {
+        return postId;
     }
 
-    public void setTbPostPostId(Integer tbPostPostId) {
-        this.tbPostPostId = tbPostPostId;
+    public void setPostId(Integer postId) {
+        this.postId = postId;
     }
 
-    @Column(name = "tb_district_district_id", nullable = false)
+    @Column(name = "district_id")
     @Id
-    public Integer getTbDistrictDistrictId() {
-        return tbDistrictDistrictId;
+    public Integer getDistrictId() {
+        return districtId;
     }
 
-    public void setTbDistrictDistrictId(Integer tbDistrictDistrictId) {
-        this.tbDistrictDistrictId = tbDistrictDistrictId;
+    public void setDistrictId(Integer districtId) {
+        this.districtId = districtId;
     }
 
     @Override
@@ -34,13 +34,12 @@ public class TbPostHasTbDistrictPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbPostHasTbDistrictPK that = (TbPostHasTbDistrictPK) o;
-        return Objects.equals(tbPostPostId, that.tbPostPostId) &&
-                Objects.equals(tbDistrictDistrictId, that.tbDistrictDistrictId);
+        return Objects.equals(postId, that.postId) &&
+                Objects.equals(districtId, that.districtId);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(tbPostPostId, tbDistrictDistrictId);
+        return Objects.hash(postId, districtId);
     }
 }

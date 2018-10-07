@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_rate", schema = "asp", catalog = "")
+@Table(name = "tb_rate", schema = "roomate", catalog = "")
 @IdClass(TbRatePK.class)
 public class TbRate {
     private Integer tbUserUserId;
@@ -14,7 +14,7 @@ public class TbRate {
     private Double utilityRating;
 
     @Id
-    @Column(name = "tb_user_user_id", nullable = false)
+    @Column(name = "tb_user_user_id")
     public Integer getTbUserUserId() {
         return tbUserUserId;
     }
@@ -24,7 +24,7 @@ public class TbRate {
     }
 
     @Id
-    @Column(name = "tb_room_room_id", nullable = false)
+    @Column(name = "tb_room_room_id")
     public Integer getTbRoomRoomId() {
         return tbRoomRoomId;
     }
@@ -34,7 +34,7 @@ public class TbRate {
     }
 
     @Basic
-    @Column(name = "security_rating", nullable = true, precision = 0)
+    @Column(name = "security_rating")
     public Double getSecurityRating() {
         return securityRating;
     }
@@ -44,7 +44,7 @@ public class TbRate {
     }
 
     @Basic
-    @Column(name = "location_rating", nullable = true, precision = 0)
+    @Column(name = "location_rating")
     public Double getLocationRating() {
         return locationRating;
     }
@@ -54,7 +54,7 @@ public class TbRate {
     }
 
     @Basic
-    @Column(name = "utility_rating", nullable = true, precision = 0)
+    @Column(name = "utility_rating")
     public Double getUtilityRating() {
         return utilityRating;
     }
@@ -77,7 +77,6 @@ public class TbRate {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(tbUserUserId, tbRoomRoomId, securityRating, locationRating, utilityRating);
     }
 }

@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: asp
+-- Host: localhost    Database: roomate
 -- ------------------------------------------------------
--- Server version	5.7.21-log
+-- Server version	5.7.18-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -163,13 +163,13 @@ DROP TABLE IF EXISTS `tb_post_has_tb_district`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tb_post_has_tb_district` (
-  `tb_post_post_id` int(11) NOT NULL,
-  `tb_district_district_id` int(11) NOT NULL,
-  PRIMARY KEY (`tb_post_post_id`,`tb_district_district_id`),
-  KEY `fk_tb_post_has_tb_district_tb_district1_idx` (`tb_district_district_id`),
-  KEY `fk_tb_post_has_tb_district_tb_post1_idx` (`tb_post_post_id`),
-  CONSTRAINT `fk_tb_post_has_tb_district_tb_district1` FOREIGN KEY (`tb_district_district_id`) REFERENCES `tb_district` (`district_id`),
-  CONSTRAINT `fk_tb_post_has_tb_district_tb_post1` FOREIGN KEY (`tb_post_post_id`) REFERENCES `tb_post` (`post_id`)
+  `post_id` int(11) NOT NULL,
+  `district_id` int(11) NOT NULL,
+  PRIMARY KEY (`post_id`,`district_id`),
+  KEY `fk_tb_post_has_tb_district_tb_district1_idx` (`district_id`),
+  KEY `fk_tb_post_has_tb_district_tb_post1_idx` (`post_id`),
+  CONSTRAINT `fk_tb_post_has_tb_district_tb_district1` FOREIGN KEY (`district_id`) REFERENCES `tb_district` (`district_id`),
+  CONSTRAINT `fk_tb_post_has_tb_district_tb_post1` FOREIGN KEY (`post_id`) REFERENCES `tb_post` (`post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -495,6 +495,10 @@ LOCK TABLES `tb_utilities_reference` WRITE;
 /*!40000 ALTER TABLE `tb_utilities_reference` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tb_utilities_reference` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'roomate'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -505,4 +509,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-07  6:49:24
+-- Dump completed on 2018-10-07 14:44:11

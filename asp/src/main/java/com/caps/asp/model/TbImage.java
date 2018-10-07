@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_image", schema = "asp", catalog = "")
+@Table(name = "tb_image", schema = "roomate", catalog = "")
 @IdClass(TbImagePK.class)
 public class TbImage {
     private Integer imageId;
@@ -12,7 +12,7 @@ public class TbImage {
     private Integer roomId;
 
     @Id
-    @Column(name = "image_id", nullable = false)
+    @Column(name = "image_id")
     public Integer getImageId() {
         return imageId;
     }
@@ -22,7 +22,7 @@ public class TbImage {
     }
 
     @Basic
-    @Column(name = "link_url", nullable = true, length = 255)
+    @Column(name = "link_url")
     public String getLinkUrl() {
         return linkUrl;
     }
@@ -32,7 +32,7 @@ public class TbImage {
     }
 
     @Id
-    @Column(name = "room_id", nullable = false)
+    @Column(name = "room_id")
     public Integer getRoomId() {
         return roomId;
     }
@@ -45,15 +45,14 @@ public class TbImage {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TbImage image = (TbImage) o;
-        return Objects.equals(imageId, image.imageId) &&
-                Objects.equals(linkUrl, image.linkUrl) &&
-                Objects.equals(roomId, image.roomId);
+        TbImage tbImage = (TbImage) o;
+        return Objects.equals(imageId, tbImage.imageId) &&
+                Objects.equals(linkUrl, tbImage.linkUrl) &&
+                Objects.equals(roomId, tbImage.roomId);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(imageId, linkUrl, roomId);
     }
 }
