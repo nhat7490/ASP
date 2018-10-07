@@ -4,25 +4,25 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_image", schema = "roomate", catalog = "")
+@Table(name = "tb_image", schema = "asp", catalog = "")
 @IdClass(TbImagePK.class)
 public class TbImage {
-    private Integer imageId;
+    private int imageId;
     private String linkUrl;
-    private Integer roomId;
+    private int roomId;
 
     @Id
-    @Column(name = "image_id")
-    public Integer getImageId() {
+    @Column(name = "image_id", nullable = false)
+    public int getImageId() {
         return imageId;
     }
 
-    public void setImageId(Integer imageId) {
+    public void setImageId(int imageId) {
         this.imageId = imageId;
     }
 
     @Basic
-    @Column(name = "link_url")
+    @Column(name = "link_url", nullable = true, length = 255)
     public String getLinkUrl() {
         return linkUrl;
     }
@@ -32,12 +32,12 @@ public class TbImage {
     }
 
     @Id
-    @Column(name = "room_id")
-    public Integer getRoomId() {
+    @Column(name = "room_id", nullable = false)
+    public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(Integer roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
@@ -45,14 +45,15 @@ public class TbImage {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TbImage tbImage = (TbImage) o;
-        return Objects.equals(imageId, tbImage.imageId) &&
-                Objects.equals(linkUrl, tbImage.linkUrl) &&
-                Objects.equals(roomId, tbImage.roomId);
+        TbImage image = (TbImage) o;
+        return imageId == image.imageId &&
+                roomId == image.roomId &&
+                Objects.equals(linkUrl, image.linkUrl);
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(imageId, linkUrl, roomId);
     }
 }

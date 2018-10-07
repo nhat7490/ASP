@@ -4,23 +4,23 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_role", schema = "roomate", catalog = "")
+@Table(name = "tb_role", schema = "asp", catalog = "")
 public class TbRole {
-    private Integer roleId;
+    private int roleId;
     private String rolename;
 
     @Id
-    @Column(name = "role_id")
-    public Integer getRoleId() {
+    @Column(name = "role_id", nullable = false)
+    public int getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 
     @Basic
-    @Column(name = "rolename")
+    @Column(name = "rolename", nullable = true, length = 45)
     public String getRolename() {
         return rolename;
     }
@@ -34,12 +34,13 @@ public class TbRole {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRole tbRole = (TbRole) o;
-        return Objects.equals(roleId, tbRole.roleId) &&
+        return roleId == tbRole.roleId &&
                 Objects.equals(rolename, tbRole.rolename);
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(roleId, rolename);
     }
 }

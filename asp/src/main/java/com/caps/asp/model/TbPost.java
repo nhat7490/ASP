@@ -5,33 +5,33 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_post", schema = "roomate", catalog = "")
+@Table(name = "tb_post", schema = "asp", catalog = "")
 @IdClass(TbPostPK.class)
 public class TbPost {
-    private Integer postId;
+    private int postId;
     private String name;
     private String phoneContact;
     private Integer numberPartner;
     private Byte genderPartner;
     private Date date;
-    private Integer typeId;
-    private Integer userId;
-    private Integer roomId;
+    private int typeId;
+    private int userId;
+    private int roomId;
     private Double longtitude;
     private Double lattitude;
 
     @Id
-    @Column(name = "post_id")
-    public Integer getPostId() {
+    @Column(name = "post_id", nullable = false)
+    public int getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(int postId) {
         this.postId = postId;
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 45)
     public String getName() {
         return name;
     }
@@ -41,7 +41,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "phone_contact")
+    @Column(name = "phone_contact", nullable = true, length = 15)
     public String getPhoneContact() {
         return phoneContact;
     }
@@ -51,7 +51,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "number_partner")
+    @Column(name = "number_partner", nullable = true)
     public Integer getNumberPartner() {
         return numberPartner;
     }
@@ -61,7 +61,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "gender_partner")
+    @Column(name = "gender_partner", nullable = true)
     public Byte getGenderPartner() {
         return genderPartner;
     }
@@ -71,7 +71,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "date")
+    @Column(name = "date", nullable = true)
     public Date getDate() {
         return date;
     }
@@ -81,37 +81,37 @@ public class TbPost {
     }
 
     @Id
-    @Column(name = "type_id")
-    public Integer getTypeId() {
+    @Column(name = "type_id", nullable = false)
+    public int getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(Integer typeId) {
+    public void setTypeId(int typeId) {
         this.typeId = typeId;
     }
 
     @Id
-    @Column(name = "user_id")
-    public Integer getUserId() {
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
     @Id
-    @Column(name = "room_id")
-    public Integer getRoomId() {
+    @Column(name = "room_id", nullable = false)
+    public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(Integer roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
     @Basic
-    @Column(name = "longtitude")
+    @Column(name = "longtitude", nullable = true, precision = 0)
     public Double getLongtitude() {
         return longtitude;
     }
@@ -121,7 +121,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "lattitude")
+    @Column(name = "lattitude", nullable = true, precision = 0)
     public Double getLattitude() {
         return lattitude;
     }
@@ -135,21 +135,22 @@ public class TbPost {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbPost tbPost = (TbPost) o;
-        return Objects.equals(postId, tbPost.postId) &&
+        return postId == tbPost.postId &&
+                typeId == tbPost.typeId &&
+                userId == tbPost.userId &&
+                roomId == tbPost.roomId &&
                 Objects.equals(name, tbPost.name) &&
                 Objects.equals(phoneContact, tbPost.phoneContact) &&
                 Objects.equals(numberPartner, tbPost.numberPartner) &&
                 Objects.equals(genderPartner, tbPost.genderPartner) &&
                 Objects.equals(date, tbPost.date) &&
-                Objects.equals(typeId, tbPost.typeId) &&
-                Objects.equals(userId, tbPost.userId) &&
-                Objects.equals(roomId, tbPost.roomId) &&
                 Objects.equals(longtitude, tbPost.longtitude) &&
                 Objects.equals(lattitude, tbPost.lattitude);
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(postId, name, phoneContact, numberPartner, genderPartner, date, typeId, userId, roomId, longtitude, lattitude);
     }
 }

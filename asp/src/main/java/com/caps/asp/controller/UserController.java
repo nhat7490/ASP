@@ -1,6 +1,5 @@
 package com.caps.asp.controller;
 
-import com.caps.asp.constant.Constant;
 import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbPostHasTbDistrict;
 import com.caps.asp.model.TbUser;
@@ -26,6 +25,16 @@ public class UserController {
         this.userService = userService;
         this.postService = postService;
         this.postHasDistrictService = postHasDistrictService;
+    }
+
+    @GetMapping("/user/login/{username}&{password}")
+    public ResponseEntity<TbUser> login(@PathVariable String username, String password) {
+        try {
+            return ResponseEntity.status(OK)
+                    .body(userService.findByUsernameAndPassword(username, password));
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/user/findByUsername/{username}")
@@ -66,7 +75,7 @@ public class UserController {
     }
 
     @PutMapping("/user/updateUser")
-    public ResponseEntity updateUSerById(@RequestBody TbUser user) {
+    public ResponseEntity updateUserById(@RequestBody TbUser user) {
         try {
             userService.updateUserById(user);
             return ResponseEntity.status(OK).build();

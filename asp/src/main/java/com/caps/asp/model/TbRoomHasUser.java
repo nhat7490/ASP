@@ -5,28 +5,27 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_room_has_user", schema = "roomate", catalog = "")
+@Table(name = "tb_room_has_user", schema = "asp", catalog = "")
 @IdClass(TbRoomHasUserPK.class)
 public class TbRoomHasUser {
-    private Integer roomHasUserId;
+    private int roomHasUserId;
     private Date dateIn;
     private Date dateOut;
-    private Byte status;
-    private Integer userId;
-    private Integer roomId;
+    private int userId;
+    private int roomId;
 
     @Id
-    @Column(name = "room_has_user_id")
-    public Integer getRoomHasUserId() {
+    @Column(name = "room_has_user_id", nullable = false)
+    public int getRoomHasUserId() {
         return roomHasUserId;
     }
 
-    public void setRoomHasUserId(Integer roomHasUserId) {
+    public void setRoomHasUserId(int roomHasUserId) {
         this.roomHasUserId = roomHasUserId;
     }
 
     @Basic
-    @Column(name = "date_in")
+    @Column(name = "date_in", nullable = true)
     public Date getDateIn() {
         return dateIn;
     }
@@ -36,7 +35,7 @@ public class TbRoomHasUser {
     }
 
     @Basic
-    @Column(name = "date_out")
+    @Column(name = "date_out", nullable = true)
     public Date getDateOut() {
         return dateOut;
     }
@@ -45,33 +44,23 @@ public class TbRoomHasUser {
         this.dateOut = dateOut;
     }
 
-    @Basic
-    @Column(name = "status")
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
     @Id
-    @Column(name = "user_id")
-    public Integer getUserId() {
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
     @Id
-    @Column(name = "room_id")
-    public Integer getRoomId() {
+    @Column(name = "room_id", nullable = false)
+    public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(Integer roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
@@ -80,16 +69,16 @@ public class TbRoomHasUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomHasUser that = (TbRoomHasUser) o;
-        return Objects.equals(roomHasUserId, that.roomHasUserId) &&
+        return roomHasUserId == that.roomHasUserId &&
+                userId == that.userId &&
+                roomId == that.roomId &&
                 Objects.equals(dateIn, that.dateIn) &&
-                Objects.equals(dateOut, that.dateOut) &&
-                Objects.equals(status, that.status) &&
-                Objects.equals(userId, that.userId) &&
-                Objects.equals(roomId, that.roomId);
+                Objects.equals(dateOut, that.dateOut);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(roomHasUserId, dateIn, dateOut, status, userId, roomId);
+
+        return Objects.hash(roomHasUserId, dateIn, dateOut, userId, roomId);
     }
 }

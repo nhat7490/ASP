@@ -6,48 +6,48 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbPostPK implements Serializable {
-    private Integer postId;
-    private Integer typeId;
-    private Integer userId;
-    private Integer roomId;
+    private int postId;
+    private int typeId;
+    private int userId;
+    private int roomId;
 
-    @Column(name = "post_id")
+    @Column(name = "post_id", nullable = false)
     @Id
-    public Integer getPostId() {
+    public int getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(int postId) {
         this.postId = postId;
     }
 
-    @Column(name = "type_id")
+    @Column(name = "type_id", nullable = false)
     @Id
-    public Integer getTypeId() {
+    public int getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(Integer typeId) {
+    public void setTypeId(int typeId) {
         this.typeId = typeId;
     }
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     @Id
-    public Integer getRoomId() {
+    public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(Integer roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
@@ -56,14 +56,15 @@ public class TbPostPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbPostPK tbPostPK = (TbPostPK) o;
-        return Objects.equals(postId, tbPostPK.postId) &&
-                Objects.equals(typeId, tbPostPK.typeId) &&
-                Objects.equals(userId, tbPostPK.userId) &&
-                Objects.equals(roomId, tbPostPK.roomId);
+        return postId == tbPostPK.postId &&
+                typeId == tbPostPK.typeId &&
+                userId == tbPostPK.userId &&
+                roomId == tbPostPK.roomId;
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(postId, typeId, userId, roomId);
     }
 }

@@ -6,26 +6,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbRoomReferencePK implements Serializable {
-    private Integer roomId;
-    private Integer userId;
+    private int roomId;
+    private int userId;
 
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     @Id
-    public Integer getRoomId() {
+    public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(Integer roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -34,12 +34,13 @@ public class TbRoomReferencePK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomReferencePK that = (TbRoomReferencePK) o;
-        return Objects.equals(roomId, that.roomId) &&
-                Objects.equals(userId, that.userId);
+        return roomId == that.roomId &&
+                userId == that.userId;
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(roomId, userId);
     }
 }

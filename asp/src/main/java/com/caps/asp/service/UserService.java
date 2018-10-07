@@ -46,8 +46,11 @@ public class UserService {
     }
 
     //For test in heroku
-    public List<TbUser> getAllUsers(){
+    public List<TbUser> getAllUsers() {
         return userRepository.findAll();
     }
 
+    public TbUser findByUsernameAndPassword(String username, String password) {
+        return userRepository.findByUsernameAndPassword(username, password);
+    }
 }

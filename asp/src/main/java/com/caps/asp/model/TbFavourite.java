@@ -4,29 +4,29 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_favourite", schema = "roomate", catalog = "")
+@Table(name = "tb_favourite", schema = "asp", catalog = "")
 @IdClass(TbFavouritePK.class)
 public class TbFavourite {
-    private Integer userId;
-    private Integer postId;
+    private int userId;
+    private int postId;
 
     @Id
-    @Column(name = "user_id")
-    public Integer getUserId() {
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
     @Id
-    @Column(name = "post_id")
-    public Integer getPostId() {
+    @Column(name = "post_id", nullable = false)
+    public int getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(int postId) {
         this.postId = postId;
     }
 
@@ -35,12 +35,13 @@ public class TbFavourite {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbFavourite that = (TbFavourite) o;
-        return Objects.equals(userId, that.userId) &&
-                Objects.equals(postId, that.postId);
+        return userId == that.userId &&
+                postId == that.postId;
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(userId, postId);
     }
 }

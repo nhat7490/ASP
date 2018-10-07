@@ -6,26 +6,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbPostHasTbDistrictPK implements Serializable {
-    private Integer postId;
-    private Integer districtId;
+    private int postId;
+    private int districtId;
 
-    @Column(name = "post_id")
+    @Column(name = "post_id", nullable = false)
     @Id
-    public Integer getPostId() {
+    public int getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(int postId) {
         this.postId = postId;
     }
 
-    @Column(name = "district_id")
+    @Column(name = "district_id", nullable = false)
     @Id
-    public Integer getDistrictId() {
+    public int getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(Integer districtId) {
+    public void setDistrictId(int districtId) {
         this.districtId = districtId;
     }
 
@@ -34,12 +34,13 @@ public class TbPostHasTbDistrictPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbPostHasTbDistrictPK that = (TbPostHasTbDistrictPK) o;
-        return Objects.equals(postId, that.postId) &&
-                Objects.equals(districtId, that.districtId);
+        return postId == that.postId &&
+                districtId == that.districtId;
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(postId, districtId);
     }
 }

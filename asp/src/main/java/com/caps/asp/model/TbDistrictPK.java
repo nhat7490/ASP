@@ -6,26 +6,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbDistrictPK implements Serializable {
-    private Integer districtId;
-    private Integer cityId;
+    private int districtId;
+    private int cityId;
 
-    @Column(name = "district_id")
+    @Column(name = "district_id", nullable = false)
     @Id
-    public Integer getDistrictId() {
+    public int getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(Integer districtId) {
+    public void setDistrictId(int districtId) {
         this.districtId = districtId;
     }
 
-    @Column(name = "city_id")
+    @Column(name = "city_id", nullable = false)
     @Id
-    public Integer getCityId() {
+    public int getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(int cityId) {
         this.cityId = cityId;
     }
 
@@ -34,12 +34,13 @@ public class TbDistrictPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbDistrictPK that = (TbDistrictPK) o;
-        return Objects.equals(districtId, that.districtId) &&
-                Objects.equals(cityId, that.cityId);
+        return districtId == that.districtId &&
+                cityId == that.cityId;
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(districtId, cityId);
     }
 }

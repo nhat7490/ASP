@@ -47,7 +47,7 @@ public class RoomController {
             room.setDate(roomRequestModel.getDateCreated());
             room.setCurrentNumber(roomRequestModel.getCurrentNumber());
             room.setDescription(roomRequestModel.getDescription());
-            room.setTbStatusStatusId(roomRequestModel.getStatus());
+            room.setStatusId(roomRequestModel.getStatus());
             room.setUserId(roomRequestModel.getUserId());
             room.setCityId(roomRequestModel.getCityId());
             room.setDistrictId(roomRequestModel.getDistrictId());
@@ -91,7 +91,7 @@ public class RoomController {
                 room.setDate(roomRequestModel.getDateCreated());
                 room.setCurrentNumber(roomRequestModel.getCurrentNumber());
                 room.setDescription(roomRequestModel.getDescription());
-                room.setTbStatusStatusId(roomRequestModel.getStatus());
+                room.setStatusId(roomRequestModel.getStatus());
                 room.setUserId(roomRequestModel.getUserId());
                 room.setCityId(roomRequestModel.getCityId());
                 room.setDistrictId(roomRequestModel.getDistrictId());

@@ -4,23 +4,23 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_status", schema = "roomate", catalog = "")
+@Table(name = "tb_status", schema = "asp", catalog = "")
 public class TbStatus {
-    private Integer statusId;
+    private int statusId;
     private String name;
 
     @Id
-    @Column(name = "status_id")
-    public Integer getStatusId() {
+    @Column(name = "status_id", nullable = false)
+    public int getStatusId() {
         return statusId;
     }
 
-    public void setStatusId(Integer statusId) {
+    public void setStatusId(int statusId) {
         this.statusId = statusId;
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 45)
     public String getName() {
         return name;
     }
@@ -34,12 +34,13 @@ public class TbStatus {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbStatus tbStatus = (TbStatus) o;
-        return Objects.equals(statusId, tbStatus.statusId) &&
+        return statusId == tbStatus.statusId &&
                 Objects.equals(name, tbStatus.name);
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(statusId, name);
     }
 }

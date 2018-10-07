@@ -6,60 +6,60 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbRoomPK implements Serializable {
-    private Integer roomId;
-    private Integer userId;
-    private Integer cityId;
-    private Integer districtId;
-    private Integer tbStatusStatusId;
+    private int roomId;
+    private int userId;
+    private int cityId;
+    private int districtId;
+    private int statusId;
 
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     @Id
-    public Integer getRoomId() {
+    public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(Integer roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    @Column(name = "city_id")
+    @Column(name = "city_id", nullable = false)
     @Id
-    public Integer getCityId() {
+    public int getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(int cityId) {
         this.cityId = cityId;
     }
 
-    @Column(name = "district_id")
+    @Column(name = "district_id", nullable = false)
     @Id
-    public Integer getDistrictId() {
+    public int getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(Integer districtId) {
+    public void setDistrictId(int districtId) {
         this.districtId = districtId;
     }
 
-    @Column(name = "tb_status_status_id")
+    @Column(name = "status_id", nullable = false)
     @Id
-    public Integer getTbStatusStatusId() {
-        return tbStatusStatusId;
+    public int getStatusId() {
+        return statusId;
     }
 
-    public void setTbStatusStatusId(Integer tbStatusStatusId) {
-        this.tbStatusStatusId = tbStatusStatusId;
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
     }
 
     @Override
@@ -67,15 +67,16 @@ public class TbRoomPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomPK tbRoomPK = (TbRoomPK) o;
-        return Objects.equals(roomId, tbRoomPK.roomId) &&
-                Objects.equals(userId, tbRoomPK.userId) &&
-                Objects.equals(cityId, tbRoomPK.cityId) &&
-                Objects.equals(districtId, tbRoomPK.districtId) &&
-                Objects.equals(tbStatusStatusId, tbRoomPK.tbStatusStatusId);
+        return roomId == tbRoomPK.roomId &&
+                userId == tbRoomPK.userId &&
+                cityId == tbRoomPK.cityId &&
+                districtId == tbRoomPK.districtId &&
+                statusId == tbRoomPK.statusId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(roomId, userId, cityId, districtId, tbStatusStatusId);
+
+        return Objects.hash(roomId, userId, cityId, districtId, statusId);
     }
 }

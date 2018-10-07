@@ -4,25 +4,25 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_district", schema = "roomate", catalog = "")
+@Table(name = "tb_district", schema = "asp", catalog = "")
 @IdClass(TbDistrictPK.class)
 public class TbDistrict {
-    private Integer districtId;
+    private int districtId;
     private String name;
-    private Integer cityId;
+    private int cityId;
 
     @Id
-    @Column(name = "district_id")
-    public Integer getDistrictId() {
+    @Column(name = "district_id", nullable = false)
+    public int getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(Integer districtId) {
+    public void setDistrictId(int districtId) {
         this.districtId = districtId;
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 45)
     public String getName() {
         return name;
     }
@@ -32,12 +32,12 @@ public class TbDistrict {
     }
 
     @Id
-    @Column(name = "city_id")
-    public Integer getCityId() {
+    @Column(name = "city_id", nullable = false)
+    public int getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(int cityId) {
         this.cityId = cityId;
     }
 
@@ -46,13 +46,14 @@ public class TbDistrict {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbDistrict that = (TbDistrict) o;
-        return Objects.equals(districtId, that.districtId) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(cityId, that.cityId);
+        return districtId == that.districtId &&
+                cityId == that.cityId &&
+                Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(districtId, name, cityId);
     }
 }

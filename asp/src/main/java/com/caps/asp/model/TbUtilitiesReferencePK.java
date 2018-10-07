@@ -6,26 +6,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbUtilitiesReferencePK implements Serializable {
-    private Integer utilityId;
-    private Integer userId;
+    private int utilityId;
+    private int userId;
 
-    @Column(name = "utility_id")
+    @Column(name = "utility_id", nullable = false)
     @Id
-    public Integer getUtilityId() {
+    public int getUtilityId() {
         return utilityId;
     }
 
-    public void setUtilityId(Integer utilityId) {
+    public void setUtilityId(int utilityId) {
         this.utilityId = utilityId;
     }
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -34,12 +34,13 @@ public class TbUtilitiesReferencePK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbUtilitiesReferencePK that = (TbUtilitiesReferencePK) o;
-        return Objects.equals(utilityId, that.utilityId) &&
-                Objects.equals(userId, that.userId);
+        return utilityId == that.utilityId &&
+                userId == that.userId;
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(utilityId, userId);
     }
 }

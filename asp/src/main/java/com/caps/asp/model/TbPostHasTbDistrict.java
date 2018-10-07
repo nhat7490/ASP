@@ -4,29 +4,29 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_post_has_tb_district", schema = "roomate", catalog = "")
+@Table(name = "tb_post_has_tb_district", schema = "asp", catalog = "")
 @IdClass(TbPostHasTbDistrictPK.class)
 public class TbPostHasTbDistrict {
-    private Integer postId;
-    private Integer districtId;
+    private int postId;
+    private int districtId;
 
     @Id
-    @Column(name = "post_id")
-    public Integer getPostId() {
+    @Column(name = "post_id", nullable = false)
+    public int getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(int postId) {
         this.postId = postId;
     }
 
     @Id
-    @Column(name = "district_id")
-    public Integer getDistrictId() {
+    @Column(name = "district_id", nullable = false)
+    public int getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(Integer districtId) {
+    public void setDistrictId(int districtId) {
         this.districtId = districtId;
     }
 
@@ -35,12 +35,13 @@ public class TbPostHasTbDistrict {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbPostHasTbDistrict that = (TbPostHasTbDistrict) o;
-        return Objects.equals(postId, that.postId) &&
-                Objects.equals(districtId, that.districtId);
+        return postId == that.postId &&
+                districtId == that.districtId;
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(postId, districtId);
     }
 }

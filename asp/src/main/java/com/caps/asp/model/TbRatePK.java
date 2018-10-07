@@ -6,26 +6,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbRatePK implements Serializable {
-    private Integer tbUserUserId;
-    private Integer tbRoomRoomId;
+    private int tbUserUserId;
+    private int tbRoomRoomId;
 
-    @Column(name = "tb_user_user_id")
+    @Column(name = "tb_user_user_id", nullable = false)
     @Id
-    public Integer getTbUserUserId() {
+    public int getTbUserUserId() {
         return tbUserUserId;
     }
 
-    public void setTbUserUserId(Integer tbUserUserId) {
+    public void setTbUserUserId(int tbUserUserId) {
         this.tbUserUserId = tbUserUserId;
     }
 
-    @Column(name = "tb_room_room_id")
+    @Column(name = "tb_room_room_id", nullable = false)
     @Id
-    public Integer getTbRoomRoomId() {
+    public int getTbRoomRoomId() {
         return tbRoomRoomId;
     }
 
-    public void setTbRoomRoomId(Integer tbRoomRoomId) {
+    public void setTbRoomRoomId(int tbRoomRoomId) {
         this.tbRoomRoomId = tbRoomRoomId;
     }
 
@@ -34,12 +34,13 @@ public class TbRatePK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRatePK tbRatePK = (TbRatePK) o;
-        return Objects.equals(tbUserUserId, tbRatePK.tbUserUserId) &&
-                Objects.equals(tbRoomRoomId, tbRatePK.tbRoomRoomId);
+        return tbUserUserId == tbRatePK.tbUserUserId &&
+                tbRoomRoomId == tbRatePK.tbRoomRoomId;
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(tbUserUserId, tbRoomRoomId);
     }
 }

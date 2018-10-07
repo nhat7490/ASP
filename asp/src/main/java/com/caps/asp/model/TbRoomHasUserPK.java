@@ -6,37 +6,37 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TbRoomHasUserPK implements Serializable {
-    private Integer roomHasUserId;
-    private Integer userId;
-    private Integer roomId;
+    private int roomHasUserId;
+    private int userId;
+    private int roomId;
 
-    @Column(name = "room_has_user_id")
+    @Column(name = "room_has_user_id", nullable = false)
     @Id
-    public Integer getRoomHasUserId() {
+    public int getRoomHasUserId() {
         return roomHasUserId;
     }
 
-    public void setRoomHasUserId(Integer roomHasUserId) {
+    public void setRoomHasUserId(int roomHasUserId) {
         this.roomHasUserId = roomHasUserId;
     }
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @Id
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    @Column(name = "room_id")
+    @Column(name = "room_id", nullable = false)
     @Id
-    public Integer getRoomId() {
+    public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(Integer roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
@@ -45,13 +45,14 @@ public class TbRoomHasUserPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomHasUserPK that = (TbRoomHasUserPK) o;
-        return Objects.equals(roomHasUserId, that.roomHasUserId) &&
-                Objects.equals(userId, that.userId) &&
-                Objects.equals(roomId, that.roomId);
+        return roomHasUserId == that.roomHasUserId &&
+                userId == that.userId &&
+                roomId == that.roomId;
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(roomHasUserId, userId, roomId);
     }
 }

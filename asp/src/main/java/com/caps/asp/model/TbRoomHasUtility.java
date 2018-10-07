@@ -4,37 +4,37 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_room_has_utility", schema = "roomate", catalog = "")
+@Table(name = "tb_room_has_utility", schema = "asp", catalog = "")
 @IdClass(TbRoomHasUtilityPK.class)
 public class TbRoomHasUtility {
-    private Integer roomId;
-    private Integer utilityId;
+    private int roomId;
+    private int utilityId;
     private String brand;
     private String description;
     private Integer quality;
 
     @Id
-    @Column(name = "room_id")
-    public Integer getRoomId() {
+    @Column(name = "room_id", nullable = false)
+    public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(Integer roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
     @Id
-    @Column(name = "utility_id")
-    public Integer getUtilityId() {
+    @Column(name = "utility_id", nullable = false)
+    public int getUtilityId() {
         return utilityId;
     }
 
-    public void setUtilityId(Integer utilityId) {
+    public void setUtilityId(int utilityId) {
         this.utilityId = utilityId;
     }
 
     @Basic
-    @Column(name = "brand")
+    @Column(name = "brand", nullable = true, length = 45)
     public String getBrand() {
         return brand;
     }
@@ -44,7 +44,7 @@ public class TbRoomHasUtility {
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = true, length = 45)
     public String getDescription() {
         return description;
     }
@@ -54,7 +54,7 @@ public class TbRoomHasUtility {
     }
 
     @Basic
-    @Column(name = "quality")
+    @Column(name = "quality", nullable = true)
     public Integer getQuality() {
         return quality;
     }
@@ -68,8 +68,8 @@ public class TbRoomHasUtility {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomHasUtility that = (TbRoomHasUtility) o;
-        return Objects.equals(roomId, that.roomId) &&
-                Objects.equals(utilityId, that.utilityId) &&
+        return roomId == that.roomId &&
+                utilityId == that.utilityId &&
                 Objects.equals(brand, that.brand) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(quality, that.quality);
@@ -77,6 +77,7 @@ public class TbRoomHasUtility {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(roomId, utilityId, brand, description, quality);
     }
 }
