@@ -1,53 +1,65 @@
 package com.caps.asp.controller;
 
+import com.caps.asp.model.TbPost;
+import com.caps.asp.model.TbPostHasTbDistrict;
 import com.caps.asp.model.TbUser;
+import com.caps.asp.resource.CalculateDistance;
+import com.caps.asp.service.PostHasDistrictService;
+import com.caps.asp.service.PostService;
 import com.caps.asp.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
+
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 public class UserController {
     public final UserService userService;
+    public final PostService postService;
+    public final PostHasDistrictService postHasDistrictService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PostService postService, PostHasDistrictService postHasDistrictService) {
         this.userService = userService;
+        this.postService = postService;
+        this.postHasDistrictService = postHasDistrictService;
     }
 
     @GetMapping("/user/findByUsername/{username}")
     public ResponseEntity<TbUser> findByUsername(@PathVariable String username) {
         try {
-            return ResponseEntity.status(HttpStatus.OK)
+            return ResponseEntity.status(OK)
                     .body(userService.findByUsername(username));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(NOT_FOUND).build();
         }
     }
-    //Test 
+
+    //Test
     @RequestMapping("/")
-    public String home(){
+    public String home() {
         return "redirect:/user";
     }
+
     //Test
     @GetMapping("/user/listUser")
     public ResponseEntity<List<TbUser>> getAllUsers() {
         try {
-            return ResponseEntity.status(HttpStatus.OK)
+            return ResponseEntity.status(OK)
                     .body(userService.getAllUsers());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(NOT_FOUND).build();
         }
     }
 
     @GetMapping("/user/findById/{id}")
     public ResponseEntity<TbUser> findById(@PathVariable int id) {
         try {
-            return ResponseEntity.status(HttpStatus.OK)
+            return ResponseEntity.status(OK)
                     .body(userService.findById(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(NOT_FOUND).build();
         }
     }
 
@@ -55,9 +67,9 @@ public class UserController {
     public ResponseEntity updateUSerById(@RequestBody TbUser user) {
         try {
             userService.updateUserById(user);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(OK).build();
         } catch (Exception e) {
-            return ResponseEntity.status((HttpStatus.NOT_MODIFIED)).build();
+            return ResponseEntity.status((NOT_MODIFIED)).build();
         }
     }
 
@@ -65,9 +77,38 @@ public class UserController {
     public ResponseEntity createUSer(@RequestBody TbUser user) {
         try {
             userService.createUser(user);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(OK).build();
         } catch (Exception e) {
-            return ResponseEntity.status((HttpStatus.CONFLICT)).build();
+            return ResponseEntity.status((CONFLICT)).build();
+        }
+    }
+
+    @GetMapping("/user/suggest/{userId}")
+    public ResponseEntity suggestPost(@PathVariable int userId) {
+        try {
+            TbPost tbPost = postService.findPostByUserIdAndTypeId(userId, 1);
+            TbPostHasTbDistrict tbPostHasTbDistrict = postHasDistrictService.findByPostId(tbPost.getPostId());
+            List<TbPostHasTbDistrict> tbPostHasTbDistrictList = postHasDistrictService.findAllByDistrictId(tbPostHasTbDistrict.getDistrictId());
+            List<TbPost> tbPostList = postService.findByPostId(tbPostHasTbDistrictList);
+
+            CalculateDistance calculateDistance = new CalculateDistance();
+            HashMap<TbPost, Double> listSort = null;
+
+            for (int i = 0; i < tbPostList.size(); i++) {
+                double distance = calculateDistance.distance(tbPost.getLattitude(), tbPost.getLongtitude(), tbPostList.get(i).getLattitude(), tbPostList.get(i).getLongtitude());
+                listSort.put(tbPostList.get(i), distance);
+            }
+            List<Map.Entry<TbPost, Double>> list = new LinkedList<>(listSort.entrySet());
+
+            Collections.sort(list, new Comparator<Map.Entry<TbPost, Double>>() {
+                @Override
+                public int compare(Map.Entry<TbPost, Double> e1, Map.Entry<TbPost, Double> e2) {
+                    return (e1.getValue()).compareTo(e2.getValue());
+                }
+            });
+            return ResponseEntity.status(OK).body(list);
+        } catch (Exception e) {
+            return ResponseEntity.status((NOT_FOUND)).build();
         }
     }
 }

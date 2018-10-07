@@ -1,8 +1,11 @@
 package com.caps.asp.service;
 
 import com.caps.asp.model.TbPost;
+import com.caps.asp.model.TbPostHasTbDistrict;
 import com.caps.asp.repository.PostRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PostService {
@@ -12,7 +15,15 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public TbPost findPostByUserIdAndTypeId(int userId, int type) {
-        return postRepository.findByUserIdAndTypeId(userId, type);
+    public TbPost findPostByUserIdAndTypeId(int userId, int typeId) {
+        return postRepository.findByUserIdAndTypeId(userId, typeId);
+    }
+
+    public List<TbPost> findByPostId(List<TbPostHasTbDistrict> tbPostHasTbDistrictList) {
+        List<TbPost> list = null;
+        for (int i = 0; i < tbPostHasTbDistrictList.size(); i++) {
+            list.add(postRepository.findByPostId(tbPostHasTbDistrictList.get(i).getPostId()));
+        }
+        return list;
     }
 }
