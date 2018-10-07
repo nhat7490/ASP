@@ -44,7 +44,9 @@ public class RoomController {
             room.setArea(roomRequestModel.getArea());
             room.setAddress(roomRequestModel.getAddress());
             room.setMaxGuest(roomRequestModel.getMaxGuest());
-            room.setDate(roomRequestModel.getDateCreated());
+
+            Date date = new Date(System.currentTimeMillis());
+            room.setDate(date);
             room.setCurrentNumber(roomRequestModel.getCurrentNumber());
             room.setDescription(roomRequestModel.getDescription());
             room.setStatusId(roomRequestModel.getStatus());
@@ -59,6 +61,7 @@ public class RoomController {
                 roomHasUtility.setBrand(utilityRequestModel.getBrand());
                 roomHasUtility.setDescription(utilityRequestModel.getDescription());
                 roomHasUtility.setQuality(utilityRequestModel.getQuality());
+                roomHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
                 roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
             }
 
