@@ -15,7 +15,7 @@ public class RoomHasUserService {
     }
 
     public void addRoomMember(TbRoomHasUser tbRoomHasUser) {
-        roomHasUserRepository.save(tbRoomHasUser)
+        roomHasUserRepository.save(tbRoomHasUser);
     }
 
     public List<TbRoomHasUser> getAllByRoomId(int roomId){
