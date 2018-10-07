@@ -1,5 +1,6 @@
 package com.caps.asp.controller;
 
+import com.caps.asp.constant.Constant;
 import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbPostHasTbDistrict;
 import com.caps.asp.model.TbUser;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static com.caps.asp.constant.Constant.PARTNER_POST;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -83,10 +85,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/suggest/{userId}")
+    @GetMapping("/user/suggestRoomMaster/{userId}")
     public ResponseEntity suggestPost(@PathVariable int userId) {
         try {
-            TbPost tbPost = postService.findPostByUserIdAndTypeId(userId, 1);
+            TbPost tbPost = postService.findPostByUserIdAndTypeId(userId, PARTNER_POST);
             TbPostHasTbDistrict tbPostHasTbDistrict = postHasDistrictService.findByPostId(tbPost.getPostId());
             List<TbPostHasTbDistrict> tbPostHasTbDistrictList = postHasDistrictService.findAllByDistrictId(tbPostHasTbDistrict.getDistrictId());
             List<TbPost> tbPostList = postService.findByPostId(tbPostHasTbDistrictList);
