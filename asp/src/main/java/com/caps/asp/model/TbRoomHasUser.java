@@ -6,21 +6,20 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_room_has_user", schema = "asp", catalog = "")
-@IdClass(TbRoomHasUserPK.class)
 public class TbRoomHasUser {
-    private int roomHasUserId;
+    private Integer roomHasUserId;
     private Date dateIn;
     private Date dateOut;
-    private int userId;
-    private int roomId;
+    private Integer userId;
+    private Integer roomId;
 
     @Id
     @Column(name = "room_has_user_id", nullable = false)
-    public int getRoomHasUserId() {
+    public Integer getRoomHasUserId() {
         return roomHasUserId;
     }
 
-    public void setRoomHasUserId(int roomHasUserId) {
+    public void setRoomHasUserId(Integer roomHasUserId) {
         this.roomHasUserId = roomHasUserId;
     }
 
@@ -44,23 +43,23 @@ public class TbRoomHasUser {
         this.dateOut = dateOut;
     }
 
-    @Id
+    @Basic
     @Column(name = "user_id", nullable = false)
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    @Id
+    @Basic
     @Column(name = "room_id", nullable = false)
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
@@ -69,11 +68,11 @@ public class TbRoomHasUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomHasUser that = (TbRoomHasUser) o;
-        return roomHasUserId == that.roomHasUserId &&
-                userId == that.userId &&
-                roomId == that.roomId &&
+        return Objects.equals(roomHasUserId, that.roomHasUserId) &&
                 Objects.equals(dateIn, that.dateIn) &&
-                Objects.equals(dateOut, that.dateOut);
+                Objects.equals(dateOut, that.dateOut) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(roomId, that.roomId);
     }
 
     @Override

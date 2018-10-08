@@ -5,31 +5,41 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_room_has_utility", schema = "asp", catalog = "")
-@IdClass(TbRoomHasUtilityPK.class)
 public class TbRoomHasUtility {
-    private int roomId;
-    private int utilityId;
+    private Integer id;
+    private Integer roomId;
+    private Integer utilityId;
     private String brand;
     private String description;
     private Integer quality;
 
     @Id
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Basic
     @Column(name = "room_id", nullable = false)
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
-    @Id
+    @Basic
     @Column(name = "utility_id", nullable = false)
-    public int getUtilityId() {
+    public Integer getUtilityId() {
         return utilityId;
     }
 
-    public void setUtilityId(int utilityId) {
+    public void setUtilityId(Integer utilityId) {
         this.utilityId = utilityId;
     }
 
@@ -68,8 +78,9 @@ public class TbRoomHasUtility {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomHasUtility that = (TbRoomHasUtility) o;
-        return roomId == that.roomId &&
-                utilityId == that.utilityId &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(roomId, that.roomId) &&
+                Objects.equals(utilityId, that.utilityId) &&
                 Objects.equals(brand, that.brand) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(quality, that.quality);
@@ -78,6 +89,6 @@ public class TbRoomHasUtility {
     @Override
     public int hashCode() {
 
-        return Objects.hash(roomId, utilityId, brand, description, quality);
+        return Objects.hash(id, roomId, utilityId, brand, description, quality);
     }
 }

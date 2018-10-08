@@ -6,27 +6,26 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_post", schema = "asp", catalog = "")
-@IdClass(TbPostPK.class)
 public class TbPost {
-    private int postId;
+    private Integer postId;
     private String name;
     private String phoneContact;
     private Integer numberPartner;
     private Byte genderPartner;
     private Date date;
-    private int typeId;
-    private int userId;
-    private int roomId;
+    private Integer typeId;
+    private Integer userId;
+    private Integer roomId;
     private Double longtitude;
     private Double lattitude;
 
     @Id
     @Column(name = "post_id", nullable = false)
-    public int getPostId() {
+    public Integer getPostId() {
         return postId;
     }
 
-    public void setPostId(int postId) {
+    public void setPostId(Integer postId) {
         this.postId = postId;
     }
 
@@ -80,33 +79,33 @@ public class TbPost {
         this.date = date;
     }
 
-    @Id
+    @Basic
     @Column(name = "type_id", nullable = false)
-    public int getTypeId() {
+    public Integer getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(int typeId) {
+    public void setTypeId(Integer typeId) {
         this.typeId = typeId;
     }
 
-    @Id
+    @Basic
     @Column(name = "user_id", nullable = false)
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    @Id
+    @Basic
     @Column(name = "room_id", nullable = false)
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
@@ -135,15 +134,15 @@ public class TbPost {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbPost tbPost = (TbPost) o;
-        return postId == tbPost.postId &&
-                typeId == tbPost.typeId &&
-                userId == tbPost.userId &&
-                roomId == tbPost.roomId &&
+        return Objects.equals(postId, tbPost.postId) &&
                 Objects.equals(name, tbPost.name) &&
                 Objects.equals(phoneContact, tbPost.phoneContact) &&
                 Objects.equals(numberPartner, tbPost.numberPartner) &&
                 Objects.equals(genderPartner, tbPost.genderPartner) &&
                 Objects.equals(date, tbPost.date) &&
+                Objects.equals(typeId, tbPost.typeId) &&
+                Objects.equals(userId, tbPost.userId) &&
+                Objects.equals(roomId, tbPost.roomId) &&
                 Objects.equals(longtitude, tbPost.longtitude) &&
                 Objects.equals(lattitude, tbPost.lattitude);
     }

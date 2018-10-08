@@ -5,31 +5,41 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_rate", schema = "asp", catalog = "")
-@IdClass(TbRatePK.class)
 public class TbRate {
-    private int tbUserUserId;
-    private int tbRoomRoomId;
+    private Integer id;
+    private Integer tbUserUserId;
+    private Integer tbRoomRoomId;
     private Double securityRating;
     private Double locationRating;
     private Double utilityRating;
 
     @Id
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Basic
     @Column(name = "tb_user_user_id", nullable = false)
-    public int getTbUserUserId() {
+    public Integer getTbUserUserId() {
         return tbUserUserId;
     }
 
-    public void setTbUserUserId(int tbUserUserId) {
+    public void setTbUserUserId(Integer tbUserUserId) {
         this.tbUserUserId = tbUserUserId;
     }
 
-    @Id
+    @Basic
     @Column(name = "tb_room_room_id", nullable = false)
-    public int getTbRoomRoomId() {
+    public Integer getTbRoomRoomId() {
         return tbRoomRoomId;
     }
 
-    public void setTbRoomRoomId(int tbRoomRoomId) {
+    public void setTbRoomRoomId(Integer tbRoomRoomId) {
         this.tbRoomRoomId = tbRoomRoomId;
     }
 
@@ -68,8 +78,9 @@ public class TbRate {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRate tbRate = (TbRate) o;
-        return tbUserUserId == tbRate.tbUserUserId &&
-                tbRoomRoomId == tbRate.tbRoomRoomId &&
+        return Objects.equals(id, tbRate.id) &&
+                Objects.equals(tbUserUserId, tbRate.tbUserUserId) &&
+                Objects.equals(tbRoomRoomId, tbRate.tbRoomRoomId) &&
                 Objects.equals(securityRating, tbRate.securityRating) &&
                 Objects.equals(locationRating, tbRate.locationRating) &&
                 Objects.equals(utilityRating, tbRate.utilityRating);
@@ -78,6 +89,6 @@ public class TbRate {
     @Override
     public int hashCode() {
 
-        return Objects.hash(tbUserUserId, tbRoomRoomId, securityRating, locationRating, utilityRating);
+        return Objects.hash(id, tbUserUserId, tbRoomRoomId, securityRating, locationRating, utilityRating);
     }
 }

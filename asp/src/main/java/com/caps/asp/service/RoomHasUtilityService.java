@@ -3,8 +3,10 @@ package com.caps.asp.service;
 import com.caps.asp.model.TbRoomHasUtility;
 import com.caps.asp.repository.RoomHasUtilityRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class RoomHasUtilityService {
     public final RoomHasUtilityRepository roomHasUtilityRepository;
 

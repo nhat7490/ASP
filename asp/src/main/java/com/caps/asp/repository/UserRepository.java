@@ -7,5 +7,5 @@ public interface UserRepository extends JpaRepository<TbUser, Integer> {
 
     TbUser findByUsername(String username);
     TbUser findByUserId(int id);
-    TbUser findByUsernameAndPassword(String username,String password);
+    TbUser findByUsernameAndPassword(String username, String password);
 }

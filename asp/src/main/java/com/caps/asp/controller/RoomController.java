@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,9 +37,9 @@ public class RoomController {
 
     @PostMapping("/room/create")
     public ResponseEntity createRoom(@RequestBody RoomRequestModel roomRequestModel) {
-        try {
+//        try {
             TbRoom room = new TbRoom();
-            room.setRoomId(roomRequestModel.getRoomId());
+            room.setRoomId(0);
             room.setName(roomRequestModel.getName());
             room.setPrice(roomRequestModel.getPrice());
             room.setArea(roomRequestModel.getArea());
@@ -57,6 +58,7 @@ public class RoomController {
 
             for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
                 TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
+                roomHasUtility.setId(0);
                 roomHasUtility.setRoomId(roomService.findRoomByName(roomRequestModel.getName()).getRoomId());
                 roomHasUtility.setBrand(utilityRequestModel.getBrand());
                 roomHasUtility.setDescription(utilityRequestModel.getDescription());
@@ -74,9 +76,9 @@ public class RoomController {
             }
 
             return ResponseEntity.status(CREATED).build();
-        } catch (Exception e) {
-            return ResponseEntity.status((CONFLICT)).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status((CONFLICT)).build();
+//        }
     }
 
     @PutMapping("/room/update")
@@ -112,7 +114,7 @@ public class RoomController {
                 roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
             }
 
-            //update room iamges
+            //update room images
             imageService.deleteAllImageByRoomId(roomRequestModel.getRoomId());
             for (String url : roomRequestModel.getImageUrls()) {
                 TbImage image = new TbImage();
@@ -129,11 +131,12 @@ public class RoomController {
     }
 
     @DeleteMapping("room/deleteRoom/{roomId}")
-    public ResponseEntity deleteRoom(@PathVariable String roomId) {
+    public ResponseEntity deleteRoom(@PathVariable int roomId) {
         try {
-            roomService.deleteRoom(Integer.parseInt(roomId));
-            roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(Integer.parseInt(roomId));
-            imageService.deleteAllImageByRoomId(Integer.parseInt(roomId));
+            roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomId);
+            imageService.deleteAllImageByRoomId(roomId);
+
+            roomService.deleteRoom(roomId);
             return ResponseEntity.status(OK).build();
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
@@ -143,7 +146,7 @@ public class RoomController {
     @GetMapping("room/viewRoom/{roomId}")
     public ResponseEntity findRoom(@PathVariable String roomId) {
         try {
-            if (roomId != null) {
+            if (roomId == null) {
                 return ResponseEntity.status(OK).body(roomService.findAllRoom());
             } else {
                 return ResponseEntity.status(OK).body(roomService.findRoomById(Integer.parseInt(roomId)));
@@ -155,9 +158,9 @@ public class RoomController {
 
     @PostMapping("rom/addMember/{roomId}&{username}&{dateout}")
     public ResponseEntity addMember(@PathVariable int roomId, String username, Date dateout) {
-        try {
+//        try {
             TbUser user = userService.findByUsername(username);
-            if (user != null) {
+            if (user == null) {
                 return ResponseEntity.status(CONFLICT).build();
             } else {
                 TbRoomHasUser tbRoomHasUser = new TbRoomHasUser();
@@ -165,7 +168,12 @@ public class RoomController {
                 LocalDateTime now = LocalDateTime.now();
                 String startDate = dtf.format(now);
                 SimpleDateFormat sdf1 = new SimpleDateFormat("dd-mm-yyyy");
-                java.util.Date date = sdf1.parse(startDate);
+                java.util.Date date = null;
+                try {
+                    date = sdf1.parse(startDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 java.sql.Date sqlStartDate = new java.sql.Date(date.getTime());
                 tbRoomHasUser.setDateIn(sqlStartDate);
                 tbRoomHasUser.setDateOut(dateout);
@@ -191,9 +199,9 @@ public class RoomController {
                 return ResponseEntity.status(OK).build();
 
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(CONFLICT).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(CONFLICT).build();
+//        }
     }
 
 }

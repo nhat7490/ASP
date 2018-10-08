@@ -5,28 +5,38 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_post_has_tb_district", schema = "asp", catalog = "")
-@IdClass(TbPostHasTbDistrictPK.class)
 public class TbPostHasTbDistrict {
-    private int postId;
-    private int districtId;
+    private Integer id;
+    private Integer postId;
+    private Integer districtId;
 
     @Id
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Basic
     @Column(name = "post_id", nullable = false)
-    public int getPostId() {
+    public Integer getPostId() {
         return postId;
     }
 
-    public void setPostId(int postId) {
+    public void setPostId(Integer postId) {
         this.postId = postId;
     }
 
-    @Id
+    @Basic
     @Column(name = "district_id", nullable = false)
-    public int getDistrictId() {
+    public Integer getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(int districtId) {
+    public void setDistrictId(Integer districtId) {
         this.districtId = districtId;
     }
 
@@ -35,13 +45,14 @@ public class TbPostHasTbDistrict {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbPostHasTbDistrict that = (TbPostHasTbDistrict) o;
-        return postId == that.postId &&
-                districtId == that.districtId;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(postId, that.postId) &&
+                Objects.equals(districtId, that.districtId);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(postId, districtId);
+        return Objects.hash(id, postId, districtId);
     }
 }

@@ -3,10 +3,12 @@ package com.caps.asp.service;
 import com.caps.asp.model.TbRoom;
 import com.caps.asp.repository.RoomRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class RoomService {
     public final RoomRepository roomRepository;
 
@@ -27,7 +29,7 @@ public class RoomService {
     }
 
     public void deleteRoom(int roomId){
-        roomRepository.deleteByRoomId(roomId);
+        roomRepository.deleteById(roomId);
     }
 
     public List<TbRoom> findAllRoom(){

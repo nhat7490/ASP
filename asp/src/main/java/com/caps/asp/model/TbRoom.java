@@ -6,9 +6,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_room", schema = "asp", catalog = "")
-@IdClass(TbRoomPK.class)
 public class TbRoom {
-    private int roomId;
+    private Integer roomId;
     private String name;
     private Double price;
     private Integer area;
@@ -16,21 +15,21 @@ public class TbRoom {
     private Integer maxGuest;
     private Integer currentNumber;
     private String description;
-    private int userId;
-    private int cityId;
-    private int districtId;
+    private Integer userId;
+    private Integer cityId;
+    private Integer districtId;
     private Date date;
-    private int statusId;
+    private Integer statusId;
     private Double longtitude;
     private Double lattitude;
 
     @Id
     @Column(name = "room_id", nullable = false)
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
@@ -104,33 +103,33 @@ public class TbRoom {
         this.description = description;
     }
 
-    @Id
+    @Basic
     @Column(name = "user_id", nullable = false)
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    @Id
+    @Basic
     @Column(name = "city_id", nullable = false)
-    public int getCityId() {
+    public Integer getCityId() {
         return cityId;
     }
 
-    public void setCityId(int cityId) {
+    public void setCityId(Integer cityId) {
         this.cityId = cityId;
     }
 
-    @Id
+    @Basic
     @Column(name = "district_id", nullable = false)
-    public int getDistrictId() {
+    public Integer getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(int districtId) {
+    public void setDistrictId(Integer districtId) {
         this.districtId = districtId;
     }
 
@@ -144,13 +143,13 @@ public class TbRoom {
         this.date = date;
     }
 
-    @Id
+    @Basic
     @Column(name = "status_id", nullable = false)
-    public int getStatusId() {
+    public Integer getStatusId() {
         return statusId;
     }
 
-    public void setStatusId(int statusId) {
+    public void setStatusId(Integer statusId) {
         this.statusId = statusId;
     }
 
@@ -179,11 +178,7 @@ public class TbRoom {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoom room = (TbRoom) o;
-        return roomId == room.roomId &&
-                userId == room.userId &&
-                cityId == room.cityId &&
-                districtId == room.districtId &&
-                statusId == room.statusId &&
+        return Objects.equals(roomId, room.roomId) &&
                 Objects.equals(name, room.name) &&
                 Objects.equals(price, room.price) &&
                 Objects.equals(area, room.area) &&
@@ -191,7 +186,11 @@ public class TbRoom {
                 Objects.equals(maxGuest, room.maxGuest) &&
                 Objects.equals(currentNumber, room.currentNumber) &&
                 Objects.equals(description, room.description) &&
+                Objects.equals(userId, room.userId) &&
+                Objects.equals(cityId, room.cityId) &&
+                Objects.equals(districtId, room.districtId) &&
                 Objects.equals(date, room.date) &&
+                Objects.equals(statusId, room.statusId) &&
                 Objects.equals(longtitude, room.longtitude) &&
                 Objects.equals(lattitude, room.lattitude);
     }

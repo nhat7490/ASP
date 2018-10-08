@@ -3,8 +3,10 @@ package com.caps.asp.service;
 import com.caps.asp.model.TbImage;
 import com.caps.asp.repository.ImageRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class ImageService {
 
     public final ImageRepository imageRepository;
