@@ -164,18 +164,9 @@ public class RoomController {
                 return ResponseEntity.status(CONFLICT).build();
             } else {
                 TbRoomHasUser tbRoomHasUser = new TbRoomHasUser();
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-                LocalDateTime now = LocalDateTime.now();
-                String startDate = dtf.format(now);
-                SimpleDateFormat sdf1 = new SimpleDateFormat("dd-mm-yyyy");
-                java.util.Date date = null;
-                try {
-                    date = sdf1.parse(startDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                java.sql.Date sqlStartDate = new java.sql.Date(date.getTime());
-                tbRoomHasUser.setDateIn(sqlStartDate);
+                Date date = new Date(System.currentTimeMillis());
+                tbRoomHasUser.setRoomHasUserId(0);
+                tbRoomHasUser.setDateIn(date);
                 tbRoomHasUser.setDateOut(dateout);
                 tbRoomHasUser.setRoomId(roomId);
                 tbRoomHasUser.setUserId(user.getUserId());
