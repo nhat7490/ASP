@@ -93,7 +93,7 @@ public class RoomController {
                 room.setArea(roomRequestModel.getArea());
                 room.setAddress(roomRequestModel.getAddress());
                 room.setMaxGuest(roomRequestModel.getMaxGuest());
-                room.setDate(roomRequestModel.getDateCreated());
+                room.setDate(new Date(System.currentTimeMillis()));//Edit with current time not in request
                 room.setCurrentNumber(roomRequestModel.getCurrentNumber());
                 room.setDescription(roomRequestModel.getDescription());
                 room.setStatusId(roomRequestModel.getStatus());

@@ -1,5 +1,9 @@
 package com.caps.asp.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
@@ -13,6 +17,7 @@ public class TbUser {
     private String email;
     private String fullname;
     private String imageProfile;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dob;
     private String phone;
     private Byte gender;
@@ -40,10 +45,12 @@ public class TbUser {
 
     @Basic
     @Column(name = "password", nullable = false, length = 45)
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }

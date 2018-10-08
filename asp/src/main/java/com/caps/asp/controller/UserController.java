@@ -1,13 +1,16 @@
 package com.caps.asp.controller;
 
+import com.caps.asp.exception.UserException;
 import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbPostHasTbDistrict;
 import com.caps.asp.model.TbUser;
+import com.caps.asp.model.uimodel.UserLoginModel;
 import com.caps.asp.resource.CalculateDistance;
 import com.caps.asp.service.PostHasDistrictService;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -20,18 +23,19 @@ public class UserController {
     public final UserService userService;
     public final PostService postService;
     public final PostHasDistrictService postHasDistrictService;
-
-    public UserController(UserService userService, PostService postService, PostHasDistrictService postHasDistrictService) {
+    public final BCryptPasswordEncoder passwordEncoder;
+    public UserController(UserService userService, PostService postService, PostHasDistrictService postHasDistrictService,BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.postService = postService;
         this.postHasDistrictService = postHasDistrictService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/user/login/{username}&{password}")
-    public ResponseEntity<TbUser> login(@PathVariable String username, String password) {
+    @PostMapping("/user/login")
+    public ResponseEntity<TbUser> login(@RequestBody UserLoginModel model) {
         try {
             return ResponseEntity.status(OK)
-                    .body(userService.findByUsernameAndPassword(username, password));
+                    .body(userService.findByUsernameAndPassword(model.getUsername(),this.passwordEncoder.encode( model.getPassword())));//need to encrypt here
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }
@@ -87,9 +91,10 @@ public class UserController {
     @PostMapping("/user/createUser")
     public ResponseEntity createUSer(@RequestBody TbUser user) {
         try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.createUser(user);
             return ResponseEntity.status(OK).build();
-        } catch (Exception e) {
+        } catch (UserException.UsernameExistedException e) {
             return ResponseEntity.status((CONFLICT)).build();
         }
     }

@@ -1,5 +1,7 @@
 package com.caps.asp.model.uimodel;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Date;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class RoomRequestModel {
     private Integer area;
     private String address;
     private Integer maxGuest;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dateCreated;
     private Integer currentNumber;
     private String description;

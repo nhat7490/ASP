@@ -1,5 +1,7 @@
 package com.caps.asp.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
@@ -18,6 +20,7 @@ public class TbRoom {
     private Integer userId;
     private Integer cityId;
     private Integer districtId;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date date;
     private Integer statusId;
     private Double longtitude;

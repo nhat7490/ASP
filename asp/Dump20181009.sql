@@ -439,8 +439,8 @@ DROP TABLE IF EXISTS `tb_user`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `tb_user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(45) CHARACTER SET utf8 COLLATE utf8_icelandic_ci NOT NULL,
-  `password` varchar(45) CHARACTER SET utf8 COLLATE utf8_icelandic_ci NOT NULL,
+  `username` varchar(45) CHARACTER SET utf8 COLLATE utf8_icelandic_ci unique NOT NULL,
+  `password` varchar(60) CHARACTER SET utf8 COLLATE utf8_icelandic_ci NOT NULL,
   `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_icelandic_ci NOT NULL,
   `fullname` varchar(100) CHARACTER SET utf8 COLLATE utf8_icelandic_ci DEFAULT NULL,
   `image_profile` varchar(255) CHARACTER SET utf8 COLLATE utf8_icelandic_ci DEFAULT NULL,
