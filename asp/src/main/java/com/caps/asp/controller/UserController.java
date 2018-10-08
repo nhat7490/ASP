@@ -57,13 +57,6 @@ public class UserController {
         }
     }
 
-    //Test
-    @RequestMapping("/")
-    public String home() {
-        return "redirect:/user";
-    }
-
-    //Test
     @GetMapping("/user/listUser")
     public ResponseEntity<List<TbUser>> getAllUsers() {
         try {

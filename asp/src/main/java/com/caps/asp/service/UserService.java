@@ -1,11 +1,14 @@
 package com.caps.asp.service;
 
+import com.caps.asp.constant.Constant;
 import com.caps.asp.exception.UserException;
 import com.caps.asp.model.TbUser;
 import com.caps.asp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.caps.asp.constant.Constant.MEMBER;
 
 @Service
 public class UserService {
@@ -41,7 +44,7 @@ public class UserService {
     public Integer createUser(TbUser user) throws UserException.UsernameExistedException {
         TbUser tbUser = userRepository.findByUsername(user.getUsername());
         if (tbUser == null) {
-            user.setRoleId(4);
+            user.setRoleId(MEMBER);
             userRepository.saveAndFlush(user);
         }else{
             throw new UserException.UsernameExistedException();
