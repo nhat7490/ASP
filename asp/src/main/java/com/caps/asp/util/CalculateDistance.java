@@ -1,4 +1,4 @@
-package com.caps.asp.resource;
+package com.caps.asp.util;
 
 public class CalculateDistance {
 
