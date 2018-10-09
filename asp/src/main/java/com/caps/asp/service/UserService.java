@@ -38,14 +38,15 @@ public class UserService {
         userRepository.save(tbUser);
     }
 
-    public void createUser(TbUser user) throws UserException.UsernameExistedException {
+    public Integer createUser(TbUser user) throws UserException.UsernameExistedException {
         TbUser tbUser = userRepository.findByUsername(user.getUsername());
         if (tbUser == null) {
             user.setRoleId(4);
-            userRepository.save(user);
+            userRepository.saveAndFlush(user);
         }else{
             throw new UserException.UsernameExistedException();
         }
+        return user.getUserId();
     }
 
     //For test in heroku

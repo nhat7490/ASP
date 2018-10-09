@@ -9,7 +9,9 @@ import com.caps.asp.resource.CalculateDistance;
 import com.caps.asp.service.PostHasDistrictService;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.UserService;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +36,12 @@ public class UserController {
     @PostMapping("/user/login")
     public ResponseEntity<TbUser> login(@RequestBody UserLoginModel model) {
         try {
-            return ResponseEntity.status(OK)
-                    .body(userService.findByUsernameAndPassword(model.getUsername(),this.passwordEncoder.encode( model.getPassword())));//need to encrypt here
+            TbUser user = userService.findByUsername(model.getUsername());
+            boolean isRigh = this.passwordEncoder.matches(model.getPassword(),user.getPassword());
+            System.out.println(isRigh);
+            return isRigh
+                    ? ResponseEntity.status(OK).body(user)
+                    : ResponseEntity.status(FORBIDDEN).build() ;//need to encrypt here
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }
@@ -92,8 +98,8 @@ public class UserController {
     public ResponseEntity createUSer(@RequestBody TbUser user) {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userService.createUser(user);
-            return ResponseEntity.status(OK).build();
+            int id = userService.createUser(user);
+            return ResponseEntity.status(CREATED).body(id);
         } catch (UserException.UsernameExistedException e) {
             return ResponseEntity.status((CONFLICT)).build();
         }
