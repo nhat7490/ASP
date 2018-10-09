@@ -107,7 +107,7 @@ public class UserController {
             List<TbPost> tbPostList = postService.findByPostId(tbPostHasTbDistrictList);
 
             CalculateDistance calculateDistance = new CalculateDistance();
-            HashMap<TbPost, Double> listSort = null;
+            HashMap<TbPost, Double> listSort = new HashMap<>();
 
             for (int i = 0; i < tbPostList.size(); i++) {
                 double distance = calculateDistance.distance(tbPost.getLattitude(), tbPost.getLongtitude(), tbPostList.get(i).getLattitude(), tbPostList.get(i).getLongtitude());
