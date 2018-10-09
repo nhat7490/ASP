@@ -18,7 +18,11 @@ public class RoomHasUserService {
         roomHasUserRepository.save(tbRoomHasUser);
     }
 
-    public List<TbRoomHasUser> getAllByRoomId(int roomId){
+    public List<TbRoomHasUser> getAllByRoomId(int roomId) {
         return roomHasUserRepository.findAllByRoomId(roomId);
+    }
+
+    public TbRoomHasUser findByUserIdAndRoomId(int userId, int roomId) {
+        return roomHasUserRepository.findByUserIdAndRoomId(userId, roomId);
     }
 }

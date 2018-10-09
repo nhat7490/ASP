@@ -35,4 +35,8 @@ public class RoomService {
     public List<TbRoom> findAllRoom(){
         return roomRepository.findAll();
     }
+
+    public TbRoom findByUserIdAndRoomId(int userId, int roomId){
+        return roomRepository.findByUserIdAndRoomId(userId, roomId);
+    }
 }

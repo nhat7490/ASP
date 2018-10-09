@@ -44,7 +44,7 @@ public class TbUser {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 45)
+    @Column(name = "password", nullable = false, length = 60)
     @JsonIgnore
     public String getPassword() {
         return password;

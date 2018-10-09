@@ -12,6 +12,7 @@ public class TbRoomHasUtility {
     private String brand;
     private String description;
     private Integer quality;
+    private Integer quantity;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -90,5 +91,15 @@ public class TbRoomHasUtility {
     public int hashCode() {
 
         return Objects.hash(id, roomId, utilityId, brand, description, quality);
+    }
+
+    @Basic
+    @Column(name = "quantity", nullable = true)
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

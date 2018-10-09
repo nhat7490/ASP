@@ -9,9 +9,7 @@ import com.caps.asp.resource.CalculateDistance;
 import com.caps.asp.service.PostHasDistrictService;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.UserService;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -104,7 +102,7 @@ public class UserController {
             TbPost tbPost = postService.findPostByUserIdAndTypeId(userId, PARTNER_POST);
             TbPostHasTbDistrict tbPostHasTbDistrict = postHasDistrictService.findByPostId(tbPost.getPostId());
             List<TbPostHasTbDistrict> tbPostHasTbDistrictList = postHasDistrictService.findAllByDistrictId(tbPostHasTbDistrict.getDistrictId());
-            List<TbPost> tbPostList = postService.findByPostId(tbPostHasTbDistrictList);
+            List<TbPost> tbPostList = postService.getPostList(tbPostHasTbDistrictList);
 
             CalculateDistance calculateDistance = new CalculateDistance();
             HashMap<TbPost, Double> listSort = new HashMap<>();

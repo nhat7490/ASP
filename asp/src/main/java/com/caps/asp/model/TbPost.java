@@ -14,7 +14,7 @@ public class TbPost {
     private String phoneContact;
     private Integer numberPartner;
     private Byte genderPartner;
-    @JsonFormat(pattern = "dd-MM-yyyy")
+//    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date date;
     private Integer typeId;
     private Integer userId;
@@ -103,7 +103,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "room_id", nullable = false)
+    @Column(name = "room_id", nullable = true)
     public Integer getRoomId() {
         return roomId;
     }

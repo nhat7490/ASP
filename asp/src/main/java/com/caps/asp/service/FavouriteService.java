@@ -22,4 +22,8 @@ public class FavouriteService {
     public void addFavourite(TbFavourite tbFavourite){
         favouriteRepository.save(tbFavourite);
     }
+
+    public void remove(int id){
+        favouriteRepository.deleteById(id);
+    }
 }

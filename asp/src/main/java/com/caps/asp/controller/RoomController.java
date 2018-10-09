@@ -1,6 +1,8 @@
 package com.caps.asp.controller;
 
+import com.caps.asp.constant.Constant;
 import com.caps.asp.model.*;
+import com.caps.asp.model.uimodel.AddRoomMemberModel;
 import com.caps.asp.model.uimodel.RoomRequestModel;
 import com.caps.asp.model.uimodel.UtilityRequestModel;
 import com.caps.asp.service.*;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.caps.asp.constant.Constant.*;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -37,48 +40,52 @@ public class RoomController {
 
     @PostMapping("/room/create")
     public ResponseEntity createRoom(@RequestBody RoomRequestModel roomRequestModel) {
-//        try {
-            TbRoom room = new TbRoom();
-            room.setRoomId(0);
-            room.setName(roomRequestModel.getName());
-            room.setPrice(roomRequestModel.getPrice());
-            room.setArea(roomRequestModel.getArea());
-            room.setAddress(roomRequestModel.getAddress());
-            room.setMaxGuest(roomRequestModel.getMaxGuest());
+        try {
+            TbUser user = userService.findById(roomRequestModel.getUserId());
+            if (user.getRoleId() == HOUSE_OWNER) {
+                TbRoom room = new TbRoom();
+                room.setRoomId(0);
+                room.setName(roomRequestModel.getName());
+                room.setPrice(roomRequestModel.getPrice());
+                room.setArea(roomRequestModel.getArea());
+                room.setAddress(roomRequestModel.getAddress());
+                room.setMaxGuest(roomRequestModel.getMaxGuest());
 
-            Date date = new Date(System.currentTimeMillis());
-            room.setDate(date);
-            room.setCurrentNumber(roomRequestModel.getCurrentNumber());
-            room.setDescription(roomRequestModel.getDescription());
-            room.setStatusId(roomRequestModel.getStatus());
-            room.setUserId(roomRequestModel.getUserId());
-            room.setCityId(roomRequestModel.getCityId());
-            room.setDistrictId(roomRequestModel.getDistrictId());
-            roomService.saveRoom(room);
+                Date date = new Date(System.currentTimeMillis());
+                room.setDate(date);
+                room.setCurrentNumber(roomRequestModel.getCurrentNumber());
+                room.setDescription(roomRequestModel.getDescription());
+                room.setStatusId(roomRequestModel.getStatus());
+                room.setUserId(roomRequestModel.getUserId());
+                room.setCityId(roomRequestModel.getCityId());
+                room.setDistrictId(roomRequestModel.getDistrictId());
+                roomService.saveRoom(room);
 
-            for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
-                TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
-                roomHasUtility.setId(0);
-                roomHasUtility.setRoomId(roomService.findRoomByName(roomRequestModel.getName()).getRoomId());
-                roomHasUtility.setBrand(utilityRequestModel.getBrand());
-                roomHasUtility.setDescription(utilityRequestModel.getDescription());
-                roomHasUtility.setQuality(utilityRequestModel.getQuality());
-                roomHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
-                roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
+                for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
+                    TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
+                    roomHasUtility.setId(0);
+                    roomHasUtility.setRoomId(roomService.findRoomByName(roomRequestModel.getName()).getRoomId());
+                    roomHasUtility.setBrand(utilityRequestModel.getBrand());
+                    roomHasUtility.setDescription(utilityRequestModel.getDescription());
+                    roomHasUtility.setQuality(utilityRequestModel.getQuality());
+                    roomHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
+                    roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
+                }
+
+                for (String url : roomRequestModel.getImageUrls()) {
+                    TbImage image = new TbImage();
+                    image.setImageId(0);
+                    image.setRoomId(roomService.findRoomByName(roomRequestModel.getName()).getRoomId());
+                    image.setLinkUrl(url);
+                    imageService.saveImage(image);
+                }
+                return ResponseEntity.status(CREATED).build();
+            }else {
+                return ResponseEntity.status((FORBIDDEN)).build();
             }
-
-            for (String url : roomRequestModel.getImageUrls()) {
-                TbImage image = new TbImage();
-                image.setImageId(0);
-                image.setRoomId(roomService.findRoomByName(roomRequestModel.getName()).getRoomId());
-                image.setLinkUrl(url);
-                imageService.saveImage(image);
-            }
-
-            return ResponseEntity.status(CREATED).build();
-//        } catch (Exception e) {
-//            return ResponseEntity.status((CONFLICT)).build();
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.status((CONFLICT)).build();
+        }
     }
 
     @PutMapping("/room/update")
@@ -86,6 +93,7 @@ public class RoomController {
         try {
             //update room info
             TbRoom room = roomService.findRoomById(roomRequestModel.getRoomId());
+            TbUser user = userService.findById(roomRequestModel.getUserId());
             if (room != null) {
                 room.setRoomId(roomRequestModel.getRoomId());
                 room.setName(roomRequestModel.getName());
@@ -156,10 +164,10 @@ public class RoomController {
         }
     }
 
-    @PostMapping("rom/addMember/{roomId}&{username}&{dateout}")
-    public ResponseEntity addMember(@PathVariable int roomId, String username, Date dateout) {
-//        try {
-            TbUser user = userService.findByUsername(username);
+    @PostMapping("rom/addMember")
+    public ResponseEntity addMember(@RequestBody AddRoomMemberModel roomMemberModel) {
+        try {
+            TbUser user = userService.findByUsername(roomMemberModel.getUsername());
             if (user == null) {
                 return ResponseEntity.status(CONFLICT).build();
             } else {
@@ -167,12 +175,12 @@ public class RoomController {
                 Date date = new Date(System.currentTimeMillis());
                 tbRoomHasUser.setRoomHasUserId(0);
                 tbRoomHasUser.setDateIn(date);
-                tbRoomHasUser.setDateOut(dateout);
-                tbRoomHasUser.setRoomId(roomId);
+                tbRoomHasUser.setDateOut(roomMemberModel.getDateout());
+                tbRoomHasUser.setRoomId(roomMemberModel.getRoomId());
                 tbRoomHasUser.setUserId(user.getUserId());
                 roomHasUserService.addRoomMember(tbRoomHasUser);
 
-                List<TbRoomHasUser> roomHasUsers = roomHasUserService.getAllByRoomId(roomId);
+                List<TbRoomHasUser> roomHasUsers = roomHasUserService.getAllByRoomId(roomMemberModel.getRoomId());
                 List<Long> milis = new ArrayList<>();
 
                 for (TbRoomHasUser roomHasUser : roomHasUsers) {
@@ -181,7 +189,7 @@ public class RoomController {
 
                 Collections.sort(milis);
                 for (TbRoomHasUser roomHasUser : roomHasUsers) {
-                    if (roomHasUser.getDateIn().getTime() == milis.get(milis.size()-1)){
+                    if (roomHasUser.getDateIn().getTime() == milis.get(milis.size() - 1)) {
                         TbUser tbUser = userService.findById(roomHasUser.getUserId());
                         tbUser.setRoleId(3);
                         userService.updateUserById(tbUser);
@@ -190,9 +198,9 @@ public class RoomController {
                 return ResponseEntity.status(OK).build();
 
             }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(CONFLICT).build();
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT).build();
+        }
     }
 
 }

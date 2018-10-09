@@ -20,14 +20,27 @@ public class PostService {
         return postRepository.findByUserIdAndTypeId(userId, typeId);
     }
 
-    public List<TbPost> findByPostId(List<TbPostHasTbDistrict> tbPostHasTbDistrictList) {
+    public List<TbPost> getPostList(List<TbPostHasTbDistrict> tbPostHasTbDistrictList) {
         List<TbPost> list = new ArrayList<>();
-//        for (int i = 0; i < tbPostHasTbDistrictList.size(); i++) {
-//            list.add(postRepository.findByPostId(tbPostHasTbDistrictList.get(i).getPostId()));
-//        }
-        for (TbPostHasTbDistrict post: tbPostHasTbDistrictList) {
+        for (TbPostHasTbDistrict post : tbPostHasTbDistrictList) {
             list.add(postRepository.findByPostId(post.getPostId()));
         }
         return list;
+    }
+
+    public TbPost findByRoomId(int roomId) {
+        return postRepository.findByRoomId(roomId);
+    }
+
+    public void savePost(TbPost post){
+        postRepository.save(post);
+    }
+
+    public TbPost findByPostId(int postId){
+        return postRepository.findByPostId(postId);
+    }
+
+    public List<TbPost> findAllByUserId(int userId){
+        return postRepository.findAllByUserId(userId);
     }
 }
