@@ -20,10 +20,12 @@ public class PostService {
         return postRepository.findByUserIdAndTypeId(userId, typeId);
     }
 
-    public List<TbPost> getPostList(List<TbPostHasTbDistrict> tbPostHasTbDistrictList) {
+    public List<TbPost> getPostList(List<TbPostHasTbDistrict> tbPostHasTbDistrictList, int postId) {
         List<TbPost> list = new ArrayList<>();
         for (TbPostHasTbDistrict post : tbPostHasTbDistrictList) {
-            list.add(postRepository.findByPostId(post.getPostId()));
+            if (post.getPostId() != postId) {
+                list.add(postRepository.findByPostId(post.getPostId()));
+            }
         }
         return list;
     }

@@ -102,7 +102,7 @@ public class UserController {
             TbPost tbPost = postService.findPostByUserIdAndTypeId(userId, PARTNER_POST);
             TbPostHasTbDistrict tbPostHasTbDistrict = postHasDistrictService.findByPostId(tbPost.getPostId());
             List<TbPostHasTbDistrict> tbPostHasTbDistrictList = postHasDistrictService.findAllByDistrictId(tbPostHasTbDistrict.getDistrictId());
-            List<TbPost> tbPostList = postService.getPostList(tbPostHasTbDistrictList);
+            List<TbPost> tbPostList = postService.getPostList(tbPostHasTbDistrictList, tbPost.getPostId());
 
             CalculateDistance calculateDistance = new CalculateDistance();
             HashMap<TbPost, Double> listSort = new HashMap<>();
