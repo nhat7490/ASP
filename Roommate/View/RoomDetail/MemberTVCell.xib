@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="50" id="KGk-i7-Jjw" customClass="MemberTVCell" customModule="Roommate" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="317" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="317" height="49.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aT1-pT-28y">
+                        <rect key="frame" x="0.0" y="0.0" width="218" height="49.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftU-bZ-wdm">
+                        <rect key="frame" x="267.5" y="0.0" width="49.5" height="49.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="ftU-bZ-wdm" secondAttribute="height" multiplier="1/1" id="ANE-cY-WIL"/>
+                        </constraints>
+                        <connections>
+                            <action selector="onClickBtnRemoveMember:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="KBg-mV-HHq"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="paZ-4c-nwt">
+                        <rect key="frame" x="218" y="0.0" width="49.5" height="49.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="paZ-4c-nwt" secondAttribute="height" multiplier="1:1" id="l95-zK-iND"/>
+                        </constraints>
+                        <connections>
+                            <action selector="onClickBtnEditMember:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="4vI-Xs-muz"/>
+                            <action selector="onClickBtnRemoveMember:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="eHy-hy-fr5"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="aT1-pT-28y" secondAttribute="bottom" id="5oF-lh-i5q"/>
+                    <constraint firstItem="aT1-pT-28y" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="8CJ-yM-pFz"/>
+                    <constraint firstItem="ftU-bZ-wdm" firstAttribute="leading" secondItem="paZ-4c-nwt" secondAttribute="trailing" id="9kf-C0-se5"/>
+                    <constraint firstAttribute="trailing" secondItem="ftU-bZ-wdm" secondAttribute="trailing" id="DHy-By-qQJ"/>
+                    <constraint firstAttribute="bottom" secondItem="paZ-4c-nwt" secondAttribute="bottom" id="ExI-yZ-JgZ"/>
+                    <constraint firstItem="ftU-bZ-wdm" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="H2y-LB-Bcg"/>
+                    <constraint firstAttribute="bottom" secondItem="ftU-bZ-wdm" secondAttribute="bottom" id="ZgD-Wl-n3i"/>
+                    <constraint firstItem="paZ-4c-nwt" firstAttribute="leading" secondItem="aT1-pT-28y" secondAttribute="trailing" id="dVe-Dj-6zh"/>
+                    <constraint firstItem="paZ-4c-nwt" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="e3K-8Q-JuL"/>
+                    <constraint firstItem="aT1-pT-28y" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="oua-Fp-zs2"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="btnEditMember" destination="paZ-4c-nwt" id="Pri-EV-xz8"/>
+                <outlet property="btnRemoveMember" destination="ftU-bZ-wdm" id="Bma-AN-Nwx"/>
+                <outlet property="lblMemberName" destination="aT1-pT-28y" id="0ZK-Ou-qpV"/>
+            </connections>
+            <point key="canvasLocation" x="63.5" y="65"/>
+        </tableViewCell>
+    </objects>
+</document>

@@ -1,0 +1,151 @@
+/*
+ Localizable.strings
+ Roommate
+ 
+ Created by TrinhHC on 9/21/18.
+ Copyright © 2018 TrinhHC. All rights reserved.
+ */
+//MARK: Navigation Title
+"FILTER"="Bộ lọc";
+"CREATE_ROOM"="Đăng phòng";
+"ALL_VC"="Tất cả";
+"BOOKMARK_VC"="Đánh dấu";
+"SIGN_IN_TITLE" = "Đăng nhập";
+
+//MARK: Roommate cell
+"ROMMATE_RIGHT_PRICE"="Mức giá";
+"ROMMATE_RIGHT_POSITION"="Vị trí tìm kiếm";
+"ROMMATE_RIGHT_CITY"="Thành Phố";
+
+//MARK: Segment control
+"SEGMENTED_CONTROL_ROOM"="Phòng ở ghép";
+"SEGMENTED_CONTROL_ROOMMATE"="Người ở ghép";
+
+//MARK: Room cell
+"NUMBER_OF_PERSON"="Tìm ở ghép %d %@";
+"PRICE_OF_ROOM"="%d VND/%@";
+"PERSON"="Người";
+
+//MARK: OrderType
+"NEWEST"="Mới nhất";
+"LOW_TO_HIGH_PRICE"="Giá từ thấp đến cao";
+"HIGH_TO_LOW_PRICE"="Giá từ cao đến thấp";
+"ORDER_TITLE"="Sắp xếp theo : ";
+
+
+//MARK: Utilies
+"FEMALE"="Nữ";
+"MALE"="Nam";
+"cctv"="Camera an ninh";
+"24-hours"="Giờ giấc tự do";
+"aircondition"="Máy lạnh";
+"closet"="Tủ quần áo";
+"cooking"="Cho nấu ăn";
+"fan"="Quạt";
+"bed"="Giường ngủ";
+"internet"="Mạng internet";
+"key"="Không chung chủ";
+"parking"="Chỗ đậu xe";
+"policeman"="Bảo vệ";
+"refrigerator"="Tủ lạnh";
+"television"="Tivi";
+"toilet"="WC riêng";
+"washing-machine"="Máy giặt";
+"water-heater"="Máy nước nóng";
+
+//MARK: RoomDetailVC
+"ROOM_DETAIL_MEMBER_TITLE"="Thông tin thành viên trong phòng";
+"ROOM_DETAIL_STATUS_CERTIFICATED"="Đã xác thực";
+"ROOM_DETAIL_STATUS_NORMAL"="Chưa xác thực";
+"ROOM_DETAIL_MAX_NUMBER_OF_MEMBER"="Tối đa : %d";
+"ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER"="Hiện tại : %d";
+"ROOM_DETAIL_ADDED_NUMBER_OF_MEMBER"="Đã thêm : %d";
+"GENDER_ACCEPT"="Giới tính";
+"ROOM_MASTER"="Quản lý";
+"CONFIRM_TITLE_BUTTON_CALL" = "Gọi";
+"CONFIRM_TITLE_BUTTON_MESSAGE" = "Gửi ngay";
+"CONFIRM_MESSAGE_CALL_ALERT" = "Bạn muốn gọi điện cho chủ nhà";
+"CONFIRM_MESSAGE_SMS_ALERT" = "Bạn muốn nhắn tin cho chủ nhà";
+
+//MARK:FilterVC
+"LIST_CITY_TITLE"="Chọn thành phố";
+"LIST_CITY_MESSAGE"="";
+"LIST_DISTRICT_TITLE"="Chọn quận";
+"LIST_DISTRICT_MESSAGE"="";
+
+//MARK: UtilityDetail
+"BRAND_TITLE"="Nhãn hiệu: %@";
+"QUANTITY_TITLE"="Số lượng: %d";
+"DESCRIPTION_PLACE_HOLDER"="Mô tả: %@";
+//MARK: UtilityInput
+"BRAND_PLACE_HOLDER"="Nhãn hiệu";
+"QUANTITY_PLACE_HOLDER"="Số lượng";
+"DESCRIPTION_PLACE_HOLDER"="Mô tả";
+
+
+//MARK: Common
+"BASE_INFORMATION"="Thông tin cơ bản";
+"UTILITY_TITLE"="Tiện ích";
+"DESCRIPTION"="Mô Tả";
+"GENDER"="Giới Tính";
+"ADDRESS"="Địa chỉ : %@";
+"AREA"="Diện tích : %d m2";
+"AREA_TITLE"="Diện tích :";
+"MONTH"="Tháng";
+"TIME"="Chỉnh sửa 2 tháng trước";
+"CONFIRM_TITLE" = "Xác nhận";
+"CONFIRM_MESSAGE_EMAIL_ALERT" = "Gửi";
+"GENDER_REQUIRED_DESCRIPTION" = "Có thể chọn cả 2";
+"CANCEL" = "Huỷ";
+"OK" = "Chọn";
+"DONE" = "Xong";
+"NEXT" = "Tiếp";
+"SAVE" = "Lưu";
+"APPLY" = "Áp dụng";
+"SELECT" = "Lựa chọn";
+"CITY" = "Tỉnh,Thành phố";
+"DISTRICT" = "Quận,Huyện";
+"PRICE" = "Giá";
+"AREA_TITLE" = "Diện tích";
+"MAX_NUMBER_OF_PERSON" = "Số người tối đa";
+
+//MARK: CERoomVC
+"ROOM_INFOR_TITLE"="Thông tin phòng";
+"ROOM_NAME_TITLE"="Tên Phòng";
+"ROOM_ADDRESS_TITLE"="Địa chỉ";
+"ROOM_AREA_TITLE"="Diện tích";
+"ROOM_PHONE_TITLE"="Số điện thoại";
+"ROOM_FIND_NUMBER_OF_PERSON_TITLE"="Số người cần tìm";
+"ROOM_HOLDER_CITY_TITLE"="Chọn ngay";
+"ROOM_DISTRICT_TITLE"="Chọn ngay";
+
+
+//MARK: Validation
+
+
+//MARK: Network
+"NETWORK_STATUS_TITLE"="Thông báo";
+"NETWORK_STATUS_CONNECTED_ERROR_MESSAGE"="Không thể kết nối mạng, vui lòng kiểm tra lại";
+"NETWORK_STATUS_ERROR_MESSAGE"="Lỗi mạng, vui lòng thử lại sau";
+"NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"="Không thể kết nối máy chủ vui lòng thử lại sau";
+//MARK: Alert
+"ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
+"ALERT_INVALID_USERNAME_PASSWORD"="Mật khẩu không đúng";
+
+//MARK: SignInVC
+"PLACE_HOLDER_USERNAME"="Tên đăng nhập";
+"PLACE_HOLDER_PASSWORD"="Mật khẩu";
+
+//MARK: Validator
+"ERROR_TYPE_USERNAME"="Tên đăng nhập từ 6 - 50 ký tự";
+"ERROR_TYPE_PASSWORD"="Mật khẩu từ 6 - 50 ký tự";
+"ERROR_TYPE_NAME_MAX_CHAR_50"="Tên Từ 6 đến 50 ký tự";
+"ERROR_TYPE_PRICE"="Giá từ 100,000 VND đến 50,000,000 VND";
+"ERROR_TYPE_AREA"="Diện tích từ 10 - 1000 m2";
+"ERROR_TYPE_PHONE"="Định dạng số điện thoại sai";
+"ERROR_TYPE_ADDRESS"="Số nhà đường phường từ 20 đến 250 ký tự";
+
+
+
+
+
