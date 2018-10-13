@@ -110,7 +110,7 @@ public class PostController {
         }
     }
 
-    @GetMapping("/post/findByUserId/{typeId}")
+    @GetMapping("/post/findByTypeId/{typeId}")
     public ResponseEntity getPostByTypeId(@PathVariable int typeId,
                                           @RequestParam(defaultValue = "1") String page) {
         try {
