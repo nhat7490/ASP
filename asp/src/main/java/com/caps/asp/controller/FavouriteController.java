@@ -33,12 +33,12 @@ public class FavouriteController {
     }
 
     @GetMapping("/favourites/getFavourite/{userId}")
-    public ResponseEntity<Page<TbFavourite>> findAllFavouritesByUserId(@PathVariable int userId,
-                                                                       @RequestParam(defaultValue = "1") String page) {
+    public ResponseEntity findAllFavouritesByUserId(@PathVariable int userId,
+                                                    @RequestParam(defaultValue = "1") String page) {
         try {
-            Page<TbFavourite> favourites = favouriteService.findAllByUserId(userId,Integer.parseInt(page), 10);
+            Page<TbFavourite> favourites = favouriteService.findAllByUserId(userId, Integer.parseInt(page), 10);
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(favourites);
+                    .body(favourites.getContent());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

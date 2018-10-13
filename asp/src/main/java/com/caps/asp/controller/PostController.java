@@ -34,11 +34,13 @@ public class PostController {
         this.roomHasUserService = roomHasUserService;
     }
 
-    @GetMapping("/post/findByUserId/{id}")
-    public ResponseEntity<List<TbPost>> getPostByUserId(@PathVariable int userId) {
+    @GetMapping("/post/findByUserId/{userId}")
+    public ResponseEntity getPostByUserId(@PathVariable int userId,
+                                          @RequestParam(defaultValue = "1") String page) {
         try {
+            Page<TbPost> posts = postService.findAllByUserId(Integer.parseInt(page), 10, userId);
             return ResponseEntity.status(OK)
-                    .body(postService.findAllByUserId(userId));
+                    .body(posts.getContent());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -96,15 +98,27 @@ public class PostController {
 
     @PostMapping("/post/filter")
     public ResponseEntity getPostByFilter(@RequestBody SearchRequestModel searchRequestModel,
-                                          @RequestParam(defaultValue = "1") String page){
+                                          @RequestParam(defaultValue = "1") String page) {
         try {
             Filter filter = new Filter();
             filter.setCriteria(searchRequestModel);
             Page<TbPost> posts = postService.finAllByFilter(Integer.parseInt(page), 10, filter);
             return ResponseEntity.status(OK).body(posts.getContent().stream().distinct().collect(Collectors.toList()));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/post/findByUserId/{typeId}")
+    public ResponseEntity getPostByTypeId(@PathVariable int typeId,
+                                          @RequestParam(defaultValue = "1") String page) {
+        try {
+            Page<TbPost> posts = postService.findAllByTypeId(Integer.parseInt(page), 10, typeId);
+            return ResponseEntity.status(OK)
+                    .body(posts.getContent());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

@@ -47,8 +47,10 @@ public class PostService {
         return postRepository.findByPostId(postId);
     }
 
-    public List<TbPost> findAllByUserId(int userId) {
-        return postRepository.findAllByUserId(userId);
+    public Page<TbPost> findAllByUserId(int page, int items,int userId) {
+        int actualPage = page - 1;
+        Pageable pageable = PageRequest.of(actualPage, items);
+        return postRepository.findAllByUserId(userId, pageable);
     }
 
     public Page<TbPost> finAllByFilter(int page, int items, Filter filter) {
@@ -61,5 +63,11 @@ public class PostService {
         Filter specification = new Filter();
         specification.setCriteria(search);
         return postRepository.findAll(specification);
+    }
+
+    public Page<TbPost> findAllByTypeId(int page, int items, int typeId){
+        int actualPage = page - 1;
+        Pageable pageable = PageRequest.of(actualPage, items);
+        return postRepository.findAllByTypeId(typeId, pageable);
     }
 }

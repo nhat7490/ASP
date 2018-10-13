@@ -11,9 +11,14 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface PostRepository extends JpaRepository<TbPost, Integer>,JpaSpecificationExecutor<TbPost> {
+public interface PostRepository extends JpaRepository<TbPost, Integer>, JpaSpecificationExecutor<TbPost> {
     TbPost findByUserIdAndTypeId(int userId, int typeId);
+
     TbPost findByPostId(int postId);
+
     TbPost findByRoomId(int roomId);
-    List<TbPost> findAllByUserId(int userId);
+
+    Page<TbPost> findAllByUserId(int userId, Pageable pageable);
+
+    Page<TbPost> findAllByTypeId(int typeId, Pageable pageable);
 }
