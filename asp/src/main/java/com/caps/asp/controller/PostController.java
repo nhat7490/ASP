@@ -3,20 +3,22 @@ package com.caps.asp.controller;
 import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbRoomHasUser;
 import com.caps.asp.model.TbUser;
+import com.caps.asp.model.uimodel.SearchRequestModel;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.RoomHasUserService;
 import com.caps.asp.service.RoomService;
 import com.caps.asp.service.UserService;
+import com.caps.asp.service.filter.Filter;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.caps.asp.constant.Constant.*;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 public class PostController {
@@ -89,6 +91,20 @@ public class PostController {
 
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
+        }
+    }
+
+    @PostMapping("/post/filter")
+    public ResponseEntity getPostByFilter(@RequestBody SearchRequestModel searchRequestModel,
+                                          @RequestParam(defaultValue = "1") String page){
+        try {
+            Filter filter = new Filter();
+            filter.setCriteria(searchRequestModel);
+            Page<TbPost> posts = postService.finAllByFilter(Integer.parseInt(page), 10, filter);
+            return ResponseEntity.status(OK).body(posts.getContent().stream().distinct().collect(Collectors.toList()));
+
+        }catch (Exception e){
+            return ResponseEntity.status(NOT_FOUND).build();
         }
     }
 }

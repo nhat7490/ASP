@@ -2,6 +2,7 @@ package com.caps.asp.controller;
 
 import com.caps.asp.model.TbFavourite;
 import com.caps.asp.service.FavouriteService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +33,12 @@ public class FavouriteController {
     }
 
     @GetMapping("/favourites/getFavourite/{userId}")
-    public ResponseEntity<List<TbFavourite>> findAllFavouritesByUserId(@PathVariable int userId) {
+    public ResponseEntity<Page<TbFavourite>> findAllFavouritesByUserId(@PathVariable int userId,
+                                                                       @RequestParam(defaultValue = "1") String page) {
         try {
+            Page<TbFavourite> favourites = favouriteService.findAllByUserId(userId,Integer.parseInt(page), 10);
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(favouriteService.findAllByUserId(userId));
+                    .body(favourites);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
