@@ -10,7 +10,8 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL = "http://localhost:8080/"
+    static let BASE_URL_API = "http://localhost:8080/"
+    static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //    static let BASE_URL = "https://asp-backend.herokuapp.com/"
     
     //MARK: Constant for Storyboard name
@@ -46,6 +47,7 @@ class Constants{
     static let CELL_NEWUTILITYCV = "NewUtilityCVCell"
     static let CELL_UTILITYCV = "UtilityCVCell"
     static let CELL_IMAGECV = "ImageCVCell"
+    static let CELL_ICONTITLETV = "IconTitleTVCell"
     
     //MARK: Constant for UITableViewCell
     static let CELL_POPUP_SELECT_LISTTV = "PopupSelectListTVCell"
@@ -88,7 +90,7 @@ class Constants{
     //CERoomVC
     static let HEIGHT_UTILITY_INPUT_VIEW:Double = 160.0
     static let HEIGHT_UTILITY_DETAIL_VIEW:Double = 160.0
-    static let HEIGHT_INPUT_VIEW:Double = 81.0
+    static let HEIGHT_NEW_INPUT_VIEW:Double = 70.0
     static let HEIGHT_CELL_NEW_UTILITY:Double = 40.0
     static let HEIGHT_ROOM_INFOR_TITLE:Double = 30.0
     static let MAX_MEMBER:Int = 10

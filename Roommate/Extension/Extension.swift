@@ -472,8 +472,8 @@ extension UITextView{
 }
 extension String{
     func isValidUsername() -> Bool{
-        let userNameFormat = "^[a-zA-Z]{6,50}"
-        let predicate = NSPredicate(format:"SELF MATCHES %@", userNameFormat)
+        let format = "^[a-zA-Z]{6,50}"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", format)
         return predicate.evaluate(with: self)
     }
     func isValidPassword() -> Bool{
@@ -482,8 +482,8 @@ extension String{
         return predicate.evaluate(with: self)
     }
     func isValidName() -> Bool{
-        let userNameFormat = "^[a-zA-Z]{6,50}"
-        let predicate = NSPredicate(format:"SELF MATCHES %@", userNameFormat)
+        let format = "^[a-zA-Z]{6,50}"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", format)
         return predicate.evaluate(with: self)
     }
     func isValidPrice() -> Bool{
@@ -493,6 +493,26 @@ extension String{
             return false
         }
     }
+    
+    func isValidArea() -> Bool{
+        if let intValue = self.toInt() , (intValue >= Constants.MIN_AREA && intValue <= Constants.MIN_AREA){
+            return true
+        }else{
+            return false
+        }
+    }
+    
+    func isValidPhoneNumber() -> Bool{
+        let format = "^[a-zA-Z]{10,11}"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", format)
+        return predicate.evaluate(with: self)
+    }
+    func isValidAddress() -> Bool{
+        let format = "^[\\w\\s,-./]{5,250}"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", format)
+        return predicate.evaluate(with: self)
+    }
+    
     func toInt()->Int?{
         return Int(self)
     }

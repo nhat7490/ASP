@@ -10,7 +10,13 @@ import Foundation
 import UIKit
 import Alamofire
 import ObjectMapper
-class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate{
+import GooglePlaces
+import GoogleMaps
+class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,GenderViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource{
+    
+    
+    let placesClient = GMSPlacesClient.shared()
+    
     
     let scrollView:UIScrollView = {
         let sv = UIScrollView()
@@ -27,30 +33,41 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
         lbl.text = "ROOM_INFOR_TITLE".localized
         return lbl
     }()
-    lazy var nameInputView:InputView = {
-        let iv:InputView = .fromNib()
+    lazy var nameInputView:NewInputView = {
+        let iv:NewInputView = .fromNib()
         iv.inputViewType = .name
         return iv
     }()
-    lazy var priceInputView:InputView = {
-        let iv:InputView = .fromNib()
+    lazy var priceInputView:NewInputView = {
+        let iv:NewInputView = .fromNib()
         iv.inputViewType = .price
         return iv
     }()
-    lazy var areaInputView:InputView = {
-        let iv:InputView = .fromNib()
+    lazy var areaInputView:NewInputView = {
+        let iv:NewInputView = .fromNib()
         iv.inputViewType = .area
         return iv
     }()
     
-    lazy var addressInputView:InputView = {
-        let iv:InputView = .fromNib()
+    lazy var addressInputView:NewInputView = {
+        let iv:NewInputView = .fromNib()
         iv.inputViewType = .address
         return iv
     }()
+    lazy var tableView:UITableView = {
+        let tv = UITableView()
+        tv.backgroundColor = .white
+        tv.showsVerticalScrollIndicator = false
+        //        tv.layer.borderWidth = 1
+        //        tv.layer.borderColor = UIColor.defaultBlue.cgColor
+        tv.layer.cornerRadius = 10
+        tv.clipsToBounds = true
+        tv.separatorStyle  = .none
+        return tv
+    }()
     
-    lazy var phoneInputView:InputView = {
-        let iv:InputView = .fromNib()
+    lazy var phoneInputView:NewInputView = {
+        let iv:NewInputView = .fromNib()
         iv.inputViewType = .phone
         return iv
     }()
@@ -82,7 +99,8 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
         bt.tintColor = .white
         return bt
     }()
-    
+    var tableViewHeightConstaint:NSLayoutConstraint?
+    let address:[String] = ["123 nguyen kiem hcm viet name","123 le van sy hcm viet nam","123 le van sy hcm viet nam","123 le van sy hcm viet nam","123 le van sy hcm viet nam"]
     var utilities = [UtilityModel(utility_id: 1, name: "24-hours", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "parking", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "toilet", quantity: 15, brand: "Hello", description: "nothing"),
                      UtilityModel(utility_id: 2, name: "aircondition", quantity: 15, brand: "Hello", description: "nothing"),
                      UtilityModel(utility_id: 3, name: "cctv", quantity: 15, brand: "Hello", description: "nothing"),
@@ -91,14 +109,33 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
     
     var cERoomVCType:CERoomVCType = .create
     var roomRequestModel:BaseRoomRequestModel = BaseRoomRequestModel()
+    
+    var suggestAddress:[GMSAutocompletePrediction]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setData()
         setNotificationObserver()
     }
-    
+    //    func getCoordinateBounds(latitude:CLLocationDegrees ,
+    //                             longitude:CLLocationDegrees,
+    //                             distance:Double = 1)->GMSCoordinateBounds{
+    //        let center = CLLocationCoordinate2D(latitude: latitude,
+    //                                            longitude: longitude)
+    //        let northEast = CLLocationCoordinate2D(latitude: center.latitude + distance, longitude: center.longitude + distance)
+    //        let southWest = CLLocationCoordinate2D(latitude: center.latitude - distance, longitude: center.longitude - distance)
+    //
+    //        return GMSCoordinateBounds(coordinate: northEast,
+    //                                   coordinate: southWest)
+    //
+    //    }
     func setupUI(){
+        
+        //        getCoordinateBounds(latitude: 10.7553405, longitude: 106.4143401)
+        
+        
+        
         
         edgesForExtendedLayout = []// view above navigation bar
         
@@ -112,12 +149,12 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
         //Caculate height
         let defaultBottomViewHeight:CGFloat = 60.0
         let defaultPadding = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
-//        let numberOfRow = utilities.count%4==0 ? utilities.count/4 : utilities.count/4+1
-//        let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITY * Double(numberOfRow) + 40.0
+        //        let numberOfRow = utilities.count%4==0 ? utilities.count/4 : utilities.count/4+1
+        //        let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITY * Double(numberOfRow) + 40.0
         let numberOfRow = utilities.count%2==0 ? utilities.count/2 : utilities.count/2+1
         let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITY * Double(numberOfRow) + 60.0
-//        let contentViewHeight = CGFloat(Constants.HEIGHT_ROOM_INFOR_TITLE+Constants.HEIGHT_INPUT_VIEW*5+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_VIEW_DESCRIPTION)
-        let contentViewHeight = CGFloat(Constants.HEIGHT_ROOM_INFOR_TITLE+Constants.HEIGHT_INPUT_VIEW*5+Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_VIEW_DESCRIPTION+Constants.HEIGHT_SPACE)
+        //        let contentViewHeight = CGFloat(Constants.HEIGHT_ROOM_INFOR_TITLE+Constants.HEIGHT_INPUT_VIEW*5+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_VIEW_DESCRIPTION)
+        let contentViewHeight = CGFloat(Constants.HEIGHT_ROOM_INFOR_TITLE+Constants.HEIGHT_NEW_INPUT_VIEW*5+Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_VIEW_DESCRIPTION+Constants.HEIGHT_SPACE)
         //Add View
         view.addSubview(scrollView)
         view.addSubview(bottomView)
@@ -130,6 +167,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
         contentView.addSubview(priceInputView)
         contentView.addSubview(areaInputView)
         contentView.addSubview(addressInputView)
+        contentView.addSubview(tableView)
         contentView.addSubview(phoneInputView)
         contentView.addSubview(maxMemberSelectView)
         contentView.addSubview(genderView)
@@ -150,13 +188,20 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
         _ = contentView.anchor(scrollView.topAnchor,scrollView.leftAnchor,scrollView.bottomAnchor,scrollView.rightAnchor)
         _ = contentView.anchorWidth(equalTo: scrollView.widthAnchor)
         _  = contentView.anchorHeight(equalToConstrant: contentViewHeight)
-
+        
         _ = lblRoomInfor.anchor(contentView.topAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_ROOM_INFOR_TITLE))
-        _ = nameInputView.anchor(lblRoomInfor.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
-        _ = priceInputView.anchor(nameInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
-        _ = areaInputView.anchor(priceInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
-        _ = addressInputView.anchor(areaInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
-        _ = phoneInputView.anchor(addressInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
+        _ = nameInputView.anchor(lblRoomInfor.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
+        _ = priceInputView.anchor(nameInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
+        _ = areaInputView.anchor(priceInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
+        _ = addressInputView.anchor(areaInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
+        
+        //START For suggest address
+        tableViewHeightConstaint = tableView.anchor(addressInputView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero, CGSize(width: 0, height: 0.5))[3]
+        contentView.bringSubview(toFront: tableView)
+        
+        //END
+        
+        _ = phoneInputView.anchor(addressInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
         _ = maxMemberSelectView.anchor(phoneInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT))
         _ = genderView.anchor(maxMemberSelectView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
         _ = utilitiesView.anchor(genderView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: utilitiesViewHeight))
@@ -166,26 +211,24 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
         _ = btnSubmit.anchor(view: bottomView,UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0))
         btnSubmit.layer.cornerRadius = CGFloat(10)
         btnSubmit.clipsToBounds = true
-        
-        
-        
     }
     //MARK:Delegate and data
     func setData(){
         navTitle = "CREATE_ROOM".localized
         btnSubmit.setTitle("APPLY".localized, for: .normal)
-        
-        
-        
+        tableView.register(UINib(nibName: Constants.CELL_ICONTITLETV, bundle: Bundle.main), forCellReuseIdentifier: Constants.CELL_ICONTITLETV)
+        suggestAddress = []
         //Delegate
         nameInputView.delegate = self
         priceInputView.delegate = self
         areaInputView.delegate =  self
         addressInputView.delegate  = self
+        tableView.delegate = self
+        tableView.dataSource = self
         phoneInputView.delegate = self
         maxMemberSelectView.delegate = self
         genderView.delegate = self
-//        utilitiesView.delegate = self
+        //        utilitiesView.delegate = self
         descriptionsView.delegate = self
         btnSubmit.addTarget(self, action: #selector(onClickBtnBack(btnBack:)), for: .touchUpInside)
         //Data
@@ -249,7 +292,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
     }
     
     func utilitiesViewDelegate(utilitiesView view: UtilitiesView, didSelectUtilityAt indexPath: IndexPath) {
-//        roomRequestModel.description = descriptionsView.text
+        //        roomRequestModel.description = descriptionsView.text
         let vc = Utilities.vcFromStoryBoard(vcName: "popupVC", sbName:"Main")
         vc.preferredContentSize = CGSize(width: UIScreen.main.bounds.width, height: 100)
         let nav = UINavigationController(rootViewController: vc)
@@ -283,8 +326,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
         }
         roomRequestModel.maxGuest = maxMember
     }
-    
-    func inputViewDelegate(inputView view: InputView, textFieldDidEndEditing textField: UITextField) {
+    func newInputViewDelegate(newInputView view: NewInputView, shouldChangeCharactersTo string: String) {
         switch view {
         case nameInputView:
             guard let text = view.text else{
@@ -302,10 +344,12 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
             }
             roomRequestModel.area = int
         case addressInputView:
+            search(text: string)
             guard let text = view.text else{
                 return
             }
             roomRequestModel.address = text
+            view.layoutIfNeeded()
         case phoneInputView:
             guard let text = view.text else{
                 return
@@ -317,35 +361,131 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,GenderViewD
         }
     }
     
-    func inputViewDelegate(inputView view: InputView, textFieldShouldReturn textField: UITextField) -> Bool {
-        switch view {
-        case nameInputView:
-            priceInputView.becomeFirstResponderTextField(returnKeyType: .next)
-        case priceInputView:
-            areaInputView.becomeFirstResponderTextField(returnKeyType: .next)
-        case areaInputView:
-            addressInputView.becomeFirstResponderTextField(returnKeyType: .next)
-        case addressInputView:
-            phoneInputView.becomeFirstResponderTextField(returnKeyType: .next)
-        case phoneInputView:
-            descriptionsView.becomeFirstResponderTextView()
-        default:
-            break
-        }
-        return false
+    //    func inputViewDelegate(inputView view: InputView, textFieldDidEndEditing textField: UITextField) {
+    //
+    //    }
+    
+    //    func inputViewDelegate(inputView view: InputView, textFieldShouldReturn textField: UITextField) -> Bool {
+    //        switch view {
+    //        case nameInputView:
+    //            priceInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    //        case priceInputView:
+    //            areaInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    //        case areaInputView:
+    //            addressInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    //        case addressInputView:
+    //            phoneInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    //        case phoneInputView:
+    //            descriptionsView.becomeFirstResponderTextView()
+    //        default:
+    //            break
+    //        }
+    //        return false
+    //    }
+    //
+    //    func inputViewDelegate(inputView view: InputView, textFieldShouldBeginEditing textField: UITextField) {
+    //        if view == nameInputView{
+    //            nameInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    //        }else if view == priceInputView{
+    //            priceInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    //        }else if view == areaInputView{
+    //            areaInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    //        }else if view == addressInputView{
+    //            addressInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    //        }else if view == phoneInputView{
+    //            phoneInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    //        }
+    //    }
+    
+    
+    //MARK: UITableview Delegate and Datasource
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return suggestAddress?.count ?? 0
     }
     
-    func inputViewDelegate(inputView view: InputView, textFieldShouldBeginEditing textField: UITextField) {
-        if view == nameInputView{
-            nameInputView.becomeFirstResponderTextField(returnKeyType: .next)
-        }else if view == priceInputView{
-            priceInputView.becomeFirstResponderTextField(returnKeyType: .next)
-        }else if view == areaInputView{
-            areaInputView.becomeFirstResponderTextField(returnKeyType: .next)
-        }else if view == addressInputView{
-            addressInputView.becomeFirstResponderTextField(returnKeyType: .next)
-        }else if view == phoneInputView{
-            phoneInputView.becomeFirstResponderTextField(returnKeyType: .next)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_ICONTITLETV, for: indexPath) as! IconTitleTVCell
+        cell.lblTitle.text  = suggestAddress?[indexPath.row].attributedFullText.string
+        print("Cell:\(suggestAddress?[indexPath.row].attributedFullText.string)")
+        cell.imgvIcon.image = UIImage(named: "address")
+        cell.backgroundColor = .clear
+        return cell
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40.0
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        addressInputView.isSelectedFromSuggest = true
+        addressInputView.tfInput.text = suggestAddress?[indexPath.row].attributedFullText.string
+        print("Did selected text : \(suggestAddress?[indexPath.row])")
+        placesClient.lookUpPlaceID((suggestAddress?[indexPath.row].placeID)!, callback: { (place, error) in
+            if let error = error {
+                print("Autocomplete error \(error)")
+                return
+            }else{
+                print("Place Component:")
+                print(place?.coordinate.longitude)
+                print(place?.coordinate.latitude)
+                place?.addressComponents?.forEach({ (component) in
+                    print(component.type)
+                    print(component.name)
+                })
+            }
+        })
+        suggestAddress?.removeAll()
+        reloadTableViewUI()
+    }
+    func reloadTableViewUI(){
+        if suggestAddress!.count>0{
+            tableViewHeightConstaint?.constant = 150.0
+            tableView.reloadData()
+        }else{
+            tableViewHeightConstaint?.constant = 0
         }
+    }
+    
+    //MARK: Custom method
+    func search(text:String) {
+        
+        // Set bounds to inner viet nam.
+        let neBoundsCorner = CLLocationCoordinate2D(latitude: 10.7792897,
+                                                    longitude: 106.6635715)
+        let swBoundsCorner = CLLocationCoordinate2D(latitude: 10.7792897,
+                                                    longitude: 106.6635715)
+        let bounds = GMSCoordinateBounds(coordinate: neBoundsCorner,
+                                         coordinate: swBoundsCorner)
+
+        let filter = GMSAutocompleteFilter()
+        filter.type = .address
+        filter.country = "VN"
+//        getCoordinateBounds(latitude: 10.7792897, longitude: 106.6635715,distance:0)
+        placesClient.autocompleteQuery(text, bounds: bounds , filter: filter, callback: {(results, error) -> Void in
+            
+            if let results = results , results.count>0{
+                self.suggestAddress?.removeAll()
+                results.forEach({ (result) in
+                    print("Location:\(result.attributedFullText.string.lowercased().contains("quận 3"))")
+                    if result.attributedFullText.string.lowercased().contains("quận 3"){
+                        self.suggestAddress?.append(result)
+                        print("Add :\(result.attributedFullText.string)")
+                    }
+                })
+                self.reloadTableViewUI()
+            }
+        })
+        
+        
+    }
+    func getCoordinateBounds(latitude:CLLocationDegrees ,
+                             longitude:CLLocationDegrees,
+                             distance:Double = 0.001)->GMSCoordinateBounds{
+        let center = CLLocationCoordinate2D(latitude: latitude,
+                                            longitude: longitude)
+        let northEast = CLLocationCoordinate2D(latitude: center.latitude + distance, longitude: center.longitude + distance)
+        let southWest = CLLocationCoordinate2D(latitude: center.latitude - distance, longitude: center.longitude - distance)
+        
+        return GMSCoordinateBounds(coordinate: northEast,
+                                   coordinate: southWest)
+        
     }
 }

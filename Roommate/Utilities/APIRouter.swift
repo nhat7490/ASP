@@ -16,10 +16,15 @@ enum ApiResponseErrorType{
 enum APIRouter:URLRequestConvertible{
     case findById(id:Int)
     case login(username:String,password:String)
+    case search(input:String)
 
     var httpHeaders:HTTPHeaders{
-        let headers = ["Accept":"application/json"]
-        return headers
+        switch self{
+        case .search:
+            return [:]
+        default:
+            return ["Accept":"application/json"]
+        }
     }
 
     var httpMethod:HTTPMethod{
@@ -28,6 +33,8 @@ enum APIRouter:URLRequestConvertible{
             return .get
         case .login:
             return .post
+        case .search:
+            return .get
         }
     }
 
@@ -37,6 +44,8 @@ enum APIRouter:URLRequestConvertible{
                 return "findById/\(id)"
             case .login:
                 return "user/login"
+            case .search:
+                return "maps/api/place/autocomplete/json"
         }
     }
 
@@ -50,20 +59,34 @@ enum APIRouter:URLRequestConvertible{
                     "password":password
                 ]
                 return dic
+        case .search(let input):
+            return ["language":"vi",
+                    "input":input,
+                    "components":"country:vi",
+                    "key":"AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"]
         }
     }
 
     func asURLRequest() throws -> URLRequest {
-        let url = try! "http://localhost:8080/".asURL()
-
+        let url:URL
+        switch self{
+            case .search:
+                url = try! Constants.BASE_URL_GOOGLE_PLACE_API.asURL()
+            default:
+                url = try!  Constants.BASE_URL_API.asURL()
+        }
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
-
         urlRequest.allHTTPHeaderFields = httpHeaders
         urlRequest.httpMethod = httpMethod.rawValue
         urlRequest.timeoutInterval  = 5
 
         do{
-            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+            switch self.httpMethod {
+            case .post:
+                urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+            default:
+                urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+            }
         }catch {
             print("Create Request error In APIRouter:\(error)")
         }

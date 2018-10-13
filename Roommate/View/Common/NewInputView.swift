@@ -10,19 +10,20 @@ import UIKit
 import SkyFloatingLabelTextField
 protocol NewInputViewDelegate:class {
     func newInputViewDelegate(newInputView view:NewInputView,shouldChangeCharactersTo string:String)
+//    func newInputViewDelegate(newInputView view:NewInputView,textFieldShouldClear string:String)
 }
 class NewInputView: UIView,UITextFieldDelegate {
     @IBOutlet weak var tfInput: SkyFloatingLabelTextField!
-    weak var delegate:InputViewDelegate?
-    
-//    var text:String?{
-//        get{
-//            return self.tfInput.text
-//        }
-//        set{
-//            self.tfInput.text = newValue
-//        }
-//    }
+    weak var delegate:NewInputViewDelegate?
+    var text:String?{
+        get{
+            return self.tfInput.text
+        }
+        set{
+            self.tfInput.text = newValue
+        }
+    }
+    var isSelectedFromSuggest:Bool = false
     var inputViewType:InputViewType?{
         didSet{
             switch self.inputViewType! {
@@ -58,68 +59,9 @@ class NewInputView: UIView,UITextFieldDelegate {
         tfInput.attributedPlaceholder = NSAttributedString(string: placeHolder.localized, attributes: [NSAttributedStringKey.foregroundColor:UIColor.lightSubTitle])
     }
     
-    //MARK:UITextfieldDelegate
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let updatedString = (tfInput.text as NSString?)?.replacingCharacters(in: range, with: string){
-            switch self.inputViewType! {
-        
-            case .name:
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    tfInput.text = string
-                    return false
-                }
-                if updatedString.isValidUsername(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_USERNAME".localized
-                }
-            case .price:
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    tfInput.text = string
-                    return false
-                }
-                if updatedString.isValidUsername(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_USERNAME".localized
-                }
-            case .area:
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    tfInput.text = string
-                    return false
-                }
-                if updatedString.isValidUsername(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_USERNAME".localized
-                }
-            case .address:
-                if updatedString.count > Constants.MAX_LENGHT_ADDRESS{
-                    tfInput.text = string
-                    return false
-                }
-                if updatedString.isValidUsername(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_USERNAME".localized
-                }
-            case .phone:
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    tfInput.text = string
-                    return false
-                }
-                if updatedString.isValidUsername(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_USERNAME".localized
-                }
-            }
-        }
-        return true
-    }
-
+    
     func setupUI(placeholder:String,title:String,keyboardType:UIKeyboardType? = .default,returnKeyType:UIReturnKeyType? = .done){
-        tfInput.isSecureTextEntry = true
+//        tfInput.isSecureTextEntry = true
         tfInput.returnKeyType = returnKeyType!
         tfInput.placeholder = placeholder.localized
         tfInput.placeholderColor = .lightGray
@@ -129,6 +71,78 @@ class NewInputView: UIView,UITextFieldDelegate {
         tfInput.selectedLineColor = .defaultBlue
         tfInput.selectedTitleColor = .defaultBlue//Title color
         tfInput.delegate = self
+    }
+    //MARK:UITextfieldDelegate
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        print(string)
+        if let updatedString = (tfInput.text as NSString?)?.replacingCharacters(in: range, with: string){
+            print(updatedString)
+            switch self.inputViewType! {
+                
+            case .name:
+                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+                    return false
+                }
+                if updatedString.isValidName(){
+                    tfInput.errorMessage = ""
+                }else{
+                    tfInput.errorMessage = "ERROR_TYPE_NAME_MAX_CHAR_50".localized
+                }
+            case .price:
+                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+                    tfInput.text = string
+                }
+                if updatedString.isValidPrice(){
+                    tfInput.errorMessage = ""
+                }else{
+                    tfInput.errorMessage = "ERROR_TYPE_PRICE".localized
+                }
+            case .area:
+                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+                    return false
+                }
+                if updatedString.isValidArea(){
+                    tfInput.errorMessage = ""
+                }else{
+                    tfInput.errorMessage = "ERROR_TYPE_AREA".localized
+                }
+            case .address:
+                if isSelectedFromSuggest{
+                    if string.count < (tfInput.text?.count)!{
+                        tfInput.text = ""
+                        isSelectedFromSuggest = false
+                    }
+                }
+                if updatedString.count > Constants.MAX_LENGHT_ADDRESS{
+                    return false
+                }
+                if updatedString.isValidAddress(){
+                    tfInput.errorMessage = ""
+                }else{
+                    tfInput.errorMessage = "ERROR_TYPE_ADDRESS".localized
+                }
+            case .phone:
+                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+                    return false
+                }
+                if updatedString.isValidPhoneNumber(){
+                    tfInput.errorMessage = ""
+                }else{
+                    tfInput.errorMessage = "ERROR_TYPE_PHONE".localized
+                }
+            }
+            delegate?.newInputViewDelegate(newInputView: self, shouldChangeCharactersTo: updatedString)
+        }
+        return true
+    }
+    
+//    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+//        delegate?.newInputViewDelegate(newInputView: self, textFieldShouldClear: tfInput.text!)
+//        return true
+//    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        resignFirstResponderTextField()
+        return true
     }
     
     //MARK: Another
