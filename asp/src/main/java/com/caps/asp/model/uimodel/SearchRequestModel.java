@@ -3,22 +3,22 @@ package com.caps.asp.model.uimodel;
 import java.util.List;
 
 public class SearchRequestModel {
-    private List<String> utilities;
-    private List<String> districts;
+    private List<Integer> utilities;
+    private List<Integer> districts;
 
-    public List<String> getUtilities() {
+    public List<Integer> getUtilities() {
         return utilities;
     }
 
-    public void setUtilities(List<String> utilities) {
+    public void setUtilities(List<Integer> utilities) {
         this.utilities = utilities;
     }
 
-    public List<String> getDistricts() {
+    public List<Integer> getDistricts() {
         return districts;
     }
 
-    public void setDistricts(List<String> districts) {
+    public void setDistricts(List<Integer> districts) {
         this.districts = districts;
     }
 }

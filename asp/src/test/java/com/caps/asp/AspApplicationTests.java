@@ -21,15 +21,15 @@ public class AspApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		List<String> usernameList = new ArrayList<>();
-		usernameList.add("10");
-		usernameList.add("Gò Vấp");
+		List<Integer> usernameList = new ArrayList<>();
+		usernameList.add(10);
+		usernameList.add(14);
 
 		//List role
-		List<String> roleList = new ArrayList<>();
-		roleList.add("Camera an ninh");
-		roleList.add("Bảo vệ");
-		roleList.add("Máy giặt");
+		List<Integer> roleList = new ArrayList<>();
+		roleList.add(1);
+		roleList.add(10);
+		roleList.add(14);
 
 		SearchRequestModel search=new SearchRequestModel();
 		search.setDistricts(usernameList);

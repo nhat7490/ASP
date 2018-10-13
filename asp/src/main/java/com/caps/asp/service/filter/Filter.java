@@ -36,8 +36,8 @@ public class Filter implements Specification<TbPost> {
                 cb.equal(roomRoot.get("roomId"),roomHasUtilityRoot.get("roomId")),
                 cb.equal(roomHasUtilityRoot.get("utilityId"),utilitiesRoot.get("utilityId")),
                 cb.and(
-                        cb.and(districtRoot.get("name").in(criteria.getDistricts())),
-                        cb.or(utilitiesRoot.get("name").in(criteria.getUtilities()))
+                        cb.and(districtRoot.get("districtId").in(criteria.getDistricts())),
+                        cb.or(utilitiesRoot.get("utilityId").in(criteria.getUtilities()))
                 )
         );
     }
