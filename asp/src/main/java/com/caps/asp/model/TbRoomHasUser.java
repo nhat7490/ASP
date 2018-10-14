@@ -1,7 +1,5 @@
 package com.caps.asp.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
@@ -10,9 +8,7 @@ import java.util.Objects;
 @Table(name = "tb_room_has_user", schema = "asp", catalog = "")
 public class TbRoomHasUser {
     private Integer roomHasUserId;
-    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dateIn;
-    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dateOut;
     private Integer userId;
     private Integer roomId;

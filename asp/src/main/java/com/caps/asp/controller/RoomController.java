@@ -67,7 +67,7 @@ public class RoomController {
                     roomHasUtility.setRoomId(roomService.findRoomByName(roomRequestModel.getName()).getRoomId());
                     roomHasUtility.setBrand(utilityRequestModel.getBrand());
                     roomHasUtility.setDescription(utilityRequestModel.getDescription());
-                    roomHasUtility.setQuality(utilityRequestModel.getQuality());
+                    roomHasUtility.setQuantity(utilityRequestModel.getQuality());
                     roomHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
                     roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
                 }
@@ -118,7 +118,7 @@ public class RoomController {
                 roomHasUtility.setRoomId(roomService.findRoomByName(roomRequestModel.getName()).getRoomId());
                 roomHasUtility.setBrand(utilityRequestModel.getBrand());
                 roomHasUtility.setDescription(utilityRequestModel.getDescription());
-                roomHasUtility.setQuality(utilityRequestModel.getQuality());
+                roomHasUtility.setQuantity(utilityRequestModel.getQuality());
                 roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
             }
 

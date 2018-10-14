@@ -2,7 +2,6 @@ package com.caps.asp.controller;
 
 import com.caps.asp.model.TbDistrict;
 import com.caps.asp.service.DistrictService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

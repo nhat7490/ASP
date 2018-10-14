@@ -1,7 +1,5 @@
 package com.caps.asp.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
@@ -13,8 +11,7 @@ public class TbPost {
     private String name;
     private String phoneContact;
     private Integer numberPartner;
-    private Byte genderPartner;
-//    @JsonFormat(pattern = "dd-MM-yyyy")
+    private Integer genderPartner;
     private Date date;
     private Integer typeId;
     private Integer userId;
@@ -64,11 +61,11 @@ public class TbPost {
 
     @Basic
     @Column(name = "gender_partner", nullable = true)
-    public Byte getGenderPartner() {
+    public Integer getGenderPartner() {
         return genderPartner;
     }
 
-    public void setGenderPartner(Byte genderPartner) {
+    public void setGenderPartner(Integer genderPartner) {
         this.genderPartner = genderPartner;
     }
 

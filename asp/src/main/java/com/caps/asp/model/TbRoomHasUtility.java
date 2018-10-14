@@ -11,7 +11,6 @@ public class TbRoomHasUtility {
     private Integer utilityId;
     private String brand;
     private String description;
-    private Integer quality;
     private Integer quantity;
 
     @Id
@@ -65,13 +64,13 @@ public class TbRoomHasUtility {
     }
 
     @Basic
-    @Column(name = "quality", nullable = true)
-    public Integer getQuality() {
-        return quality;
+    @Column(name = "quantity", nullable = true)
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setQuality(Integer quality) {
-        this.quality = quality;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     @Override
@@ -84,22 +83,12 @@ public class TbRoomHasUtility {
                 Objects.equals(utilityId, that.utilityId) &&
                 Objects.equals(brand, that.brand) &&
                 Objects.equals(description, that.description) &&
-                Objects.equals(quality, that.quality);
+                Objects.equals(quantity, that.quantity);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, roomId, utilityId, brand, description, quality);
-    }
-
-    @Basic
-    @Column(name = "quantity", nullable = true)
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+        return Objects.hash(id, roomId, utilityId, brand, description, quantity);
     }
 }

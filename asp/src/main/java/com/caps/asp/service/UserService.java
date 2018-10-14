@@ -1,6 +1,5 @@
 package com.caps.asp.service;
 
-import com.caps.asp.constant.Constant;
 import com.caps.asp.exception.UserException;
 import com.caps.asp.model.TbUser;
 import com.caps.asp.repository.UserRepository;
