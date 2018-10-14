@@ -25,6 +25,8 @@ public class UserService {
         return userRepository.findByUserId(id);
     }
 
+    public TbUser findByEmail(String email) throws UserException.EmailNotFoundException{ return userRepository.findByEmail(email);}
+
     public void updateUserById(TbUser user) {
         TbUser tbUser = userRepository.findByUserId(user.getUserId());
         if (tbUser != null) {

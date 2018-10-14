@@ -9,6 +9,7 @@ import com.caps.asp.util.CalculateDistance;
 import com.caps.asp.service.PostHasDistrictService;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.UserService;
+import com.caps.asp.util.ResetPassword;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +33,13 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<TbUser> login(@RequestBody UserLoginModel model) {
+    public ResponseEntity login(@RequestBody UserLoginModel model) {
         try {
             TbUser user = userService.findByUsername(model.getUsername());
             boolean isRigh = this.passwordEncoder.matches(model.getPassword(),user.getPassword());
             System.out.println(isRigh);
             return isRigh
-                    ? ResponseEntity.status(OK).body(user)
+                    ? ResponseEntity.status(OK).build()
                     : ResponseEntity.status(FORBIDDEN).build() ;//need to encrypt here
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
@@ -120,6 +121,20 @@ public class UserController {
                 }
             });
             return ResponseEntity.status(OK).body(list);
+        } catch (Exception e) {
+            return ResponseEntity.status((NOT_FOUND)).build();
+        }
+    }
+
+    @GetMapping("/user/resetPassword/{email}")
+    public ResponseEntity resetPassword(@PathVariable String email) {
+        try {
+            TbUser user = userService.findByEmail(email);
+            ResetPassword resetPassword = new ResetPassword();
+            String newPassword = resetPassword.sendEmail(email);
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userService.updateUserById(user);
+            return ResponseEntity.status(OK).build();
         } catch (Exception e) {
             return ResponseEntity.status((NOT_FOUND)).build();
         }

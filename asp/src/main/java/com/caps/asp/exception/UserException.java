@@ -7,4 +7,8 @@ public class UserException {
 
     public static class UsernameExistedException extends Exception {
     }
+
+    public static class EmailNotFoundException extends Exception {
+
+    }
 }
