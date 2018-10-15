@@ -38,8 +38,8 @@ public class Filter implements Specification<TbPost> {
         List<Predicate> typeList = new ArrayList<>();
 
 
-        criteriaQuery.distinct(true);
-        criteriaQuery.orderBy(cb.desc(postRoot.get("date")));
+//        criteriaQuery.distinct(true);
+//        criteriaQuery.orderBy(cb.desc(postRoot.get("date")));
 
         if (criteria.getDistricts() == null || criteria.getUtilities().size() == 0) {
             districtList.add(cb.conjunction());
@@ -75,19 +75,21 @@ public class Filter implements Specification<TbPost> {
         }
 
         typeList.add(cb.equal(postRoot.get("typeId"), criteria.getTypeId()));
-        return cb.and(
+        Predicate result = cb.and(
                 cb.equal(postRoot.get("roomId"), roomRoot.get("roomId")),
                 cb.equal(roomRoot.get("districtId"), districtRoot.get("districtId")),
                 cb.equal(roomRoot.get("roomId"), roomHasUtilityRoot.get("roomId")),
                 cb.equal(roomHasUtilityRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
 
-                cb.and(typeList.toArray(new Predicate[typeList.size()])),
-                cb.and(
-                        cb.or(districtList.toArray(new Predicate[districtList.size()]))
+                cb.equal(postRoot.get("typeId"), criteria.getTypeId()),
+//                cb.and(
+                cb.and(districtList.toArray(new Predicate[districtList.size()]))
 //                        cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
 //                        cb.or(priceList.toArray(new Predicate[priceList.size()])),
 //                        cb.or(genderList.toArray(new Predicate[genderList.size()]))
-                )
+//                )
         );
+        System.out.println(result.getExpressions());
+        return result;
     }
 }

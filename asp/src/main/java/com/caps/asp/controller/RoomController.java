@@ -76,7 +76,7 @@ public class RoomController {
                     imageService.saveImage(image);
                 }
                 return ResponseEntity.status(CREATED).build();
-            }else {
+            } else {
                 return ResponseEntity.status((FORBIDDEN)).build();
             }
         } catch (Exception e) {
@@ -169,31 +169,35 @@ public class RoomController {
             if (user == null) {
                 return ResponseEntity.status(CONFLICT).build();
             } else {
-                TbRoomHasUser tbRoomHasUser = new TbRoomHasUser();
                 Date date = new Date(System.currentTimeMillis());
-                tbRoomHasUser.setRoomHasUserId(0);
-                tbRoomHasUser.setDateIn(date);
-                tbRoomHasUser.setDateOut(roomMemberModel.getDateout());
-                tbRoomHasUser.setRoomId(roomMemberModel.getRoomId());
-                tbRoomHasUser.setUserId(user.getUserId());
-                roomHasUserService.addRoomMember(tbRoomHasUser);
+                if (date.getTime() < roomMemberModel.getDateout().getTime()) {
+                    return ResponseEntity.status(CONFLICT).build();
+                } else {
+                    TbRoomHasUser tbRoomHasUser = new TbRoomHasUser();
+                    tbRoomHasUser.setRoomHasUserId(0);
+                    tbRoomHasUser.setDateIn(date);
+                    tbRoomHasUser.setDateOut(roomMemberModel.getDateout());
+                    tbRoomHasUser.setRoomId(roomMemberModel.getRoomId());
+                    tbRoomHasUser.setUserId(user.getUserId());
+                    roomHasUserService.addRoomMember(tbRoomHasUser);
 
-                List<TbRoomHasUser> roomHasUsers = roomHasUserService.getAllByRoomId(roomMemberModel.getRoomId());
-                List<Long> milis = new ArrayList<>();
+                    List<TbRoomHasUser> roomHasUsers = roomHasUserService.getAllByRoomId(roomMemberModel.getRoomId());
+                    List<Long> milis = new ArrayList<>();
 
-                for (TbRoomHasUser roomHasUser : roomHasUsers) {
-                    milis.add(roomHasUser.getDateIn().getTime());
-                }
-
-                Collections.sort(milis);
-                for (TbRoomHasUser roomHasUser : roomHasUsers) {
-                    if (roomHasUser.getDateIn().getTime() == milis.get(milis.size() - 1)) {
-                        TbUser tbUser = userService.findById(roomHasUser.getUserId());
-                        tbUser.setRoleId(ROOM_MASTER);
-                        userService.updateUserById(tbUser);
+                    for (TbRoomHasUser roomHasUser : roomHasUsers) {
+                        milis.add(roomHasUser.getDateIn().getTime());
                     }
+
+                    Collections.sort(milis);
+                    for (TbRoomHasUser roomHasUser : roomHasUsers) {
+                        if (roomHasUser.getDateIn().getTime() == milis.get(milis.size() - 1)) {
+                            TbUser tbUser = userService.findById(roomHasUser.getUserId());
+                            tbUser.setRoleId(ROOM_MASTER);
+                            userService.updateUserById(tbUser);
+                        }
+                    }
+                    return ResponseEntity.status(OK).build();
                 }
-                return ResponseEntity.status(OK).build();
 
             }
         } catch (Exception e) {
