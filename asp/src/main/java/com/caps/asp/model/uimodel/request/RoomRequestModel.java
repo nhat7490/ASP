@@ -13,11 +13,7 @@ public class RoomRequestModel {
     private Integer area;
     private String address;
     private Integer maxGuest;
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date dateCreated;
-    private Integer currentNumber;
     private String description;
-    private int status;
     private int userId;
     private int cityId;
     private int districtId;
@@ -26,6 +22,25 @@ public class RoomRequestModel {
     private List<UtilityRequestModel> utilities;
     private List<String> imageUrls;
 
+    public RoomRequestModel() {
+    }
+
+    public RoomRequestModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, String description, int userId, int cityId, int districtId, Double longitude, Double latitude, List<UtilityRequestModel> utilities, List<String> imageUrls) {
+        this.roomId = roomId;
+        this.name = name;
+        this.price = price;
+        this.area = area;
+        this.address = address;
+        this.maxGuest = maxGuest;
+        this.description = description;
+        this.userId = userId;
+        this.cityId = cityId;
+        this.districtId = districtId;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.utilities = utilities;
+        this.imageUrls = imageUrls;
+    }
 
     public int getRoomId() {
         return roomId;
@@ -75,36 +90,12 @@ public class RoomRequestModel {
         this.maxGuest = maxGuest;
     }
 
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public Integer getCurrentNumber() {
-        return currentNumber;
-    }
-
-    public void setCurrentNumber(Integer currentNumber) {
-        this.currentNumber = currentNumber;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public int getUserId() {
@@ -131,22 +122,6 @@ public class RoomRequestModel {
         this.districtId = districtId;
     }
 
-    public List<UtilityRequestModel> getUtilities() {
-        return utilities;
-    }
-
-    public void setUtilities(List<UtilityRequestModel> utilities) {
-        this.utilities = utilities;
-    }
-
-    public List<String> getImageUrls() {
-        return imageUrls;
-    }
-
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
-    }
-
     public Double getLongitude() {
         return longitude;
     }
@@ -161,5 +136,21 @@ public class RoomRequestModel {
 
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
+    }
+
+    public List<UtilityRequestModel> getUtilities() {
+        return utilities;
+    }
+
+    public void setUtilities(List<UtilityRequestModel> utilities) {
+        this.utilities = utilities;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 }

@@ -9,5 +9,6 @@ public class Constant {
 
     public static final int PARTNER_POST = 1;
     public static final int ROOM_POST = 2;
-
+    public static final int UNAUTHENTICATE = 1;
+    public static final int AUTHENTICATED = 2;
 }
