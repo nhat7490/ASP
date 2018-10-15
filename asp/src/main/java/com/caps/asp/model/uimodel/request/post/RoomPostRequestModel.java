@@ -1,9 +1,5 @@
 package com.caps.asp.model.uimodel.request.post;
 
-import com.caps.asp.model.uimodel.request.RoomRequestModel;
-
-import java.sql.Date;
-
 // find partner
 public class RoomPostRequestModel extends BasePostRequestModel{
     private String name;

@@ -1,11 +1,12 @@
-package com.caps.asp.model.uimodel.request;
+package com.caps.asp.model.uimodel;
 
+import com.caps.asp.model.uimodel.request.UtilityRequestModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.sql.Date;
 import java.util.List;
 
-public class RoomRequestModel {
+public class RoomModel {
 
     private int roomId;
     private String name;
