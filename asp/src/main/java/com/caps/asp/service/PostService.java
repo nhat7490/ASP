@@ -2,7 +2,6 @@ package com.caps.asp.service;
 
 import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbPostHasTbDistrict;
-import com.caps.asp.model.uimodel.SearchRequestModel;
 import com.caps.asp.repository.PostRepository;
 import com.caps.asp.service.filter.Filter;
 import org.springframework.data.domain.Page;
@@ -47,7 +46,7 @@ public class PostService {
         return postRepository.findByPostId(postId);
     }
 
-    public Page<TbPost> findAllByUserId(int page, int items,int userId) {
+    public Page<TbPost> findAllByUserId(int page, int items, int userId) {
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
         return postRepository.findAllByUserId(userId, pageable);
@@ -59,15 +58,13 @@ public class PostService {
         return postRepository.findAll(filter,pageable);
     }
 
-    public List<TbPost> search(SearchRequestModel search){
-        Filter specification = new Filter();
-        specification.setCriteria(search);
-        return postRepository.findAll(specification);
-    }
-
     public Page<TbPost> findAllByTypeId(int page, int items, int typeId){
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
         return postRepository.findAllByTypeId(typeId, pageable);
+    }
+
+    public List<TbPost> search(Filter filter){
+        return postRepository.findAll(filter);
     }
 }

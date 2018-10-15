@@ -1,20 +1,14 @@
 package com.caps.asp.controller;
 
-import com.caps.asp.constant.Constant;
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.AddRoomMemberModel;
-import com.caps.asp.model.uimodel.RoomRequestModel;
-import com.caps.asp.model.uimodel.UtilityRequestModel;
+import com.caps.asp.model.uimodel.request.RoomRequestModel;
+import com.caps.asp.model.uimodel.request.UtilityRequestModel;
 import com.caps.asp.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,6 +53,8 @@ public class RoomController {
                 room.setUserId(roomRequestModel.getUserId());
                 room.setCityId(roomRequestModel.getCityId());
                 room.setDistrictId(roomRequestModel.getDistrictId());
+                room.setLattitude(roomRequestModel.getLatitude());
+                room.setLongtitude(roomRequestModel.getLongitude());
                 roomService.saveRoom(room);
 
                 for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
@@ -108,6 +104,8 @@ public class RoomController {
                 room.setUserId(roomRequestModel.getUserId());
                 room.setCityId(roomRequestModel.getCityId());
                 room.setDistrictId(roomRequestModel.getDistrictId());
+                room.setLongtitude(roomRequestModel.getLongitude());
+                room.setLattitude(roomRequestModel.getLatitude());
                 roomService.saveRoom(room);
             }
 
@@ -164,7 +162,7 @@ public class RoomController {
         }
     }
 
-    @PostMapping("rom/addMember")
+    @PostMapping("room/addMember")
     public ResponseEntity addMember(@RequestBody AddRoomMemberModel roomMemberModel) {
         try {
             TbUser user = userService.findByUsername(roomMemberModel.getUsername());

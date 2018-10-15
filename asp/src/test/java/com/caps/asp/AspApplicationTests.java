@@ -1,8 +1,9 @@
 package com.caps.asp;
 
 import com.caps.asp.model.TbPost;
-import com.caps.asp.model.uimodel.SearchRequestModel;
+import com.caps.asp.model.uimodel.request.SearchRequestModel;
 import com.caps.asp.service.PostService;
+import com.caps.asp.service.filter.Filter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,14 @@ public class AspApplicationTests {
 		SearchRequestModel search=new SearchRequestModel();
 		search.setDistricts(usernameList);
 		search.setUtilities(roleList);
+//		search.setGender(2);
+//		search.setMaxPrice(100000);
+//		search.setMinPrice(0);
 
-		List<TbPost> userList = postService.search(search);
+		Filter filter = new Filter();
+		filter.setCriteria(null);
+
+		List<TbPost> userList = postService.search(filter);
 		System.out.println(userList);
 	}
 

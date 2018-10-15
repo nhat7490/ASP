@@ -1,4 +1,4 @@
-package com.caps.asp.model.uimodel;
+package com.caps.asp.model.uimodel.request;
 
 public class UserLoginModel {
 

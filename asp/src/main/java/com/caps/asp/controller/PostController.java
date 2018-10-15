@@ -1,9 +1,13 @@
 package com.caps.asp.controller;
 
 import com.caps.asp.model.TbPost;
+import com.caps.asp.model.TbRoom;
 import com.caps.asp.model.TbRoomHasUser;
 import com.caps.asp.model.TbUser;
-import com.caps.asp.model.uimodel.SearchRequestModel;
+import com.caps.asp.model.uimodel.request.FilterArgumentModel;
+import com.caps.asp.model.uimodel.request.SearchRequestModel;
+import com.caps.asp.model.uimodel.request.post.RoomPostRequestModel;
+import com.caps.asp.model.uimodel.request.post.RoommatePostRequestModel;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.RoomHasUserService;
 import com.caps.asp.service.RoomService;
@@ -14,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.stream.Collectors;
 
 import static com.caps.asp.constant.Constant.*;
@@ -45,32 +50,61 @@ public class PostController {
         }
     }
 
-    @PostMapping("/post/create")
-    public ResponseEntity createPost(@RequestBody TbPost post) {
+    @PostMapping("/post/createRoommatePost")
+    public ResponseEntity createRoommatePost(@RequestBody RoommatePostRequestModel roommatePostRequestModel) {
         try {
-            TbUser user = userService.findById(post.getUserId());
+            TbUser user = userService.findById(roommatePostRequestModel.getUserId());
             if (user.getRoleId() == MEMBER) {
-                post.setTypeId(ROOM_POST);
+                TbPost post = new TbPost();
+                post.setTypeId(PARTNER_POST);
+                Date date = new Date(System.currentTimeMillis());
+                post.setDate(date);
+//                post.setNumberPartner(roomPostRequestModel.getNumberPartner());
+//                post.setPhoneContact(roomPostRequestModel.getPhoneContact());
+//                post.setName(roomPostRequestModel.getName());
+//                post.setRoomId(roomPostRequestModel.getRoomId());
+//                post.setGenderPartner(roomPostRequestModel.getGenderPartner());
+                post.setUserId(roommatePostRequestModel.getUserId());
+                post.setPostId(0);
                 postService.savePost(post);
                 return ResponseEntity.status(CREATED).build();
             } else {
-                TbPost existedPost = postService.findByRoomId(post.getRoomId());
-                TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomId(post.getUserId(), post.getRoomId());
-                if (existedPost == null
-                        && roomHasUser != null
-                        && user.getRoleId() == ROOM_MASTER) {
-                    post.setTypeId(PARTNER_POST);
-                    postService.savePost(post);
-                    return ResponseEntity.status(CREATED).build();
-                } else {
-                    return ResponseEntity.status(CONFLICT).build();
-                }
+                return ResponseEntity.status(CONFLICT).build();
             }
-
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
         }
     }
+
+    @PostMapping("/post/createRoomPost")
+    public ResponseEntity createRoomPost(@RequestBody RoomPostRequestModel roomPostRequestModel) {
+        try {
+            TbUser user = userService.findById(roomPostRequestModel.getUserId());
+            if (user.getRoleId() == ROOM_MASTER) {
+                TbPost post = new TbPost();
+                post.setTypeId(ROOM_POST);
+                TbRoom room = roomService.findRoomById(roomPostRequestModel.getRoomId());
+                post.setLongtitude(room.getLongtitude());
+                post.setLattitude(room.getLattitude());
+                Date date = new Date(System.currentTimeMillis());
+                post.setDate(date);
+                post.setNumberPartner(roomPostRequestModel.getNumberPartner());
+                post.setPhoneContact(roomPostRequestModel.getPhoneContact());
+                post.setName(roomPostRequestModel.getName());
+                post.setRoomId(roomPostRequestModel.getRoomId());
+                post.setGenderPartner(roomPostRequestModel.getGenderPartner());
+                post.setUserId(roomPostRequestModel.getUserId());
+                post.setPostId(0);
+                postService.savePost(post);
+                return ResponseEntity.status(CREATED).build();
+            } else {
+                return ResponseEntity.status(CONFLICT).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT).build();
+        }
+    }
+
 
     @PutMapping("/post/update")
     public ResponseEntity updatePost(@RequestBody TbPost post) {
@@ -96,12 +130,20 @@ public class PostController {
     }
 
     @PostMapping("/post/filter")
-    public ResponseEntity getPostByFilter(@RequestBody SearchRequestModel searchRequestModel,
-                                          @RequestParam(defaultValue = "1") String page) {
+    public ResponseEntity getPostByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
         try {
             Filter filter = new Filter();
-            filter.setCriteria(searchRequestModel);
-            Page<TbPost> posts = postService.finAllByFilter(Integer.parseInt(page), 10, filter);
+            if (filterArgumentModel.getSearchRequestModel().getDistricts() == null
+                    && filterArgumentModel.getSearchRequestModel().getUtilities() == null
+                    && filterArgumentModel.getSearchRequestModel().getGender() == null
+                    && filterArgumentModel.getSearchRequestModel().getMaxPrice() == null
+                    && filterArgumentModel.getSearchRequestModel().getMinPrice() == null) {
+                filter.setCriteria(null);
+            } else {
+                filter.setCriteria(filterArgumentModel.getSearchRequestModel());
+            }
+
+            Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
             return ResponseEntity.status(OK).body(posts.getContent().stream().distinct().collect(Collectors.toList()));
 
         } catch (Exception e) {
@@ -120,4 +162,6 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+
 }

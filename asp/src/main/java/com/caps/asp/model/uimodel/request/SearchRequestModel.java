@@ -1,13 +1,22 @@
-package com.caps.asp.model.uimodel;
+package com.caps.asp.model.uimodel.request;
 
 import java.util.List;
 
 public class SearchRequestModel {
     private List<Integer> utilities;
     private List<Integer> districts;
-    int maxPrice;
-    int minPrice;
-    int gender;
+    private Integer maxPrice;
+    private Integer minPrice;
+    private Integer gender;
+    private Integer typeId;
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
+    }
 
     public List<Integer> getUtilities() {
         return utilities;
@@ -25,27 +34,27 @@ public class SearchRequestModel {
         this.districts = districts;
     }
 
-    public int getMaxPrice() {
+    public Integer getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(int maxPrice) {
+    public void setMaxPrice(Integer maxPrice) {
         this.maxPrice = maxPrice;
     }
 
-    public int getMinPrice() {
+    public Integer getMinPrice() {
         return minPrice;
     }
 
-    public void setMinPrice(int minPrice) {
+    public void setMinPrice(Integer minPrice) {
         this.minPrice = minPrice;
     }
 
-    public int getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 }

@@ -4,7 +4,7 @@ import com.caps.asp.exception.UserException;
 import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbPostHasTbDistrict;
 import com.caps.asp.model.TbUser;
-import com.caps.asp.model.uimodel.UserLoginModel;
+import com.caps.asp.model.uimodel.request.UserLoginModel;
 import com.caps.asp.util.CalculateDistance;
 import com.caps.asp.service.PostHasDistrictService;
 import com.caps.asp.service.PostService;

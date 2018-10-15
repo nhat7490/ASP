@@ -15,7 +15,7 @@ public class TbUser {
     private String imageProfile;
     private Date dob;
     private String phone;
-    private Byte gender;
+    private Integer gender;
     private Integer roleId;
 
     @Id
@@ -100,11 +100,11 @@ public class TbUser {
 
     @Basic
     @Column(name = "gender", nullable = true)
-    public Byte getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(Byte gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 
