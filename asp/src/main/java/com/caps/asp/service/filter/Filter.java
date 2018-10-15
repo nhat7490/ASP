@@ -41,55 +41,50 @@ public class Filter implements Specification<TbPost> {
 //        criteriaQuery.distinct(true);
 //        criteriaQuery.orderBy(cb.desc(postRoot.get("date")));
 
-        if (criteria.getDistricts() == null || criteria.getUtilities().size() == 0) {
-            districtList.add(cb.conjunction());
-        } else {
+        if (criteria.getDistricts().size() != 0) {
             for (Integer districtId : criteria.getDistricts()) {
                 districtList.add(cb.equal(districtRoot.get("districtId"), districtId));
             }
         }
 
-        if (criteria.getGender() == null || criteria.getGender().size() == 0) {
-            genderList.add(cb.conjunction());
-        } else {
-            for (Integer gender : criteria.getGender()) {
-                genderList.add(cb.equal(postRoot.get("genderPartner"), gender));
-            }
-        }
-
-        if (criteria.getUtilities() == null || criteria.getDistricts().size() == 0) {
-            utilityList.add(cb.conjunction());
-        } else {
+        if (criteria.getUtilities().size() != 0) {
             for (Integer utilityId : criteria.getUtilities()) {
                 utilityList.add(cb.equal(utilitiesRoot.get("utilityId"), utilityId));
             }
         }
 
-        if (criteria.getPrice() == null || criteria.getPrice().size() == 0) {
-            priceList.add(cb.conjunction());
-        } else {
+        if (criteria.getGender().size() != 0)
+            genderList.add(cb.equal(postRoot.get("genderPartner"), criteria.getGender().get(0)));
+
+        if (criteria.getPrice().size() != 0) {
             priceList.add(cb.and(
                     cb.ge(roomRoot.get("price"), criteria.getPrice().get(0)),
-                    cb.le(roomRoot.get("price"), criteria.getPrice().get(1))
-            ));
+                    cb.le(roomRoot.get("price"), criteria.getPrice().get(1))));
         }
 
         typeList.add(cb.equal(postRoot.get("typeId"), criteria.getTypeId()));
+
+        if (districtList.size() == 0) districtList.add(cb.conjunction());
+        if (utilityList.size() == 0) utilityList.add(cb.conjunction());
+        if (genderList.size() == 0) genderList.add(cb.conjunction());
+        if (priceList.size() == 0) priceList.add(cb.conjunction());
+
         Predicate result = cb.and(
                 cb.equal(postRoot.get("roomId"), roomRoot.get("roomId")),
                 cb.equal(roomRoot.get("districtId"), districtRoot.get("districtId")),
                 cb.equal(roomRoot.get("roomId"), roomHasUtilityRoot.get("roomId")),
                 cb.equal(roomHasUtilityRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
+                cb.or(typeList.toArray(new Predicate[typeList.size()])),
 
-                cb.equal(postRoot.get("typeId"), criteria.getTypeId()),
-//                cb.and(
-                cb.and(districtList.toArray(new Predicate[districtList.size()]))
-//                        cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
-//                        cb.or(priceList.toArray(new Predicate[priceList.size()])),
-//                        cb.or(genderList.toArray(new Predicate[genderList.size()]))
-//                )
+                cb.or(districtList.toArray(new Predicate[districtList.size()])),
+                cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
+                cb.or(priceList.toArray(new Predicate[priceList.size()])),
+                cb.or(genderList.toArray(new Predicate[genderList.size()]))
+//                cb.and(utilityList.toArray(new Predicate[utilityList.size()]))
+//                cb.and(priceList.toArray(new Predicate[priceList.size()])),
+//                cb.and(genderList.toArray(new Predicate[genderList.size()]))
+
         );
-        System.out.println(result.getExpressions());
         return result;
     }
 }

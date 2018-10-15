@@ -131,13 +131,12 @@ public class PostController {
 
     @PostMapping("/post/filter")
     public ResponseEntity getPostByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
-        try {
+//        try {
             Filter filter = new Filter();
-            if (filterArgumentModel.getSearchRequestModel().getDistricts() == null
-                    && filterArgumentModel.getSearchRequestModel().getUtilities() == null
-                    && filterArgumentModel.getSearchRequestModel().getGender() == null
-                    && filterArgumentModel.getSearchRequestModel().getPrice() == null
-                    && filterArgumentModel.getSearchRequestModel().getTypeId() == null) {
+            if (filterArgumentModel.getSearchRequestModel().getDistricts().size()==0
+                    && filterArgumentModel.getSearchRequestModel().getUtilities().size()==0
+                    && filterArgumentModel.getSearchRequestModel().getGender().size()==0
+                    && filterArgumentModel.getSearchRequestModel().getPrice().size()==0) {
                 filter.setCriteria(null);
             } else {
                 filter.setCriteria(filterArgumentModel.getSearchRequestModel());
@@ -146,9 +145,9 @@ public class PostController {
             Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
             return ResponseEntity.status(OK).body(posts.getContent().stream().distinct().collect(Collectors.toList()));
 
-        } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(NOT_FOUND).build();
+//        }
     }
 
     @GetMapping("/post/findByTypeId/{typeId}")
