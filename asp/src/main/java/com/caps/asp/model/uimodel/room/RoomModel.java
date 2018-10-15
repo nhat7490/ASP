@@ -1,4 +1,4 @@
-package com.caps.asp.model.uimodel;
+package com.caps.asp.model.uimodel.room;
 
 import com.caps.asp.model.uimodel.request.UtilityRequestModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,7 +26,15 @@ public class RoomModel {
     private Double latitude;
     private List<UtilityRequestModel> utilities;
     private List<String> imageUrls;
+    List<Integer> userIds;
 
+    public List<Integer> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(List<Integer> userIds) {
+        this.userIds = userIds;
+    }
 
     public int getRoomId() {
         return roomId;

@@ -1,19 +1,19 @@
-package com.caps.asp.model.uimodel;
+package com.caps.asp.model.uimodel.room;
 
 import java.sql.Date;
 
-public class AddRoomMemberModel {
+public class RoomMemberModel {
      private int roomId;
      private String username;
      private Date dateout;
 
-    public AddRoomMemberModel(int roomId, String username, Date dateout) {
+    public RoomMemberModel(int roomId, String username, Date dateout) {
         this.roomId = roomId;
         this.username = username;
         this.dateout = dateout;
     }
 
-    public AddRoomMemberModel() {
+    public RoomMemberModel() {
     }
 
     public int getRoomId() {

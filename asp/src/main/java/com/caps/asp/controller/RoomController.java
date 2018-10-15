@@ -1,8 +1,8 @@
 package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
-import com.caps.asp.model.uimodel.AddRoomMemberModel;
-import com.caps.asp.model.uimodel.RoomModel;
+import com.caps.asp.model.uimodel.room.RoomMemberModel;
+import com.caps.asp.model.uimodel.room.RoomModel;
 import com.caps.asp.model.uimodel.request.UtilityRequestModel;
 import com.caps.asp.service.*;
 import org.springframework.http.ResponseEntity;
@@ -163,7 +163,7 @@ public class RoomController {
     }
 
     @PostMapping("room/addMember")
-    public ResponseEntity addMember(@RequestBody AddRoomMemberModel roomMemberModel) {
+    public ResponseEntity addMember(@RequestBody RoomMemberModel roomMemberModel) {
         try {
             TbUser user = userService.findByUsername(roomMemberModel.getUsername());
             if (user == null) {
@@ -189,7 +189,7 @@ public class RoomController {
                 for (TbRoomHasUser roomHasUser : roomHasUsers) {
                     if (roomHasUser.getDateIn().getTime() == milis.get(milis.size() - 1)) {
                         TbUser tbUser = userService.findById(roomHasUser.getUserId());
-                        tbUser.setRoleId(3);
+                        tbUser.setRoleId(ROOM_MASTER);
                         userService.updateUserById(tbUser);
                     }
                 }

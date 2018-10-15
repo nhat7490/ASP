@@ -1,5 +1,7 @@
 package com.caps.asp.model.uimodel;
 
+import com.caps.asp.model.uimodel.room.RoomModel;
+
 import java.sql.Date;
 
 public class PostRequestModel {
