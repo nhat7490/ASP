@@ -3,10 +3,12 @@ package com.caps.asp.service;
 import com.caps.asp.model.TbRoomHasUser;
 import com.caps.asp.repository.RoomHasUserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class RoomHasUserService {
     public final RoomHasUserRepository roomHasUserRepository;
 

@@ -5,8 +5,18 @@ public class UtilityRequestModel {
     private String name;
     private String brand;
     private String description;
-    private int quality;
+    private int quantity;
 
+    public UtilityRequestModel() {
+    }
+
+    public UtilityRequestModel(int utilityId, String name, String brand, String description, int quantity) {
+        this.utilityId = utilityId;
+        this.name = name;
+        this.brand = brand;
+        this.description = description;
+        this.quantity = quantity;
+    }
 
     public int getUtilityId() {
         return utilityId;
@@ -40,11 +50,11 @@ public class UtilityRequestModel {
         this.description = description;
     }
 
-    public int getQuality() {
-        return quality;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setQuality(int quality) {
-        this.quality = quality;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

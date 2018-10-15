@@ -9,6 +9,17 @@ public class SearchRequestModel {
     private List<Integer> gender;
     private Integer typeId;
 
+    public SearchRequestModel() {
+    }
+
+    public SearchRequestModel(List<Integer> utilities, List<Integer> districts, List<Double> price, List<Integer> gender, Integer typeId) {
+        this.utilities = utilities;
+        this.districts = districts;
+        this.price = price;
+        this.gender = gender;
+        this.typeId = typeId;
+    }
+
     public List<Integer> getUtilities() {
         return utilities;
     }

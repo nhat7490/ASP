@@ -6,6 +6,7 @@ import com.caps.asp.model.uimodel.room.RoomModel;
 import com.caps.asp.model.uimodel.request.UtilityRequestModel;
 import com.caps.asp.service.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -32,10 +33,12 @@ public class RoomController {
         this.roomHasUserService = roomHasUserService;
     }
 
+    @Transactional
     @PostMapping("/room/create")
     public ResponseEntity createRoom(@RequestBody RoomModel roomModel) {
         try {
             TbUser user = userService.findById(roomModel.getUserId());
+            int roomId = 0;
             if (user.getRoleId() == HOUSE_OWNER) {
                 TbRoom room = new TbRoom();
                 room.setRoomId(0);
@@ -55,15 +58,15 @@ public class RoomController {
                 room.setDistrictId(roomModel.getDistrictId());
                 room.setLattitude(roomModel.getLatitude());
                 room.setLongtitude(roomModel.getLongitude());
-                roomService.saveRoom(room);
+                roomId = roomService.saveRoom(room);
 
                 for (UtilityRequestModel utilityRequestModel : roomModel.getUtilities()) {
                     TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
                     roomHasUtility.setId(0);
-                    roomHasUtility.setRoomId(roomService.findRoomByName(roomModel.getName()).getRoomId());
+                    roomHasUtility.setRoomId(roomId);
                     roomHasUtility.setBrand(utilityRequestModel.getBrand());
                     roomHasUtility.setDescription(utilityRequestModel.getDescription());
-                    roomHasUtility.setQuantity(utilityRequestModel.getQuality());
+                    roomHasUtility.setQuantity(utilityRequestModel.getQuantity());
                     roomHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
                     roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
                 }
@@ -71,7 +74,7 @@ public class RoomController {
                 for (String url : roomModel.getImageUrls()) {
                     TbImage image = new TbImage();
                     image.setImageId(0);
-                    image.setRoomId(roomService.findRoomByName(roomModel.getName()).getRoomId());
+                    image.setRoomId(roomId);
                     image.setLinkUrl(url);
                     imageService.saveImage(image);
                 }
@@ -84,6 +87,7 @@ public class RoomController {
         }
     }
 
+    @Transactional
     @PutMapping("/room/update")
     public ResponseEntity updateRoom(@RequestBody RoomModel roomModel) {
         try {
@@ -113,10 +117,10 @@ public class RoomController {
             roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomModel.getRoomId());
             for (UtilityRequestModel utilityRequestModel : roomModel.getUtilities()) {
                 TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
-                roomHasUtility.setRoomId(roomService.findRoomByName(roomModel.getName()).getRoomId());
+                roomHasUtility.setRoomId(roomModel.getRoomId());
                 roomHasUtility.setBrand(utilityRequestModel.getBrand());
                 roomHasUtility.setDescription(utilityRequestModel.getDescription());
-                roomHasUtility.setQuantity(utilityRequestModel.getQuality());
+                roomHasUtility.setQuantity(utilityRequestModel.getQuantity());
                 roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
             }
 
@@ -125,7 +129,7 @@ public class RoomController {
             for (String url : roomModel.getImageUrls()) {
                 TbImage image = new TbImage();
                 image.setImageId(0);
-                image.setRoomId(roomService.findRoomByName(roomModel.getName()).getRoomId());
+                image.setRoomId(roomModel.getRoomId());
                 image.setLinkUrl(url);
                 imageService.saveImage(image);
             }

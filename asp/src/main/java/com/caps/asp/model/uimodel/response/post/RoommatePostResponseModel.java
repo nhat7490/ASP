@@ -7,6 +7,15 @@ public class RoommatePostResponseModel {
     private double maxPrice;
     private List<Integer> districtIds;
 
+    public RoommatePostResponseModel() {
+    }
+
+    public RoommatePostResponseModel(List<Integer> utilityIds, double maxPrice, List<Integer> districtIds) {
+        this.utilityIds = utilityIds;
+        this.maxPrice = maxPrice;
+        this.districtIds = districtIds;
+    }
+
     public List<Integer> getUtilityIds() {
         return utilityIds;
     }

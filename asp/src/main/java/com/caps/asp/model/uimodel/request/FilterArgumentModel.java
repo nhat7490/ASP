@@ -5,6 +5,15 @@ public class FilterArgumentModel {
     private Integer page;
     private Integer offset;
 
+    public FilterArgumentModel() {
+    }
+
+    public FilterArgumentModel(SearchRequestModel searchRequestModel, Integer page, Integer offset) {
+        this.searchRequestModel = searchRequestModel;
+        this.page = page;
+        this.offset = offset;
+    }
+
     public SearchRequestModel getSearchRequestModel() {
         return searchRequestModel;
     }

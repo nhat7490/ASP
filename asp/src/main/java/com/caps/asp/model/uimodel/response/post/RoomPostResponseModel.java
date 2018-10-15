@@ -1,7 +1,9 @@
 package com.caps.asp.model.uimodel.response.post;
 
 import com.caps.asp.model.uimodel.request.UtilityRequestModel;
+import com.caps.asp.model.uimodel.response.UserResponeModel;
 
+import java.sql.Date;
 import java.util.List;
 
 //show room post detail
@@ -12,6 +14,14 @@ public class RoomPostResponseModel extends BasePostResponeModel{
     private List<String> imageUrls;
     private Integer numberPartner;
     private Integer genderPartner;
+
+    public RoomPostResponseModel() {
+    }
+
+
+    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice) {
+        super(postId, phoneContact, date, userResponeModel, isFavourite, minPrice);
+    }
 
     public Integer getArea() {
         return area;

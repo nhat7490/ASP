@@ -4,12 +4,14 @@ import com.caps.asp.exception.UserException;
 import com.caps.asp.model.TbUser;
 import com.caps.asp.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static com.caps.asp.constant.Constant.MEMBER;
 
 @Service
+@Transactional
 public class UserService {
     public final UserRepository userRepository;
 

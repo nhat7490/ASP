@@ -10,6 +10,18 @@ public class UserResponeModel {
     private String phone;
     private int gender;
 
+    public UserResponeModel() {
+    }
+
+    public UserResponeModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender) {
+        this.userId = userId;
+        this.fullname = fullname;
+        this.imageProfile = imageProfile;
+        this.dob = dob;
+        this.phone = phone;
+        this.gender = gender;
+    }
+
     public Integer getUserId() {
         return userId;
     }

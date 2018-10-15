@@ -12,6 +12,18 @@ public class BasePostResponeModel {
     private boolean isFavourite;
     private double minPrice;
 
+    public BasePostResponeModel() {
+    }
+
+    public BasePostResponeModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice) {
+        this.postId = postId;
+        this.phoneContact = phoneContact;
+        this.date = date;
+        this.userResponeModel = userResponeModel;
+        this.isFavourite = isFavourite;
+        this.minPrice = minPrice;
+    }
+
     public Integer getPostId() {
         return postId;
     }

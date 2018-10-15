@@ -16,8 +16,8 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
-    public void saveRoom(TbRoom room) {
-        roomRepository.save(room);
+    public int saveRoom(TbRoom room) {
+        return roomRepository.save(room).getRoomId();
     }
 
     public TbRoom findRoomByName(String roomName) {
