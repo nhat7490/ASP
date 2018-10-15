@@ -136,8 +136,8 @@ public class PostController {
             if (filterArgumentModel.getSearchRequestModel().getDistricts() == null
                     && filterArgumentModel.getSearchRequestModel().getUtilities() == null
                     && filterArgumentModel.getSearchRequestModel().getGender() == null
-                    && filterArgumentModel.getSearchRequestModel().getMaxPrice() == null
-                    && filterArgumentModel.getSearchRequestModel().getMinPrice() == null) {
+                    && filterArgumentModel.getSearchRequestModel().getPrice() == null
+                    && filterArgumentModel.getSearchRequestModel().getTypeId() == null) {
                 filter.setCriteria(null);
             } else {
                 filter.setCriteria(filterArgumentModel.getSearchRequestModel());

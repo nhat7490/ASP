@@ -5,18 +5,9 @@ import java.util.List;
 public class SearchRequestModel {
     private List<Integer> utilities;
     private List<Integer> districts;
-    private Integer maxPrice;
-    private Integer minPrice;
-    private Integer gender;
+    private List<Double> price;
+    private List<Integer> gender;
     private Integer typeId;
-
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
-    }
 
     public List<Integer> getUtilities() {
         return utilities;
@@ -34,27 +25,27 @@ public class SearchRequestModel {
         this.districts = districts;
     }
 
-    public Integer getMaxPrice() {
-        return maxPrice;
+    public List<Double> getPrice() {
+        return price;
     }
 
-    public void setMaxPrice(Integer maxPrice) {
-        this.maxPrice = maxPrice;
+    public void setPrice(List<Double> price) {
+        this.price = price;
     }
 
-    public Integer getMinPrice() {
-        return minPrice;
-    }
-
-    public void setMinPrice(Integer minPrice) {
-        this.minPrice = minPrice;
-    }
-
-    public Integer getGender() {
+    public List<Integer> getGender() {
         return gender;
     }
 
-    public void setGender(Integer gender) {
+    public void setGender(List<Integer> gender) {
         this.gender = gender;
+    }
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
     }
 }

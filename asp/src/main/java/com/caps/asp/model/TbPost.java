@@ -70,7 +70,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "date", nullable = true)
+    @Column(name = "date_post", nullable = true)
     public Date getDate() {
         return date;
     }
