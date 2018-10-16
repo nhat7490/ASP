@@ -13,14 +13,22 @@ protocol AlertControllerDelegate {
 class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelegate  {
     var delegate:AlertControllerDelegate?
     private var listItem:[String]?
+    var tableView = UITableView()
     static func showAlertInfor(withTitle title:String?,forMessage message:String?,inViewController controller:UIViewController) {
-        showAlertConfirm(withTitle: title, andMessage: message, alertStyle: .alert, forViewController: controller, lhsButtonTitle: nil, rhsButtonTitle: "OK".localized, lhsButtonHandler: nil, rhsButtonHandler: nil)
+        let alertController = AlertController(title: title, message: message, preferredStyle: .alert)
+        if let _ = title {
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: .cancel, handler: {(action) in
+                alertController.dismiss(animated: true, completion: nil)
+            }))
+        }
+        controller.present(alertController, animated: true, completion: nil)
+//        showAlertConfirm(withTitle: title, andMessage: message, alertStyle: .alert, forViewController: controller, lhsButtonTitle: "OK".localized, rhsButtonTitle: nil, lhsButtonHandler: nil, rhsButtonHandler: nil)
     }
     
     static func showAlertConfirm(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,forViewController controller:UIViewController,lhsButtonTitle:String?,rhsButtonTitle:String?,lhsButtonHandler:((UIAlertAction)->Void)?,rhsButtonHandler:((UIAlertAction)->Void)?){
         let alertController = AlertController(title: title, message: message, preferredStyle: alertStyle)
         if let _ = lhsButtonTitle {
-            alertController.addAction(UIAlertAction(title: lhsButtonTitle, style: .default, handler: lhsButtonHandler))
+            alertController.addAction(UIAlertAction(title: lhsButtonTitle, style: .cancel, handler: lhsButtonHandler))
         }
         if let _ = rhsButtonTitle {
             alertController.addAction(UIAlertAction(title: rhsButtonTitle, style: .default, handler: rhsButtonHandler))
@@ -43,7 +51,7 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         return alertController
     }
     
-    static func showAlertWithCustomView(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,forViewController controller:UIViewController,customView:UIView,lhsButtonTitle:String?,rhsButtonTitle:String?,lhsButtonHandler:((UIAlertAction)->Void)?,rhsButtonHandler:((UIAlertAction)->Void)?){
+    static func showAlertInputUtility(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,forViewController controller:UIViewController,lhsButtonTitle:String?,rhsButtonTitle:String?,lhsButtonHandler:((UIAlertAction)->Void)?,rhsButtonHandler:((UIAlertAction)->Void)?){
         let alertController = AlertController(title: title, message: message, preferredStyle: alertStyle)
         
         if let _ = lhsButtonTitle {
@@ -52,13 +60,18 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         if let _ = rhsButtonTitle {
             alertController.addAction(UIAlertAction(title: rhsButtonTitle, style: .default, handler: rhsButtonHandler))
         }
-        //Default
-//        customView.frame = CGRect(x:0,y:0,width: 272.0, height: 400.0)
         
-        alertController.view.addSubview(customView)
-        alertController.view.bringSubview(toFront: customView)
-        alertController.modalPresentationStyle = .overCurrentContext
-        alertController.modalTransitionStyle = .crossDissolve
+        let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_UTILITY_INPUT, sbName: Constants.STORYBOARD_MAIN)
+        vc.view.backgroundColor = .red
+//        vc.view.frame = alertController.view.frame
+//
+//        //Size of content in popup viewcontroller
+        vc.preferredContentSize  = CGSize(width: 242,
+                                          height:  200)
+        
+//        customView.isUserInteractionEnabled = true
+        vc.view.isUserInteractionEnabled = true
+        alertController.setValue(vc, forKey: "contentViewController")
         controller.present(alertController, animated: true, completion: nil)
         
     }
@@ -72,8 +85,7 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         
         //Size of content in popup viewcontroller
         vc.preferredContentSize  = CGSize(width: Constants.POPUP_SELECT_TABLE_DEFATUL_WIDTH,
-                                          height: tableHeight > Constants.POPUP_SELECT_TABLE_MAX_HEIGHT ? Constants.POPUP_SELECT_TABLE_MAX_HEIGHT : tableHeight)
-        let tableView = UITableView()
+                                          height:  Constants.POPUP_SELECT_TABLE_MAX_HEIGHT)
         tableView.register(UINib.init(nibName: Constants.CELL_POPUP_SELECT_LISTTV, bundle: nil), forCellReuseIdentifier: cellIdentifier)
         tableView.frame = vc.view.frame
         tableView.dataSource = self

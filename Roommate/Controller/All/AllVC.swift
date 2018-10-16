@@ -18,7 +18,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                      RoommateModel(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
                      RoommateModel(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
                      RoommateModel(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true)]
-    var rooms = [Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 1,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false),Room(id:1,numberPerson: 3,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 2,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:4,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false)]
+    var rooms:[Room] = []
+//        [Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 1,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false),Room(id:1,numberPerson: 3,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 2,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:4,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false)]
     let orders = [
         OrderType.newest:"NEWEST",
         OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
@@ -80,7 +81,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         return tv
     }()
     
-    var isTableVisible =  false
+    
     var selectedOrder = OrderType.newest//default
     var tableHeightLayoutConstraint : NSLayoutConstraint?
     
@@ -90,17 +91,6 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         return BaseVerticalCollectionView()
     }()
     
-    lazy var indicatorView:UIView  = {
-        let v = UIView()
-        v.backgroundColor = .white
-        return v
-    }()
-    lazy var activityIndicator:UIActivityIndicatorView = {
-        let iv = UIActivityIndicatorView()
-        iv.color = .gray
-        iv.hidesWhenStopped = true
-        return iv
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,10 +132,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         
         //Add View
         view.addSubview(orderByView)
-        view.addSubview(indicatorView)
         orderByView.addSubview(btnOrderBy)
         orderByView.addSubview(lblOrderBy)
-        indicatorView.addSubview(activityIndicator)
         btnOrderBy.addSubview(imageView)
         btnOrderBy.addSubview(lblSelectTitle)
         view.addSubview(tableView)
@@ -155,7 +143,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         let orderByViewWidth = view.frame.width-Constants.MARGIN_5*4
         
         //Add Constraint
-        _ = orderByView.anchor(view.topAnchor, view.leftAnchor, nil, nil, UIEdgeInsets(top: 88, left: 0, bottom: 0, right: 0), CGSize(width: orderByViewWidth, height: orderByViewHeight))
+        _ = orderByView.anchor(view.topAnchor, view.leftAnchor, nil, nil, UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0), CGSize(width: orderByViewWidth, height: orderByViewHeight))
         if #available(iOS 11.0, *) {
             print(view.safeAreaLayoutGuide.topAnchor)
         } else {
@@ -167,14 +155,10 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         _ = imageView.anchorWidth(equalTo: btnOrderBy.heightAnchor, constant: -10)
         _ = lblSelectTitle.anchor(btnOrderBy.topAnchor,btnOrderBy.leftAnchor,btnOrderBy.bottomAnchor,imageView.leftAnchor,UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
         
-        _ = indicatorView.anchorTopLeft(orderByView.bottomAnchor, view.leftAnchor,0,Constants.MARGIN_5*3,view.frame.width-Constants.MARGIN_5*6, view.frame.height-orderByViewHeight)
-        view.bringSubview(toFront: indicatorView)
-        
-        _ = activityIndicator.anchor(view: indicatorView)
-        activityIndicator.startAnimating()
         view.addSubview(collectionView)
         _ = collectionView.anchorTopLeft(orderByView.bottomAnchor, view.leftAnchor,0,Constants.MARGIN_5*3,view.frame.width-Constants.MARGIN_5*6, view.frame.height-orderByViewHeight)
         
+        view.bringSubview(toFront: tableView)
         tableHeightLayoutConstraint = tableView.anchorTopRight(orderByView.bottomAnchor, btnOrderBy.rightAnchor, 150.0, 1)[3]
         
         view.layoutIfNeeded()
@@ -267,11 +251,11 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if segmentControl.selectedSegmentIndex == 0{
             let vc = RoomDetailVC()
-            vc.viewType = DetailViewType.detailForMember
+            vc.viewType = ViewType.detailForMember
             navigationController?.pushViewController(vc, animated: true)
         }else{
             let vc = RoomDetailVC()
-            vc.viewType = DetailViewType.detailForMember
+            vc.viewType = ViewType.detailForMember
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -334,11 +318,9 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     @objc func onClickBtnOrder(){
         
         UIView.animate(withDuration: 0.1) {
-            if !self.isTableVisible{
-                self.isTableVisible = true
+            if self.tableHeightLayoutConstraint?.constant == 0 {
                 self.tableHeightLayoutConstraint?.constant = 150
             }else{
-                self.isTableVisible = false
                 self.tableHeightLayoutConstraint?.constant = 0
             }
             self.view.layoutIfNeeded()

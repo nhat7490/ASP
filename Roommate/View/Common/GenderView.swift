@@ -24,9 +24,9 @@ class GenderView: UIView {
         }
     }
     
-    var viewType:DetailViewType?{
+    var viewType:ViewType?{
         didSet{
-            if  viewType == DetailViewType.detailForMember || viewType == DetailViewType.detailForOwner{
+            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
                 btnMale.isUserInteractionEnabled = false
                 btnFemale.isUserInteractionEnabled = false
             }else{

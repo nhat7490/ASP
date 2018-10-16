@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class NotificationModel:BaseModel{
+class NotificationModel{
     var id:Int?
     var title:String?
     var date:Date?

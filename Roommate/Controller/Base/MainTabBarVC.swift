@@ -8,36 +8,39 @@
 
 import UIKit
 
-class MainTabBarVC: UITabBarController,UITabBarControllerDelegate{
-
+class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI();
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkInitData()
+    }
     func setupUI() {
         self.tabBar.backgroundColor = .white
         let all = AllVC()
         let bookmark = AllVC()
         bookmark.allVCType = .bookmark
         var vcs = [UIViewController]()
-//        vcs.append(HomeVC())
+                vcs.append(CERoomVC())
         vcs.append(all)
         vcs.append(bookmark)
         vcs.append(NotificationVC())
         //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_IN, sbName: Constants.STORYBOARD_MAIN))
-//        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
-//        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_RESET_PASSWORD, sbName: Constants.STORYBOARD_MAIN))
-//        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
+        //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
+        //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_RESET_PASSWORD, sbName: Constants.STORYBOARD_MAIN))
+        //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
         
         viewControllers = vcs.map({UINavigationController(rootViewController: $0)})
         self.selectedIndex = 1
-//    UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor(hexString: "555")], for: .normal)
-//        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor(hexString: "00A8B5")], for: .selected)
-//        UITabBarItem.appearance().set
-//        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.backgroundColor : UIColor(hexString: "00A8B5")], for: .selected)
     }
     
-
+    func initData(){
+        self.showIndicator()
+        
+    }
+    
 }
 //

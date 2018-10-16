@@ -19,9 +19,9 @@ class UtilityDetailView: UIView {
             guard let utilityModel = utilityModel else {
                 return
             }
-            lblBrand.text = String(key: "BRAND_TITLE", args: utilityModel.brand!)
-            lblQuantity.text = String(key: "QUANTITY_TITLE", args: utilityModel.quantity!)
-            tvDescription.text = String(key: "DESCRIPTION_PLACE_HOLDER".localized, args:  utilityModel.description!)
+            lblBrand.text = String(key: "BRAND_TITLE", args: utilityModel.brand)
+            lblQuantity.text = String(key: "QUANTITY_TITLE", args: utilityModel.quantity)
+            tvDescription.text = String(key: "DESCRIPTION_PLACE_HOLDER".localized, args:  utilityModel.utilityDescription)
         }
     }
     

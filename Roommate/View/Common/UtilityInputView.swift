@@ -7,9 +7,7 @@
 //
 
 import UIKit
-//protocol UtilityInputViewDelegate:class{
-//    func utilityInputViewDelegate(utilityInputView view:UtilityInputView,onCompletedWithUtilityModel:UtilityModel)
-//}
+
 class UtilityInputView: UIView,UITextViewDelegate,UITextFieldDelegate {
 
     @IBOutlet weak var tfBrand: UITextField!
@@ -34,6 +32,9 @@ class UtilityInputView: UIView,UITextViewDelegate,UITextFieldDelegate {
         tfBrand.delegate = self
         tfQuantity.delegate = self
         tvDescription.delegate = self
+         
+        //Init data
+        utilityModel = UtilityModel()
     }
     
     //MARK: UITextViewDelegate
@@ -48,7 +49,7 @@ class UtilityInputView: UIView,UITextViewDelegate,UITextFieldDelegate {
             textView.text = "DESCRIPTION_PLACE_HOLDER".localized
             tvDescription.textColor = .lightGray
         }else{
-            utilityModel?.description = textView.text
+            utilityModel?.utilityDescription = textView.text
         }
     }
     
@@ -63,4 +64,5 @@ class UtilityInputView: UIView,UITextViewDelegate,UITextFieldDelegate {
             }
         }
     }
+    
 }

@@ -42,7 +42,7 @@ enum BorderSide {
 enum SystemAppType {
     case phone, message, email
 }
-enum DetailViewType{
+enum ViewType{
     case detailForOwner,detailForMember,cEForOwner
 }
 enum DropdownListViewType{

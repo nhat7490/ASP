@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FilterForRoomModel:BaseModel {
+class FilterForRoomModel {
     var city:CityModel
     var district:DistrictModel
     var min_price:Float

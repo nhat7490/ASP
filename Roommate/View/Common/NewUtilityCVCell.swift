@@ -20,7 +20,7 @@ class NewUtilityCVCell: UICollectionViewCell {
     var data:UtilityModel?{
         didSet{
             lblTitle.text = data?.name?.localized
-            imgvIcon.image = UIImage(named: data!.name!)
+            imgvIcon.image = UIImage(named: "cctv")
         }
     }
     var utilityCVCellType:UtilityCVCellType = .detail

@@ -21,11 +21,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
         let vc = MainTabBarVC()
         return vc
     }()
-    lazy var indicator:UIActivityIndicatorView = {
-        let av = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        av.hidesWhenStopped = true
-        return av
-    }()
+    
     var username:String = ""
     var password:String = ""
 //    var btnSignIn:UIButton={
@@ -71,62 +67,43 @@ class SignInVC: BaseVC,UITextFieldDelegate {
         
         //Valid
         if username.isValidUsername() && password.isValidPassword(){
-            //Check network available
-            if NetworkStatus.isConnected(){
-                showIndicator()
-                Alamofire.request(APIRouter.login(username: username, password: password)).responseObject { (response:DataResponse<UserModel>) in
-                    self.indicator.stopAnimating()
-                    self.indicator.removeFromSuperview()
-                    UIApplication.shared.endIgnoringInteractionEvents()
-                    //Connected server fail
-                    if response.response == nil{
-                        print("FAILURE:\(response.result.value)")
-                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
-                    }else{
-                        //Success connected with response
-                        //Success mapping response to usermodel
-                        let statusCode:HTTPStatusCode = HTTPStatusCode(rawValue: response.response!.statusCode)!
-                        if response.result.isSuccess{
-                            if statusCode == .OK{
-                                guard let user = response.result.value else{
-                                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-                                    return
-                                }
-                                _ = DBManager.shared.addUser(user: user)
-                                let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                                appdelegate.window!.rootViewController = self.mainTabBarVC
-                            }else if statusCode == .Forbidden {
-                                APIResponseAlert.apiResponseError(controller: self, type: .invalidPassword)
-                                print("Forbidden")
-                            }
-                        //Fail to convert response to Usermodel
-                        }else if response.result.isFailure{
-                            if statusCode == .NotFound{
-                                //Error
-                                print("FAILURE:\(response.result.value)")
-                                APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidUsername)
-                            }
-                        }
-                    }
-                }
+            self.showIndicator()
+            //Request for user
+            requestUser()
+        }else{
+            AlertController.showAlertInfor(withTitle: "NETWORK_STATUS_TITLE".localized, forMessage: "ERROR_TYPE_INPUT".localized, inViewController: self)
+        }
+    }
+            
+
+    func requestUser(){
+        APIConnection.requestObject(apiRouter: APIRouter.login(username: username, password: password), errorNetworkConnectedHander: {
+            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+        }, returnType: UserModel.self) { (user, error, statusCode) -> (Void) in
+            
+            if error == .SERVER_NOT_RESPONSE {
+                self.hideIndicator()
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+            }else if error == .PARSE_RESPONSE_FAIL{
+                //404
+                self.hideIndicator()
+                APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidUsername)
             }else{
-                APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+                //200
+                if statusCode == .OK{
+                    _ = DBManager.shared.addUser(user: user!)
+                    self.hideIndicator()
+                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                    appdelegate.window!.rootViewController = self.mainTabBarVC
+                    
+                    //403
+                }else if statusCode == .Forbidden {
+                    APIResponseAlert.apiResponseError(controller: self, type: .invalidPassword)
+                }
             }
         }
     }
-    
-    func showIndicator(){
-        view.addSubview(indicator)
-        _ = indicator.anchorCenterXAndY(view.centerXAnchor, view.centerYAnchor,100,100)
-        view.bringSubview(toFront: indicator)
-        indicator.color = UIColor.gray
-        indicator.contentMode = .scaleAspectFill
-        indicator.startAnimating()
-        UIApplication.shared.beginIgnoringInteractionEvents()
-    }
-//    @objc func onTapView(){
-//        view.endEditing(true)
-//    }
+
     
     @objc func keyBoard(notification: Notification){
         let userInfo = notification.userInfo!

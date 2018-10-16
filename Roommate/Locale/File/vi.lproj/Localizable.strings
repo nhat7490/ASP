@@ -15,7 +15,7 @@
 //MARK: Roommate cell
 "ROMMATE_RIGHT_PRICE"="Mức giá";
 "ROMMATE_RIGHT_POSITION"="Vị trí tìm kiếm";
-"ROMMATE_RIGHT_CITY"="Thành Phố";
+"ROMMATE_RIGHT_CITY"="Tỉnh/Thành";
 
 //MARK: Segment control
 "SEGMENTED_CONTROL_ROOM"="Phòng ở ghép";
@@ -86,6 +86,7 @@
 //MARK: Common
 "BASE_INFORMATION"="Thông tin cơ bản";
 "UTILITY_TITLE"="Tiện ích";
+"UTILITY_INFOR_TITLE"="Thông tin tiện ích";
 "DESCRIPTION"="Mô Tả";
 "GENDER"="Giới Tính";
 "ADDRESS"="Địa chỉ : %@";
@@ -128,6 +129,7 @@
 "NETWORK_STATUS_CONNECTED_ERROR_MESSAGE"="Không thể kết nối mạng, vui lòng kiểm tra lại";
 "NETWORK_STATUS_ERROR_MESSAGE"="Lỗi mạng, vui lòng thử lại sau";
 "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"="Không thể kết nối máy chủ vui lòng thử lại sau";
+"NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Ops. Lỗi máy chủ.";
 //MARK: Alert
 "ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
 "ALERT_INVALID_USERNAME_PASSWORD"="Mật khẩu không đúng";
@@ -140,10 +142,15 @@
 "ERROR_TYPE_USERNAME"="Tên đăng nhập từ 6 - 50 ký tự";
 "ERROR_TYPE_PASSWORD"="Mật khẩu từ 6 - 50 ký tự";
 "ERROR_TYPE_NAME_MAX_CHAR_50"="Tên Từ 6 đến 50 ký tự";
+"ERROR_TYPE_QUANTITY"="Số lượng Từ 1 đến 20";
+"ERROR_TYPE_BRAND"="Nhãn Từ 2 đến 50 ký tự";
 "ERROR_TYPE_PRICE"="Giá từ 100,000 VND đến 50,000,000 VND";
 "ERROR_TYPE_AREA"="Diện tích từ 10 - 1000 m2";
 "ERROR_TYPE_PHONE"="Định dạng số điện thoại sai";
 "ERROR_TYPE_ADDRESS"="Số nhà đường phường từ 5 đến 250 ký tự";
+"ERROR_TYPE_INPUT"="Vui lòng nhập thông tin hợp lệ";
+"ERROR_TYPE_DESCRIPTION"="Mô tả từ 5 đến 250 ký tự";
+
 
 
 

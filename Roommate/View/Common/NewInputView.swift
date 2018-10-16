@@ -65,6 +65,7 @@ class NewInputView: UIView,UITextFieldDelegate {
         tfInput.returnKeyType = returnKeyType!
         tfInput.placeholder = placeholder.localized
         tfInput.placeholderColor = .lightGray
+        tfInput.titleColor = .defaultBlue
         tfInput.keyboardType = keyboardType!
         tfInput.title = title.localized
         tfInput.errorColor = .red
@@ -90,7 +91,7 @@ class NewInputView: UIView,UITextFieldDelegate {
                 }
             case .price:
                 if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    tfInput.text = string
+                    return false
                 }
                 if updatedString.isValidPrice(){
                     tfInput.errorMessage = ""

@@ -17,9 +17,9 @@ class MemberTVCell: UITableViewCell {
     @IBOutlet weak var btnEditMember: UIButton!
     @IBOutlet weak var btnRemoveMember: UIButton!
     weak var delegate:MemberTVCellDelegate?
-    var viewType:DetailViewType?{
+    var viewType:ViewType?{
         didSet{
-            if  viewType == DetailViewType.detailForMember || viewType == DetailViewType.detailForOwner{
+            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
                 btnEditMember.isHidden = true
                 btnRemoveMember.isHidden = true
             }else{

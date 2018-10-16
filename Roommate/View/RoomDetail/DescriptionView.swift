@@ -9,6 +9,7 @@
 import UIKit
 protocol DescriptionViewDelegate:class{
     func descriptionViewDelegate(descriptionView view:DescriptionView,textViewDidEndEditing textView:UITextView )
+
 }
 class DescriptionView: UIView,UITextViewDelegate{
     @IBOutlet weak var lblTitle: UILabel!
@@ -27,11 +28,12 @@ class DescriptionView: UIView,UITextViewDelegate{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    var viewType:DetailViewType?{
+    var viewType:ViewType?{
         didSet{
-            if  viewType == DetailViewType.detailForMember || viewType == DetailViewType.detailForOwner{
+            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
                 tvContent.isEditable = false
             }else{
+                tvContent.addToobarButton()
                 tvContent.isEditable = true
             }
         }
@@ -46,16 +48,15 @@ class DescriptionView: UIView,UITextViewDelegate{
         tvContent.isEditable = false
         tvContent.delegate = self
         tvContent.returnKeyType = .done
+        
         lblTitle.text = "DESCRIPTION".localized
     }
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         return true
     }
-    
     func textViewDidEndEditing(_ textView: UITextView) {
         delegate?.descriptionViewDelegate(descriptionView: self, textViewDidEndEditing: textView)
     }
-    
     //MARK: Another
     func becomeFirstResponderTextView(){
         tvContent.addToobarButton()

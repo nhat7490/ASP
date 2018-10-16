@@ -436,7 +436,7 @@ extension Int{
     }
     
 }
-extension Float{
+extension Double{
     var toString:String{
         return "\(self)"
     }
@@ -472,17 +472,22 @@ extension UITextView{
 }
 extension String{
     func isValidUsername() -> Bool{
-        let format = "^[a-zA-Z]{6,50}"
+        let format = "^[\\w\\s]{6,50}"
         let predicate = NSPredicate(format:"SELF MATCHES %@", format)
         return predicate.evaluate(with: self)
     }
     func isValidPassword() -> Bool{
-        let format = "^[a-zA-Z]{6,50}"
+        let format = "^[\\w\\s]{6,50}"
         let predicate = NSPredicate(format:"SELF MATCHES %@", format)
         return predicate.evaluate(with: self)
     }
     func isValidName() -> Bool{
-        let format = "^[a-zA-Z]{6,50}"
+        let format = "^[\\w\\s]{6,50}"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", format)
+        return predicate.evaluate(with: self)
+    }
+    func isValidBrand() -> Bool{
+        let format = "^[\\w\\s]{2,50}"
         let predicate = NSPredicate(format:"SELF MATCHES %@", format)
         return predicate.evaluate(with: self)
     }
@@ -493,9 +498,16 @@ extension String{
             return false
         }
     }
+    func isValidQuantity() -> Bool{
+        if let intValue = self.toInt() , (intValue >= Constants.MIN_QUANTITY && intValue <= Constants.MAX_QUANTITY){
+            return true
+        }else{
+            return false
+        }
+    }
     
     func isValidArea() -> Bool{
-        if let intValue = self.toInt() , (intValue >= Constants.MIN_AREA && intValue <= Constants.MIN_AREA){
+        if let intValue = self.toInt() , (intValue >= Constants.MIN_AREA && intValue <= Constants.MAX_AREA){
             return true
         }else{
             return false

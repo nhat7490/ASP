@@ -17,7 +17,11 @@ enum APIRouter:URLRequestConvertible{
     case findById(id:Int)
     case login(username:String,password:String)
     case search(input:String)
-
+    case city()
+    case district()
+    case utility()
+    case createRoom(model:NewRoomModel)
+    
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -26,60 +30,69 @@ enum APIRouter:URLRequestConvertible{
             return ["Accept":"application/json"]
         }
     }
-
+    
     var httpMethod:HTTPMethod{
         switch self{
-        case .findById:
-            return .get
-        case .login:
+        case .login,.createRoom:
             return .post
-        case .search:
+        default:
             return .get
+            
         }
     }
-
+    
     var path:String{
         switch self{
-            case .findById(let id):
-                return "findById/\(id)"
-            case .login:
-                return "user/login"
-            case .search:
-                return "maps/api/place/autocomplete/json"
+        case .findById(let id):
+            return "findById/\(id)"
+        case .login:
+            return "user/login"
+        case .search:
+            return "maps/api/place/autocomplete/json"
+        case .city:
+            return "city"
+        case .district:
+            return "district"
+        case .createRoom:
+            return "room/create"
+        case .utility:
+            return "utilities/getAll";
         }
     }
-
+    
     var parameters:Parameters{
         switch self{
-            case .findById:
-                return [:]
-            case .login(let username,let password):
-                let dic = [
-                    "username":username,
-                    "password":password
-                ]
-                return dic
+        case .login(let username,let password):
+            let dic = [
+                "username":username,
+                "password":password
+            ]
+            return dic
         case .search(let input):
             return ["language":"vi",
                     "input":input,
                     "components":"country:vi",
                     "key":"AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"]
+        case .createRoom(let model):
+            return Mapper().toJSON(model)
+        default:
+            return [:]
         }
     }
-
+    
     func asURLRequest() throws -> URLRequest {
         let url:URL
         switch self{
-            case .search:
-                url = try! Constants.BASE_URL_GOOGLE_PLACE_API.asURL()
-            default:
-                url = try!  Constants.BASE_URL_API.asURL()
+        case .search:
+            url = try! Constants.BASE_URL_GOOGLE_PLACE_API.asURL()
+        default:
+            url = try!  Constants.BASE_URL_API.asURL()
         }
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.allHTTPHeaderFields = httpHeaders
         urlRequest.httpMethod = httpMethod.rawValue
-        urlRequest.timeoutInterval  = 5
-
+        urlRequest.timeoutInterval  = 30
+        
         do{
             switch self.httpMethod {
             case .post:
@@ -90,7 +103,7 @@ enum APIRouter:URLRequestConvertible{
         }catch {
             print("Create Request error In APIRouter:\(error)")
         }
-
+        
         return urlRequest
     }
 }

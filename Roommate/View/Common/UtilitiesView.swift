@@ -59,24 +59,17 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let utilityForSC = self.utilityForSC else {
-            return
-        }
-        switch utilityForSC {
-        case .showDetail:
-            delegate?.utilitiesViewDelegate(utilitiesView: self, didSelectUtilityAt: indexPath)
-        default:
-            break
-        }
+
+        delegate?.utilitiesViewDelegate(utilitiesView: self, didSelectUtilityAt: indexPath)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        print("Size Of cell \(collectionView.frame.width/4)")
-        return CGSize(width: collectionView.frame.width/2-13, height:CGFloat(Constants.HEIGHT_CELL_NEW_UTILITY-5))
+        print("Size Of cell \(UIScreen.main.bounds.width/2-2*Constants.MARGIN_10-5.0)")
+        return CGSize(width: UIScreen.main.bounds.width/2-Constants.MARGIN_10-2.5, height:CGFloat(Constants.HEIGHT_CELL_NEW_UTILITY-2.5))
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 5//Item in diffrence row
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return 5
+//    }
 }

@@ -19,7 +19,7 @@ class OptionView: UIView {
     @IBOutlet weak var btnEdit: UIButton!
     @IBOutlet weak var btnRight: UIButton!
     weak var delegate:OptionViewDelegate?
-    var viewType:DetailViewType?{
+    var viewType:ViewType?{
         didSet{
             setupUI()
         }

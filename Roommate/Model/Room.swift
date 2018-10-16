@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class Room:BaseModel{
+class Room{
     var id:Int
     var numberPerson:Int
     var name:String

@@ -9,7 +9,7 @@
 import UIKit
 
 class APIResponseAlert {
-    static func defaultAPIResponseError(controller:BaseVC,error:ApiResponseErrorType){
+    static func defaultAPIResponseError(controller:UIViewController,error:ApiResponseErrorType){
         var message:String?
         switch error {
         case .HTTP_ERROR:
@@ -19,11 +19,11 @@ class APIResponseAlert {
         case .SERVER_NOT_RESPONSE:
             message = "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"
         case .PARSE_RESPONSE_FAIL:
-            message = ""
+            message = "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"
         }
         AlertController.showAlertInfor(withTitle: "NETWORK_STATUS_TITLE".localized, forMessage: message?.localized, inViewController: controller)
     }
-    static func apiResponseError(controller:BaseVC,type:APIResponseAlertType){
+    static func apiResponseError(controller:UIViewController,type:APIResponseAlertType){
         var message:String?
         switch type {
         case .invalidUsername:

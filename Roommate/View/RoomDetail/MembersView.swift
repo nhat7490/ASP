@@ -27,9 +27,9 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTV
         }
     }
     
-    var viewType:DetailViewType?{
+    var viewType:ViewType?{
         didSet{
-            if  viewType == DetailViewType.detailForMember || viewType == DetailViewType.detailForOwner{
+            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
                 tblMembers.allowsSelection = false
                 btnAddNewMember.isHidden = true
             }else{
@@ -76,7 +76,7 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTV
         }else{
             cell.lblMemberName.text = user.name
         }
-        if  viewType == DetailViewType.detailForMember || viewType == DetailViewType.detailForOwner{
+        if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
             cell.delegate = self
             cell.selectionStyle = .default
         }else{

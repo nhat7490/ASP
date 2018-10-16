@@ -8,7 +8,7 @@
 
 import UIKit
 import ObjectMapper
-class ImageModel :BaseModel,Mappable{
+class ImageModel{
     var image_id:Int?
     var link_url:String?
 

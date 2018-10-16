@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StatusModel :BaseModel{
+class StatusModel{
     var status:Int
     var name:String
     

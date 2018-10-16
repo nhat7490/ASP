@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-class User:BaseModel{
+class User{
     var id:Int?
     var name:String
     var imageUrl:String

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://localhost:8080/"
+    static let BASE_URL_API = "http://192.168.1.47:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //    static let BASE_URL = "https://asp-backend.herokuapp.com/"
     
@@ -33,6 +33,8 @@ class Constants{
     static let VC_SIGN_UP = "SignUpVC"
     static let VC_RESET_PASSWORD = "ResetPasswordVC"
     static let VC_FIRST_LAUNCH = "FirstLaunchVC"
+    static let VC_UTILITY_INPUT = "UtilityInputVC"
+    
     
     //MARK: Constant for Locale
     static let LOCALE_EN = "EN"
@@ -91,15 +93,18 @@ class Constants{
     static let HEIGHT_UTILITY_INPUT_VIEW:Double = 160.0
     static let HEIGHT_UTILITY_DETAIL_VIEW:Double = 160.0
     static let HEIGHT_NEW_INPUT_VIEW:Double = 70.0
-    static let HEIGHT_CELL_NEW_UTILITY:Double = 40.0
+    static let HEIGHT_CELL_NEW_UTILITY:Double = 50.0
     static let HEIGHT_ROOM_INFOR_TITLE:Double = 30.0
     static let MAX_MEMBER:Int = 10
     static let MIN_MEMBER:Int = 0
     static let MAX_PRICE:Int = 50_000_000
     static let MIN_PRICE:Int = 100_000
+    static let MAX_QUANTITY:Int = 20
+    static let MIN_QUANTITY:Int = 1
     static let MAX_AREA:Int = 1_000
     static let MIN_AREA:Int = 10
     static let MAX_LENGHT_ADDRESS:Int = 250
+    static let MAX_LENGHT_DESCRIPTION:Int = 250
     static let MAX_LENGHT_NORMAL_TEXT:Int = 50
     
     //Status code
