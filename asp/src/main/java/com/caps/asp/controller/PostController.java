@@ -80,10 +80,14 @@ public class PostController {
     public ResponseEntity createRoomPost(@RequestBody RoomPostRequestModel roomPostRequestModel) {
         try {
             TbUser user = userService.findById(roomPostRequestModel.getUserId());
-            if (user.getRoleId() == ROOM_MASTER) {
+            TbRoom room = roomService.findRoomById(roomPostRequestModel.getRoomId());
+            TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomId(user.getUserId(), room.getRoomId());
+            TbPost excistedPost = postService.findByRoomId(room.getRoomId());
+            if (user.getRoleId() == ROOM_MASTER
+                    && roomHasUser != null
+                    && excistedPost == null) {
                 TbPost post = new TbPost();
                 post.setTypeId(ROOM_POST);
-                TbRoom room = roomService.findRoomById(roomPostRequestModel.getRoomId());
                 post.setLongtitude(room.getLongtitude());
                 post.setLattitude(room.getLattitude());
                 Date date = new Date(System.currentTimeMillis());
@@ -132,18 +136,19 @@ public class PostController {
     @PostMapping("/post/filter")
     public ResponseEntity getPostByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
 //        try {
-            Filter filter = new Filter();
-            if (filterArgumentModel.getSearchRequestModel().getDistricts().size()==0
-                    && filterArgumentModel.getSearchRequestModel().getUtilities().size()==0
-                    && filterArgumentModel.getSearchRequestModel().getGender().size()==0
-                    && filterArgumentModel.getSearchRequestModel().getPrice().size()==0) {
-                filter.setCriteria(null);
-            } else {
-                filter.setCriteria(filterArgumentModel.getSearchRequestModel());
-            }
+        Filter filter = new Filter();
+        if (filterArgumentModel.getSearchRequestModel().getDistricts().size() == 0
+                && filterArgumentModel.getSearchRequestModel().getUtilities().size() == 0
+                && filterArgumentModel.getSearchRequestModel().getGender().size() == 0
+                && filterArgumentModel.getSearchRequestModel().getPrice().size() == 0
+                && filterArgumentModel.getSearchRequestModel().getTypeId() == null) {
+            filter.setCriteria(null);
+        } else {
+            filter.setCriteria(filterArgumentModel.getSearchRequestModel());
+        }
 
-            Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
-            return ResponseEntity.status(OK).body(posts.getContent().stream().distinct().collect(Collectors.toList()));
+        Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
+        return ResponseEntity.status(OK).body(posts.getContent().stream().distinct().collect(Collectors.toList()));
 
 //        } catch (Exception e) {
 //            return ResponseEntity.status(NOT_FOUND).build();

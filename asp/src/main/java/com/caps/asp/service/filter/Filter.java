@@ -38,8 +38,8 @@ public class Filter implements Specification<TbPost> {
         List<Predicate> typeList = new ArrayList<>();
 
 
-//        criteriaQuery.distinct(true);
-//        criteriaQuery.orderBy(cb.desc(postRoot.get("date")));
+        criteriaQuery.distinct(true);
+        criteriaQuery.orderBy(cb.desc(postRoot.get("date")));
 
         if (criteria.getDistricts().size() != 0) {
             for (Integer districtId : criteria.getDistricts()) {
@@ -73,7 +73,7 @@ public class Filter implements Specification<TbPost> {
                 cb.equal(postRoot.get("roomId"), roomRoot.get("roomId")),
                 cb.equal(roomRoot.get("districtId"), districtRoot.get("districtId")),
                 cb.equal(roomRoot.get("roomId"), roomHasUtilityRoot.get("roomId")),
-                cb.equal(roomHasUtilityRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
+                cb.equal(roomHasUtilityRoot.get("utilityId"), utilitiesRoot.get("utilityId")), 
                 cb.or(typeList.toArray(new Predicate[typeList.size()])),
 
                 cb.or(districtList.toArray(new Predicate[districtList.size()])),
