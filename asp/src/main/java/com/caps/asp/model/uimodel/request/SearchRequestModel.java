@@ -6,18 +6,30 @@ public class SearchRequestModel {
     private List<Integer> utilities;
     private List<Integer> districts;
     private List<Double> price;
-    private List<Integer> gender;
+    private Integer gender;
     private Integer typeId;
+    private String orderBy;
+    private Integer userId;
 
     public SearchRequestModel() {
     }
 
-    public SearchRequestModel(List<Integer> utilities, List<Integer> districts, List<Double> price, List<Integer> gender, Integer typeId) {
+    public SearchRequestModel(List<Integer> utilities, List<Integer> districts, List<Double> price, Integer gender, Integer typeId, String orderBy, Integer userId) {
         this.utilities = utilities;
         this.districts = districts;
         this.price = price;
         this.gender = gender;
         this.typeId = typeId;
+        this.orderBy = orderBy;
+        this.userId = userId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public List<Integer> getUtilities() {
@@ -44,11 +56,11 @@ public class SearchRequestModel {
         this.price = price;
     }
 
-    public List<Integer> getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(List<Integer> gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 
@@ -58,5 +70,13 @@ public class SearchRequestModel {
 
     public void setTypeId(Integer typeId) {
         this.typeId = typeId;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 }

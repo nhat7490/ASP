@@ -15,11 +15,20 @@ public class RoomPostResponseModel extends BasePostResponeModel {
     private List<String> imageUrls;
     private Integer numberPartner;
     private Integer genderPartner;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public RoomPostResponseModel() {
     }
 
-    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner) {
+    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner, String description) {
         super(postId, phoneContact, date, userResponeModel, isFavourite, minPrice);
         this.name = name;
         this.area = area;
@@ -28,6 +37,7 @@ public class RoomPostResponseModel extends BasePostResponeModel {
         this.imageUrls = imageUrls;
         this.numberPartner = numberPartner;
         this.genderPartner = genderPartner;
+        this.description = description;
     }
 
     public String getName() {

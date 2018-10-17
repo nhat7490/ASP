@@ -31,4 +31,8 @@ public class FavouriteService {
     public void remove(int id) {
         favouriteRepository.deleteById(id);
     }
+
+    public TbFavourite findByUserIdAndPostId(int userId, int postId){
+        return favouriteRepository.findByUserIdAndPostId(userId, postId);
+    }
 }

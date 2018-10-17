@@ -20,7 +20,7 @@ public class TbUtilities {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 45)
+    @Column(name = "name", nullable = true, length = 50)
     public String getName() {
         return name;
     }

@@ -39,7 +39,11 @@ public class Filter implements Specification<TbPost> {
 
 
         criteriaQuery.distinct(true);
-        criteriaQuery.orderBy(cb.desc(postRoot.get("date")));
+        if(criteria.getOrderBy().equals("Cũ")){
+            criteriaQuery.orderBy(cb.asc(postRoot.get("date")));
+        }else {
+            criteriaQuery.orderBy(cb.desc(postRoot.get("date")));
+        }
 
         if (criteria.getDistricts().size() != 0) {
             for (Integer districtId : criteria.getDistricts()) {
@@ -53,8 +57,8 @@ public class Filter implements Specification<TbPost> {
             }
         }
 
-        if (criteria.getGender().size() != 0)
-            genderList.add(cb.equal(postRoot.get("genderPartner"), criteria.getGender().get(0)));
+        if (criteria.getGender() != null)
+            genderList.add(cb.equal(postRoot.get("genderPartner"), criteria.getGender()));
 
         if (criteria.getPrice().size() != 0) {
             priceList.add(cb.and(
@@ -73,17 +77,13 @@ public class Filter implements Specification<TbPost> {
                 cb.equal(postRoot.get("roomId"), roomRoot.get("roomId")),
                 cb.equal(roomRoot.get("districtId"), districtRoot.get("districtId")),
                 cb.equal(roomRoot.get("roomId"), roomHasUtilityRoot.get("roomId")),
-                cb.equal(roomHasUtilityRoot.get("utilityId"), utilitiesRoot.get("utilityId")), 
+                cb.equal(roomHasUtilityRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
                 cb.or(typeList.toArray(new Predicate[typeList.size()])),
 
                 cb.or(districtList.toArray(new Predicate[districtList.size()])),
                 cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
                 cb.or(priceList.toArray(new Predicate[priceList.size()])),
                 cb.or(genderList.toArray(new Predicate[genderList.size()]))
-//                cb.and(utilityList.toArray(new Predicate[utilityList.size()]))
-//                cb.and(priceList.toArray(new Predicate[priceList.size()])),
-//                cb.and(genderList.toArray(new Predicate[genderList.size()]))
-
         );
         return result;
     }

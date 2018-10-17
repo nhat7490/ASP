@@ -12,12 +12,15 @@ public class TbPost {
     private String phoneContact;
     private Integer numberPartner;
     private Integer genderPartner;
-    private Date date;
+    private Date datePost;
     private Integer typeId;
     private Integer userId;
     private Integer roomId;
     private Double longtitude;
     private Double lattitude;
+    private Double minPrice;
+    private Double maxPrice;
+    private String description;
 
     @Id
     @Column(name = "post_id", nullable = false)
@@ -30,7 +33,7 @@ public class TbPost {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 45)
+    @Column(name = "name", nullable = true, length = 50)
     public String getName() {
         return name;
     }
@@ -71,12 +74,12 @@ public class TbPost {
 
     @Basic
     @Column(name = "date_post", nullable = true)
-    public Date getDate() {
-        return date;
+    public Date getDatePost() {
+        return datePost;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDatePost(Date datePost) {
+        this.datePost = datePost;
     }
 
     @Basic
@@ -129,27 +132,60 @@ public class TbPost {
         this.lattitude = lattitude;
     }
 
+    @Basic
+    @Column(name = "min_price", nullable = true, precision = 0)
+    public Double getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(Double minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    @Basic
+    @Column(name = "max_price", nullable = true, precision = 0)
+    public Double getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(Double maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    @Basic
+    @Column(name = "description", nullable = true, length = 255)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TbPost tbPost = (TbPost) o;
-        return Objects.equals(postId, tbPost.postId) &&
-                Objects.equals(name, tbPost.name) &&
-                Objects.equals(phoneContact, tbPost.phoneContact) &&
-                Objects.equals(numberPartner, tbPost.numberPartner) &&
-                Objects.equals(genderPartner, tbPost.genderPartner) &&
-                Objects.equals(date, tbPost.date) &&
-                Objects.equals(typeId, tbPost.typeId) &&
-                Objects.equals(userId, tbPost.userId) &&
-                Objects.equals(roomId, tbPost.roomId) &&
-                Objects.equals(longtitude, tbPost.longtitude) &&
-                Objects.equals(lattitude, tbPost.lattitude);
+        TbPost post = (TbPost) o;
+        return Objects.equals(postId, post.postId) &&
+                Objects.equals(name, post.name) &&
+                Objects.equals(phoneContact, post.phoneContact) &&
+                Objects.equals(numberPartner, post.numberPartner) &&
+                Objects.equals(genderPartner, post.genderPartner) &&
+                Objects.equals(datePost, post.datePost) &&
+                Objects.equals(typeId, post.typeId) &&
+                Objects.equals(userId, post.userId) &&
+                Objects.equals(roomId, post.roomId) &&
+                Objects.equals(longtitude, post.longtitude) &&
+                Objects.equals(lattitude, post.lattitude) &&
+                Objects.equals(minPrice, post.minPrice) &&
+                Objects.equals(maxPrice, post.maxPrice) &&
+                Objects.equals(description, post.description);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(postId, name, phoneContact, numberPartner, genderPartner, date, typeId, userId, roomId, longtitude, lattitude);
+        return Objects.hash(postId, name, phoneContact, numberPartner, genderPartner, datePost, typeId, userId, roomId, longtitude, lattitude, minPrice, maxPrice, description);
     }
 }

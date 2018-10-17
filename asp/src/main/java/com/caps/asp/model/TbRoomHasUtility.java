@@ -44,7 +44,7 @@ public class TbRoomHasUtility {
     }
 
     @Basic
-    @Column(name = "brand", nullable = true, length = 45)
+    @Column(name = "brand", nullable = true, length = 50)
     public String getBrand() {
         return brand;
     }
@@ -54,7 +54,7 @@ public class TbRoomHasUtility {
     }
 
     @Basic
-    @Column(name = "description", nullable = true, length = 45)
+    @Column(name = "description", nullable = true, length = 255)
     public String getDescription() {
         return description;
     }

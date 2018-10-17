@@ -2,7 +2,7 @@ package com.caps.asp.model.uimodel.response.post;
 
 import java.util.List;
 
-public class RoommatePostResponseModel {
+public class RoommatePostResponseModel extends BasePostResponeModel {
     private List<Integer> utilityIds;
     private double maxPrice;
     private List<Integer> districtIds;

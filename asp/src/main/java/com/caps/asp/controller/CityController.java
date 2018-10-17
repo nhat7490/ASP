@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -23,7 +25,14 @@ public class CityController {
     @GetMapping("/city")
     public ResponseEntity<List<TbCity>> getAllDistrict() {
         try {
-            return ResponseEntity.status(OK).body(cityService.findAll());
+            List<TbCity> cities = cityService.findAll();
+            Collections.sort(cities, new Comparator<TbCity>() {
+                @Override
+                public int compare(TbCity c1, TbCity c2) {
+                    return c1.getName().compareTo(c2.getName());
+                }
+            });
+            return ResponseEntity.status(OK).body(cities);
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }

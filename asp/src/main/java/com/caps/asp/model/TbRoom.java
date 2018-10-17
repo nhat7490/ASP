@@ -34,7 +34,7 @@ public class TbRoom {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 45)
+    @Column(name = "name", nullable = false, length = 50)
     public String getName() {
         return name;
     }
