@@ -9,7 +9,7 @@ import com.caps.asp.util.CalculateDistance;
 import com.caps.asp.service.PostHasDistrictService;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.UserService;
-import com.caps.asp.util.ResetPassword;
+//import com.caps.asp.util.ResetPassword;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -125,18 +125,18 @@ public class UserController {
             return ResponseEntity.status((NOT_FOUND)).build();
         }
     }
-
-    @GetMapping("/user/resetPassword/{email}")
-    public ResponseEntity resetPassword(@PathVariable String email) {
-        try {
-            TbUser user = userService.findByEmail(email);
-            ResetPassword resetPassword = new ResetPassword();
-            String newPassword = resetPassword.sendEmail(email);
-            user.setPassword(passwordEncoder.encode(newPassword));
-            userService.updateUserById(user);
-            return ResponseEntity.status(OK).build();
-        } catch (Exception e) {
-            return ResponseEntity.status((NOT_FOUND)).build();
-        }
-    }
+//
+//    @GetMapping("/user/resetPassword/{email}")
+//    public ResponseEntity resetPassword(@PathVariable String email) {
+//        try {
+//            TbUser user = userService.findByEmail(email);
+//            ResetPassword resetPassword = new ResetPassword();
+//            String newPassword = resetPassword.sendEmail(email);
+//            user.setPassword(passwordEncoder.encode(newPassword));
+//            userService.updateUserById(user);
+//            return ResponseEntity.status(OK).build();
+//        } catch (Exception e) {
+//            return ResponseEntity.status((NOT_FOUND)).build();
+//        }
+//    }
 }

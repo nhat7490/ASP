@@ -65,7 +65,10 @@ public class PostService {
         Pageable pageable = PageRequest.of(actualPage, items);
         return postRepository.findAllByTypeId(typeId, pageable);
     }
+    public List<TbPost> findAllByTypeId(int typeId){
+        return   postRepository.findAllByTypeId(typeId);
 
+    }
     public List<TbPost> search(Filter filter){
         return postRepository.findAll(filter);
     }

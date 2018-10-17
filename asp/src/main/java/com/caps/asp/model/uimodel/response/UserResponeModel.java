@@ -1,5 +1,7 @@
 package com.caps.asp.model.uimodel.response;
 
+import com.caps.asp.model.TbUser;
+
 import java.sql.Date;
 
 public class UserResponeModel {
@@ -12,7 +14,14 @@ public class UserResponeModel {
 
     public UserResponeModel() {
     }
-
+    public UserResponeModel(TbUser user){
+        this.userId = user.getUserId();
+        this.fullname = user.getFullname();
+        this.imageProfile = user.getImageProfile();
+        this.dob = user.getDob();
+        this.phone = user.getPhone();
+        this.gender = user.getGender();
+    }
     public UserResponeModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender) {
         this.userId = userId;
         this.fullname = fullname;

@@ -5,6 +5,8 @@ import com.caps.asp.repository.RoomHasUtilityRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class RoomHasUtilityService {
@@ -21,4 +23,5 @@ public class RoomHasUtilityService {
     public void deleteAllRoomHasUtilityByRoomId(int roomId){
         roomHasUtilityRepository.deleteAllByRoomId(roomId);
     }
+    public List<TbRoomHasUtility> findAllByRoomId(int roomId){return roomHasUtilityRepository.findAllByRoomId(roomId);}
 }

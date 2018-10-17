@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
+
 public interface PostRepository extends JpaRepository<TbPost, Integer>, JpaSpecificationExecutor<TbPost> {
     TbPost findByUserIdAndTypeId(int userId, int typeId);
 
@@ -16,5 +18,6 @@ public interface PostRepository extends JpaRepository<TbPost, Integer>, JpaSpeci
     Page<TbPost> findAllByUserId(int userId, Pageable pageable);
 
     Page<TbPost> findAllByTypeId(int typeId, Pageable pageable);
+    List<TbPost>  findAllByTypeId(int typeId);
 
 }

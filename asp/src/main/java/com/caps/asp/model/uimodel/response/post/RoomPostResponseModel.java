@@ -1,16 +1,17 @@
 package com.caps.asp.model.uimodel.response.post;
 
-import com.caps.asp.model.uimodel.request.UtilityRequestModel;
+import com.caps.asp.model.TbRoomHasUtility;
 import com.caps.asp.model.uimodel.response.UserResponeModel;
 
 import java.sql.Date;
 import java.util.List;
 
 //show room post detail
-public class RoomPostResponseModel extends BasePostResponeModel{
+public class RoomPostResponseModel extends BasePostResponeModel {
+    private String name;
     private Integer area;
     private String address;
-    private List<UtilityRequestModel> utilities;
+    private List<TbRoomHasUtility> utilities;
     private List<String> imageUrls;
     private Integer numberPartner;
     private Integer genderPartner;
@@ -18,9 +19,23 @@ public class RoomPostResponseModel extends BasePostResponeModel{
     public RoomPostResponseModel() {
     }
 
-
-    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice) {
+    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner) {
         super(postId, phoneContact, date, userResponeModel, isFavourite, minPrice);
+        this.name = name;
+        this.area = area;
+        this.address = address;
+        this.utilities = utilities;
+        this.imageUrls = imageUrls;
+        this.numberPartner = numberPartner;
+        this.genderPartner = genderPartner;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getArea() {
@@ -39,11 +54,11 @@ public class RoomPostResponseModel extends BasePostResponeModel{
         this.address = address;
     }
 
-    public List<UtilityRequestModel> getUtilities() {
+    public List<TbRoomHasUtility> getUtilities() {
         return utilities;
     }
 
-    public void setUtilities(List<UtilityRequestModel> utilities) {
+    public void setUtilities(List<TbRoomHasUtility> utilities) {
         this.utilities = utilities;
     }
 

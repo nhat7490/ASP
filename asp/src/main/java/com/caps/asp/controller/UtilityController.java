@@ -17,7 +17,7 @@ public class UtilityController {
         this.utilityService = utilityService;
     }
 
-    @GetMapping("/utiliti/getAll")
+    @GetMapping("/utilities/getAll")
     public ResponseEntity getAllUtilities() {
         return ResponseEntity.status(OK).body(utilityService.getAll());
     }

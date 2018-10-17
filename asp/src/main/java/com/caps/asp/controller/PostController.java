@@ -1,17 +1,14 @@
 package com.caps.asp.controller;
 
-import com.caps.asp.model.TbPost;
-import com.caps.asp.model.TbRoom;
-import com.caps.asp.model.TbRoomHasUser;
-import com.caps.asp.model.TbUser;
+import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.FilterArgumentModel;
 import com.caps.asp.model.uimodel.request.SearchRequestModel;
+import com.caps.asp.model.uimodel.request.UtilityRequestModel;
 import com.caps.asp.model.uimodel.request.post.RoomPostRequestModel;
 import com.caps.asp.model.uimodel.request.post.RoommatePostRequestModel;
-import com.caps.asp.service.PostService;
-import com.caps.asp.service.RoomHasUserService;
-import com.caps.asp.service.RoomService;
-import com.caps.asp.service.UserService;
+import com.caps.asp.model.uimodel.response.UserResponeModel;
+import com.caps.asp.model.uimodel.response.post.RoomPostResponseModel;
+import com.caps.asp.service.*;
 import com.caps.asp.service.filter.Filter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.caps.asp.constant.Constant.*;
@@ -30,12 +30,13 @@ public class PostController {
     public final RoomService roomService;
     public final UserService userService;
     public final RoomHasUserService roomHasUserService;
-
-    public PostController(PostService postService, RoomService roomService, UserService userService, RoomHasUserService roomHasUserService) {
+    public final RoomHasUtilityService roomHasUtilityService;
+    public PostController(PostService postService, RoomService roomService, UserService userService, RoomHasUserService roomHasUserService,RoomHasUtilityService roomHasUtilityService) {
         this.postService = postService;
         this.roomService = roomService;
         this.userService = userService;
         this.roomHasUserService = roomHasUserService;
+        this.roomHasUtilityService = roomHasUtilityService;
     }
 
     @GetMapping("/post/findByUserId/{userId}")
@@ -135,37 +136,77 @@ public class PostController {
 
     @PostMapping("/post/filter")
     public ResponseEntity getPostByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
-//        try {
+        try {
         Filter filter = new Filter();
-        if (filterArgumentModel.getSearchRequestModel().getDistricts().size() == 0
-                && filterArgumentModel.getSearchRequestModel().getUtilities().size() == 0
-                && filterArgumentModel.getSearchRequestModel().getGender().size() == 0
-                && filterArgumentModel.getSearchRequestModel().getPrice().size() == 0
-                && filterArgumentModel.getSearchRequestModel().getTypeId() == null) {
+        if (filterArgumentModel.getSearchRequestModel() == null) {
             filter.setCriteria(null);
         } else {
             filter.setCriteria(filterArgumentModel.getSearchRequestModel());
         }
 
         Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
-        return ResponseEntity.status(OK).body(posts.getContent().stream().distinct().collect(Collectors.toList()));
+        Page<RoomPostResponseModel> roomPostResponseModels  = posts.map(tbPost -> {
+            RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
 
-//        } catch (Exception e) {
-//            return ResponseEntity.status(NOT_FOUND).build();
-//        }
+            TbRoom room = roomService.findRoomById(tbPost.getRoomId());
+            List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
+            UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+            roomPostResponseModel.setName(tbPost.getName());
+            roomPostResponseModel.setPostId(tbPost.getPostId());
+            roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
+            roomPostResponseModel.setDate(tbPost.getDate());
+            roomPostResponseModel.setUserResponeModel(userResponeModel);
+            roomPostResponseModel.setFavourite(false);
+            roomPostResponseModel.setMinPrice(room.getPrice());//missing
+            roomPostResponseModel.setAddress(room.getAddress());
+            roomPostResponseModel.setArea(room.getArea());
+            roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
+            //missing
+            roomPostResponseModel.setImageUrls(Arrays.asList("http://gracehotel.com.au/sites/default/files/field/gallery/2018/08/5DM48071-HDR.jpg","http://gracehotel.com.au/sites/default/files/field/gallery/2018/08/5DM48071-HDR.jpg","http://gracehotel.com.au/sites/default/files/field/gallery/2018/08/5DM48071-HDR.jpg"));
+            roomPostResponseModel.setUtilities(roomHasUtilities);
+            roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
+            return roomPostResponseModel;
+        });
+
+        return ResponseEntity.status(OK).body(roomPostResponseModels);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
-    @GetMapping("/post/findByTypeId/{typeId}")
-    public ResponseEntity getPostByTypeId(@PathVariable int typeId,
-                                          @RequestParam(defaultValue = "1") String page) {
+    @GetMapping("/post/{typeId}")
+    public ResponseEntity getAll(@PathVariable int typeId) {
         try {
-            Page<TbPost> posts = postService.findAllByTypeId(Integer.parseInt(page), 10, typeId);
+            List<TbPost> tbPostList = postService.findAllByTypeId(typeId);
+            List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
+            tbPostList.forEach(tbPost -> {
+                RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
+
+                TbRoom room = roomService.findRoomById(tbPost.getRoomId());
+                List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
+                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                roomPostResponseModel.setName(tbPost.getName());
+                roomPostResponseModel.setPostId(tbPost.getPostId());
+                roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
+                roomPostResponseModel.setDate(tbPost.getDate());
+                roomPostResponseModel.setUserResponeModel(userResponeModel);
+                roomPostResponseModel.setFavourite(false);
+                roomPostResponseModel.setMinPrice(room.getPrice());//missing
+                roomPostResponseModel.setAddress(room.getAddress());
+                roomPostResponseModel.setArea(room.getArea());
+                roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
+                roomPostResponseModel.setImageUrls(Arrays.asList("http://gracehotel.com.au/sites/default/files/field/gallery/2018/08/5DM48071-HDR.jpg","http://gracehotel.com.au/sites/default/files/field/gallery/2018/08/5DM48071-HDR.jpg","http://gracehotel.com.au/sites/default/files/field/gallery/2018/08/5DM48071-HDR.jpg"));
+                roomPostResponseModel.setUtilities(roomHasUtilities);
+                roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
+                roomPostResponseModels.add(roomPostResponseModel);
+
+            });
             return ResponseEntity.status(OK)
-                    .body(posts.getContent());
+                    .body(roomPostResponseModels);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
 
 }
