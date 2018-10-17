@@ -26,12 +26,15 @@ class NewUtilityCVCell: UICollectionViewCell {
     var utilityCVCellType:UtilityCVCellType = .detail
     
     required init?(coder aDecoder: NSCoder) {
+        self.isSetSelected = false
         super.init(coder: aDecoder)
+        
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         lblTitle.font = .small
+        self.layer.backgroundColor = UIColor.white.cgColor
         lblTitle.textColor = .lightSubTitle
         imgvIcon.tintColor = .lightSubTitle
         self.layer.borderColor = UIColor.lightSubTitle.cgColor
@@ -40,16 +43,21 @@ class NewUtilityCVCell: UICollectionViewCell {
         imgvIcon.tintColor = .lightGray
     }
     
-    override var isSelected: Bool{
+    var isSetSelected: Bool{
         didSet{
-            switch utilityCVCellType {
-            case .detail:
-                break
-                //show alert to show detail here
-            case .interact:
-                //show alert to input detail here
-                break
-                
+            if isSetSelected{
+                self.layer.backgroundColor = UIColor.defaultBlue.cgColor
+                lblTitle.textColor = .white
+                imgvIcon.tintColor = .white
+                self.layer.borderWidth = 0
+                imgvIcon.tintColor = .white
+            }else{
+                self.layer.backgroundColor = UIColor.white.cgColor
+                lblTitle.textColor = .lightSubTitle
+                imgvIcon.tintColor = .lightSubTitle
+                self.layer.borderColor = UIColor.lightSubTitle.cgColor
+                self.layer.borderWidth = 1.0
+                imgvIcon.tintColor = .lightGray
             }
         }
     }

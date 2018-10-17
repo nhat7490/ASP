@@ -440,6 +440,9 @@ extension Double{
     var toString:String{
         return "\(self)"
     }
+    var cgFloat:CGFloat{
+        return CGFloat(self)
+    }
 }
 
 extension UITextField{
@@ -492,7 +495,7 @@ extension String{
         return predicate.evaluate(with: self)
     }
     func isValidPrice() -> Bool{
-        if let intValue = self.toInt() , (intValue >= Constants.MIN_PRICE && intValue <= Constants.MAX_PRICE){
+        if let value = self.toDouble() , (value >= Constants.MIN_PRICE && value <= Constants.MAX_PRICE){
             return true
         }else{
             return false
@@ -527,5 +530,8 @@ extension String{
     
     func toInt()->Int?{
         return Int(self)
+    }
+    func toDouble() ->Double?{
+        return Double(self)
     }
 }

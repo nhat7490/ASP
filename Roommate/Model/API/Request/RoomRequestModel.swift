@@ -10,7 +10,7 @@ import ObjectMapper
 import RealmSwift
 import ObjectMapper_Realm
 import Realm
-class NewRoomModel:BaseModel{
+class RoomRequestModel:BaseModel{
     @objc dynamic var roomId:Int = 0
     @objc dynamic var name:String?
     @objc dynamic var price:Double = 0.0
@@ -26,8 +26,8 @@ class NewRoomModel:BaseModel{
     @objc dynamic var districtId = 0
     @objc dynamic var longitude = 0.0
     @objc dynamic var latitude = 0.0
-    let utilities = List<UtilityModel>()
-    let imageUrls = List<String>()
+    var utilities = List<UtilityModel>()
+    var imageUrls = [String]()
     
     //MARK: ObjectMapper
     required init?(map: Map) {
@@ -42,7 +42,7 @@ class NewRoomModel:BaseModel{
         area <- map["area"]
         address <- map["address"]
         maxGuest <- map["maxGuest"]
-        dateCreated <- map["dateCreated"]
+        dateCreated <- (map["dateCreated"])
         currentNumber <- map["currentNumber"]
         roomDescription <- map["description"]
         status <- map["status"]
@@ -51,20 +51,8 @@ class NewRoomModel:BaseModel{
         districtId <- map["districtId"]
         longitude <- map["longitude"]
         latitude <- map["latitude"]
-        var utilities:[UtilityModel]?
-        utilities <- map["utilities"]
-        if let utilities = utilities{
-            utilities.forEach({ (utilityModel) in
-                self.utilities.append(utilityModel)
-            })
-        }
-        var imageUrls:[UtilityModel]?
+        self.utilities <- (map["utilities"],CustomListTransform<UtilityModel>())
         imageUrls <- map["imageUrls"]
-        if let imageUrls = imageUrls{
-            imageUrls.forEach({ (str) in
-                self.utilities.append(str)
-            })
-        }
     }
 //    
     override class func primaryKey() -> String? {

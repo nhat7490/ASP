@@ -109,11 +109,13 @@
 "PRICE" = "Giá";
 "AREA_TITLE" = "Diện tích";
 "MAX_NUMBER_OF_PERSON" = "Số người tối đa";
-
+"ALERT_TITLE" = "Thông báo";
+"INVALID_INFOR"="Vui lòng nhập đầy đủ thông tin hợp lệ";
 //MARK: CERoomVC
 "ROOM_INFOR_TITLE"="Thông tin phòng";
 "ROOM_NAME_TITLE"="Tên Phòng";
 "ROOM_ADDRESS_TITLE"="Địa chỉ";
+"ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT"="Địa chỉ: Yêu cầu chọn quận";
 "ROOM_AREA_TITLE"="Diện tích";
 "ROOM_PHONE_TITLE"="Số điện thoại";
 "ROOM_FIND_NUMBER_OF_PERSON_TITLE"="Số người cần tìm";

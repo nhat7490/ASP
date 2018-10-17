@@ -23,7 +23,7 @@ class APIConnection: NSObject {
             handler()
             return
         }
-        
+        print(apiRouter)
         Alamofire.request(apiRouter).responseArray { (response:DataResponse<[T]>) in
             //Fail to connect to server
             if let _ = response.error{

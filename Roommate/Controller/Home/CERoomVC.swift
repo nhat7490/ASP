@@ -13,7 +13,7 @@ import ObjectMapper
 import GooglePlaces
 import GoogleMaps
 import RealmSwift
-class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource,DropdownListViewDelegate{
+class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource,DropdownListViewDelegate,AlertControllerDelegate,UtilityInputVCDelegate{
     
     
     let scrollView:UIScrollView = {
@@ -99,8 +99,6 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         return bt
     }()
     
-    
-    
     var keyboardHeight:CGFloat?
     var tableViewHeightConstaint:NSLayoutConstraint?
     let address:[String] = []
@@ -110,8 +108,11 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     var images = ["https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?cs=srgb&dl=4k-wallpaper-background-beautiful-853199.jpg&fm=jpg","https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?cs=srgb&dl=4k-wallpaper-background-beautiful-853199.jpg&fm=jpg","https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?cs=srgb&dl=4k-wallpaper-background-beautiful-853199.jpg&fm=jpg","https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?cs=srgb&dl=4k-wallpaper-background-beautiful-853199.jpg&fm=jpg","https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?cs=srgb&dl=4k-wallpaper-background-beautiful-853199.jpg&fm=jpg"]
     
     var cERoomVCType:CERoomVCType = .create
-    var newRoomModel:NewRoomModel = NewRoomModel()
-    
+    var newRoomModel:RoomRequestModel = RoomRequestModel()
+    var cityName:String = ""
+    var districtName:String = ""
+    var selectedCity:CityModel?
+    var selectedDistrict:DistrictModel?
     var suggestAddress:[GMSAutocompletePrediction]?
     
     override func viewDidLoad() {
@@ -238,7 +239,6 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         }else{
             utilitiesView.utilities = Array(utilities!)
             descriptionsView.viewType = ViewType.cEForOwner
-            
         }
         
     }
@@ -293,13 +293,13 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         //                let popup = nav.popoverPresentationController
         //                popup?.delegate = self
         //                popup?.sourceView = view.collectionView.cellForItem(at: indexPath)?.contentView
-        
-        let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_UTILITY_INPUT, sbName: Constants.STORYBOARD_MAIN)
-        //                vc.view.backgroundColor = .red
+        let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_UTILITY_INPUT, sbName: Constants.STORYBOARD_MAIN) as! UtilityInputVC
+        vc.utilityModel = utilities![indexPath.row].copy(with: nil) as! UtilityModel
+        vc.indexPath = indexPath
         vc.view.frame.size = CGSize(width: 242,
                                     height:  200)
+        vc.delegate = self
         vc.definesPresentationContext = true
-        
         vc.modalTransitionStyle  = .crossDissolve
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: true, completion: nil)
@@ -326,27 +326,27 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     func newInputViewDelegate(newInputView view: NewInputView, shouldChangeCharactersTo string: String) {
         switch view {
         case nameInputView:
-            guard let text = view.text else{
-                return
-            }
-            newRoomModel.name = text
+            newRoomModel.name = string
         case priceInputView:
-            guard let text = view.text, let price = Double(text) else{
+            guard let price = Double(string) else{
                 return
             }
             newRoomModel.price = price
         case areaInputView:
-            guard let text = view.text, let int = Int(text) else{
+            guard let int = Int(string) else{
                 return
             }
             newRoomModel.area = int
         case addressInputView:
-            search(text: string)
-            guard let text = view.text else{
+            if newRoomModel.districtId == 0{
+                addressInputView.setupUI(placeholder: "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT", title: "ROOM_ADDRESS_TITLE")
                 return
+            }else{
+                addressInputView.setupUI(placeholder: "ROOM_ADDRESS_TITLE", title: "ROOM_ADDRESS_TITLE")
+                search(text: string)
+                newRoomModel.address = string
+                view.layoutIfNeeded()
             }
-            newRoomModel.address = text
-            view.layoutIfNeeded()
         default:
             break
             
@@ -354,15 +354,89 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     }
     func dropdownListViewDelegate(view dropdownListView: DropdownListView, onClickBtnChangeSelect btnSelect: UIButton) {
         if dropdownListView == cityDropdownListView{
-            let alert = AlertController.showAlertList(withTitle: "LIST_CITY_TITLE".localized, andMessage: nil, alertStyle: .alert, forViewController: self, data: districts?.map({ (district) -> String     in
-                district.name!
-            }), lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "OK".localized, lhsButtonHandler: nil, rhsButtonHandler: nil)
-            print(alert.tableView.indexPathsForSelectedRows)
+            let alert = AlertController.showAlertList(withTitle: "LIST_DISTRICT_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .city, forViewController: self, data: cities?.map({ (city) -> String     in
+                city.name!
+            }), rhsButtonTitle: "OK".localized, rhsButtonHandler: {(action) in
+                if self.newRoomModel.cityId != 0{
+                    self.cityDropdownListView.lblSelectTitle.text = self.cityName
+                    self.districtDropdownListView.lblSelectTitle.text  = "LIST_DISTRICT_TITLE".localized
+                }else{
+                    self.cityDropdownListView.lblSelectTitle.text  = "LIST_CITY_TITLE".localized
+                }
+            })
+            alert.delegate = self
+
         }else{
             
+            if newRoomModel.cityId != 0{
+                let alert = AlertController.showAlertList(withTitle: "LIST_CITY_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .district, forViewController: self, data: districts?.filter({ (district) -> Bool in
+                    district.cityId == self.newRoomModel.cityId
+                }).map({ (district) -> String in
+                    district.name!
+                }), rhsButtonTitle: "OK".localized, rhsButtonHandler:{(action) in
+                    if self.newRoomModel.districtId != 0{
+                        self.districtDropdownListView.lblSelectTitle.text = self.districtName
+                    }else{
+                        self.districtDropdownListView.lblSelectTitle.text  = "LIST_DISTRICT_TITLE".localized
+                    }
+                })
+                alert.delegate = self
+            }
+            
+        }
+        self.addressInputView.text = ""
+    }
+    //MARK: UIAlertControllerDelegate
+    func alertControllerDelegate(ofController: UIAlertController,withAlertType type:AlertType, atIndexPaths indexs: [IndexPath]?) {
+        guard let indexs = indexs else {
+            return
+        }
+        if cERoomVCType == CERoomVCType.create{
+            if type == AlertType.city{
+                guard let city = cities?[(indexs.first?.row)!]  else{
+                    return
+                }
+                newRoomModel.cityId = city.cityId
+                cityName = city.name!
+                newRoomModel.districtId = 0
+                addressInputView.isSelectedFromSuggest = false
+            }else if type == AlertType.district{
+                guard let districtOfCity = districts?.filter({ (district) -> Bool in
+                    district.cityId == self.newRoomModel.cityId
+                }) else{
+                    return
+                }
+                districtOfCity.forEach { (d) in
+                    print(d.name)
+                    print(d.districtId)
+                    print(d.cityId)
+                }
+                let district = Array(districtOfCity)[(indexs.first?.row)!]
+                print(districtOfCity.first?.name)
+                print(district.name)
+                print(districtOfCity[10].name)
+                addressInputView.isSelectedFromSuggest = false
+                newRoomModel.districtId = district.districtId
+                self.districtName = district.name!
+//                districtDropdownListView.lblSelectTitle.text = district.name
+                
+            }
         }
     }
-    
+    //MARK: UtilityInputVCDelegate
+    func utilityInputVCDelegate(onCompletedInputUtility utility:UtilityModel,atIndexPath indexPath:IndexPath?) {
+        newRoomModel.utilities.append(utility)
+        utilitiesView.setState(isSelected: true, atIndexPath: indexPath!)
+    }
+    func utilityInputVCDelegate(onDeletedInputUtility utility:UtilityModel,atIndexPath indexPath:IndexPath?){
+        guard let index = newRoomModel.utilities.index(where: { (record) -> Bool in
+            utility.utilityId.value == record.utilityId.value
+        }) else {
+            return
+        }
+        newRoomModel.utilities.remove(at: index)
+        utilitiesView.setState(isSelected: false, atIndexPath: indexPath!)
+    }
     
     //MARK: UITableview Delegate and Datasource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -383,29 +457,35 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        addressInputView.isSelectedFromSuggest = true
-        addressInputView.tfInput.text = suggestAddress?[indexPath.row].attributedFullText.string
-        print("Did selected text : \(suggestAddress?[indexPath.row])")
-        GMSPlacesClient.shared().lookUpPlaceID((suggestAddress?[indexPath.row].placeID)!, callback: { (place, error) in
-            if let error = error {
-                print("Autocomplete error \(error)")
-                return
-            }else{
-                print("Place Component:")
-                print(place?.coordinate.longitude)
-                print(place?.coordinate.latitude)
-                place?.addressComponents?.forEach({ (component) in
-                    print(component.type)
-                    print(component.name)
-                })
-            }
-        })
-        suggestAddress?.removeAll()
-        reloadTableViewUI()
+        if (suggestAddress?.count)! > 0{
+            addressInputView.isSelectedFromSuggest = true
+            addressInputView.tfInput.text = suggestAddress?[indexPath.row].attributedFullText.string
+            print("Did selected text : \(suggestAddress?[indexPath.row])")
+            GMSPlacesClient.shared().lookUpPlaceID((suggestAddress?[indexPath.row].placeID)!, callback: { (place, error) in
+                if let error = error {
+                    print("Autocomplete error \(error)")
+                    return
+                }else{
+                    self.newRoomModel.address = self.suggestAddress?[indexPath.row].attributedFullText.string
+                    self.newRoomModel.latitude = place!.coordinate.latitude
+                    self.newRoomModel.longitude = place!.coordinate.longitude
+                    print("Place Component:")
+                    print(place?.coordinate.longitude)
+                    print(place?.coordinate.latitude)
+                    place?.addressComponents?.forEach({ (component) in
+                        print(component.type)
+                        print(component.name)
+                    })
+                }
+            })
+            //        suggestAddress?.removeAll()
+            reloadTableViewUI()
+        }
+        
     }
     
     func reloadTableViewUI(){
-        if suggestAddress!.count>0{
+        if !addressInputView.isSelectedFromSuggest{
             tableViewHeightConstaint?.constant = 150.0
             tableView.reloadData()
         }else{
@@ -420,49 +500,57 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
 //        newRoomModel.price = 5000_000
 //        newRoomModel.area = 25
 //        newRoomModel.cityId = 45
-//        newRoomModel.userId = 122
+        newRoomModel.userId = 122
 //        newRoomModel.districtId = 493
 //        newRoomModel.utilities.removeAll()
 //        utilities?.forEach({ (utilityModel) in
 //            newRoomModel.utilities.append( utilityModel)
 //        })
-//        newRoomModel.imageUrls.removeAll()
-//        images.forEach { (str) in
-//            newRoomModel.imageUrls.append(str)
-//        }
+        newRoomModel.imageUrls.removeAll()
+        images.forEach { (str) in
+            newRoomModel.imageUrls.append(str)
+        }
+        print(newRoomModel.toJSONString())
 //        newRoomModel.roomDescription = "Nothing"
 //        newRoomModel.maxGuest = 5
 //        newRoomModel.address = "123 Nguyễn Đình Chiểu Phường 6 Quận 3 Hồ Chí Minh, Việt Nam"
 //        newRoomModel.longitude = 10.7773007
 //        newRoomModel.latitude = 106.6872542
-        Alamofire.request(APIRouter.createRoom(model: newRoomModel)).response { (response) in
-            self.hideIndicator()
-            print(response.response?.statusCode)
+        if isValid(){
+            Alamofire.request(APIRouter.createRoom(model: newRoomModel)).response { (response) in
+                self.hideIndicator()
+                print(response.response?.statusCode)
+            }
+        }else{
+            hideIndicator()
+            AlertController.showAlertInfor(withTitle: "ALERT_TITLE".localized, forMessage: "INVALID_INFOR".localized, inViewController: self)
         }
+        
         
     }
     
     //MARK: Custom method
     func search(text:String) {
         
-        // Set bounds to inner viet nam.
-        //        let neBoundsCorner = CLLocationCoordinate2D(latitude: 15.6275655,
-        //                                                    longitude: 96.8441401)
-        //        let swBoundsCorner = CLLocationCoordinate2D(latitude: 15.6275655,
-        //                                                    longitude: 96.8441401)
-        //        let bounds = GMSCoordinateBounds(coordinate: neBoundsCorner,
-        //                                         coordinate: swBoundsCorner)
+////         Set bounds to inner viet nam.
+//                let neBoundsCorner = CLLocationCoordinate2D(latitude: 15.6275655,
+//                                                            longitude: 96.8441401)
+//                let swBoundsCorner = CLLocationCoordinate2D(latitude: 15.6275655,
+//                                                            longitude: 96.8441401)
+//                let bounds = GMSCoordinateBounds(coordinate: neBoundsCorner,
+//                                                 coordinate: swBoundsCorner)
         
         let filter = GMSAutocompleteFilter()
         filter.type = .address
         filter.country = "VN"
-        //        getCoordinateBounds(latitude: 10.7792897, longitude: 106.6635715,distance:0)
-        GMSPlacesClient.shared().autocompleteQuery(text, bounds: nil , filter: filter, callback: {(results, error) -> Void in
+        
+        GMSPlacesClient.shared().autocompleteQuery(text, bounds: getCoordinateBounds(latitude: newRoomModel.latitude, longitude: newRoomModel.longitude,distance:1) , filter: filter, callback: {(results, error) -> Void in
             if let results = results , results.count>0{
                 self.suggestAddress?.removeAll()
                 results.forEach({ (result) in
-                    print("Location:\(result.attributedFullText.string.lowercased().contains("quận 3"))")
-                    if result.attributedFullText.string.lowercased().contains("quận 3"),result.attributedFullText.string.lowercased().contains("hồ chí minh".lowercased()){
+                    print(result.attributedFullText.string)
+                    print("Location:\(result.attributedFullText.string.lowercased().contains(self.districtName))")
+                    if result.attributedFullText.string.lowercased().contains(self.districtName.lowercased()),result.attributedFullText.string.lowercased().contains(self.cityName.lowercased()){
                         self.suggestAddress?.append(result)
                         print("Add :\(result.attributedFullText.string)")
                     }
@@ -486,5 +574,19 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         
     }
     //    func isValidInformation
-    
+    func isValid()->Bool{
+        print("Valid:")
+        print(addressInputView.isSelectedFromSuggest)
+        print(newRoomModel.name!.isValidName())
+        print(newRoomModel.price.toString.isValidPrice())
+        print(newRoomModel.area.toString.isValidArea())
+        print(newRoomModel.cityId != 0)
+        print(newRoomModel.districtId != 0)
+        print(addressInputView.isSelectedFromSuggest)
+        if addressInputView.isSelectedFromSuggest , newRoomModel.name!.isValidName() , newRoomModel.price.toString.isValidPrice(),newRoomModel.area.toString.isValidArea(),newRoomModel.cityId != 0 , newRoomModel.districtId != 0,newRoomModel.longitude != 0,newRoomModel.latitude != 0 {
+            
+            return true
+        }
+        return false
+    }
 }

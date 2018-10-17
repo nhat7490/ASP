@@ -11,15 +11,16 @@ import UIKit
 class AllVC:BaseVC,UICollectionViewDataSource,
     UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,
     UITableViewDataSource,UITableViewDelegate,
-RoomCVCellDelegate,RoommateCVCellDelegate{
+NewRoomCVCellDelegate,RoommateCVCellDelegate{
     
     //MARK: Data for UICollectionView And UITableView
-    var roommates = [RoommateModel(id: 1, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice:  500_000, maxPrice: 1_000_000_000, location:["Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4"], city: "HCM",isBookmark:true),
-                     RoommateModel(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
-                     RoommateModel(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
-                     RoommateModel(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true)]
-    var rooms:[Room] = []
-//        [Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 1,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false),Room(id:1,numberPerson: 3,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 2,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:4,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false)]
+    var roommates:[RoommateModel] = []
+    //        [RoommateModel(id: 1, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice:  500_000, maxPrice: 1_000_000_000, location:["Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4","Quan 3","Quan 4","Quan 4","Quan 4","Quan 4","Quan 4"], city: "HCM",isBookmark:true),
+    //                     RoommateModel(id: 2, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
+    //                     RoommateModel(id: 3, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true),
+    //                     RoommateModel(id: 4, user: User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1), minPrice: 500_000, maxPrice: 1_000_000_000, location: ["Quan 3","Quan 4"], city: "HCM",isBookmark:true)]
+    var rooms:[RoomPostResponseModel] = []
+    //        [Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:1,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 1,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false),Room(id:1,numberPerson: 3,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 2,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: true),Room(id:4,numberPerson: 2,name: "Phòng ở quận tân bình gần sân bay tân sơn nhất",price: 8000_000,city: "HCM",gender: 3,location: "147 Hoa Lan, P. 2, Quận Phú Nhuận, TP. HCM",isBookMark: true,isCertificate: false)]
     let orders = [
         OrderType.newest:"NEWEST",
         OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
@@ -98,11 +99,15 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         setupDataAndDelegate()
         
     }
-
+    
     //MARK: Setup UI
     func setupUI(){
         view.backgroundColor = .white
         automaticallyAdjustsScrollViewInsets = false
+        //        let statusBarHeight = UIApplication.shared.statusBarFrame.size.height;
+        //        let navigationBarHeight = navigationController?.navigationBar.frame.size.height;
+        let tabBarHeight = self.tabBarController?.tabBar.frame.size.height;
+        let adjustForTabbarInsets = UIEdgeInsets(top: 0,left: 0,bottom: tabBarHeight!,right: 0)
         navigationController?.navigationBar.backgroundColor = .white
         //For tabbar
         tabBarItem = UITabBarItem(title: allVCType == .all ? "ALL_VC".localized : "BOOKMARK_VC".localized, image: UIImage(named: "icons8-home-page-51")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "icons8-home-page-50"))
@@ -156,7 +161,12 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         _ = lblSelectTitle.anchor(btnOrderBy.topAnchor,btnOrderBy.leftAnchor,btnOrderBy.bottomAnchor,imageView.leftAnchor,UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
         
         view.addSubview(collectionView)
-        _ = collectionView.anchorTopLeft(orderByView.bottomAnchor, view.leftAnchor,0,Constants.MARGIN_5*3,view.frame.width-Constants.MARGIN_5*6, view.frame.height-orderByViewHeight)
+        if #available(iOS 11.0, *) {
+            _ = collectionView.anchor(orderByView.bottomAnchor, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor)
+        } else {
+            // Fallback on earlier versions
+            _ = collectionView.anchor(orderByView.bottomAnchor, view.leftAnchor, bottomLayoutGuide.topAnchor, view.rightAnchor)
+        }
         
         view.bringSubview(toFront: tableView)
         tableHeightLayoutConstraint = tableView.anchorTopRight(orderByView.bottomAnchor, btnOrderBy.rightAnchor, 150.0, 1)[3]
@@ -167,62 +177,54 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     func setupDataAndDelegate(){
         //Event for BtnOrderBy
         btnOrderBy.addTarget(self, action: #selector(onClickBtnOrder), for: .touchUpInside)
-        
+        showIndicator()
         
         //Register delegate , datasource & cell collectionview
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(RoommateCVCell.self, forCellWithReuseIdentifier: Constants.CELL_ROOMMATECV)
-        collectionView.register(RoomCVCell.self, forCellWithReuseIdentifier: Constants.CELL_ROOMCV)
+        collectionView.register(UINib(nibName: Constants.CELL_NEWROOMCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_NEWROOMCV)
         
         //Register delegate , datasource & cell tableview
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(OrderTVCell.self, forCellReuseIdentifier: Constants.CELL_ORDERTV)
         
-        //Request Data
-//        if NetworkStatus.isConnected(){
-//            showIndicator()
-//            Alamofire.request(APIRouter.login(username: username, password: password)).responseObject { (response:DataResponse<List<RoomModel>>) in
-//                self.indicator.stopAnimating()
-//                self.indicator.removeFromSuperview()
-//                UIApplication.shared.endIgnoringInteractionEvents()
-//                //Connected server fail
-//                if response.response == nil{
-//                    print("FAILURE:\(response.result.value)")
-//                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .SEVER_NOT_RESPONSE)
-//                }else{
-//                    //Success connected with response
-//                    //Success mapping response to usermodel
-//                    let statusCode:HTTPStatusCode = HTTPStatusCode(rawValue: response.response!.statusCode)!
-//                    if response.result.isSuccess{
-//                        if statusCode == .OK{
-//                            guard let user = response.result.value else{
-//                                APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-//                                return
-//                            }
-//                            _ = DBManager.shared.addUser(user: user)
-//                            let appdelegate = UIApplication.shared.delegate as! AppDelegate
-//                            appdelegate.window!.rootViewController = self.mainTabBarVC
-//                        }else if statusCode == .Forbidden {
-//                            APIResponseAlert.apiResponseError(controller: self, type: .invalidPassword)
-//                            print("Forbidden")
-//                        }
-//                        //Fail to convert response to Usermodel
-//                    }else if response.result.isFailure{
-//                        if statusCode == .NotFound{
-//                            //Error
-//                            print("FAILURE:\(response.result.value)")
-//                            APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidUsername)
-//                        }
-//                    }
-//                }
-//            }
-//        }else{
-//            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-//        }
+        requestRoom(page: 1)
+        
+        
     }
-    
+    func  requestRoom(page:Int,offset:Int=15){
+        self.requestArray(apiRouter: APIRouter.allRoom(), returnType: RoomPostResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            if error == .SERVER_NOT_RESPONSE {
+                //                self.group.leave()
+                DispatchQueue.main.async {
+                    self.hideIndicator()
+                }
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+            }else if error == .PARSE_RESPONSE_FAIL{
+                //404
+                DispatchQueue.main.async {
+                    self.hideIndicator()
+                }
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+            }else{
+                //200
+                if statusCode == .OK{
+                    guard let values = values else{
+                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+                        //                        self.group.leave()
+                        return
+                    }
+                    self.rooms = values
+                    DispatchQueue.main.async {
+                        self.hideIndicator()
+                        self.collectionView.reloadData()
+                    }
+                }
+            }
+        })
+    }
     //MARK: UICollectionView DataSourse and Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if segmentControl.selectedSegmentIndex == 0{
@@ -235,9 +237,14 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if segmentControl.selectedSegmentIndex == 0{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMCV, for: indexPath) as! RoomCVCell
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMCV, for: indexPath) as! RoomCVCell
+//            cell.delegate = self
+//            cell.setData(room: rooms[indexPath.row], indexPath: indexPath,isEvenCell:indexPath.row%2==0)
+//            return cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWROOMCV, for: indexPath) as! NewRoomCVCell
             cell.delegate = self
-            cell.setData(room: rooms[indexPath.row], indexPath: indexPath,isEvenCell:indexPath.row%2==0)
+            cell.room = rooms[indexPath.row]
+            cell.indexPath = indexPath
             return cell
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMMATECV, for: indexPath) as! RoommateCVCell
@@ -249,22 +256,22 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if segmentControl.selectedSegmentIndex == 0{
-            let vc = RoomDetailVC()
-            vc.viewType = ViewType.detailForMember
-            navigationController?.pushViewController(vc, animated: true)
-        }else{
-            let vc = RoomDetailVC()
-            vc.viewType = ViewType.detailForMember
-            navigationController?.pushViewController(vc, animated: true)
-        }
+        //        if segmentControl.selectedSegmentIndex == 0{
+        //            let vc = RoomDetailVC()
+        //            vc.viewType = ViewType.detailForMember
+        //            navigationController?.pushViewController(vc, animated: true)
+        //        }else{
+        //            let vc = RoomDetailVC()
+        //            vc.viewType = ViewType.detailForMember
+        //            navigationController?.pushViewController(vc, animated: true)
+        //        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if segmentControl.selectedSegmentIndex == 0{
-            return CGSize(width: collectionView.frame.width/2, height: 240)
+            return CGSize(width: collectionView.frame.width/2, height: Constants.HEIGHT_CELL_NEWROOMCV.cgFloat)
         }else{
-            return CGSize(width: collectionView.frame.width, height: 120)
+            return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_NEWROOMCV.cgFloat)
         }
     }
     
@@ -329,16 +336,16 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     
     
     
-    func roomCVCellDelegate(cell: RoomCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
+    func newRoomCVCellDelegate(cell: NewRoomCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
         guard let row = indexPath?.row else{
             return
         }
         
         let room = rooms[row]
         if allVCType == .all{
-            room.isBookMark =  room.isBookMark == true ? false : true
+            room.favourite =  room.favourite! == true ? false : true
         }else if allVCType == .bookmark{
-            room.isBookMark =  false//for api
+            room.favourite =  false//for api
             rooms.remove(at: row)
         }
         collectionView.reloadData()

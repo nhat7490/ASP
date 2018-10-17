@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://192.168.1.47:8080/"
+    static let BASE_URL_API = "http://192.168.1.91:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //    static let BASE_URL = "https://asp-backend.herokuapp.com/"
     
@@ -45,6 +45,7 @@ class Constants{
     static let CELL_NOTIFICATIONCV = "NotificationCVCell"
     static let CELL_ROOMMATECV = "RoommateCVCell"
     static let CELL_ROOMCV = "RoomCVCell"
+    static let CELL_NEWROOMCV = "NewRoomCVCell"
     static let CELL_ORDERTV = "OrderTVCell"
     static let CELL_NEWUTILITYCV = "NewUtilityCVCell"
     static let CELL_UTILITYCV = "UtilityCVCell"
@@ -84,6 +85,7 @@ class Constants{
     static let HEIGHT_VIEW_DROPDOWN_LIST:Double = 81.0
     static let HEIGHT_VIEW_SLIDER:Double = 90.0
     static let HEIGHT_SPACE:Double = 20.0
+    static let HEIGHT_CELL_NEWROOMCV:Double = 230
     
     //MARK: AlertViewVC
     static let POPUP_SELECT_TABLE_MAX_HEIGHT:Double = 400
@@ -97,8 +99,8 @@ class Constants{
     static let HEIGHT_ROOM_INFOR_TITLE:Double = 30.0
     static let MAX_MEMBER:Int = 10
     static let MIN_MEMBER:Int = 0
-    static let MAX_PRICE:Int = 50_000_000
-    static let MIN_PRICE:Int = 100_000
+    static let MAX_PRICE:Double = 50_000_000.0
+    static let MIN_PRICE:Double = 100_000.0
     static let MAX_QUANTITY:Int = 20
     static let MIN_QUANTITY:Int = 1
     static let MAX_AREA:Int = 1_000

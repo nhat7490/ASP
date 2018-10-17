@@ -133,3 +133,6 @@ enum HTTPStatusCode: Int {
 enum APIResponseAlertType{
     case invalidPassword,invalidUsername,internalServerError
 }
+enum AlertType{
+    case normal,city,district
+}

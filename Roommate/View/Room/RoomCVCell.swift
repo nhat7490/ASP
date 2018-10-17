@@ -14,7 +14,7 @@ protocol RoomCVCellDelegate:class {
 
 class RoomCVCell:UICollectionViewCell{
     //MARK: Var for Data & Delegate
-    var room : Room?
+    var room : RoomPostResponseModel?
     var indexPath:IndexPath?
     weak var delegate:RoomCVCellDelegate?
     
@@ -170,19 +170,19 @@ class RoomCVCell:UICollectionViewCell{
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setData(room:Room,indexPath:IndexPath,isEvenCell:Bool)  {
+    func setData(room:RoomPostResponseModel,indexPath:IndexPath,isEvenCell:Bool)  {
         self.room = room
         self.indexPath = indexPath
         imgvAvatar.image = UIImage(named: "room")
-        setBookMark(isBookMark: room.isBookMark)
-        imgvCertificate.image = room.isCertificate ? UIImage(named: "certificated") : UIImage(named: "certificate")
-        lblMaxNumberOfPerson.text = room.gender == 1 ?
-            String(format: "NUMBER_OF_PERSON".localized,room.numberPerson,"MALE".localized) :
-            room.gender == 2 ? String(format: "NUMBER_OF_PERSON".localized,room.numberPerson,"FEMALE".localized) :
-            String(format: "NUMBER_OF_PERSON".localized,room.numberPerson,"\("MALE".localized)/\("FEMALE".localized)")
+        setBookMark(isBookMark: room.favourite!)
+        imgvCertificate.image =  UIImage(named: "certificated")
+        lblMaxNumberOfPerson.text = room.genderPartner == 1 ?
+            String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"MALE".localized) :
+            room.genderPartner == 2 ? String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"FEMALE".localized) :
+            String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"\("MALE".localized)/\("FEMALE".localized)")
         lblRoomName.text = room.name
-        lblPrice.text = String(format: "PRICE_OF_ROOM".localized,room.price,"PERSON".localized)
-        lblLocation.text = room.location
+        lblPrice.text = String(format: "PRICE_OF_ROOM".localized,room.minPrice!,"PERSON".localized)
+        lblLocation.text = room.address
         if !isEvenCell{
             mainConstraints?[1].constant = 1.5*Constants.MARGIN_5
         }else{

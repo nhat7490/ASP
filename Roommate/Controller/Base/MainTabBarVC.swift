@@ -16,7 +16,7 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        checkInitData()
+//        checkInitData()
     }
     func setupUI() {
         self.tabBar.backgroundColor = .white
@@ -40,6 +40,10 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
     func initData(){
         self.showIndicator()
         
+    }
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        view.layoutIfNeeded()
+        return true
     }
     
 }

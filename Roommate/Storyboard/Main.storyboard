@@ -549,7 +549,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lh7-N3-j2n" customClass="UtilityInputView" customModule="Roommate" customModuleProvider="target">
-                                <rect key="frame" x="86" y="178" width="242" height="400"/>
+                                <rect key="frame" x="86" y="213" width="242" height="330"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ozF-G4-3NG" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
                                         <rect key="frame" x="0.0" y="50" width="242" height="50"/>
@@ -619,7 +619,7 @@
                                 <constraints>
                                     <constraint firstItem="ozF-G4-3NG" firstAttribute="leading" secondItem="snv-Su-dZn" secondAttribute="leading" id="1eg-9J-Bqf"/>
                                     <constraint firstItem="snv-Su-dZn" firstAttribute="trailing" secondItem="ppy-FY-XUH" secondAttribute="trailing" id="26n-80-cWP"/>
-                                    <constraint firstAttribute="height" constant="400" id="2c1-oo-Ke7"/>
+                                    <constraint firstAttribute="height" constant="330" id="2c1-oo-Ke7"/>
                                     <constraint firstItem="PLW-fv-be2" firstAttribute="top" secondItem="JM2-YM-FFD" secondAttribute="bottom" id="4G0-rH-Srt"/>
                                     <constraint firstItem="FNg-Oj-nsa" firstAttribute="leading" secondItem="PLW-fv-be2" secondAttribute="trailing" id="5Ec-Zl-wzn"/>
                                     <constraint firstItem="PLW-fv-be2" firstAttribute="leading" secondItem="snv-Su-dZn" secondAttribute="leading" id="ASU-H8-Dna"/>
@@ -650,7 +650,7 @@
                                 </connections>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="0.14902611301369864" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="lh7-N3-j2n" firstAttribute="centerX" secondItem="MtT-Ia-m9u" secondAttribute="centerX" id="umk-kl-dzf"/>
                             <constraint firstItem="lh7-N3-j2n" firstAttribute="centerY" secondItem="MtT-Ia-m9u" secondAttribute="centerY" id="yJv-iZ-T7y"/>

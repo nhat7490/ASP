@@ -9,7 +9,8 @@
 import UIKit
 import SkyFloatingLabelTextField
 protocol UtilityInputVCDelegate:class{
-    func utilityInputVCDelegate(onCompletedInputUtility utility:UtilityModel)
+    func utilityInputVCDelegate(onCompletedInputUtility utility:UtilityModel,atIndexPath indexPath:IndexPath?)
+    func utilityInputVCDelegate(onDeletedInputUtility utility:UtilityModel,atIndexPath indexPath:IndexPath?)
 }
 class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     @IBOutlet weak var tfBrand: SkyFloatingLabelTextField!
@@ -20,26 +21,32 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblDescription: UILabel!
     var utilityModel = UtilityModel()
-    
+    var indexPath:IndexPath?
     var delegate:UtilityInputVCDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
+//        view.backgroundColor = .clear
+        lblTitle.textAlignment = .center
         lblTitle.text = utilityModel.name
         lblDescription.text = "DESCRIPTION".localized
         setupTFUI(tfBrand,placeholder: "BRAND_PLACE_HOLDER", title: "BRAND_PLACE_HOLDER")
         setupTFUI(tfQuantity,placeholder: "QUANTITY_PLACE_HOLDER", title: "QUANTITY_PLACE_HOLDER",keyboardType:UIKeyboardType.numberPad)
-        tfQuantity.text =  0.toString
-        tvDescription.text = "DESCRIPTION_PLACE_HOLDER".localized
-        tvDescription.textColor = .lightGray
+
+        tvDescription.textColor = .black
         tvDescription.addToobarButton()
+        tvDescription.layer.borderWidth = 1
+        tvDescription.layer.borderColor = UIColor.lightGray.cgColor
         tvDescription.delegate = self
         tfBrand.delegate = self
         tfQuantity.delegate = self
-        tvDescription.delegate = self
         btnLeft.setTitle("CANCEL".localized, for: .normal)
         btnRight.setTitle("OK".localized, for: .normal)
+        
+        
+        tfBrand.text = utilityModel.brand
+        tfQuantity.text =  utilityModel.quantity.toString
+        tvDescription.text = utilityModel.utilityDescription
         
     }
 
@@ -78,7 +85,7 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
                 }
                 if updatedString.isValidQuantity(){
                     tfQuantity.errorMessage = ""
-                    utilityModel.brand = updatedString
+                    utilityModel.quantity = updatedString.toInt()!
                 }else{
                     tfQuantity.errorMessage = "ERROR_TYPE_QUANTITY".localized
                 }
@@ -89,19 +96,30 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if let updatedString = (textView.text as NSString?)?.replacingCharacters(in: range, with: text){
             if updatedString.count > Constants.MAX_LENGHT_DESCRIPTION{
+                textView.text = text
                 return false
             }
             utilityModel.utilityDescription = updatedString
         }
         return true
+//        let currentText = textView.text ?? ""
+//        guard let stringRange = Range(range, in: currentText) else { return false }
+//
+//        let changedText = currentText.replacingCharacters(in: stringRange, with: text)
+//        if changedText.count > Constants.MAX_LENGHT_DESCRIPTION{
+//            return false
+//        }
+//        utilityModel.utilityDescription = changedText
+//        return true
     }
     
     @IBAction func onclickBtnLeft(_ sender: Any) {
+        self.delegate?.utilityInputVCDelegate(onDeletedInputUtility: utilityModel,atIndexPath:indexPath)
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func onclickBtnRight(_ sender: Any) {
-        self.delegate?.utilityInputVCDelegate(onCompletedInputUtility: utilityModel)
+        self.delegate?.utilityInputVCDelegate(onCompletedInputUtility: utilityModel,atIndexPath:indexPath)
         self.dismiss(animated: true, completion: nil)
     }
 }

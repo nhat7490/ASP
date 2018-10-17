@@ -5,7 +5,7 @@
 
 import Foundation
 import ObjectMapper
-class BaseRoomRequestModel {
+class BaseRoomRequestModel :Mappable{
     
     var roomId:Int?
     var name:String!

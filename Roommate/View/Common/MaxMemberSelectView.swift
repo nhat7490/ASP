@@ -32,7 +32,7 @@ class MaxMemberSelectView: UIView {
         lblTitle.text = "MAX_NUMBER_OF_PERSON".localized
         lblTitle.font = .smallTitle
         
-        lblContent.text = "0"
+        lblContent.text = "1"
         lblContent.font = .boldSmall
         
         btnSub.setImage(UIImage(named: "substract"), for: .normal)

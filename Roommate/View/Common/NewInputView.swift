@@ -39,7 +39,7 @@ class NewInputView: UIView,UITextFieldDelegate {
                 setupUI(placeholder: "ROOM_AREA_TITLE", title: "ROOM_AREA_TITLE", keyboardType: .numberPad)
 //                initData(title: "ROOM_AREA_TITLE", placeHolder: "PLACE_HOLDER_AREA")
             case .address:
-                setupUI(placeholder: "ROOM_ADDRESS_TITLE", title: "ROOM_ADDRESS_TITLE")
+                setupUI(placeholder: "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT", title: "ROOM_ADDRESS_TITLE")
 //                initData(title: "ROOM_ADDRESS_TITLE", placeHolder: "PLACE_HOLDER_ADDRESS")
             case .phone:
                 tfInput.addToobarButton()
@@ -76,65 +76,68 @@ class NewInputView: UIView,UITextFieldDelegate {
     //MARK:UITextfieldDelegate
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         print(string)
-        if let updatedString = (tfInput.text as NSString?)?.replacingCharacters(in: range, with: string){
-            print(updatedString)
-            switch self.inputViewType! {
+        guard let updatedString = (tfInput.text as NSString?)?.replacingCharacters(in: range, with: string) else {
+            return false
+        }
+        print(updatedString)
+        switch self.inputViewType! {
+            
+        case .name:
+            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+                return false
+            }
+            if updatedString.isValidName(){
+                tfInput.errorMessage = ""
                 
-            case .name:
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    return false
-                }
-                if updatedString.isValidName(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_NAME_MAX_CHAR_50".localized
-                }
-            case .price:
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    return false
-                }
-                if updatedString.isValidPrice(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_PRICE".localized
-                }
-            case .area:
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    return false
-                }
-                if updatedString.isValidArea(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_AREA".localized
-                }
-            case .address:
-                if isSelectedFromSuggest{
-                    if string.count < (tfInput.text?.count)!{
-                        tfInput.text = ""
-                        isSelectedFromSuggest = false
-                    }
-                }
-                if updatedString.count > Constants.MAX_LENGHT_ADDRESS{
-                    return false
-                }
-                if updatedString.isValidAddress(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_ADDRESS".localized
-                }
-            case .phone:
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    return false
-                }
-                if updatedString.isValidPhoneNumber(){
-                    tfInput.errorMessage = ""
-                }else{
-                    tfInput.errorMessage = "ERROR_TYPE_PHONE".localized
+            }else{
+                tfInput.errorMessage = "ERROR_TYPE_NAME_MAX_CHAR_50".localized
+            }
+        case .price:
+            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+                return false
+            }
+            if updatedString.isValidPrice(){
+                tfInput.errorMessage = ""
+            }else{
+                tfInput.errorMessage = "ERROR_TYPE_PRICE".localized
+            }
+        case .area:
+            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+                return false
+            }
+            if updatedString.isValidArea(){
+                tfInput.errorMessage = ""
+            }else{
+                tfInput.errorMessage = "ERROR_TYPE_AREA".localized
+            }
+        case .address:
+            if isSelectedFromSuggest{
+                if string.count < (tfInput.text?.count)!{
+                    tfInput.text = ""
+                    isSelectedFromSuggest = false
                 }
             }
-            delegate?.newInputViewDelegate(newInputView: self, shouldChangeCharactersTo: updatedString)
+            if updatedString.count > Constants.MAX_LENGHT_ADDRESS{
+                return false
+            }
+            if updatedString.isValidAddress(){
+                tfInput.errorMessage = ""
+            }else{
+                tfInput.errorMessage = "ERROR_TYPE_ADDRESS".localized
+            }
+        case .phone:
+            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+                return false
+            }
+            if updatedString.isValidPhoneNumber(){
+                tfInput.errorMessage = ""
+            }else{
+                tfInput.errorMessage = "ERROR_TYPE_PHONE".localized
+            }
         }
+        delegate?.newInputViewDelegate(newInputView: self, shouldChangeCharactersTo: updatedString)
         return true
+        
     }
     
 //    func textFieldShouldClear(_ textField: UITextField) -> Bool {

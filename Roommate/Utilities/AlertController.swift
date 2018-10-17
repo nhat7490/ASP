@@ -8,18 +8,17 @@
 
 import UIKit
 protocol AlertControllerDelegate {
-    func selectValue(ofController:UIAlertController,withValue value:String?,atIndex index:Int?)
+    func alertControllerDelegate(ofController:UIAlertController,withAlertType type:AlertType,atIndexPaths indexs:[IndexPath]?)
 }
 class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelegate  {
     var delegate:AlertControllerDelegate?
-    private var listItem:[String]?
+    var listItem:[String]?
     var tableView = UITableView()
+    var alertType:AlertType = .normal
     static func showAlertInfor(withTitle title:String?,forMessage message:String?,inViewController controller:UIViewController) {
         let alertController = AlertController(title: title, message: message, preferredStyle: .alert)
         if let _ = title {
-            alertController.addAction(UIAlertAction(title: "OK".localized, style: .cancel, handler: {(action) in
-                alertController.dismiss(animated: true, completion: nil)
-            }))
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: nil))
         }
         controller.present(alertController, animated: true, completion: nil)
 //        showAlertConfirm(withTitle: title, andMessage: message, alertStyle: .alert, forViewController: controller, lhsButtonTitle: "OK".localized, rhsButtonTitle: nil, lhsButtonHandler: nil, rhsButtonHandler: nil)
@@ -36,17 +35,14 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         controller.present(alertController, animated: true, completion: nil)
     }
     
-    static func showAlertList(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,forViewController controller:UIViewController,data:[String]?,lhsButtonTitle:String?,rhsButtonTitle:String?,lhsButtonHandler:((UIAlertAction)->Void)?,rhsButtonHandler:((UIAlertAction)->Void)?)->AlertController{
+    static func showAlertList(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,alertType:AlertType = .normal,isMultiSelected:Bool = false,forViewController controller:UIViewController,data:[String]?,rhsButtonTitle:String?,rhsButtonHandler:((UIAlertAction)->Void)?)->AlertController{
         let alertController = AlertController(title: title, message: message, preferredStyle: alertStyle)
-        
-        if let _ = lhsButtonTitle {
-            alertController.addAction(UIAlertAction(title: lhsButtonTitle, style: .default, handler: lhsButtonHandler))
-        }
         if let _ = rhsButtonTitle {
             alertController.addAction(UIAlertAction(title: rhsButtonTitle, style: .default, handler: rhsButtonHandler))
         }
-        
-        alertController.addTableView(withCellIdentifier: Constants.CELL_POPUP_SELECT_LISTTV)
+        alertController.alertType = alertType
+        alertController.listItem = data
+        alertController.addTableView(withCellIdentifier: Constants.CELL_POPUP_SELECT_LISTTV,isMultiSelected:isMultiSelected)
         controller.present(alertController, animated: true, completion: nil)
         return alertController
     }
@@ -76,18 +72,17 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         
     }
     
-    func addTableView(withCellIdentifier cellIdentifier:String) {
-        //Initial height
-        let tableHeight = 50.0 * Double(self.listItem!.count)
+    func addTableView(withCellIdentifier cellIdentifier:String,isMultiSelected:Bool) {
         
         //Create View Controller and TableView
         let vc = UIViewController()
         
         //Size of content in popup viewcontroller
-        vc.preferredContentSize  = CGSize(width: Constants.POPUP_SELECT_TABLE_DEFATUL_WIDTH,
-                                          height:  Constants.POPUP_SELECT_TABLE_MAX_HEIGHT)
+        vc.preferredContentSize  = CGSize(width: 242,
+                                          height:  400)
+        
         tableView.register(UINib.init(nibName: Constants.CELL_POPUP_SELECT_LISTTV, bundle: nil), forCellReuseIdentifier: cellIdentifier)
-        tableView.frame = vc.view.frame
+        tableView.frame = CGRect(x: 0, y: 0, width: 242, height: 400)
         tableView.dataSource = self
         tableView.delegate = self
         vc.view.addSubview(tableView)
@@ -95,12 +90,13 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         
         tableView.isUserInteractionEnabled = true
         tableView.allowsSelection = true
+        tableView.allowsMultipleSelection = isMultiSelected
         vc.view.isUserInteractionEnabled = true
         self.setValue(vc, forKey: "contentViewController")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.listItem?.count != nil ? self.listItem!.count : 0
+        return self.listItem?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -110,7 +106,7 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.delegate?.selectValue(ofController: self, withValue: self.listItem?[indexPath.row], atIndex: indexPath.row)
+        self.delegate?.alertControllerDelegate(ofController: self, withAlertType: self.alertType, atIndexPaths: tableView.indexPathsForSelectedRows)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50

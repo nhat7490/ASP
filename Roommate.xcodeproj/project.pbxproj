@@ -14,11 +14,15 @@
 		6907E89F2160E42C009A5F25 /* UtilitiesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6907E89E2160E42B009A5F25 /* UtilitiesView.xib */; };
 		69082C512170459B00E77E24 /* IconTitleTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69082C4F2170459B00E77E24 /* IconTitleTVCell.swift */; };
 		69082C522170459B00E77E24 /* IconTitleTVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69082C502170459B00E77E24 /* IconTitleTVCell.xib */; };
+		690A61E02176611400BA9564 /* CustomListTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A61DF2176611400BA9564 /* CustomListTransform.swift */; };
+		690A61E221766E9C00BA9564 /* RoomPostResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A61E121766E9C00BA9564 /* RoomPostResponseModel.swift */; };
+		690A61E42176850500BA9564 /* UserResponeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A61E32176850500BA9564 /* UserResponeModel.swift */; };
 		690B2065215BA0DE00DAD053 /* RoomDetailForMasterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */; };
 		690B2067215BA14500DAD053 /* RoomDetailForFinderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690B2066215BA14500DAD053 /* RoomDetailForFinderVC.swift */; };
 		691727B0215509D100104A19 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 691727B2215509D100104A19 /* Localizable.strings */; };
 		691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B62155122D00104A19 /* NotificationCVCell.swift */; };
 		691727BA2155129700104A19 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B92155129700104A19 /* NotificationModel.swift */; };
+		6920FB4B21724DED000E06E0 /* BaseTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6920FB4A21724DED000E06E0 /* BaseTabBarVC.swift */; };
 		69225641215B27100040213A /* OrderTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69225640215B27100040213A /* OrderTVCell.swift */; };
 		69225643215B27320040213A /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69225642215B27320040213A /* Protocols.swift */; };
 		69232A1F21614A7E00C782F9 /* BaseHorizontalCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69232A1E21614A7E00C782F9 /* BaseHorizontalCollectionView.swift */; };
@@ -29,6 +33,7 @@
 		6925AA942164B03200232311 /* RoomDetaillVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925AA932164B03100232311 /* RoomDetaillVC.swift */; };
 		6925AA962164E86800232311 /* FilterForRoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925AA952164E86800232311 /* FilterForRoomModel.swift */; };
 		6925AA982164F22F00232311 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925AA972164F22F00232311 /* BaseModel.swift */; };
+		6929BFC92175C4B100A0EEAF /* UtilityInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6929BFC82175C4B100A0EEAF /* UtilityInputVC.swift */; };
 		692C24F721671E5E008C16A7 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692C24F621671E5E008C16A7 /* APIRouter.swift */; };
 		692E8F9F21634EF700AF5927 /* MemberTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692E8F9D21634EF700AF5927 /* MemberTVCell.swift */; };
 		692E8FA021634EF700AF5927 /* MemberTVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 692E8F9E21634EF700AF5927 /* MemberTVCell.xib */; };
@@ -74,6 +79,9 @@
 		696219022163FDED00044EB4 /* FilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696219012163FDED00044EB4 /* FilterVC.swift */; };
 		696219072163FF4300044EB4 /* DropdownListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696219062163FF4300044EB4 /* DropdownListView.swift */; };
 		69621909216401BE00044EB4 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69621908216401BE00044EB4 /* SliderView.swift */; };
+		69678D6F21779DCA001F4352 /* NewRoomCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69678D6E21779DCA001F4352 /* NewRoomCVCell.xib */; };
+		69678D7121779E52001F4352 /* NewRoomCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69678D7021779E52001F4352 /* NewRoomCVCell.swift */; };
+		69747F0421759213005E869B /* ArrayTranform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69747F0321759212005E869B /* ArrayTranform.swift */; };
 		6977C7F42162269F003C58F4 /* BaseInformationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6977C7F32162269F003C58F4 /* BaseInformationView.xib */; };
 		6977C7F6216229A6003C58F4 /* Room.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6977C7F5216229A6003C58F4 /* Room.storyboard */; };
 		6977C7F821627A0C003C58F4 /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6977C7F721627A0C003C58F4 /* DescriptionView.swift */; };
@@ -85,6 +93,9 @@
 		69834F5E2153977D00845AB8 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69834F5D2153977D00845AB8 /* Utilities.swift */; };
 		69834F612153989900845AB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69834F602153989900845AB8 /* Main.storyboard */; };
 		69834F6321539AD800845AB8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69834F6221539AD800845AB8 /* Constants.swift */; };
+		699EF0BA217453DF00788E17 /* SearchRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699EF0B9217453DF00788E17 /* SearchRequestModel.swift */; };
+		699EF0BC2174689A00788E17 /* FilterArgumentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699EF0BB2174689A00788E17 /* FilterArgumentModel.swift */; };
+		699EF0BE2174821300788E17 /* RoomRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699EF0BD2174821300788E17 /* RoomRequestModel.swift */; };
 		69A02FB521538C930087897F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A02FB421538C930087897F /* AppDelegate.swift */; };
 		69A02FB721538C930087897F /* MainViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A02FB621538C930087897F /* MainViewVC.swift */; };
 		69A02FBC21538C950087897F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69A02FBB21538C950087897F /* Assets.xcassets */; };
@@ -131,10 +142,10 @@
 		69F4EDFB216F629A006998A7 /* NewInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69F4EDFA216F629A006998A7 /* NewInputView.xib */; };
 		69F4EDFD216F62A6006998A7 /* NewInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F4EDFC216F62A6006998A7 /* NewInputView.swift */; };
 		69F6BECC216B759500DFD3B3 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F6BECB216B759500DFD3B3 /* UserModel.swift */; };
-		9FB46854225AC39B95FC8A43 /* Pods_Roommate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 531EFCC1E08155030005CF69 /* Pods_Roommate.framework */; };
 		C0D680C4CE1811944AB4B691 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D68EAA07119A21C4B2B4DD /* DBManager.swift */; };
 		C0D681E6D7644850C1AE02EA /* BasePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D68D14E23CBCF84423F539 /* BasePost.swift */; };
 		C0D68F1955A4A6AEFE7B202F /* BaseRoomRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D680CA2A2841399EAA1489 /* BaseRoomRequestModel.swift */; };
+		EE49BDDDFA745A4BE110552A /* Pods_Roommate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7108C76CDC3840CC93B3D71C /* Pods_Roommate.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -142,12 +153,12 @@
 		04D77E40215760610045C45C /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		04D77E422158A3060045C45C /* RoundButotn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButotn.swift; sourceTree = "<group>"; };
 		04D77E442158AFD70045C45C /* CustomSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControl.swift; sourceTree = "<group>"; };
-		3A759BB022E91CAF1EA8832B /* Pods-Roommate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roommate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Roommate/Pods-Roommate.debug.xcconfig"; sourceTree = "<group>"; };
-		531EFCC1E08155030005CF69 /* Pods_Roommate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roommate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		532B1705F701D569C85429DC /* Pods-Roommate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roommate.release.xcconfig"; path = "Pods/Target Support Files/Pods-Roommate/Pods-Roommate.release.xcconfig"; sourceTree = "<group>"; };
 		6907E89E2160E42B009A5F25 /* UtilitiesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UtilitiesView.xib; sourceTree = "<group>"; };
 		69082C4F2170459B00E77E24 /* IconTitleTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTitleTVCell.swift; sourceTree = "<group>"; };
 		69082C502170459B00E77E24 /* IconTitleTVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconTitleTVCell.xib; sourceTree = "<group>"; };
+		690A61DF2176611400BA9564 /* CustomListTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListTransform.swift; sourceTree = "<group>"; };
+		690A61E121766E9C00BA9564 /* RoomPostResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPostResponseModel.swift; sourceTree = "<group>"; };
+		690A61E32176850500BA9564 /* UserResponeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponeModel.swift; sourceTree = "<group>"; };
 		690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailForMasterVC.swift; sourceTree = "<group>"; };
 		690B2066215BA14500DAD053 /* RoomDetailForFinderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailForFinderVC.swift; sourceTree = "<group>"; };
 		691727AC2155099700104A19 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -156,6 +167,7 @@
 		691727B3215509D300104A19 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		691727B62155122D00104A19 /* NotificationCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCVCell.swift; sourceTree = "<group>"; };
 		691727B92155129700104A19 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
+		6920FB4A21724DED000E06E0 /* BaseTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarVC.swift; sourceTree = "<group>"; };
 		69225640215B27100040213A /* OrderTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTVCell.swift; sourceTree = "<group>"; };
 		69225642215B27320040213A /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		69232A1E21614A7E00C782F9 /* BaseHorizontalCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHorizontalCollectionView.swift; sourceTree = "<group>"; };
@@ -166,6 +178,7 @@
 		6925AA932164B03100232311 /* RoomDetaillVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomDetaillVC.swift; sourceTree = "<group>"; };
 		6925AA952164E86800232311 /* FilterForRoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterForRoomModel.swift; sourceTree = "<group>"; };
 		6925AA972164F22F00232311 /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseModel.swift; sourceTree = "<group>"; };
+		6929BFC82175C4B100A0EEAF /* UtilityInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityInputVC.swift; sourceTree = "<group>"; };
 		692C24F621671E5E008C16A7 /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
 		692E8F9D21634EF700AF5927 /* MemberTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberTVCell.swift; sourceTree = "<group>"; };
 		692E8F9E21634EF700AF5927 /* MemberTVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemberTVCell.xib; sourceTree = "<group>"; };
@@ -213,6 +226,9 @@
 		696219012163FDED00044EB4 /* FilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterVC.swift; sourceTree = "<group>"; };
 		696219062163FF4300044EB4 /* DropdownListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownListView.swift; sourceTree = "<group>"; };
 		69621908216401BE00044EB4 /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		69678D6E21779DCA001F4352 /* NewRoomCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewRoomCVCell.xib; sourceTree = "<group>"; };
+		69678D7021779E52001F4352 /* NewRoomCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRoomCVCell.swift; sourceTree = "<group>"; };
+		69747F0321759212005E869B /* ArrayTranform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTranform.swift; sourceTree = "<group>"; };
 		6977C7F32162269F003C58F4 /* BaseInformationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseInformationView.xib; sourceTree = "<group>"; };
 		6977C7F5216229A6003C58F4 /* Room.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Room.storyboard; sourceTree = "<group>"; };
 		6977C7F721627A0C003C58F4 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
@@ -224,6 +240,9 @@
 		69834F5D2153977D00845AB8 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		69834F602153989900845AB8 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		69834F6221539AD800845AB8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		699EF0B9217453DF00788E17 /* SearchRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRequestModel.swift; sourceTree = "<group>"; };
+		699EF0BB2174689A00788E17 /* FilterArgumentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterArgumentModel.swift; sourceTree = "<group>"; };
+		699EF0BD2174821300788E17 /* RoomRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomRequestModel.swift; sourceTree = "<group>"; };
 		69A02FB121538C930087897F /* Roommate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roommate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69A02FB421538C930087897F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69A02FB621538C930087897F /* MainViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewVC.swift; sourceTree = "<group>"; };
@@ -280,6 +299,9 @@
 		69F6BECD216B761600DFD3B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		69F6BECF216B762500DFD3B3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		69F6BED1216B762C00DFD3B3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		7108C76CDC3840CC93B3D71C /* Pods_Roommate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roommate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		886F5C280B014BE8CFB24F09 /* Pods-Roommate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roommate.release.xcconfig"; path = "Pods/Target Support Files/Pods-Roommate/Pods-Roommate.release.xcconfig"; sourceTree = "<group>"; };
+		BED42C13279C1047F3CA8DCD /* Pods-Roommate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roommate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Roommate/Pods-Roommate.debug.xcconfig"; sourceTree = "<group>"; };
 		C0D680CA2A2841399EAA1489 /* BaseRoomRequestModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseRoomRequestModel.swift; sourceTree = "<group>"; };
 		C0D68D14E23CBCF84423F539 /* BasePost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePost.swift; sourceTree = "<group>"; };
 		C0D68EAA07119A21C4B2B4DD /* DBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
@@ -290,7 +312,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FB46854225AC39B95FC8A43 /* Pods_Roommate.framework in Frameworks */,
+				EE49BDDDFA745A4BE110552A /* Pods_Roommate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +349,7 @@
 				6943D9892153F1B1002CFEBB /* RoomateFilterVC.swift */,
 				6943D9A52153F5E6002CFEBB /* ListRoomVC.swift */,
 				6943D9A72153F5F3002CFEBB /* ListRoommateVC.swift */,
+				6929BFC82175C4B100A0EEAF /* UtilityInputVC.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -400,6 +423,35 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		69588FE4217330CC00894F0D /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				699EF0B9217453DF00788E17 /* SearchRequestModel.swift */,
+				699EF0BB2174689A00788E17 /* FilterArgumentModel.swift */,
+				69E496852158DF3D00444211 /* RoomModel.swift */,
+				699EF0BD2174821300788E17 /* RoomRequestModel.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
+		69588FE5217330DB00894F0D /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				690A61E121766E9C00BA9564 /* RoomPostResponseModel.swift */,
+				690A61E32176850500BA9564 /* UserResponeModel.swift */,
+			);
+			path = Response;
+			sourceTree = "<group>";
+		};
+		69588FE6217330E100894F0D /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				69A67F11216D341A0020F09F /* BaseResponseModel.swift */,
+				690A61DF2176611400BA9564 /* CustomListTransform.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		696219002163FDCE00044EB4 /* Filter */ = {
 			isa = PBXGroup;
 			children = (
@@ -417,6 +469,26 @@
 				695D346C2166859100DCD6EE /* SliderView.xib */,
 			);
 			path = Filter;
+			sourceTree = "<group>";
+		};
+		69678D6C21778E53001F4352 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				69D00EC821609A8200FF034E /* CityModel.swift */,
+				69D00ECA21609AF000FF034E /* DistrictModel.swift */,
+				69F6BECB216B759500DFD3B3 /* UserModel.swift */,
+				6925AA972164F22F00232311 /* BaseModel.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
+		69678D6D21778E59001F4352 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				69588FE5217330DB00894F0D /* Response */,
+				69588FE4217330CC00894F0D /* Request */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 		6977C7EE21622586003C58F4 /* RoomDetail */ = {
@@ -466,6 +538,8 @@
 				69F4EDFA216F629A006998A7 /* NewInputView.xib */,
 				69082C4F2170459B00E77E24 /* IconTitleTVCell.swift */,
 				69082C502170459B00E77E24 /* IconTitleTVCell.xib */,
+				69678D7021779E52001F4352 /* NewRoomCVCell.swift */,
+				69678D6E21779DCA001F4352 /* NewRoomCVCell.xib */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -516,7 +590,7 @@
 				69A02FD321538C950087897F /* RoommateUITests */,
 				69A02FB221538C930087897F /* Products */,
 				92203C071C27F79203B45604 /* Frameworks */,
-				EEECAB4F9858D535FED76246 /* Pods */,
+				F1B657FA8A188C4B21A24717 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -584,21 +658,18 @@
 		69A02FE321538D0E0087897F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				69E496852158DF3D00444211 /* RoomModel.swift */,
+				69678D6D21778E59001F4352 /* API */,
+				69678D6C21778E53001F4352 /* Realm */,
+				69588FE6217330E100894F0D /* Common */,
 				695309FB215633B70004BDE9 /* User.swift */,
 				695309F8215631980004BDE9 /* RoommateModel.swift */,
 				691727B92155129700104A19 /* NotificationModel.swift */,
 				69D00EC6216099A400FF034E /* ImageModel.swift */,
-				69D00EC821609A8200FF034E /* CityModel.swift */,
-				69D00ECA21609AF000FF034E /* DistrictModel.swift */,
 				69D00ECC21609DF200FF034E /* StatusModel.swift */,
 				69D00ECE21609F2400FF034E /* UtilityModel.swift */,
 				69D00ED02160A79500FF034E /* Room.swift */,
 				6925AA952164E86800232311 /* FilterForRoomModel.swift */,
-				6925AA972164F22F00232311 /* BaseModel.swift */,
 				C0D68374ACAD0BA0148A1D73 /* RequestModel */,
-				69F6BECB216B759500DFD3B3 /* UserModel.swift */,
-				69A67F11216D341A0020F09F /* BaseResponseModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -630,6 +701,7 @@
 				C0D68EAA07119A21C4B2B4DD /* DBManager.swift */,
 				69A67F0D216CEC5D0020F09F /* APIConnection.swift */,
 				69A67F0F216D25C80020F09F /* APIResponseAlert.swift */,
+				69747F0321759212005E869B /* ArrayTranform.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -663,6 +735,7 @@
 				69232A1E21614A7E00C782F9 /* BaseHorizontalCollectionView.swift */,
 				69232A2021614AC700C782F9 /* BaseHorizontalCollectionViewFlowLayout.swift */,
 				69D9DA172169B68B00B38D35 /* ViewController.swift */,
+				6920FB4A21724DED000E06E0 /* BaseTabBarVC.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -676,7 +749,7 @@
 				69F6BECF216B762500DFD3B3 /* UIKit.framework */,
 				69F6BECD216B761600DFD3B3 /* Foundation.framework */,
 				69CB7838216091ED003FA0F9 /* Cocoa.framework */,
-				531EFCC1E08155030005CF69 /* Pods_Roommate.framework */,
+				7108C76CDC3840CC93B3D71C /* Pods_Roommate.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -692,11 +765,11 @@
 			path = RequestModel;
 			sourceTree = "<group>";
 		};
-		EEECAB4F9858D535FED76246 /* Pods */ = {
+		F1B657FA8A188C4B21A24717 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3A759BB022E91CAF1EA8832B /* Pods-Roommate.debug.xcconfig */,
-				532B1705F701D569C85429DC /* Pods-Roommate.release.xcconfig */,
+				BED42C13279C1047F3CA8DCD /* Pods-Roommate.debug.xcconfig */,
+				886F5C280B014BE8CFB24F09 /* Pods-Roommate.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -708,12 +781,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 69A02FD921538C950087897F /* Build configuration list for PBXNativeTarget "Roommate" */;
 			buildPhases = (
-				964F9B00F6BB1176216F1E5A /* [CP] Check Pods Manifest.lock */,
+				2EE8F3E1FE29982C312D140D /* [CP] Check Pods Manifest.lock */,
 				69A02FAD21538C930087897F /* Sources */,
 				69A02FAE21538C930087897F /* Frameworks */,
 				69A02FAF21538C930087897F /* Resources */,
-				F80DA20FA8B3F5B1DFE4A264 /* [CP] Embed Pods Frameworks */,
-				DDB5F431D95E2FF7BF821312 /* [CP] Copy Pods Resources */,
+				9A2A3B68E5C5E741FC9D03D4 /* [CP] Embed Pods Frameworks */,
+				11D85F228D7715913211A76A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -767,6 +840,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69678D6F21779DCA001F4352 /* NewRoomCVCell.xib in Resources */,
 				69F4EDFB216F629A006998A7 /* NewInputView.xib in Resources */,
 				6977C7F6216229A6003C58F4 /* Room.storyboard in Resources */,
 				6943D9682153F03A002CFEBB /* Bookmark.storyboard in Resources */,
@@ -803,25 +877,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		964F9B00F6BB1176216F1E5A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Roommate-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DDB5F431D95E2FF7BF821312 /* [CP] Copy Pods Resources */ = {
+		11D85F228D7715913211A76A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -843,7 +899,25 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Roommate/Pods-Roommate-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F80DA20FA8B3F5B1DFE4A264 /* [CP] Embed Pods Frameworks */ = {
+		2EE8F3E1FE29982C312D140D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Roommate-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9A2A3B68E5C5E741FC9D03D4 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -859,6 +933,7 @@
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SkyFloatingLabelTextField/SkyFloatingLabelTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/TTRangeSlider/TTRangeSlider.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -873,6 +948,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkyFloatingLabelTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TTRangeSlider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -902,10 +978,13 @@
 				6943D9782153F0C9002CFEBB /* FirstLaunchVC.swift in Sources */,
 				69D00ED12160A79500FF034E /* Room.swift in Sources */,
 				69C854F721691D4300C22F41 /* InputView.swift in Sources */,
+				699EF0BC2174689A00788E17 /* FilterArgumentModel.swift in Sources */,
 				04D77E452158AFD70045C45C /* CustomSegmentedControl.swift in Sources */,
+				69747F0421759213005E869B /* ArrayTranform.swift in Sources */,
 				6943D97C2153F0EC002CFEBB /* RoommateDetailVC.swift in Sources */,
 				6943D9982153F462002CFEBB /* SuggestVC.swift in Sources */,
 				69BF69F021607917002B5B49 /* BaseVerticalCollectionViewFlowLayout.swift in Sources */,
+				699EF0BA217453DF00788E17 /* SearchRequestModel.swift in Sources */,
 				696219022163FDED00044EB4 /* FilterVC.swift in Sources */,
 				692E8F9F21634EF700AF5927 /* MemberTVCell.swift in Sources */,
 				69D2D11B216C8E780067288A /* NetworkStatus.swift in Sources */,
@@ -916,6 +995,7 @@
 				6943D99A2153F46E002CFEBB /* ProfileVC.swift in Sources */,
 				690B2067215BA14500DAD053 /* RoomDetailForFinderVC.swift in Sources */,
 				6943D9822153F121002CFEBB /* CERoommateVC.swift in Sources */,
+				690A61E42176850500BA9564 /* UserResponeModel.swift in Sources */,
 				692E8FA2216371BD00AF5927 /* GenderView.swift in Sources */,
 				6943D9962153F452002CFEBB /* NotificationDetailVC.swift in Sources */,
 				69E496862158DF3D00444211 /* RoomModel.swift in Sources */,
@@ -934,6 +1014,7 @@
 				695309FC215633B70004BDE9 /* User.swift in Sources */,
 				69BA0D792167C781006AEEDC /* NewUtilityCVCell.swift in Sources */,
 				691727BA2155129700104A19 /* NotificationModel.swift in Sources */,
+				699EF0BE2174821300788E17 /* RoomRequestModel.swift in Sources */,
 				697A75312163189F00B7618B /* MembersView.swift in Sources */,
 				69232A2321614C4E00C782F9 /* ImageCVCell.swift in Sources */,
 				6943D9622153E769002CFEBB /* BaseVC.swift in Sources */,
@@ -948,6 +1029,7 @@
 				69BF69EC216072E5002B5B49 /* BaseVerticalCollectionView.swift in Sources */,
 				69082C512170459B00E77E24 /* IconTitleTVCell.swift in Sources */,
 				04D77E41215760610045C45C /* TestViewController.swift in Sources */,
+				690A61E221766E9C00BA9564 /* RoomPostResponseModel.swift in Sources */,
 				69D00ECF21609F2400FF034E /* UtilityModel.swift in Sources */,
 				69F6BECC216B759500DFD3B3 /* UserModel.swift in Sources */,
 				69D886DA2167A1A300A83D1C /* RoomPostRequestModel.swift in Sources */,
@@ -958,18 +1040,22 @@
 				69F4EDFD216F62A6006998A7 /* NewInputView.swift in Sources */,
 				695309F9215631980004BDE9 /* RoommateModel.swift in Sources */,
 				69A02FB521538C930087897F /* AppDelegate.swift in Sources */,
+				690A61E02176611400BA9564 /* CustomListTransform.swift in Sources */,
 				6943D9AA2153F65E002CFEBB /* RoleVC.swift in Sources */,
 				69A03003215390EF0087897F /* SignInVC.swift in Sources */,
 				69CB782F216083E7003FA0F9 /* UtilityCVCell.swift in Sources */,
+				69678D7121779E52001F4352 /* NewRoomCVCell.swift in Sources */,
 				6925AA942164B03200232311 /* RoomDetaillVC.swift in Sources */,
 				6943D9A82153F5F3002CFEBB /* ListRoommateVC.swift in Sources */,
 				692C24F721671E5E008C16A7 /* APIRouter.swift in Sources */,
 				69232A1F21614A7E00C782F9 /* BaseHorizontalCollectionView.swift in Sources */,
+				6920FB4B21724DED000E06E0 /* BaseTabBarVC.swift in Sources */,
 				6943D9702153F08C002CFEBB /* HomeVC.swift in Sources */,
 				6943D9A02153F55F002CFEBB /* PolicyVC.swift in Sources */,
 				6943D98A2153F1B1002CFEBB /* RoomateFilterVC.swift in Sources */,
 				6943D9742153F0AE002CFEBB /* NotificationVC.swift in Sources */,
 				69A67F10216D25C80020F09F /* APIResponseAlert.swift in Sources */,
+				6929BFC92175C4B100A0EEAF /* UtilityInputVC.swift in Sources */,
 				696219072163FF4300044EB4 /* DropdownListView.swift in Sources */,
 				6943D9A62153F5E6002CFEBB /* ListRoomVC.swift in Sources */,
 				69D00ECB21609AF000FF034E /* DistrictModel.swift in Sources */,
@@ -1131,7 +1217,7 @@
 		};
 		69A02FDA21538C950087897F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A759BB022E91CAF1EA8832B /* Pods-Roommate.debug.xcconfig */;
+			baseConfigurationReference = BED42C13279C1047F3CA8DCD /* Pods-Roommate.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -1151,7 +1237,7 @@
 		};
 		69A02FDB21538C950087897F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 532B1705F701D569C85429DC /* Pods-Roommate.release.xcconfig */;
+			baseConfigurationReference = 886F5C280B014BE8CFB24F09 /* Pods-Roommate.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

@@ -20,7 +20,9 @@ enum APIRouter:URLRequestConvertible{
     case city()
     case district()
     case utility()
-    case createRoom(model:NewRoomModel)
+    case createRoom(model:RoomRequestModel)
+    case allRoom()
+    case allRoommate()
     
     var httpHeaders:HTTPHeaders{
         switch self{
@@ -57,6 +59,10 @@ enum APIRouter:URLRequestConvertible{
             return "room/create"
         case .utility:
             return "utilities/getAll";
+        case .allRoom:
+            return "post/1"
+        case .allRoommate:
+            return "post/2"
         }
     }
     
@@ -91,7 +97,7 @@ enum APIRouter:URLRequestConvertible{
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.allHTTPHeaderFields = httpHeaders
         urlRequest.httpMethod = httpMethod.rawValue
-        urlRequest.timeoutInterval  = 30
+        urlRequest.timeoutInterval  = 40
         
         do{
             switch self.httpMethod {

@@ -59,7 +59,6 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
         delegate?.utilitiesViewDelegate(utilitiesView: self, didSelectUtilityAt: indexPath)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -69,7 +68,9 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 5//Item in diffrence row
     }
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return 5
-//    }
+    func setState(isSelected:Bool,atIndexPath indexPath:IndexPath){
+        let cell = collectionView.cellForItem(at: indexPath) as! NewUtilityCVCell
+        cell.isSetSelected = isSelected
+        
+    }
 }
