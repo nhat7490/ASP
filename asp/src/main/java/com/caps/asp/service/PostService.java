@@ -3,6 +3,7 @@ package com.caps.asp.service;
 import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbPostHasTbDistrict;
 import com.caps.asp.repository.PostRepository;
+import com.caps.asp.service.filter.BookmarkFilter;
 import com.caps.asp.service.filter.Filter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,6 +56,12 @@ public class PostService {
     }
 
     public Page<TbPost> finAllByFilter(int page, int items, Filter filter) {
+        int actualPage = page - 1;
+        Pageable pageable = PageRequest.of(actualPage, items);
+        return postRepository.findAll(filter,pageable);
+    }
+
+    public Page<TbPost> finAllBookmarkByFilter(int page, int items, BookmarkFilter filter) {
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
         return postRepository.findAll(filter,pageable);

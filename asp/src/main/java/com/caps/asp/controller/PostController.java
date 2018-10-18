@@ -8,6 +8,7 @@ import com.caps.asp.model.uimodel.response.UserResponeModel;
 import com.caps.asp.model.uimodel.response.post.RoomPostResponseModel;
 import com.caps.asp.model.uimodel.response.post.RoommatePostResponseModel;
 import com.caps.asp.service.*;
+import com.caps.asp.service.filter.BookmarkFilter;
 import com.caps.asp.service.filter.Filter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -142,7 +143,7 @@ public class PostController {
 
     @PostMapping("/post/filter")
     public ResponseEntity getPostByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
-//        try {
+        try {
             Filter filter = new Filter();
             filter.setFilterArgumentModel(filterArgumentModel);
 //            if (filterArgumentModel.getSearchRequestModel() == null) {
@@ -179,7 +180,7 @@ public class PostController {
                 });
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
 
-            } else if (filter.getFilterArgumentModel().getTypeId() == PARTNER_POST){//get room master post
+            } else if (filter.getFilterArgumentModel().getTypeId() == PARTNER_POST) {//get room master post
 
                 Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
                 Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> {
@@ -218,10 +219,80 @@ public class PostController {
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
 
             }
-        return ResponseEntity.status(NOT_FOUND).build();
-//        } catch (Exception e) {
-//            return ResponseEntity.status(NOT_FOUND).build();
-//        }
+            return ResponseEntity.status(NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/post/favouriteFilter")
+    public ResponseEntity getFavouriteByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
+        try {
+            BookmarkFilter filter = new BookmarkFilter();
+            filter.setFilterArgumentModel(filterArgumentModel);
+
+            if (filter.getFilterArgumentModel().getTypeId() == ROOM_POST) {//get member post
+
+                Page<TbPost> posts = postService.finAllBookmarkByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
+                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> {
+
+                    RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
+                    UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                    roommatePostResponseModel.setPostId(tbPost.getPostId());
+                    roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
+                    roommatePostResponseModel.setDate(tbPost.getDatePost());
+                    roommatePostResponseModel.setUserResponeModel(userResponeModel);
+                    roommatePostResponseModel.setFavourite(true);
+                    roommatePostResponseModel.setMinPrice(tbPost.getMinPrice());
+                    roommatePostResponseModel.setMaxPrice(tbPost.getMaxPrice());
+                    roommatePostResponseModel.setUtilityIds(null);
+                    List<TbPostHasTbDistrict> postHasTbDistricts = postHasDistrictService.findAllByPostId(tbPost.getPostId());
+                    roommatePostResponseModel.setDistrictIds(postHasTbDistricts.stream().map(
+                            tbPostHasTbDistrict -> tbPostHasTbDistrict.getDistrictId()).collect(Collectors.toList()));
+                    return roommatePostResponseModel;
+                });
+                return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
+
+            } else if (filter.getFilterArgumentModel().getTypeId() == PARTNER_POST) {//get room master post
+
+                Page<TbPost> posts = postService.finAllBookmarkByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
+                Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> {
+                    TbFavourite favourite = favouriteService
+                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
+                    RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
+
+                    TbRoom room = roomService.findRoomById(tbPost.getRoomId());
+                    List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
+                    UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+
+                    roomPostResponseModel.setName(tbPost.getName());
+                    roomPostResponseModel.setPostId(tbPost.getPostId());
+                    roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
+                    roomPostResponseModel.setDate(tbPost.getDatePost());
+                    roomPostResponseModel.setUserResponeModel(userResponeModel);
+                    roomPostResponseModel.setFavourite(true);
+                    roomPostResponseModel.setFavourite(false);
+                    roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
+                    roomPostResponseModel.setAddress(room.getAddress());
+                    roomPostResponseModel.setArea(room.getArea());
+                    roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
+                    roomPostResponseModel.setDescription(tbPost.getDescription());
+                    //missing
+                    List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
+                    roomPostResponseModel.setImageUrls(images.stream().map(image -> image.getLinkUrl()).collect(Collectors.toList()));
+
+                    roomPostResponseModel.setUtilities(roomHasUtilities);
+                    roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
+                    return roomPostResponseModel;
+                });
+
+                return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
+
+            }
+            return ResponseEntity.status(NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/post/{typeId}")
