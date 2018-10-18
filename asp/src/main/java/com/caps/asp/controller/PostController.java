@@ -145,18 +145,19 @@ public class PostController {
         try {
             Filter filter = new Filter();
             if (filterArgumentModel.getSearchRequestModel() == null) {
-                filter.setCriteria(null);
+                filter.setFilterArgumentModel(null);
             } else {
-                filter.setCriteria(filterArgumentModel.getSearchRequestModel());
+                filter.setFilterArgumentModel(filterArgumentModel);
             }
 
-            if (filter.getCriteria().getTypeId() == ROOM_POST) {//get member post
+            if (filter.getFilterArgumentModel().getTypeId() == ROOM_POST) {//get member post
 
                 Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
                 Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> {
                     RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
                     UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
-                    TbFavourite favourite = favouriteService.findByUserIdAndPostId(filter.getCriteria().getUserId(), tbPost.getPostId());
+                    TbFavourite favourite = favouriteService
+                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getSearchRequestModel().getUserId(), tbPost.getPostId());
 
                     roommatePostResponseModel.setPostId(tbPost.getPostId());
                     roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
@@ -177,7 +178,7 @@ public class PostController {
                 });
                 return ResponseEntity.status(OK).body(roommatePostResponseModels);
 
-            } else if (filter.getCriteria().getTypeId() == PARTNER_POST){//get room master post
+            } else if (filter.getFilterArgumentModel().getTypeId() == PARTNER_POST){//get room master post
 
                 Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage(), filterArgumentModel.getOffset(), filter);
                 Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> {
@@ -186,7 +187,8 @@ public class PostController {
                     TbRoom room = roomService.findRoomById(tbPost.getRoomId());
                     List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
                     UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
-                    TbFavourite favourite = favouriteService.findByUserIdAndPostId(filter.getCriteria().getUserId(), tbPost.getPostId());
+                    TbFavourite favourite = favouriteService
+                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getSearchRequestModel().getUserId(), tbPost.getPostId());
 
                     roomPostResponseModel.setName(tbPost.getName());
                     roomPostResponseModel.setPostId(tbPost.getPostId());

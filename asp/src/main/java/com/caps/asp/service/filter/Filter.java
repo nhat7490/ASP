@@ -1,6 +1,7 @@
 package com.caps.asp.service.filter;
 
 import com.caps.asp.model.*;
+import com.caps.asp.model.uimodel.request.FilterArgumentModel;
 import com.caps.asp.model.uimodel.request.SearchRequestModel;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -13,22 +14,22 @@ import java.util.List;
 
 public class Filter implements Specification<TbPost> {
 
-    private SearchRequestModel criteria;
+    private FilterArgumentModel filterArgumentModel;
 
-    public SearchRequestModel getCriteria() {
-        return criteria;
+    public FilterArgumentModel getFilterArgumentModel() {
+        return filterArgumentModel;
     }
 
-    public void setCriteria(SearchRequestModel criteria) {
-        this.criteria = criteria;
+    public void setFilterArgumentModel(FilterArgumentModel filterArgumentModel) {
+        this.filterArgumentModel = filterArgumentModel;
     }
 
     @Override
     public Predicate toPredicate(Root<TbPost> postRoot, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
-        if (criteria == null) return cb.conjunction();
+        if (filterArgumentModel.getSearchRequestModel() == null) return cb.conjunction();
         criteriaQuery.distinct(true);
 
-        if (criteria.getTypeId() == 1){
+        if (filterArgumentModel.getTypeId() == 1) {
             Root<TbRoom> roomRoot = criteriaQuery.from(TbRoom.class);
             Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
             Root<TbRoomHasUtility> roomHasUtilityRoot = criteriaQuery.from(TbRoomHasUtility.class);
@@ -40,34 +41,36 @@ public class Filter implements Specification<TbPost> {
             List<Predicate> genderList = new ArrayList<>();
             List<Predicate> typeList = new ArrayList<>();
 
-            if (criteria.getOrderBy().equals("Cũ")) {
+            if (filterArgumentModel.getOrderBy().equals("Cũ")) {
                 criteriaQuery.orderBy(cb.asc(postRoot.get("datePost")));
             } else {
                 criteriaQuery.orderBy(cb.desc(postRoot.get("datePost")));
             }
 
-            if (criteria.getDistricts().size() != 0) {
-                for (Integer districtId : criteria.getDistricts()) {
+            if (filterArgumentModel.getSearchRequestModel().getDistricts().size() != 0) {
+                for (Integer districtId : filterArgumentModel.getSearchRequestModel().getDistricts()) {
                     districtList.add(cb.equal(districtRoot.get("districtId"), districtId));
                 }
             }
 
-            if (criteria.getUtilities().size() != 0) {
-                for (Integer utilityId : criteria.getUtilities()) {
+            if (filterArgumentModel.getSearchRequestModel().getUtilities().size() != 0) {
+                for (Integer utilityId : filterArgumentModel.getSearchRequestModel().getUtilities()) {
                     utilityList.add(cb.equal(utilitiesRoot.get("utilityId"), utilityId));
                 }
             }
 
-            if (criteria.getGender() != null)
-                genderList.add(cb.equal(postRoot.get("genderPartner"), criteria.getGender()));
+            if (filterArgumentModel.getSearchRequestModel().getGender() == 1
+                    || filterArgumentModel.getSearchRequestModel().getGender() == 2
+                    || filterArgumentModel.getSearchRequestModel().getGender() == 3)
+                genderList.add(cb.equal(postRoot.get("genderPartner"), filterArgumentModel.getSearchRequestModel().getGender()));
 
-            if (criteria.getPrice().size() != 0) {
+            if (filterArgumentModel.getSearchRequestModel().getPrice().size() != 0) {
                 priceList.add(cb.and(
-                        cb.ge(roomRoot.get("price"), criteria.getPrice().get(0)),
-                        cb.le(roomRoot.get("price"), criteria.getPrice().get(1))));
+                        cb.ge(roomRoot.get("price"), filterArgumentModel.getSearchRequestModel().getPrice().get(0)),
+                        cb.le(roomRoot.get("price"), filterArgumentModel.getSearchRequestModel().getPrice().get(1))));
             }
 
-            typeList.add(cb.equal(postRoot.get("typeId"), criteria.getTypeId()));
+            typeList.add(cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()));
 
             if (districtList.size() == 0) districtList.add(cb.conjunction());
             if (utilityList.size() == 0) utilityList.add(cb.conjunction());
@@ -84,10 +87,9 @@ public class Filter implements Specification<TbPost> {
                     cb.or(priceList.toArray(new Predicate[priceList.size()])),
                     cb.or(genderList.toArray(new Predicate[genderList.size()]))
             );
-        }else {
-            Root<TbPostHasTbDistrict> tbPostHasTbDistrictRoot = criteriaQuery.from(TbPostHasTbDistrict.class);
+        } else {
             return cb.and(
-                    cb.equal(postRoot.get("typeId"), criteria.getTypeId())
+                    cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId())
             );
         }
     }

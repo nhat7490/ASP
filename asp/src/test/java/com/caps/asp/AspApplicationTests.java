@@ -40,7 +40,7 @@ public class AspApplicationTests {
 //		search.setMinPrice(0);
 
 		Filter filter = new Filter();
-		filter.setCriteria(null);
+		filter.setFilterArgumentModel(null);
 
 		List<TbPost> userList = postService.search(filter);
 		System.out.println(userList);
