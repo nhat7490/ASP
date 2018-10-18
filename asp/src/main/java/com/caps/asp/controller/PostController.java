@@ -177,7 +177,7 @@ public class PostController {
                             tbPostHasTbDistrict -> tbPostHasTbDistrict.getDistrictId()).collect(Collectors.toList()));
                     return roommatePostResponseModel;
                 });
-                return ResponseEntity.status(OK).body(roommatePostResponseModels);
+                return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
 
             } else if (filter.getFilterArgumentModel().getTypeId() == PARTNER_POST){//get room master post
 
@@ -215,7 +215,7 @@ public class PostController {
                     return roomPostResponseModel;
                 });
 
-                return ResponseEntity.status(OK).body(roomPostResponseModels);
+                return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
 
             }
         return ResponseEntity.status(NOT_FOUND).build();
