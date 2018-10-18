@@ -8,4 +8,5 @@ import java.util.List;
 public interface PostHasDistrictRepository extends JpaRepository<TbPostHasTbDistrict, Integer> {
     TbPostHasTbDistrict findByPostId(int postId);
     List<TbPostHasTbDistrict> findAllByDistrictId(int districtId);
+    List<TbPostHasTbDistrict> findAllByPostId(int postId);
 }

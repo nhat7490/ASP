@@ -23,4 +23,7 @@ public class PostHasDistrictService {
     public List<TbPostHasTbDistrict> findAllByDistrictId(int districtId) {
         return postHasDistrictRepository.findAllByDistrictId(districtId);
     }
+    public List<TbPostHasTbDistrict> findAllByPostId(int postId) {
+        return postHasDistrictRepository.findAllByPostId(postId);
+    }
 }
