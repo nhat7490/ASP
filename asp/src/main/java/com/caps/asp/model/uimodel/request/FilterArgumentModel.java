@@ -5,17 +5,19 @@ public class FilterArgumentModel {
     private Integer page;
     private Integer offset;
     private Integer typeId;
-    private String orderBy;
+    private Integer orderBy;
+    private Integer userId;
 
     public FilterArgumentModel() {
     }
 
-    public FilterArgumentModel(SearchRequestModel searchRequestModel, Integer page, Integer offset, Integer typeId, String orderBy) {
+    public FilterArgumentModel(SearchRequestModel searchRequestModel, Integer page, Integer offset, Integer typeId, Integer orderBy, Integer userId) {
         this.searchRequestModel = searchRequestModel;
         this.page = page;
         this.offset = offset;
         this.typeId = typeId;
         this.orderBy = orderBy;
+        this.userId = userId;
     }
 
     public SearchRequestModel getSearchRequestModel() {
@@ -50,11 +52,19 @@ public class FilterArgumentModel {
         this.typeId = typeId;
     }
 
-    public String getOrderBy() {
+    public Integer getOrderBy() {
         return orderBy;
     }
 
-    public void setOrderBy(String orderBy) {
+    public void setOrderBy(Integer orderBy) {
         this.orderBy = orderBy;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

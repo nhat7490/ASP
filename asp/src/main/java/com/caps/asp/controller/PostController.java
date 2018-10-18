@@ -142,13 +142,14 @@ public class PostController {
 
     @PostMapping("/post/filter")
     public ResponseEntity getPostByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
-        try {
+//        try {
             Filter filter = new Filter();
-            if (filterArgumentModel.getSearchRequestModel() == null) {
-                filter.setFilterArgumentModel(null);
-            } else {
-                filter.setFilterArgumentModel(filterArgumentModel);
-            }
+            filter.setFilterArgumentModel(filterArgumentModel);
+//            if (filterArgumentModel.getSearchRequestModel() == null) {
+//                filter.setFilterArgumentModel(null);
+//            } else {
+//                filter.setFilterArgumentModel(filterArgumentModel);
+//            }
 
             if (filter.getFilterArgumentModel().getTypeId() == ROOM_POST) {//get member post
 
@@ -157,7 +158,7 @@ public class PostController {
                     RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
                     UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
                     TbFavourite favourite = favouriteService
-                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getSearchRequestModel().getUserId(), tbPost.getPostId());
+                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
 
                     roommatePostResponseModel.setPostId(tbPost.getPostId());
                     roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
@@ -188,7 +189,7 @@ public class PostController {
                     List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
                     UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
                     TbFavourite favourite = favouriteService
-                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getSearchRequestModel().getUserId(), tbPost.getPostId());
+                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
 
                     roomPostResponseModel.setName(tbPost.getName());
                     roomPostResponseModel.setPostId(tbPost.getPostId());
@@ -218,9 +219,9 @@ public class PostController {
 
             }
         return ResponseEntity.status(NOT_FOUND).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(NOT_FOUND).build();
+//        }
     }
 
     @GetMapping("/post/{typeId}")

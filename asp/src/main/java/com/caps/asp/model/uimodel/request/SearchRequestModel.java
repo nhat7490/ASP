@@ -7,17 +7,15 @@ public class SearchRequestModel {
     private List<Integer> districts;
     private List<Double> price;
     private Integer gender;
-    private Integer userId;
 
     public SearchRequestModel() {
     }
 
-    public SearchRequestModel(List<Integer> utilities, List<Integer> districts, List<Double> price, Integer gender, Integer userId) {
+    public SearchRequestModel(List<Integer> utilities, List<Integer> districts, List<Double> price, Integer gender) {
         this.utilities = utilities;
         this.districts = districts;
         this.price = price;
         this.gender = gender;
-        this.userId = userId;
     }
 
     public List<Integer> getUtilities() {
@@ -50,13 +48,5 @@ public class SearchRequestModel {
 
     public void setGender(Integer gender) {
         this.gender = gender;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 }
