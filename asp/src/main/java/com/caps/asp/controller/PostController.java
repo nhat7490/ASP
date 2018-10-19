@@ -34,8 +34,9 @@ public class PostController {
     public final ImageService imageService;
     public final FavouriteService favouriteService;
     public final PostHasDistrictService postHasDistrictService;
+    public final DistrictService districtService;
 
-    public PostController(PostService postService, RoomService roomService, UserService userService, RoomHasUserService roomHasUserService, RoomHasUtilityService roomHasUtilityService, ImageService imageService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService) {
+    public PostController(PostService postService, RoomService roomService, UserService userService, RoomHasUserService roomHasUserService, RoomHasUtilityService roomHasUtilityService, ImageService imageService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, DistrictService districtService) {
         this.postService = postService;
         this.roomService = roomService;
         this.userService = userService;
@@ -44,6 +45,7 @@ public class PostController {
         this.imageService = imageService;
         this.favouriteService = favouriteService;
         this.postHasDistrictService = postHasDistrictService;
+        this.districtService = districtService;
     }
 
     @GetMapping("/post/findByUserId/{userId}")
@@ -146,11 +148,6 @@ public class PostController {
         try {
             Filter filter = new Filter();
             filter.setFilterArgumentModel(filterArgumentModel);
-//            if (filterArgumentModel.getSearchRequestModel() == null) {
-//                filter.setFilterArgumentModel(null);
-//            } else {
-//                filter.setFilterArgumentModel(filterArgumentModel);
-//            }
 
             if (filter.getFilterArgumentModel().getTypeId() == ROOM_POST) {//get member post
 
@@ -160,6 +157,8 @@ public class PostController {
                     UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
                     TbFavourite favourite = favouriteService
                             .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
+                    TbRoom room = roomService.findRoomById(tbPost.getRoomId());
+                    TbDistrict district = districtService.findByDistrictId(room.getDistrictId());
 
                     roommatePostResponseModel.setPostId(tbPost.getPostId());
                     roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
@@ -170,6 +169,7 @@ public class PostController {
                     } else {
                         roommatePostResponseModel.setFavourite(false);
                     }
+                    roommatePostResponseModel.setCityId(district.getCityId());
                     roommatePostResponseModel.setMinPrice(tbPost.getMinPrice());
                     roommatePostResponseModel.setMaxPrice(tbPost.getMaxPrice());
                     roommatePostResponseModel.setUtilityIds(null);

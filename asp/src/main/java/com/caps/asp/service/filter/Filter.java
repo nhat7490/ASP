@@ -1,5 +1,6 @@
 package com.caps.asp.service.filter;
 
+import com.caps.asp.constant.Constant;
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.FilterArgumentModel;
 import com.caps.asp.model.uimodel.request.SearchRequestModel;
@@ -11,6 +12,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.caps.asp.constant.Constant.*;
 
 public class Filter implements Specification<TbPost> {
 
@@ -44,11 +47,11 @@ public class Filter implements Specification<TbPost> {
                 List<Predicate> genderList = new ArrayList<>();
                 List<Predicate> typeList = new ArrayList<>();
 
-                if (filterArgumentModel.getOrderBy() == 1) {
+                if (filterArgumentModel.getOrderBy() == NEWPOST) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("datePost")));
-                } else if (filterArgumentModel.getOrderBy() == 2) {
+                } else if (filterArgumentModel.getOrderBy() == PRICEDESC) {
                     criteriaQuery.orderBy(cb.asc(postRoot.get("minPrice")));
-                } else if (filterArgumentModel.getOrderBy() == 3) {
+                } else if (filterArgumentModel.getOrderBy() == PRICEASC) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("minPrice")));
                 }
 
@@ -68,8 +71,8 @@ public class Filter implements Specification<TbPost> {
                     utilityList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getGender() == 1
-                        || filterArgumentModel.getSearchRequestModel().getGender() == 2) {
+                if (filterArgumentModel.getSearchRequestModel().getGender() == FEMALE
+                        || filterArgumentModel.getSearchRequestModel().getGender() == MALE) {
 
                     genderList.add(cb.equal(postRoot.get("genderPartner"), filterArgumentModel.getSearchRequestModel().getGender()));
                 } else {
@@ -102,11 +105,11 @@ public class Filter implements Specification<TbPost> {
 
                 );
             } else {
-                if (filterArgumentModel.getOrderBy() == 1) {
+                if (filterArgumentModel.getOrderBy() == NEWPOST) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("datePost")));
-                } else if (filterArgumentModel.getOrderBy() == 2) {
+                } else if (filterArgumentModel.getOrderBy() == PRICEDESC) {
                     criteriaQuery.orderBy(cb.asc(postRoot.get("minPrice")));
-                } else if (filterArgumentModel.getOrderBy() == 3) {
+                } else if (filterArgumentModel.getOrderBy() == PRICEASC) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("minPrice")));
                 }
                 return cb.and(

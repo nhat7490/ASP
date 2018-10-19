@@ -24,4 +24,8 @@ public class DistrictService {
     public List<TbDistrict>findAllByCity(int cityId){
         return districtRepository.findAllByCityId(cityId);
     }
+
+    public TbDistrict findByDistrictId(int districtId){
+        return districtRepository.findByDistrictId(districtId);
+    }
 }

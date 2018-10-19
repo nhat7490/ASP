@@ -1,11 +1,9 @@
 package com.caps.asp.model.uimodel.request.post;
 
-import java.sql.Date;
-
 public class BasePostRequestModel {
     private Integer userId;
-    //default min price in room post
-    private double price;
+    //default min minPrice in room post
+    private double minPrice;
 
     public Integer getUserId() {
         return userId;
@@ -15,11 +13,11 @@ public class BasePostRequestModel {
         this.userId = userId;
     }
 
-    public double getPrice() {
-        return price;
+    public double getMinPrice() {
+        return minPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setMinPrice(double minPrice) {
+        this.minPrice = minPrice;
     }
 }

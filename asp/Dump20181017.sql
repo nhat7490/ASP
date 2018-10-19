@@ -252,7 +252,7 @@ DROP TABLE IF EXISTS `tb_room`;
 CREATE TABLE `tb_room` (
   `room_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `price` float DEFAULT NULL,
+  `minPrice` float DEFAULT NULL,
   `area` int(11) DEFAULT NULL,
   `address` varchar(255) NOT NULL,
   `max_guest` int(11) DEFAULT NULL,
