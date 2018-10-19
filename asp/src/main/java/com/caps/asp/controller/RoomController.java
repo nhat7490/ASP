@@ -178,7 +178,7 @@ public class RoomController {
                     return ResponseEntity.status(CONFLICT).build();
                 } else {
                     TbRoomHasUser tbRoomHasUser = new TbRoomHasUser();
-                    tbRoomHasUser.setRoomHasUserId(0);
+                    tbRoomHasUser.setUserId(user.getUserId());
                     tbRoomHasUser.setDateIn(date);
                     tbRoomHasUser.setDateOut(roomMemberModel.getDateout());
                     tbRoomHasUser.setRoomId(roomMemberModel.getRoomId());

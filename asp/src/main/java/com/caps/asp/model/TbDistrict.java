@@ -44,10 +44,10 @@ public class TbDistrict {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TbDistrict that = (TbDistrict) o;
-        return Objects.equals(districtId, that.districtId) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(cityId, that.cityId);
+        TbDistrict district = (TbDistrict) o;
+        return Objects.equals(districtId, district.districtId) &&
+                Objects.equals(name, district.name) &&
+                Objects.equals(cityId, district.cityId);
     }
 
     @Override

@@ -44,10 +44,10 @@ public class TbFavourite {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TbFavourite that = (TbFavourite) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(userId, that.userId) &&
-                Objects.equals(postId, that.postId);
+        TbFavourite favourite = (TbFavourite) o;
+        return Objects.equals(id, favourite.id) &&
+                Objects.equals(userId, favourite.userId) &&
+                Objects.equals(postId, favourite.postId);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.caps.asp.service;
 
 import com.caps.asp.model.TbPost;
-import com.caps.asp.model.TbPostHasTbDistrict;
 import com.caps.asp.repository.PostRepository;
 import com.caps.asp.service.filter.BookmarkFilter;
 import com.caps.asp.service.filter.Filter;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,15 +25,15 @@ public class PostService {
         return postRepository.findByUserIdAndTypeId(userId, typeId);
     }
 
-    public List<TbPost> getPostList(List<TbPostHasTbDistrict> tbPostHasTbDistrictList, int postId) {
-        List<TbPost> list = new ArrayList<>();
-        for (TbPostHasTbDistrict post : tbPostHasTbDistrictList) {
-            if (post.getPostId() != postId) {
-                list.add(postRepository.findByPostId(post.getPostId()));
-            }
-        }
-        return list;
-    }
+//    public List<TbPost> getPostList(List<TbPostHasTbDistrict> tbPostHasTbDistrictList, int postId) {
+//        List<TbPost> list = new ArrayList<>();
+//        for (TbPostHasTbDistrict post : tbPostHasTbDistrictList) {
+//            if (post.getPostId() != postId) {
+//                list.add(postRepository.findByPostId(post.getPostId()));
+//            }
+//        }
+//        return list;
+//    }
 
     public TbPost findByRoomId(int roomId) {
         return postRepository.findByRoomId(roomId);

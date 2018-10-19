@@ -7,20 +7,19 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_room_has_user", schema = "asp", catalog = "")
 public class TbRoomHasUser {
-    private Integer roomHasUserId;
+    private Integer userId;
     private Date dateIn;
     private Date dateOut;
-    private Integer userId;
     private Integer roomId;
 
     @Id
-    @Column(name = "room_has_user_id", nullable = false)
-    public Integer getRoomHasUserId() {
-        return roomHasUserId;
+    @Column(name = "user_id", nullable = false)
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setRoomHasUserId(Integer roomHasUserId) {
-        this.roomHasUserId = roomHasUserId;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     @Basic
@@ -44,16 +43,6 @@ public class TbRoomHasUser {
     }
 
     @Basic
-    @Column(name = "user_id", nullable = false)
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    @Basic
     @Column(name = "room_id", nullable = false)
     public Integer getRoomId() {
         return roomId;
@@ -68,16 +57,15 @@ public class TbRoomHasUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomHasUser that = (TbRoomHasUser) o;
-        return Objects.equals(roomHasUserId, that.roomHasUserId) &&
+        return Objects.equals(userId, that.userId) &&
                 Objects.equals(dateIn, that.dateIn) &&
                 Objects.equals(dateOut, that.dateOut) &&
-                Objects.equals(userId, that.userId) &&
                 Objects.equals(roomId, that.roomId);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(roomHasUserId, dateIn, dateOut, userId, roomId);
+        return Objects.hash(userId, dateIn, dateOut, roomId);
     }
 }

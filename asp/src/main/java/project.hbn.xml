@@ -23,6 +23,8 @@
       <mapping class="com.caps.asp.model.TbUser"/>
       <mapping class="com.caps.asp.model.TbUtilities"/>
       <mapping class="com.caps.asp.model.TbUtilitiesReference"/>
+      <mapping class="com.caps.asp.model.TbReference"/>
+      <mapping class="com.caps.asp.model.TbDistrictReference"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
