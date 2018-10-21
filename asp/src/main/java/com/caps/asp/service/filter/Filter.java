@@ -84,9 +84,15 @@ public class Filter implements Specification<TbPost> {
                     priceList.add(cb.and(
                             cb.ge(postRoot.get("minPrice"), filterArgumentModel.getSearchRequestModel().getPrice().get(0)),
                             cb.le(postRoot.get("minPrice"), filterArgumentModel.getSearchRequestModel().getPrice().get(1))));
+                }else{
+                    priceList.add(cb.conjunction());
                 }
 
-                typeList.add(cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()));
+                if (filterArgumentModel.getTypeId() != null){
+                    typeList.add(cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()));
+                }else {
+                    typeList.add(cb.conjunction());
+                }
 
                 if (districtList.size() == 0) districtList.add(cb.conjunction());
                 if (utilityList.size() == 0) utilityList.add(cb.conjunction());
@@ -173,8 +179,17 @@ public class Filter implements Specification<TbPost> {
                                             , filterArgumentModel.getSearchRequestModel().getPrice().get(1))));
                 }
 
-                typeList.add(cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()));
-                userList.add(cb.equal(userRoot.get("userId"), filterArgumentModel.getUserId()));
+                if (filterArgumentModel.getTypeId() != null){
+                    typeList.add(cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()));
+                }else {
+                    typeList.add(cb.conjunction());
+                }
+
+                if (filterArgumentModel.getUserId() != null){
+                    userList.add(cb.equal(userRoot.get("userId"), filterArgumentModel.getUserId()));
+                }else {
+                    userList.add(cb.conjunction());
+                }
 
                 if (districtList.size() == 0) districtList.add(cb.conjunction());
                 if (utilityList.size() == 0) utilityList.add(cb.conjunction());
