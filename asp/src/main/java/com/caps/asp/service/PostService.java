@@ -1,16 +1,18 @@
 package com.caps.asp.service;
 
 import com.caps.asp.model.TbPost;
+import com.caps.asp.model.TbRoom;
 import com.caps.asp.repository.PostRepository;
 import com.caps.asp.service.filter.BookmarkFilter;
 import com.caps.asp.service.filter.Filter;
+import com.caps.asp.util.CalculateDistance;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -25,15 +27,30 @@ public class PostService {
         return postRepository.findByUserIdAndTypeId(userId, typeId);
     }
 
-//    public List<TbPost> getPostList(List<TbPostHasTbDistrict> tbPostHasTbDistrictList, int postId) {
-//        List<TbPost> list = new ArrayList<>();
-//        for (TbPostHasTbDistrict post : tbPostHasTbDistrictList) {
-//            if (post.getPostId() != postId) {
-//                list.add(postRepository.findByPostId(post.getPostId()));
-//            }
-//        }
-//        return list;
-//    }
+    public List<TbPost> getPostList(List<TbRoom> roomList, int roomId) {
+        //roomId : is room of people who is suggested
+        List<TbPost> list = new ArrayList<>();
+        for (TbRoom room : roomList) {
+            if (room.getRoomId() != roomId) {
+                TbPost tbPost = new TbPost();
+                tbPost = postRepository.findByRoomId(room.getRoomId());
+                if (tbPost != null)
+                    list.add(tbPost);
+            }
+        }
+        return list;
+    }
+
+    public Page<TbPost> getAllPostByRoomIds(int page, int items, List<Integer> roomIds) {
+        int actualPage = page - 1;
+        Pageable pageable = PageRequest.of(actualPage, items);
+
+        return postRepository.findAllByRoomIdIn(roomIds, pageable);
+    }
+
+    public List<TbPost> findAllPostByRoomIds(List<Integer> roomIds) {
+        return postRepository.findAllByRoomIdIn(roomIds);
+    }
 
     public TbPost findByRoomId(int roomId) {
         return postRepository.findByRoomId(roomId);

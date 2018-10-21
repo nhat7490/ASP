@@ -11,4 +11,5 @@ public interface RoomRepository extends JpaRepository<TbRoom, Integer> {
     TbRoom findByRoomId(int roomId);
     List<TbRoom> findAll();
     TbRoom findByUserIdAndRoomId(int userId, int roomId);
+    List<TbRoom> findAllByDistrictId(int districtId);
 }

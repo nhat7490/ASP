@@ -18,6 +18,11 @@ public interface PostRepository extends JpaRepository<TbPost, Integer>, JpaSpeci
     Page<TbPost> findAllByUserId(int userId, Pageable pageable);
 
     Page<TbPost> findAllByTypeId(int typeId, Pageable pageable);
-    List<TbPost>  findAllByTypeId(int typeId);
+
+    List<TbPost> findAllByTypeId(int typeId);
+
+    Page<TbPost> findAllByRoomIdIn(List<Integer> roomIds, Pageable pageable);
+
+    List<TbPost> findAllByRoomIdIn(List<Integer> roomIds);
 
 }
