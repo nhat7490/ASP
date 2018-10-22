@@ -249,7 +249,7 @@ public class PostController {
 
     @PostMapping("/post/favouriteFilter")
     public ResponseEntity getFavouriteByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
-        try {
+//        try {
             BookmarkFilter filter = new BookmarkFilter();
             filter.setFilterArgumentModel(filterArgumentModel);
 
@@ -326,9 +326,9 @@ public class PostController {
 
             }
             return ResponseEntity.status(NOT_FOUND).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(NOT_FOUND).build();
+//        }
     }
 
     @GetMapping("/post/{typeId}")
@@ -537,7 +537,7 @@ public class PostController {
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
 
             }
-            
+
         } catch (Exception e) {
             return ResponseEntity.status((NOT_FOUND)).build();
         }
