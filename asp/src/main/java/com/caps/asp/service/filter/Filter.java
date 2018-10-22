@@ -73,8 +73,9 @@ public class Filter implements Specification<TbPost> {
                     utilityList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getGender() == FEMALE
-                        || filterArgumentModel.getSearchRequestModel().getGender() == MALE) {
+                if (filterArgumentModel.getSearchRequestModel().getGender() != null
+                        && (filterArgumentModel.getSearchRequestModel().getGender() == FEMALE
+                        || filterArgumentModel.getSearchRequestModel().getGender() == MALE)) {
 
                     genderList.add(cb.equal(postRoot.get("genderPartner"), filterArgumentModel.getSearchRequestModel().getGender()));
                 } else {
