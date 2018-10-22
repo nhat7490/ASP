@@ -103,6 +103,8 @@ public class BookmarkFilter implements Specification<TbPost> {
                         cb.equal(roomRoot.get("districtId"), districtRoot.get("districtId")),
                         cb.equal(roomRoot.get("roomId"), roomHasUtilityRoot.get("roomId")),
                         cb.equal(roomHasUtilityRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
+                        cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId()),
+
                         cb.or(userList.toArray(new Predicate[userList.size()])),
                         cb.or(typeList.toArray(new Predicate[typeList.size()])),
                         cb.or(districtList.toArray(new Predicate[districtList.size()])),
@@ -207,6 +209,7 @@ public class BookmarkFilter implements Specification<TbPost> {
                         cb.equal(utilitiesReferenceRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
                         cb.equal(referenceRoot.get("userId"), districtReferenceRoot.get("userId")),
                         cb.equal(districtReferenceRoot.get("districtId"), districtRoot.get("districtId")),
+                        cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId()),
 
                         cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()),
                         cb.equal(userRoot.get("userId"), filterArgumentModel.getUserId()),

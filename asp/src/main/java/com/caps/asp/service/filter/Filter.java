@@ -40,12 +40,14 @@ public class Filter implements Specification<TbPost> {
                 Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
                 Root<TbRoomHasUtility> roomHasUtilityRoot = criteriaQuery.from(TbRoomHasUtility.class);
                 Root<TbUtilities> utilitiesRoot = criteriaQuery.from(TbUtilities.class);
+                Root<TbCity> cityRoot = criteriaQuery.from(TbCity.class);
 
                 List<Predicate> districtList = new ArrayList<>();
                 List<Predicate> utilityList = new ArrayList<>();
                 List<Predicate> priceList = new ArrayList<>();
                 List<Predicate> genderList = new ArrayList<>();
                 List<Predicate> typeList = new ArrayList<>();
+                List<Predicate> cityList = new ArrayList<>();
 
                 if (filterArgumentModel.getOrderBy() == NEWPOST) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("datePost")));
@@ -84,13 +86,13 @@ public class Filter implements Specification<TbPost> {
                     priceList.add(cb.and(
                             cb.ge(postRoot.get("minPrice"), filterArgumentModel.getSearchRequestModel().getPrice().get(0)),
                             cb.le(postRoot.get("minPrice"), filterArgumentModel.getSearchRequestModel().getPrice().get(1))));
-                }else{
+                } else {
                     priceList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getTypeId() != null){
+                if (filterArgumentModel.getTypeId() != null) {
                     typeList.add(cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()));
-                }else {
+                } else {
                     typeList.add(cb.conjunction());
                 }
 
@@ -103,6 +105,8 @@ public class Filter implements Specification<TbPost> {
                         cb.equal(roomRoot.get("districtId"), districtRoot.get("districtId")),
                         cb.equal(roomRoot.get("roomId"), roomHasUtilityRoot.get("roomId")),
                         cb.equal(roomHasUtilityRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
+                        cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId()),
+
                         cb.or(typeList.toArray(new Predicate[typeList.size()])),
                         cb.or(districtList.toArray(new Predicate[districtList.size()])),
                         cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
@@ -176,18 +180,18 @@ public class Filter implements Specification<TbPost> {
                     priceList.add(cb.and(
                             cb.between(postRoot.get("minPrice")
                                     , filterArgumentModel.getSearchRequestModel().getPrice().get(0)
-                                            , filterArgumentModel.getSearchRequestModel().getPrice().get(1))));
+                                    , filterArgumentModel.getSearchRequestModel().getPrice().get(1))));
                 }
 
-                if (filterArgumentModel.getTypeId() != null){
+                if (filterArgumentModel.getTypeId() != null) {
                     typeList.add(cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()));
-                }else {
+                } else {
                     typeList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getUserId() != null){
+                if (filterArgumentModel.getUserId() != null) {
                     userList.add(cb.equal(userRoot.get("userId"), filterArgumentModel.getUserId()));
-                }else {
+                } else {
                     userList.add(cb.conjunction());
                 }
 
@@ -203,6 +207,7 @@ public class Filter implements Specification<TbPost> {
                         cb.equal(utilitiesReferenceRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
                         cb.equal(referenceRoot.get("userId"), districtReferenceRoot.get("userId")),
                         cb.equal(districtReferenceRoot.get("districtId"), districtRoot.get("districtId")),
+                        cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId()),
 
                         cb.or(typeList.toArray(new Predicate[typeList.size()])),
                         cb.or(districtList.toArray(new Predicate[districtList.size()])),

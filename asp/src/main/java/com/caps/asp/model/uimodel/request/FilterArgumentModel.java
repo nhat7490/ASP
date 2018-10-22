@@ -7,17 +7,28 @@ public class FilterArgumentModel {
     private Integer typeId;
     private Integer orderBy;
     private Integer userId;
+    private Integer cityId;
+
 
     public FilterArgumentModel() {
     }
 
-    public FilterArgumentModel(SearchRequestModel searchRequestModel, Integer page, Integer offset, Integer typeId, Integer orderBy, Integer userId) {
+    public FilterArgumentModel(SearchRequestModel searchRequestModel, Integer page, Integer offset, Integer typeId, Integer orderBy, Integer userId, Integer cityId) {
         this.searchRequestModel = searchRequestModel;
         this.page = page;
         this.offset = offset;
         this.typeId = typeId;
         this.orderBy = orderBy;
         this.userId = userId;
+        this.cityId = cityId;
+    }
+
+    public Integer getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 
     public SearchRequestModel getSearchRequestModel() {
