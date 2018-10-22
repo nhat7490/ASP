@@ -13,7 +13,7 @@ protocol AlertControllerDelegate {
 class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelegate  {
     var delegate:AlertControllerDelegate?
     var listItem:[String]?
-    var tableView = UITableView()
+    var tableView:UITableView!
     var alertType:AlertType = .normal
     static func showAlertInfor(withTitle title:String?,forMessage message:String?,inViewController controller:UIViewController) {
         let alertController = AlertController(title: title, message: message, preferredStyle: .alert)
@@ -21,7 +21,18 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
             alertController.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: nil))
         }
         controller.present(alertController, animated: true, completion: nil)
-//        showAlertConfirm(withTitle: title, andMessage: message, alertStyle: .alert, forViewController: controller, lhsButtonTitle: "OK".localized, rhsButtonTitle: nil, lhsButtonHandler: nil, rhsButtonHandler: nil)
+    }
+    
+    static func showAlertInfoWithAttributeString(withTitle title:NSAttributedString?,forMessage message:NSAttributedString?,inViewController controller:UIViewController) {
+        let alertController = AlertController(title: nil, message: nil, preferredStyle: .alert)
+        if let _ = title {
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: nil))
+        }
+        
+        alertController.setValue(title, forKey: "attributedTitle")
+        alertController.setValue(message, forKey: "attributedMessage")
+        
+        controller.present(alertController, animated: true, completion: nil)
     }
     
     static func showAlertConfirm(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,forViewController controller:UIViewController,lhsButtonTitle:String?,rhsButtonTitle:String?,lhsButtonHandler:((UIAlertAction)->Void)?,rhsButtonHandler:((UIAlertAction)->Void)?){
@@ -35,11 +46,14 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         controller.present(alertController, animated: true, completion: nil)
     }
     
-    static func showAlertList(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,alertType:AlertType = .normal,isMultiSelected:Bool = false,forViewController controller:UIViewController,data:[String]?,rhsButtonTitle:String?,rhsButtonHandler:((UIAlertAction)->Void)?)->AlertController{
+    static func showAlertList(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,alertType:AlertType = .normal,isMultiSelected:Bool = false,forViewController controller:UIViewController,data:[String]?,rhsButtonTitle:String?)->AlertController{
         let alertController = AlertController(title: title, message: message, preferredStyle: alertStyle)
         if let _ = rhsButtonTitle {
-            alertController.addAction(UIAlertAction(title: rhsButtonTitle, style: .default, handler: rhsButtonHandler))
+            alertController.addAction(UIAlertAction(title: title, style: .default, handler: { (action) in
+                alertController.delegate?.alertControllerDelegate(ofController: alertController, withAlertType: alertController.alertType, atIndexPaths: alertController.tableView.indexPathsForSelectedRows)
+            }))
         }
+        alertController.addAction(UIAlertAction(title: "CANCEL".localized, style: .cancel, handler: nil))
         alertController.alertType = alertType
         alertController.listItem = data
         alertController.addTableView(withCellIdentifier: Constants.CELL_POPUP_SELECT_LISTTV,isMultiSelected:isMultiSelected)
@@ -73,7 +87,8 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
     }
     
     func addTableView(withCellIdentifier cellIdentifier:String,isMultiSelected:Bool) {
-        
+        tableView =  UITableView()
+        tableView.separatorStyle = .none
         //Create View Controller and TableView
         let vc = UIViewController()
         
@@ -106,7 +121,7 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.delegate?.alertControllerDelegate(ofController: self, withAlertType: self.alertType, atIndexPaths: tableView.indexPathsForSelectedRows)
+        
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50

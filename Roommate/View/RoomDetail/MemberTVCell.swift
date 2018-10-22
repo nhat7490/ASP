@@ -19,7 +19,7 @@ class MemberTVCell: UITableViewCell {
     weak var delegate:MemberTVCellDelegate?
     var viewType:ViewType?{
         didSet{
-            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
+            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForMaster{
                 btnEditMember.isHidden = true
                 btnRemoveMember.isHidden = true
             }else{

@@ -30,8 +30,8 @@ class RoomRequestModel:BaseModel{
     var imageUrls = [String]()
     
     //MARK: ObjectMapper
-    required init?(map: Map) {
-        super.init()
+    required convenience init?(map: Map) {
+        self.init()
     }
     
     override func mapping(map: Map){

@@ -129,12 +129,14 @@
 //MARK: Network
 "NETWORK_STATUS_TITLE"="Thông báo";
 "NETWORK_STATUS_CONNECTED_ERROR_MESSAGE"="Không thể kết nối mạng, vui lòng kiểm tra lại";
-"NETWORK_STATUS_ERROR_MESSAGE"="Lỗi mạng, vui lòng thử lại sau";
-"NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"="Không thể kết nối máy chủ vui lòng thử lại sau";
-"NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Ops. Lỗi máy chủ.";
+"NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE"="Không thể kết nối mạng, chạm để thử lại";
+"NETWORK_STATUS_ERROR_MESSAGE"="Lỗi mạng, chạm để thử lại";
+"NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"="Không thể kết nối máy chủ, chạm để thử lại";
+"NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Ops. Lỗi máy chủ, chạm để thử lại";
 //MARK: Alert
 "ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
 "ALERT_INVALID_USERNAME_PASSWORD"="Mật khẩu không đúng";
+
 
 //MARK: SignInVC
 "PLACE_HOLDER_USERNAME"="Tên đăng nhập";
@@ -146,7 +148,7 @@
 "ERROR_TYPE_NAME_MAX_CHAR_50"="Tên Từ 6 đến 50 ký tự";
 "ERROR_TYPE_QUANTITY"="Số lượng Từ 1 đến 20";
 "ERROR_TYPE_BRAND"="Nhãn Từ 2 đến 50 ký tự";
-"ERROR_TYPE_PRICE"="Giá từ 100,000 VND đến 50,000,000 VND";
+"ERROR_TYPE_PRICE"="Giá từ 300,000 VND đến 50,000,000 VND";
 "ERROR_TYPE_AREA"="Diện tích từ 10 - 1000 m2";
 "ERROR_TYPE_PHONE"="Định dạng số điện thoại sai";
 "ERROR_TYPE_ADDRESS"="Số nhà đường phường từ 5 đến 250 ký tự";
@@ -155,6 +157,8 @@
 
 
 
+//MARK: Progresshub title
 
-
+"MB_SIGN_IN_TITLE" = "Đăng nhập...";
+"MB_LOAD_DATA_TITLE" = "Đang tải dữ liệu";
 

@@ -43,7 +43,7 @@ enum SystemAppType {
     case phone, message, email
 }
 enum ViewType{
-    case detailForOwner,detailForMember,cEForOwner
+    case detailForMaster,detailForMember,cEForOwner,detailForFinder
 }
 enum DropdownListViewType{
     case city,district

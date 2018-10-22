@@ -1,3 +1,4 @@
+
 //
 //  UtilityModel.swift
 //  Roommate
@@ -11,14 +12,16 @@ import RealmSwift
 import Realm
 import ObjectMapper_Realm
 class UtilityModel:BaseModel {
-    let utilityId = RealmOptional<Int>()
+    @objc dynamic var utilityId = 0
     @objc dynamic var name:String?
     @objc dynamic var quantity = 1
     @objc dynamic var brand = ""
     @objc dynamic var utilityDescription = ""
-
+    override var hashValue: Int{
+        return self.utilityId.hashValue
+    }
     public init(utilityId: Int, name: String, quantity: Int, brand: String, utilityDescription: String) {
-        self.utilityId.value = utilityId
+        self.utilityId = utilityId
         self.name = name
         self.quantity = quantity
         self.brand = brand
@@ -26,7 +29,7 @@ class UtilityModel:BaseModel {
         super.init()
     }
     override func copy(with zone: NSZone?) -> Any {
-        let utilityModel = UtilityModel(utilityId: utilityId.value!, name: name!, quantity: quantity, brand: brand, utilityDescription: utilityDescription)
+        let utilityModel = UtilityModel(utilityId: utilityId, name: name!, quantity: quantity, brand: brand, utilityDescription: utilityDescription)
         return utilityModel
     }
     
@@ -37,7 +40,7 @@ class UtilityModel:BaseModel {
     
     override func mapping(map: Map) {
         print("Call mapping(map: Map) for utility")
-        utilityId.value <- map["utilityId"]
+        utilityId <- map["utilityId"]
         name <- map["name"]
         quantity <- map["quantity"]
         brand <- map["brand"]
@@ -62,5 +65,9 @@ class UtilityModel:BaseModel {
     required init(value: Any, schema: RLMSchema) {
         super.init(value: value, schema: schema)
         print("Call init(value: Any, schema: RLMSchema) for utility")
+    }
+    
+    static func ==(lhs:UtilityModel,rhs:UtilityModel)->Bool{
+        return lhs.utilityId == rhs.utilityId
     }
 }

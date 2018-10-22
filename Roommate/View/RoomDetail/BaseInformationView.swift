@@ -19,6 +19,7 @@ class BaseInformationView: UIView {
     @IBOutlet weak var imgvArea: UIImageView!
     @IBOutlet weak var lblArea: UILabel!
     
+    @IBOutlet weak var lblStatusHeightConstraint: NSLayoutConstraint!
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }

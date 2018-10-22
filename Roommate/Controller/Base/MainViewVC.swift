@@ -37,17 +37,18 @@ class MainViewVC: BaseVC {
         super.viewDidLoad()
 //        self.present(ceRoomVC, animated: true, completion: nil)
 //        Check Login
-//        if let user = DBManager.shared.getUser(){
+        
+        if let _ = DBManager.shared.getUser(){
 //            let filter = FilterVC()
 //            filter.filterVCType = .roommate
 //             self.add(UINavigationController(rootViewController:firstLanchVC))
 //            self.add(UINavigationController(rootViewController:roomDetailVC))
-
+//
 //            self.add(UINavigationController(rootViewController: mainTabBarVC))
             self.add(mainTabBarVC)
-//        }else{
-//            self.add(UINavigationController(rootViewController: firstLanchVC))
-//        }
+        }else{
+            self.add(UINavigationController(rootViewController: firstLanchVC))
+        }
     }
 
 

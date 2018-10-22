@@ -31,7 +31,7 @@ class APIResponseAlert {
         case .invalidPassword:
              message = "ALERT_INVALID_PASSWORD_MESSAGE"
         case .internalServerError:
-             message = "ALERT_INTERNAL_SERVER_ERROR"
+             message = "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"
         }
         AlertController.showAlertInfor(withTitle: "NETWORK_STATUS_TITLE".localized, forMessage: message?.localized, inViewController: controller)
     }

@@ -16,7 +16,7 @@ class UserModel:BaseModel{
     
     
     @objc dynamic var userId = 0
-    @objc dynamic var username:String!
+    @objc dynamic var username:String?
     @objc dynamic var email:String?
     @objc dynamic var fullname:String?
     @objc dynamic var imageProfile:String?
@@ -26,8 +26,8 @@ class UserModel:BaseModel{
     @objc dynamic var roleId = 0
     
     //MARK: ObjectMapper
-    required init?(map: Map) {
-        super.init()
+    required convenience init?(map: Map) {
+        self.init()
     }
     
     override func mapping(map: Map){
@@ -37,7 +37,7 @@ class UserModel:BaseModel{
         email <- map["email"]
         fullname <- map["fullname"]
         imageProfile <- map["imageProfile"]
-        dob <- (map["dob"],CustomDateFormatTransform(formatString: ""))
+        dob <- (map["dob"])
         phone <- map["phone"]
         gender <- map["gender"]
         roleId <- map["roleId"]
@@ -61,9 +61,5 @@ class UserModel:BaseModel{
         super.init(value: value, schema: schema)
     }
     
-    //MARK: Copy
-    override func copy(with zone: NSZone? = nil) -> Any {
-        let base = BaseModel()
-        return base
-    }
+
 }

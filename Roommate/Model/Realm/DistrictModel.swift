@@ -43,11 +43,7 @@ class DistrictModel:BaseModel{
         super.init(value: value, schema: schema)
     }
     
-    //MARK: Copy
-    override func copy(with zone: NSZone? = nil) -> Any {
-        let base = BaseModel()
-        return base
-    }
+
     
 
 

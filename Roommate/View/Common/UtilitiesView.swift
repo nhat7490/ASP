@@ -26,7 +26,7 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
     
     weak var delegate:UtilitiesViewDelegate?
     
-    var utilityForSC:UtilityForSC?
+//    var utilityForSC:UtilityForSC?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

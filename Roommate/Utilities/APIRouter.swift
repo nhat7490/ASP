@@ -21,9 +21,10 @@ enum APIRouter:URLRequestConvertible{
     case district()
     case utility()
     case createRoom(model:RoomRequestModel)
-    case allRoom()
-    case allRoommate()
-    
+    case postForAll(model:FilterArgumentModel)
+    case postForBookmark(model:FilterArgumentModel)
+    case createBookmark(model:BookmarkRequestModel)
+    case removeBookmark(id:Int)
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -35,8 +36,10 @@ enum APIRouter:URLRequestConvertible{
     
     var httpMethod:HTTPMethod{
         switch self{
-        case .login,.createRoom:
+        case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark:
             return .post
+        case .removeBookmark:
+            return .delete
         default:
             return .get
             
@@ -58,11 +61,15 @@ enum APIRouter:URLRequestConvertible{
         case .createRoom:
             return "room/create"
         case .utility:
-            return "utilities/getAll";
-        case .allRoom:
-            return "post/1"
-        case .allRoommate:
-            return "post/2"
+            return "utilities/getAll"
+        case .postForAll:
+            return "post/filter"
+        case .postForBookmark:
+            return "post/favouriteFilter"
+        case .createBookmark:
+            return "favourites/createFavourite"
+        case .removeBookmark(let id):
+            return "favourite/remove/\(id)"
         }
     }
     
@@ -80,6 +87,12 @@ enum APIRouter:URLRequestConvertible{
                     "components":"country:vi",
                     "key":"AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"]
         case .createRoom(let model):
+            return Mapper().toJSON(model)
+        case .postForAll(let model):
+            return Mapper().toJSON(model)
+        case .postForBookmark(let model):
+            return Mapper().toJSON(model)
+        case .createBookmark(let model):
             return Mapper().toJSON(model)
         default:
             return [:]

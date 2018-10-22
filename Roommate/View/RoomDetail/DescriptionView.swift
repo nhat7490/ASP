@@ -30,7 +30,7 @@ class DescriptionView: UIView,UITextViewDelegate{
     }
     var viewType:ViewType?{
         didSet{
-            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
+            if  viewType == .detailForMember || viewType == .detailForMaster || viewType == .detailForFinder{
                 tvContent.isEditable = false
             }else{
                 tvContent.addToobarButton()

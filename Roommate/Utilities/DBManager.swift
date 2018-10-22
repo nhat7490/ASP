@@ -11,7 +11,7 @@ class DBManager {
     //For check data
     func isExistedUtility()->Bool{
         let realm = try! Realm()
-        return realm.objects(UtilityModel.self).first != nil ? true : false
+        return realm.objects(UtilityModel.self).isEmpty
     }
     func isExistedDistrict()->Bool{
         let realm = try! Realm()
@@ -22,6 +22,10 @@ class DBManager {
         return realm.objects(CityModel.self).first != nil ? true : false
     }
     
+    func isExisted<T:BaseModel>(ofType:T.Type)->Bool{
+        let realm = try! Realm()
+        return realm.objects(T.self).count != 0
+    }
     //For Common
     func getRecord<T:BaseModel>(id:Int,ofType:T.Type)->T?{
         let realm = try! Realm()
@@ -38,6 +42,10 @@ class DBManager {
             try realm.write {
                 realm.add(objects)
             }
+            print("Value")
+            print(realm.objects(UtilityModel.self).count)
+            print(realm.objects(CityModel.self).count)
+            print(realm.objects(DistrictModel.self).count)
             return true
         }catch{
             return false
@@ -162,6 +170,7 @@ class DBManager {
     func getUser() -> UserModel?{
         let realm = try! Realm()
         return  realm.objects(UserModel.self).first
+        
     }
 
     func addUser(user:UserModel)->Bool{

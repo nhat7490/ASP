@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
-
+    
     
     var room:RoomModel! = nil//RoomModel(name: "Tên phòng hiện tại là Thanh xuân -  Dalab Dalab Dalab", price: 500000, area: 50, address: "1B Nguyễn thị Minh Khai", maxGuest: 5, date_create: Date(), current_member: 3, description: "Mình rất yêu căn phòng này nhưng do đi làm xa quá mình cho thuê lại giá 1.7tr, toilet riêng, rửa chén riêng, như hình, có giếng trời mát lắm điện 2.500, xe free ko thêm gì, à quên nước tháng hình như 40k thì phải mình ko Care luôn, bà chủ dễ thương dịu dàng, nhà cực sạch , an ninh, 11h tối đóng cửa, đi khua hơn thì báo tiếng là đc Alo cho mình nha - oanh", status: StatusModel(status: 1, name: "Active"), city: CityModel(id: 1, name: "Hồ chí minh"), district: DistrictModel(districtId: 1, name: "Quận 1",city_id:1), image: [ImageModel(id: 1, link_url: "https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?cs=srgb&dl=4k-wallpaper-background-beautiful-853199.jpg&fm=jpg"), ImageModel(id: 2, link_url: "https://images.pexels.com/photos/534049/pexels-photo-534049.jpeg?cs=srgb&dl=beach-calm-cliffs-534049.jpg&fm=jpg"), ImageModel(id: 2, link_url: "https://images.pexels.com/photos/534049/pexels-photo-534049.jpeg?cs=srgb&dl=beach-calm-cliffs-534049.jpg&fm=jpg")], utilities: [UtilityModel(utility_id: 1, name: "24-hours", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "parking", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "toilet", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 2, name: "aircondition", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 3, name: "cctv", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 4, name: "cooking", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 5, name: "fan", quantity: 15, brand: "Hello", description: "nothing")] ,users:[User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1),User(id: 2, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 2),User(id: 3, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom:2)], requiredGender: 1)
     
@@ -78,7 +78,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
         print(scrollView.frame)
         print(scrollView.bounds)
     }
-
+    
     
     func setupUI() {
         //Navigation bar
@@ -129,14 +129,16 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
         _ = descriptionsView.anchor(utilitiesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_DESCRIPTION))
         _ = optionView.anchor(nil, view.leftAnchor, view.bottomAnchor, view.rightAnchor,.zero,CGSize(width: 0, height: Constants.HEIGHT_VIEW_OPTION))
     }
-
+    
     func setData() {
         //Delegate , Datasource and other
         let status = NSAttributedString(string: "ROOM_DETAIL_STATUS_CERTIFICATED".localized, attributes: [NSAttributedStringKey.font : UIFont.boldMedium,
-                                                                                             NSAttributedStringKey.backgroundColor: UIColor.defaultBlue,
-                                                                                             NSAttributedStringKey.foregroundColor:UIColor.white])
+                                                                                                          NSAttributedStringKey.backgroundColor: UIColor.defaultBlue,
+                                                                                                          NSAttributedStringKey.foregroundColor:UIColor.white])
         //Data for baseInformationView
-        horizontalImagesView.images = room.image
+        horizontalImagesView.images = room.image.map({ (image) -> String in
+            image.link_url!
+        })
         baseInformationView.lblMainTitle.text = room.name
         baseInformationView.lblStatus.attributedText = status
         baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
@@ -178,21 +180,23 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
     func optionViewDelegate(view optionView: OptionView, onClickBtnLeft btnLeft: UIButton) {
         //Valid information at time input. So we dont need to valid here
         switch viewType { 
-            case .detailForOwner:
-                print("Need to set to show edit screen here")
-            case .detailForMember:
-                AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_SMS_ALERT".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_MESSAGE".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
-                  
-                    Utilities.openSystemApp(type: .message, forController: self, withContent: "0918170105", completionHander: nil)
-                })
-            case .cEForOwner:
-                break
+        case .detailForMaster:
+            print("Need to set to show edit screen here")
+        case .detailForMember:
+            AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_SMS_ALERT".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_MESSAGE".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
+                
+                Utilities.openSystemApp(type: .message, forController: self, withContent: "0918170105", completionHander: nil)
+            })
+        case .cEForOwner:
+            break
+        case .detailForFinder:
+            break
         }
     }
     
     func optionViewDelegate(view optionView: OptionView, onClickBtnRight btnRight: UIButton) {
         switch viewType {
-        case .detailForOwner:
+        case .detailForMaster:
             print("Need to set to show edit screen here")
         case .detailForMember:
             AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_SMS_ALERT".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_CALL".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
@@ -200,6 +204,8 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
                 Utilities.openSystemApp(type: .phone, forController: self, withContent: "0918170105", completionHander: nil)
             })
         case .cEForOwner:
+            break
+        default:
             break
         }
     }

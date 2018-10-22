@@ -103,8 +103,30 @@ class RoommateCVCell:UICollectionViewCell{
     }()
     
     var delegate:RoommateCVCellDelegate?
+    var roommate:RoommatePostResponseModel?{
+        didSet{
+            self.imgvLeftAvatar.sd_setImage(with: URL(string: (roommate?.userResponseModel?.imageProfile)!), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
+                guard let image = image else{
+                    return
+                }
+                DispatchQueue.main.async {
+                    self.imgvLeftAvatar.image = image
+                }
+            }
+            self.lblRightName.text = roommate?.userResponseModel?.fullname
+            self.lblRightPrice.text = "ROMMATE_RIGHT_PRICE".localized
+            self.lblRightPriceValue.text = "\(roommate!.minPrice.toString)vnd - \(roommate!.maxPrice.toString)vnd"
+            self.lblRightPosition.text = "ROMMATE_RIGHT_POSITION".localized
+            let dictrictsString = roommate?.districtIds?.map({ (districtId) -> String in
+                (DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.name)!
+            })
+            self.lblRightPositionValue.text = dictrictsString?.joined(separator: ",")
+            self.lblRightCity.text = "ROMMATE_RIGHT_CITY".localized
+            self.lblRightCityValue.text = DBManager.shared.getRecord(id: (roommate?.cityId)!, ofType: CityModel.self)?.name
+            self.imgvLeftBookmark.image = (roommate?.favourite)! ? UIImage(named: "bookmarked"):UIImage(named: "bookmark")
+        }
+    }
     var indexPath:IndexPath?
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -188,19 +210,6 @@ class RoommateCVCell:UICollectionViewCell{
         super.init(coder: aDecoder)
     }
     
-    
-    func setData(roommate:RoommateModel,indexPath:IndexPath)  {
-        self.indexPath = indexPath
-        self.imgvLeftAvatar.image = roommate.user.image
-        self.lblRightName.text = roommate.user.name
-        self.lblRightPrice.text = "ROMMATE_RIGHT_PRICE".localized
-        self.lblRightPriceValue.text = "\(roommate.minPrice)vnd - \(roommate.maxPrice)vnd"
-        self.lblRightPosition.text = "ROMMATE_RIGHT_POSITION".localized
-        self.lblRightPositionValue.text = roommate.location.joined(separator: ",")
-        self.lblRightCity.text = "ROMMATE_RIGHT_CITY".localized
-        self.lblRightCityValue.text = roommate.city
-        self.imgvLeftBookmark.image = roommate.isBookMark ? UIImage(named: "bookmarked"):UIImage(named: "bookmark")
-    }
     override func layoutSubviews() {
         imgvLeftAvatar.layer.cornerRadius = frame.height/2-2*Constants.MARGIN_6
     }

@@ -26,7 +26,7 @@ class SliderView: UIView, TTRangeSliderDelegate{
                 lblTitle.text = "AREA_TITLE".localized
                 ttrsValue.numberFormatterOverride.negativeSuffix = " m2"
                 ttrsValue.numberFormatterOverride.positiveSuffix = " m2"
-                self.initRangeValue(step: 1, minValue: 0, maxValue: 100, minDistance: 1,minSelectedValue: 5,maxSelectedValue: 50)
+                self.initRangeValue(step: 1, minValue: Float(Constants.MIN_AREA), maxValue: Float(Constants.MAX_AREA), minDistance: 1,minSelectedValue: 15,maxSelectedValue: 50)
             }
         }
     }
@@ -36,7 +36,7 @@ class SliderView: UIView, TTRangeSliderDelegate{
         lblTitle.text  = "PRICE".localized
         lblTitle.font = .smallTitle
         addSubview(ttrsValue)
-        _ = ttrsValue.anchor(lblTitle.bottomAnchor, leftAnchor,nil, rightAnchor, UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20), .init(width: 0, height: 30))
+        _ = ttrsValue.anchor(lblTitle.bottomAnchor, leftAnchor,nil, rightAnchor, UIEdgeInsets(top: 20, left: 25, bottom: 0, right: -25), .init(width: 0, height: 30))
         
         ttrsValue.delegate = self
         //default setting : PRICE
@@ -64,7 +64,7 @@ class SliderView: UIView, TTRangeSliderDelegate{
         
         
         //init value
-        self.initRangeValue(step: 50_000, minValue: 0, maxValue: 20_000_000, minDistance: 50_000,minSelectedValue: 500_000,maxSelectedValue: 10_000_000)
+        self.initRangeValue(step: 50_000, minValue: Float(Constants.MIN_PRICE), maxValue: Float(Constants.MAX_PRICE), minDistance: 200_000,minSelectedValue: 1_000_000,maxSelectedValue: 40_000_000)
     }
     
     func rangeSlider(_ sender: TTRangeSlider!, didChangeSelectedMinimumValue selectedMinimum: Float, andMaximumValue selectedMaximum: Float) {

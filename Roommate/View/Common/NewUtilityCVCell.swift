@@ -19,7 +19,7 @@ class NewUtilityCVCell: UICollectionViewCell {
     
     var data:UtilityModel?{
         didSet{
-            lblTitle.text = data?.name?.localized
+            lblTitle.text = DBManager.shared.getRecord(id: (data?.utilityId)!, ofType: UtilityModel.self)?.name
             imgvIcon.image = UIImage(named: "cctv")
         }
     }
@@ -33,7 +33,7 @@ class NewUtilityCVCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        lblTitle.font = .small
+        lblTitle.font = .boldSmall
         self.layer.backgroundColor = UIColor.white.cgColor
         lblTitle.textColor = .lightSubTitle
         imgvIcon.tintColor = .lightSubTitle

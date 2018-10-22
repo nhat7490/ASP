@@ -154,6 +154,7 @@
                     <connections>
                         <outlet property="btnSignIn" destination="U0S-cd-Ozg" id="1Fp-Hc-3Ke"/>
                         <outlet property="btnSignUp" destination="1Jt-dL-clK" id="i7S-Hj-Dmn"/>
+                        <outlet property="imgvIcon" destination="Xpe-iX-R34" id="R4N-IX-Cfz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4yb-wf-5Ag" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -237,7 +238,7 @@
                                                             <constraint firstAttribute="bottom" secondItem="3CZ-n4-CEZ" secondAttribute="bottom" id="zci-yN-meu"/>
                                                         </constraints>
                                                     </view>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="app_icon_small" translatesAutoresizingMaskIntoConstraints="NO" id="BIO-sH-uee">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="app_icon_small" translatesAutoresizingMaskIntoConstraints="NO" id="BIO-sH-uee">
                                                         <rect key="frame" x="45" y="0.0" width="150" height="150"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="150" id="EXq-jr-L7s"/>
@@ -285,6 +286,7 @@
                     </view>
                     <connections>
                         <outlet property="btnSignIn" destination="3CZ-n4-CEZ" id="edC-Uu-d8r"/>
+                        <outlet property="imgvIcon" destination="BIO-sH-uee" id="SyG-Ru-GqD"/>
                         <outlet property="scrollView" destination="MVw-If-VsX" id="Jxc-cD-272"/>
                         <outlet property="tfPassword" destination="pob-9i-Spq" id="QJp-1e-XbE"/>
                         <outlet property="tfUsername" destination="vwc-0u-Fan" id="4cT-ju-NEr"/>

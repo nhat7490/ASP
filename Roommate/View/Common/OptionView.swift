@@ -21,7 +21,17 @@ class OptionView: UIView {
     weak var delegate:OptionViewDelegate?
     var viewType:ViewType?{
         didSet{
-            setupUI()
+            switch viewType! {
+            case .detailForMaster:
+                btnEdit.setImage(UIImage(named: "edit"), for: .normal)
+                btnRight.setImage(UIImage(named: "remove"), for: .normal)
+            case .detailForMember,.detailForFinder:
+                btnEdit.setImage(UIImage(named: "sms"), for: .normal)
+                btnRight.setImage(UIImage(named: "call"), for: .normal)
+            default:
+                //for future
+                break
+            }
         }
     }
     
@@ -49,19 +59,6 @@ class OptionView: UIView {
     }
     @IBAction func onClickBtnRemove(_ sender: UIButton) {
         delegate?.optionViewDelegate(view: self, onClickBtnRight: sender)
-    }
-    func setupUI() {
-        switch viewType! {
-            case .detailForOwner:
-                btnEdit.setImage(UIImage(named: "edit"), for: .normal)
-                btnRight.setImage(UIImage(named: "remove"), for: .normal)
-            case .detailForMember:
-                btnEdit.setImage(UIImage(named: "sms"), for: .normal)
-                btnRight.setImage(UIImage(named: "call"), for: .normal)
-        default:
-            //for future
-            break
-        }
     }
     func setupUI(forButton button:UIButton,imageName:String){
         button.setImage(UIImage(named: imageName), for: .normal)

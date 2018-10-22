@@ -12,7 +12,7 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
 
     @IBOutlet weak var collectionView: BaseHorizontalCollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
-    var images:[ImageModel]?{
+    var images:[String]?{
         didSet{
             pageControl.numberOfPages = images?.count ?? 0
             collectionView.delegate = self
@@ -32,7 +32,7 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_IMAGECV, for: indexPath) as! ImageCVCell
-        cell.link_url = images?[indexPath.row].link_url
+        cell.link_url = images?[indexPath.row]
 //        cell.backgroundColor = .red
         return cell
     }

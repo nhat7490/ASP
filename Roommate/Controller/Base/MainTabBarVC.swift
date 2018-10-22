@@ -37,10 +37,7 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
         self.selectedIndex = 1
     }
     
-    func initData(){
-        self.showIndicator()
-        
-    }
+
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         view.layoutIfNeeded()
         return true

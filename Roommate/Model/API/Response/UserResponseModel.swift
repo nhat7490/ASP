@@ -7,7 +7,7 @@
 //
 import Foundation
 import ObjectMapper
-class UserResponeModel: Mappable {
+class UserResponseModel: Mappable {
     var userId: Int?
     var fullname: String?
     var imageProfile: String?

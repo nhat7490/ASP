@@ -8,7 +8,8 @@
 
 import UIKit
 import GooglePlaces
-
+import Realm
+import RealmSwift
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -19,6 +20,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        window = UIWindow(frame: UIScreen.main.bounds)
 //        window?.makeKeyAndVisible()
         GMSPlacesClient.provideAPIKey("AIzaSyALHwTQKAUuHGqFmfji7-3U9SF_b04mXds")
+//        var config = Realm.Configuration()
+        
+        // Use the default directory, but replace the filename with the username
+//        config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent("roommate.realm")
+        
+        // Set this as the configuration used for the default Realm
+//        Realm.Configuration.defaultConfiguration = config
+//
+//        do {
+//            let realm = try Realm(configuration: config)
+//        } catch {
+//            fatalError("Error occurred while trying to initialise realm \(error)")
+//
+//        }
+//        let realmURL = Realm.Configuration.defaultConfiguration.fileURL!
+//        let realmURLs = [
+//            realmURL,
+//            realmURL.appendingPathExtension("lock"),
+//            realmURL.appendingPathExtension("note"),
+//            realmURL.appendingPathExtension("management")
+//        ]
+//        for URL in realmURLs {
+//            do {
+//                try FileManager.default.removeItem(at: URL)
+//            } catch {
+//                // handle error
+//            }
+//        }
+//        do {
+//            let realm = try Realm()
+//        } catch let error as NSError {
+//            fatalError("Error occurred while trying to initialise realm \(error)")
+//        }
         return true
     }
 

@@ -26,7 +26,7 @@ class GenderView: UIView {
     
     var viewType:ViewType?{
         didSet{
-            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
+            if  viewType == .detailForMember || viewType == .detailForMaster || viewType == .detailForFinder{
                 btnMale.isUserInteractionEnabled = false
                 btnFemale.isUserInteractionEnabled = false
             }else{

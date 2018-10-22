@@ -8,7 +8,12 @@
 
 import UIKit
 import Alamofire
-class FilterVC: BaseVC {
+import RealmSwift
+protocol FilterVCDelegate:class{
+    func filterVCDelegate(filterVC:FilterVC,onCompletedWithFilter filter:FilterArgumentModel)
+}
+class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderViewDelegate,AlertControllerDelegate,SliderViewDelegate{
+    
     
     let scrollView:UIScrollView = {
         let sv = UIScrollView()
@@ -37,18 +42,6 @@ class FilterVC: BaseVC {
         sv.sliderViewType  = .price
         return sv
     }()
-    
-    lazy var areaSliderView:SliderView = {
-        let sv:SliderView = .fromNib()
-        sv.sliderViewType  = .area
-        return sv
-    }()
-    
-    lazy var maxMemberSelectView:MaxMemberSelectView = {
-        let mv:MaxMemberSelectView = .fromNib()
-        return mv
-    }()
-    
     lazy var genderView:GenderView = {
         let gv:GenderView = .fromNib()
         return gv
@@ -56,7 +49,7 @@ class FilterVC: BaseVC {
     
     lazy var utilitiesView:UtilitiesView = {
         let uv:UtilitiesView = .fromNib()
-        uv.utilityForSC = .filter
+//        uv.utilityForSC = .filter
         return uv
     }()
     
@@ -66,42 +59,64 @@ class FilterVC: BaseVC {
         bt.tintColor = .white
         return bt
     }()
-    var filterVCType:FilterVCType!
+//    var filterVCType:FilterVCType!
+    var filterArgumentModel:FilterArgumentModel!
+    var utilities:[UtilityModel]?
+    var districts:[DistrictModel]?
+    var cities:[CityModel]?
+    var selectedUtilities:List<UtilityModel>?
+    var selectedCity:CityModel?
+    var selectedDistrict:DistrictModel?
+    var selectedGender:GenderSelect?
+    var selectedPrice:List<Float>?
+    weak var delegate:FilterVCDelegate?
     
-    var utilities:[UtilityModel] = []
-//        = [UtilityModel(utility_id: 1, name: "24-hours", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "parking", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "toilet", quantity: 15, brand: "Hello", description: "nothing"),
-//                     UtilityModel(utility_id: 2, name: "aircondition", quantity: 15, brand: "Hello", description: "nothing"),
-//                     UtilityModel(utility_id: 3, name: "cctv", quantity: 15, brand: "Hello", description: "nothing"),
-//                     UtilityModel(utility_id: 4, name: "cooking", quantity: 15, brand: "Hello", description: "nothing"),
-//                     UtilityModel(utility_id: 5, name: "fan", quantity: 15, brand: "Hello", description: "nothing")]
-//
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchData()
+        
+        
+    }
+    func fetchData(){
+        if !APIConnection.isConnectedInternet(){
+            showErrorView(inView: self.contentView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+                self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
+                    DispatchQueue.main.async {
+                        self.setupUIAndData()
+                    }
+                }
+            }
+        }else{
+            self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
+                DispatchQueue.main.async {
+                    self.setupUIAndData()
+                }
+            }
+        }
+    }
+    func setupUIAndData(){
+        self.utilities = (DBManager.shared.getRecords(ofType: UtilityModel.self)?.toArray(type: UtilityModel.self))!
+        self.cities = (DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self))!
+        self.districts = (DBManager.shared.getRecords(ofType: DistrictModel.self)?.toArray(type: DistrictModel.self))!
         setupUI()
         setData()
     }
     
     func setupUI(){
         view.backgroundColor = .white
-        edgesForExtendedLayout = []// view above navigation bar
-        automaticallyAdjustsScrollViewInsets = false
+        edgesForExtendedLayout = .top// view above navigation bar
+//        automaticallyAdjustsScrollViewInsets = false
         //Create tempview for bottom button
         let bottomView = UIView()
 
         //Caculate height
         let defaultBottomViewHeight:CGFloat = 60.0
         let defaultPadding = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
-//        let numberOfRow = utilities.count%4==0 ? utilities.count/4 : utilities.count/4+1
-//        let utilitiesViewWidth = Double((view.frame.size.width-20.0)/8.0 + 40.0)
-//        let utilitiesViewHeight =  utilitiesViewWidth * Double(numberOfRow)
-        let numberOfRow = utilities.count%2==0 ? utilities.count/2 : utilities.count/2+1
-        let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITY * Double(numberOfRow) + 40.0
+        let numberOfRow =  (utilities?.count)!%2==0 ? (utilities?.count)!/2 : (utilities?.count)!/2+1
+        let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITY * Double(numberOfRow) + 70.0
         let contentViewHeight:CGFloat
-        if filterVCType == .room{
-            contentViewHeight = CGFloat(Constants.HEIGHT_VIEW_SLIDER*2+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_SPACE)
-        }else{
-            contentViewHeight = CGFloat(Constants.HEIGHT_VIEW_SLIDER*1+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_SPACE)
-        }
+            contentViewHeight = CGFloat(Constants.HEIGHT_VIEW_SLIDER+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_SPACE)
 
         //Add View
         view.addSubview(scrollView)
@@ -115,16 +130,10 @@ class FilterVC: BaseVC {
         contentView.addSubview(priceSliderView)
         contentView.addSubview(genderView)
         contentView.addSubview(utilitiesView)
-
-        if filterVCType == .room{
-            contentView.addSubview(areaSliderView)
-            contentView.addSubview(maxMemberSelectView)
-        }
-        
         //Add Constrant
        
         if #available(iOS 11.0, *) {
-             _ = scrollView.anchor(view.topAnchor, view.leftAnchor, bottomLayoutGuide.bottomAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -defaultBottomViewHeight-2*Constants.MARGIN_10, right: -Constants.MARGIN_10))
+             _ = scrollView.anchor(view.safeAreaLayoutGuide.topAnchor, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -defaultBottomViewHeight-2*Constants.MARGIN_10, right: -Constants.MARGIN_10))
             _ = bottomView.anchor(scrollView.bottomAnchor, view.leftAnchor, nil, view.rightAnchor,defaultPadding,.init(width: 0, height: defaultBottomViewHeight))
         } else {
             // Fallback on earlier versions
@@ -139,20 +148,14 @@ class FilterVC: BaseVC {
         _ = cityDropdownListView.anchor(contentView.topAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_DROPDOWN_LIST))
         _ = districtDropdownListView.anchor(cityDropdownListView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_DROPDOWN_LIST))
         _ = priceSliderView.anchor(districtDropdownListView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_SLIDER))
-        if filterVCType == .room{
-            _ = areaSliderView.anchor(priceSliderView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_SLIDER))
-            _ = maxMemberSelectView.anchor(areaSliderView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT))
-            _ = genderView.anchor(maxMemberSelectView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
-        }else{
-            _ = genderView.anchor(priceSliderView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
-        }
+        _ = genderView.anchor(priceSliderView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
         _ = utilitiesView.anchor(genderView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: utilitiesViewHeight))
 
         _ = btnSave.anchor(view: bottomView,UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0))
         btnSave.layer.cornerRadius = CGFloat(10)
         btnSave.clipsToBounds = true
-
-
+        btnSave.addTarget(self, action: #selector(onClickBtnSave(btnSave:)), for: .touchUpInside)
+        
         
     }
 
@@ -160,16 +163,119 @@ class FilterVC: BaseVC {
         navTitle = "FILTER".localized
         btnSave.setTitle("APPLY".localized, for: .normal)
         utilitiesView.utilities = utilities
-        Alamofire.request(APIRouter.findById(id: 2)).responseJSON(completionHandler: { response in
-//            print(response.)
-         })
         
-
+        utilitiesView.delegate = self
+        districtDropdownListView.delegate = self
+        cityDropdownListView.delegate = self
+        genderView.delegate = self
+        
+        cityDropdownListView.lblSelectTitle.text = "LIST_CITY_TITLE".localized
+        districtDropdownListView.lblSelectTitle.text = "LIST_DISTRICT_TITLE".localized
+//        filterArgumentModel.searchRequestModel?.districts.first.
+        selectedCity = CityModel()
+        selectedDistrict = DistrictModel()
+        selectedUtilities = List<UtilityModel>()
+        selectedPrice = List<Float>()
+        selectedPrice?.removeAll()
+        selectedPrice?.append(1_000_000)
+        selectedPrice?.append(40_000_000)
+        selectedGender = .none
+    }
+    
+    //MARK: Handler utilitiesViewDelegate
+    func utilitiesViewDelegate(utilitiesView view: UtilitiesView, didSelectUtilityAt indexPath: IndexPath) {
+        guard let utility = utilities?[indexPath.row] else {
+            return
+        }
+        if (selectedUtilities?.contains(utility))!{
+            utilitiesView.setState(isSelected: false, atIndexPath: indexPath)
+            let index = selectedUtilities?.index(of: utility)
+            selectedUtilities?.remove(at: index!)
+        }else{
+            utilitiesView.setState(isSelected: true, atIndexPath: indexPath)
+            selectedUtilities?.append(utility)
+        }
+        
+    }
+    //MARK: Handler dropdownListViewDelegate
+    func dropdownListViewDelegate(view dropdownListView: DropdownListView, onClickBtnChangeSelect btnSelect: UIButton) {
+        if dropdownListView == cityDropdownListView{
+            let alert = AlertController.showAlertList(withTitle: "LIST_CITY_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .city, forViewController: self, data: cities?.map({ (city) -> String     in
+                city.name!
+            }), rhsButtonTitle: "DONE".localized)
+            alert.delegate = self
+            
+        }else{
+            
+            if self.selectedCity?.cityId != 0{
+                let alert = AlertController.showAlertList(withTitle: "LIST_DISTRICT_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .district, forViewController: self, data: districts?.filter({ (district) -> Bool in
+                    district.cityId == self.selectedCity?.cityId
+                }).map({ (district) -> String in
+                    district.name!
+                }), rhsButtonTitle: "DONE".localized)
+                alert.delegate = self
+            }
+            
+        }
+    }
+    //MARK: Handler genderViewDelegate
+    func genderViewDelegate(genderView view: GenderView, onChangeGenderSelect genderSelect: GenderSelect?) {
+        
+    }
+    //MARK: Handler sliderView
+    func sliderView(view sliderView: SliderView, didChangeSelectedMinValue selectedMin: Float, andMaxValue selectedMax: Float) {
+        selectedPrice?.removeAll()
+        selectedPrice?.append(selectedMin)
+        selectedPrice?.append(selectedMax)
+    }
+    //MARK: UIAlertControllerDelegate
+    func alertControllerDelegate(ofController: UIAlertController,withAlertType type:AlertType, atIndexPaths indexs: [IndexPath]?) {
+        guard let indexs = indexs else {
+            return
+        }
+        if type == AlertType.city{
+            guard let city = cities?[(indexs.first?.row)!]  else{
+                return
+            }
+            selectedCity = city
+            selectedDistrict? =  DistrictModel()
+            self.cityDropdownListView.lblSelectTitle.text = self.selectedCity?.name
+            self.districtDropdownListView.lblSelectTitle.text  = "LIST_DISTRICT_TITLE".localized
+        }else if type == AlertType.district{
+            guard let districtOfCity = districts?.filter({ (district) -> Bool in
+                district.cityId == self.selectedCity?.cityId
+            }) else{
+                return
+            }
+            districtOfCity.forEach { (d) in
+                print(d.name)
+                print(d.districtId)
+                print(d.cityId)
+            }
+            let district =  districtOfCity[(indexs.first?.row)!]
+            selectedDistrict = district
+            self.districtDropdownListView.lblSelectTitle.text  = self.selectedDistrict?.name
+        }
     }
     //MARK: Handler for save button
     @objc  func onClickBtnSave(btnSave:UIButton){
         //handler for save filter
+        filterArgumentModel.searchRequestModel = SearchRequestModel()
+        filterArgumentModel.searchRequestModel?.gender.value = genderView.genderSelect?.rawValue
+        filterArgumentModel.searchRequestModel?.price = selectedPrice!
+        if selectedCity?.cityId != 0 && selectedDistrict?.districtId != 0{
+            let districts = List<Int>()
+            districts.append((selectedDistrict?.districtId)!)
+            filterArgumentModel.searchRequestModel?.districts = districts
+        }
+        let utilities = List<Int>()
+        selectedUtilities?.forEach({ (utility) in
+            utilities.append(utility.utilityId)
+        })
+        filterArgumentModel.searchRequestModel?.utilities = utilities
         
+        self.delegate?.filterVCDelegate(filterVC: self, onCompletedWithFilter: filterArgumentModel)
+        self.navigationController?.popViewController(animated: true)
     }
 
 }

@@ -29,7 +29,7 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTV
     
     var viewType:ViewType?{
         didSet{
-            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
+            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForMaster{
                 tblMembers.allowsSelection = false
                 btnAddNewMember.isHidden = true
             }else{
@@ -76,7 +76,7 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTV
         }else{
             cell.lblMemberName.text = user.name
         }
-        if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
+        if  viewType == ViewType.detailForMember || viewType == ViewType.detailForMaster{
             cell.delegate = self
             cell.selectionStyle = .default
         }else{

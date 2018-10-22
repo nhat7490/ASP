@@ -11,7 +11,7 @@ import UIKit
 class RoomDetailForMasterVC:BaseVC,UtilitiesViewDelegate{
     lazy var util:UtilitiesView = {
         let v:UtilitiesView = .fromNib()
-        v.utilityForSC = .create
+//        v.utilityForSC = .create
         return v
     }()
     var utilities:[UtilityModel] = []

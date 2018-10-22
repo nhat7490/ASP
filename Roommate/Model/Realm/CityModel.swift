@@ -43,10 +43,5 @@ class CityModel:BaseModel {
     required init(value: Any, schema: RLMSchema) {
         super.init(value: value, schema: schema)
     }
-    
-    //MARK: Copy
-    override func copy(with zone: NSZone? = nil) -> Any {
-        let base = BaseModel()
-        return base
-    }
+
 }

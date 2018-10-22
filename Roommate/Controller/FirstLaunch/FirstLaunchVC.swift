@@ -6,10 +6,17 @@
 //  Copyright © 2018 TrinhHC. All rights reserved.
 //
 
+import UIKit
 import Foundation
 class FirstLaunchVC:BaseVC{
     @IBOutlet weak var btnSignIn: RoundButton!
     @IBOutlet weak var btnSignUp: RoundButton!
+    @IBOutlet weak var imgvIcon: UIImageView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        imgvIcon.layer.cornerRadius = 15
+        imgvIcon.clipsToBounds = true
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: true)

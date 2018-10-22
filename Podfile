@@ -3,7 +3,6 @@
 
 target 'Roommate' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
 
   # Pods for Roommate
 	pod 'Alamofire'
@@ -17,6 +16,7 @@ target 'Roommate' do
 	pod 'ObjectMapper+Realm'
 	pod 'SkyFloatingLabelTextField'
 	pod 'Firebase/Core'
+	pod 'MBProgressHUD'
 	pod 'SwiftyJSON'
 end
 post_install do |installer|

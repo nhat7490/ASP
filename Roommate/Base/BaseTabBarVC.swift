@@ -36,15 +36,17 @@ class BaseTabBarVC: UITabBarController {
     }
     func checkInitData(){
         showIndicator()
-        DispatchQueue.global(qos: .userInteractive).async {
+        DispatchQueue.global(qos: .background).async {
             if !DBManager.shared.isExistedUtility(){self.requestArray(apiRouter: APIRouter.utility(), returnType:UtilityModel.self)}
             if !DBManager.shared.isExistedCity(){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
             if !DBManager.shared.isExistedDistrict(){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
-            self.group.notify(queue: DispatchQueue.main, execute: {
-                self.hideIndicator()
-            })
         }
-        
+        self.group.notify(queue: DispatchQueue.main, execute: {
+            self.hideIndicator()
+        })
+//        if !DBManager.shared.isExistedUtility() || !DBManager.shared.isExistedCity() || !DBManager.shared.isExistedDistrict(){
+//            APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+//        }
         DBManager.shared.getRecords(ofType: UtilityModel.self)?.forEach({ (model) in
             print(model.name)
         })
@@ -59,27 +61,28 @@ class BaseTabBarVC: UITabBarController {
     func requestArray<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){
         self.group.enter()
         APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: {
+            self.hideIndicator()
+            self.group.leave()
             APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
         }, returnType: T.self) { (values, error, statusCode) -> (Void) in
-            
-            if error == .SERVER_NOT_RESPONSE {
+            if error == .SERVER_NOT_RESPONSE || error == .PARSE_RESPONSE_FAIL{
                 self.group.leave()
-                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
-            }else if error == .PARSE_RESPONSE_FAIL{
-                //404
-                self.group.leave()
-                APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+//                self.group.leave()
+//                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+//            }else if error == .PARSE_RESPONSE_FAIL{
+//                //404
+//                self.group.leave()
+//                APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
             }else{
                 //200
                 if statusCode == .OK{
                     guard let values = values else{
-                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
                         self.group.leave()
                         return
                     }
                     _ = DBManager.shared.addRecords(ofType: T.self, objects: values)
                     
-                    
+//                    APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
                 }
                 self.group.leave()
             }

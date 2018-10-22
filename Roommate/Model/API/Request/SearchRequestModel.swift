@@ -15,9 +15,9 @@ class SearchRequestModel: BaseModel {
     //default send nil for backend
     var utilities = List<Int>()
     var districts = List<Int>()
-    var price = List<Double>()
-    var gender  = List<Int>()
-    var typeId = RealmOptional<Int>()
+    var price = List<Float>()
+    var gender = RealmOptional<Int>()
+    var userId = RealmOptional<Int>()
     
     //MARK: Objectmapper
     required init?(map: Map) {
@@ -29,8 +29,8 @@ class SearchRequestModel: BaseModel {
         utilities <- (map["utilities"])
         districts <- map["districts"]
         price <- map["price"]
-        gender <- map["gender"]
-        typeId.value <- map["typeId"]
+        gender.value <- map["gender"]
+        userId.value <- map["userId"]
     }
     //MARK: Object
     required init() {

@@ -115,7 +115,7 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="imgvAvatar" destination="4hB-17-Hz5" id="lXH-W8-bHK"/>
-                <outlet property="imgvFavorite" destination="IhY-MM-yIF" id="LQy-2V-LkA"/>
+                <outlet property="imgvBookMark" destination="IhY-MM-yIF" id="kpt-FU-kYJ"/>
                 <outlet property="tvAddress" destination="aC9-J7-dMJ" id="Eiw-rH-fBy"/>
                 <outlet property="tvName" destination="99R-8a-FHS" id="T1i-1D-Wvi"/>
                 <outlet property="tvNumberOfPatner" destination="5xt-51-2tv" id="zUT-4o-R1G"/>

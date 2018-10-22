@@ -14,15 +14,16 @@ import Realm
 class RoomPostResponseModel:Mappable {
     var postId: Int?
     var name:String?
-    var phoneContact, date: Date?
-    var userResponeModel: UserResponeModel?
+    var phoneContact:String!
+    var date: Date?
+    var userResponseModel: UserResponseModel?
     var minPrice, area: Int?
     var address: String?
-    var utilities: [UtilityModel]?
+    var utilities: [UtilityModel]!
     var imageUrls: [String]?
     var numberPartner, genderPartner: Int?
     var favourite: Bool?
-    
+    var postDesription: String?
     required init?(map: Map) {
         
     }
@@ -30,9 +31,10 @@ class RoomPostResponseModel:Mappable {
     func mapping(map: Map) {
         postId <- map["postId"]
         name <- map["name"]
+        print("PostName:\(map["name"].currentValue)")
         phoneContact <- map["phoneContact"]
         date <- (map["date"],DateTransform())
-        userResponeModel <- map["userResponeModel"]
+        userResponseModel <- map["userResponeModel"]
         minPrice <- map["minPrice"]
         area <- map["area"]
         address <- map["address"]
@@ -41,6 +43,7 @@ class RoomPostResponseModel:Mappable {
         numberPartner <- map["numberPartner"]
         genderPartner <- map["genderPartner"]
         favourite <- map["favourite"]
+        postDesription <- map["description"]
     }
     
 }

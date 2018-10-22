@@ -10,13 +10,14 @@ import UIKit
 import Alamofire
 import AlamofireObjectMapper
 import SkyFloatingLabelTextField
-
+import MBProgressHUD
 //This class for sign up
 class SignInVC: BaseVC,UITextFieldDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var btnSignIn: RoundButton!
     @IBOutlet weak var tfUsername: SkyFloatingLabelTextField!
     @IBOutlet weak var tfPassword: SkyFloatingLabelTextField!
+    @IBOutlet weak var imgvIcon: UIImageView!
     private lazy var mainTabBarVC:MainTabBarVC =  {
         let vc = MainTabBarVC()
         return vc
@@ -32,6 +33,10 @@ class SignInVC: BaseVC,UITextFieldDelegate {
 //    }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        imgvIcon.layer.cornerRadius = 15
+        imgvIcon.clipsToBounds = true
+        
         btnSignIn.setTitle("SIGN_IN_TITLE".localized, for: .normal)
         tfUsername.returnKeyType = .done
         tfUsername.placeholder = "PLACE_HOLDER_USERNAME".localized
@@ -60,6 +65,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
         
     }
     
+    //MARK: UIButton Event
     @IBAction func onClickBtnSignIn(_ sender: Any) {
 //        navigationController?.popToRootViewController(animated: false)
         //        navigationController?.pushViewController(mainTabBarVC, animated: true)
@@ -67,7 +73,12 @@ class SignInVC: BaseVC,UITextFieldDelegate {
         
         //Valid
         if username.isValidUsername() && password.isValidPassword(){
-            self.showIndicator()
+//            self.showIndicator()
+            let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
+            hub.mode = .annularDeterminate
+            hub.bezelView.backgroundColor = .white
+            hub.contentColor = .defaultBlue
+            hub.label.text = "MB_SIGN_IN_TITLE".localized
             //Request for user
             requestUser()
         }else{
@@ -76,46 +87,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
     }
             
 
-    func requestUser(){
-        APIConnection.requestObject(apiRouter: APIRouter.login(username: username, password: password), errorNetworkConnectedHander: {
-            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-        }, returnType: UserModel.self) { (user, error, statusCode) -> (Void) in
-            
-            if error == .SERVER_NOT_RESPONSE {
-                self.hideIndicator()
-                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
-            }else if error == .PARSE_RESPONSE_FAIL{
-                //404
-                self.hideIndicator()
-                APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidUsername)
-            }else{
-                //200
-                if statusCode == .OK{
-                    _ = DBManager.shared.addUser(user: user!)
-                    self.hideIndicator()
-                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                    appdelegate.window!.rootViewController = self.mainTabBarVC
-                    
-                    //403
-                }else if statusCode == .Forbidden {
-                    APIResponseAlert.apiResponseError(controller: self, type: .invalidPassword)
-                }
-            }
-        }
-    }
 
-    
-    @objc func keyBoard(notification: Notification){
-        let userInfo = notification.userInfo!
-        let keyboardScreenEndFrame =  (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame,from: view.window)
-        if notification.name == Notification.Name.UIKeyboardWillHide{
-            scrollView.contentInset = UIEdgeInsets.zero
-        }else{
-            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height + 30, right: 0)
-        }
-        scrollView.scrollIndicatorInsets = scrollView.contentInset
-    }
 
     //MARK: UITextFieldDeleage
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -144,6 +116,51 @@ class SignInVC: BaseVC,UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    //MARK:Other methods
+    func requestUser(){
+        APIConnection.requestObject(apiRouter: APIRouter.login(username: username, password: password), errorNetworkConnectedHander: {
+            MBProgressHUD.hide(for: self.view, animated: true)
+            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+        }, returnType: UserModel.self) { (user, error, statusCode) -> (Void) in
+            DispatchQueue.main.async {
+                MBProgressHUD.hide(for: self.view, animated: true)
+            }
+            if error == .SERVER_NOT_RESPONSE {
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+            }else if error == .PARSE_RESPONSE_FAIL{
+                //404
+                APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidUsername)
+            }else{
+                //200
+                if statusCode == .OK{
+                    //                    DispatchQueue.global(qos: .userInteractive).async {
+                    
+                    //                        self.group.notify(queue: DispatchQueue.main, execute: {
+                    _ = DBManager.shared.addUser(user: user!)
+                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                    appdelegate.window!.rootViewController = self.mainTabBarVC
+                    
+                    //403
+                }else if statusCode == .Forbidden {
+                    APIResponseAlert.apiResponseError(controller: self, type: .invalidPassword)
+                }
+            }
+        }
+    }
+    
+    
+    @objc func keyBoard(notification: Notification){
+        let userInfo = notification.userInfo!
+        let keyboardScreenEndFrame =  (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame,from: view.window)
+        if notification.name == Notification.Name.UIKeyboardWillHide{
+            scrollView.contentInset = UIEdgeInsets.zero
+        }else{
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height + 30, right: 0)
+        }
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
     }
     
 }

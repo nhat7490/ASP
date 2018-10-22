@@ -17,11 +17,10 @@ class APIConnection: NSObject {
     static func requestArray<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander handler:(()->Void)?,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
         //Network handler
         if !isConnectedInternet(){
-            guard let handler = handler else{
+            if let handler = handler{
+                handler()
                 return
             }
-            handler()
-            return
         }
         print(apiRouter)
         Alamofire.request(apiRouter).responseArray { (response:DataResponse<[T]>) in
@@ -52,13 +51,11 @@ class APIConnection: NSObject {
     static func requestObject<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander handler:(()->Void)?,returnType:T.Type,completion:@escaping (_ result:T?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
         //Network handler
         if !isConnectedInternet(){
-            guard let handler = handler else{
+            if let handler = handler{
+                handler()
                 return
             }
-            handler()
-            return
         }
-        
         Alamofire.request(apiRouter).responseObject { (response:DataResponse<T>) in
             //Fail to connect to server
             if let _ = response.error{
@@ -89,11 +86,10 @@ class APIConnection: NSObject {
     static func request(apiRouter:APIRouter,errorNetworkConnectedHander handler:(()->Void)?,completion:@escaping (_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
         //Network handler
         if !isConnectedInternet(){
-            guard let handler = handler else{
+            if let handler = handler{
+                handler()
                 return
             }
-            handler()
-            return
         }
         
         Alamofire.request(apiRouter).response { (response) in

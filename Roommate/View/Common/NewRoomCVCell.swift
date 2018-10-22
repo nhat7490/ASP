@@ -12,7 +12,7 @@ protocol NewRoomCVCellDelegate:class {
     func newRoomCVCellDelegate(cell roomCVCell:NewRoomCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?);
 }
 class NewRoomCVCell: UICollectionViewCell {
-    @IBOutlet weak var imgvFavorite: UIImageView!
+    @IBOutlet weak var imgvBookMark: UIImageView!
     @IBOutlet weak var imgvAvatar: UIImageView!
     @IBOutlet weak var tvNumberOfPatner: UITextView!
     @IBOutlet weak var tvName: UITextView!
@@ -21,7 +21,8 @@ class NewRoomCVCell: UICollectionViewCell {
     var delegate:NewRoomCVCellDelegate?
     var room:RoomPostResponseModel?{
         didSet{
-            imgvAvatar.sd_setImage(with: URL(string: (room?.imageUrls?.first)!), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.scaleDownLargeImages,.retryFailed,]) { (image, error, cacheType, url) in
+            print(room?.imageUrls?.first)
+            imgvAvatar.sd_setImage(with: URL(string: (room?.imageUrls?.first)!), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
                 guard let image = image else{
                     return
                 }
@@ -32,7 +33,8 @@ class NewRoomCVCell: UICollectionViewCell {
             guard let favorite = room?.favourite ,let genderOfPatner = room?.genderPartner,let numberOfPatner = room?.numberPartner,let name = room?.name,let price = room?.minPrice,let address = room?.address else {
                 return
             }
-            imgvFavorite.image = favorite ? UIImage(named: "bookmarked") : UIImage(named: "bookmark-white")
+            print("Gender of patner:\(genderOfPatner)")
+            imgvBookMark.image = favorite ? UIImage(named: "bookmarked") : UIImage(named: "bookmark")
             tvNumberOfPatner.text = genderOfPatner == 1 ? String(format: "NUMBER_OF_PERSON".localized,numberOfPatner,"MALE".localized) :
                 genderOfPatner == 2 ? String(format: "NUMBER_OF_PERSON".localized,numberOfPatner,"FEMALE".localized) : String(format: "NUMBER_OF_PERSON".localized,numberOfPatner,"\("MALE".localized)/\("FEMALE".localized)")
             tvName.text = name
@@ -46,8 +48,12 @@ class NewRoomCVCell: UICollectionViewCell {
     }
     override func awakeFromNib() {
         super.awakeFromNib()
-        imgvAvatar.layer.cornerRadius = 5
+        imgvAvatar.layer.cornerRadius = 10
         imgvAvatar.clipsToBounds  = true
+        
+        imgvBookMark.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onClickImgvBookmark(geture:)))
+        imgvBookMark.addGestureRecognizer(tap)
         tvNumberOfPatner.isEditable = false
         tvName.isEditable = false
         tvPrice.isEditable = false
@@ -60,19 +66,14 @@ class NewRoomCVCell: UICollectionViewCell {
         
         tvPrice.textColor = .defaultBlue
         tvNumberOfPatner.textColor = .lightGray
-        
-        imgvFavorite.image = UIImage(named: "bookmark-white")
-        //MARK: Setup Event for bookmark
-        let tap = UITapGestureRecognizer(target: self, action: #selector(onClickImgvBookmark(geture:)))
-        imgvFavorite.addGestureRecognizer(tap)
     }
     
     func setBookMark(isBookMark:Bool){
-        imgvFavorite.image = isBookMark ? UIImage(named: "bookmarked") : UIImage(named: "bookmark-white")
+        imgvBookMark.image = isBookMark ? UIImage(named: "bookmarked") : UIImage(named: "bookmark")
     }
     //MARK: Event for UI
     @objc func onClickImgvBookmark(geture:UITapGestureRecognizer) {
-        delegate?.newRoomCVCellDelegate(cell: self, onClickUIImageView: imgvFavorite,atIndextPath: indexPath)
+        delegate?.newRoomCVCellDelegate(cell: self, onClickUIImageView: imgvBookMark,atIndextPath: indexPath)
         
     }
 }
