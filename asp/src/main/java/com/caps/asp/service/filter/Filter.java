@@ -108,6 +108,7 @@ public class Filter implements Specification<TbPost> {
                         cb.equal(roomHasUtilityRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
                         cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId()),
 
+                        cb.notEqual(postRoot.get("userId"),filterArgumentModel.getUserId()),
                         cb.or(typeList.toArray(new Predicate[typeList.size()])),
                         cb.or(districtList.toArray(new Predicate[districtList.size()])),
                         cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
