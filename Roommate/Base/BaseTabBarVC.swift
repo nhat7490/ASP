@@ -47,15 +47,15 @@ class BaseTabBarVC: UITabBarController {
 //        if !DBManager.shared.isExistedUtility() || !DBManager.shared.isExistedCity() || !DBManager.shared.isExistedDistrict(){
 //            APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
 //        }
-        DBManager.shared.getRecords(ofType: UtilityModel.self)?.forEach({ (model) in
-            print(model.name)
-        })
-        DBManager.shared.getRecords(ofType: CityModel.self)?.forEach({ (model) in
-            print(model.name)
-        })
-        DBManager.shared.getRecords(ofType: DistrictModel.self)?.forEach({ (model) in
-            print(model.name)
-        })
+//        DBManager.shared.getRecords(ofType: UtilityModel.self)?.forEach({ (model) in
+//            print(model.name)
+//        })
+//        DBManager.shared.getRecords(ofType: CityModel.self)?.forEach({ (model) in
+//            print(model.name)
+//        })
+//        DBManager.shared.getRecords(ofType: DistrictModel.self)?.forEach({ (model) in
+//            print(model.name)
+//        })
     }
     
     func requestArray<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){

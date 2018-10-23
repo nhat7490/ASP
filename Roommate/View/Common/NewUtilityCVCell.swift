@@ -39,7 +39,7 @@ class NewUtilityCVCell: UICollectionViewCell {
         imgvIcon.tintColor = .lightSubTitle
         self.layer.borderColor = UIColor.lightSubTitle.cgColor
         self.layer.borderWidth = 1.0
-        self.layer.cornerRadius = CGFloat((Constants.HEIGHT_CELL_NEW_UTILITY-5)/2)
+        self.layer.cornerRadius = CGFloat((Constants.HEIGHT_CELL_NEW_UTILITYCV-5)/2)
         imgvIcon.tintColor = .lightGray
     }
     

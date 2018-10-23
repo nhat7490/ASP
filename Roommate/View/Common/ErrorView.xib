@@ -17,17 +17,17 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EwV-Sk-Q71">
-                    <rect key="frame" x="67.5" y="307.5" width="240" height="72"/>
+                    <rect key="frame" x="0.0" y="307.5" width="375" height="72"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="refresh" translatesAutoresizingMaskIntoConstraints="NO" id="OZA-0V-Aff">
-                            <rect key="frame" x="104" y="0.0" width="32" height="32"/>
+                            <rect key="frame" x="171.5" y="0.0" width="32" height="32"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="32" id="AgO-PM-ecN"/>
                                 <constraint firstAttribute="width" constant="32" id="hqw-wo-Bgf"/>
                             </constraints>
                         </imageView>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="7lJ-d8-hsf">
-                            <rect key="frame" x="0.0" y="32" width="240" height="40"/>
+                            <rect key="frame" x="0.0" y="32" width="375" height="40"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="JmN-xW-HfE"/>
@@ -40,7 +40,6 @@
                     <constraints>
                         <constraint firstItem="OZA-0V-Aff" firstAttribute="centerX" secondItem="EwV-Sk-Q71" secondAttribute="centerX" id="0vY-7S-JBN"/>
                         <constraint firstAttribute="height" constant="72" id="5wz-3q-GpQ"/>
-                        <constraint firstAttribute="width" constant="240" id="IT0-Ou-Adz"/>
                         <constraint firstItem="OZA-0V-Aff" firstAttribute="top" secondItem="EwV-Sk-Q71" secondAttribute="top" id="M9B-Oh-POc"/>
                         <constraint firstItem="7lJ-d8-hsf" firstAttribute="top" secondItem="OZA-0V-Aff" secondAttribute="bottom" id="kB8-9U-zN6"/>
                         <constraint firstAttribute="trailing" secondItem="7lJ-d8-hsf" secondAttribute="trailing" id="mN2-sB-A0l"/>
@@ -51,6 +50,7 @@
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <constraints>
                 <constraint firstItem="EwV-Sk-Q71" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="HwW-Vr-XaF"/>
+                <constraint firstItem="EwV-Sk-Q71" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="j4q-Nm-3HR"/>
                 <constraint firstItem="EwV-Sk-Q71" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="vBE-it-h2T"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>

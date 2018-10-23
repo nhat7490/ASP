@@ -432,6 +432,9 @@ extension Int{
     func cgFloat() -> CGFloat {
         return CGFloat(self)
     }
+    var toDouble:Double{
+        return Double(self)
+    }
     var toString:String{
         return "\(self)"
     }
@@ -539,5 +542,14 @@ extension String{
 extension Results {
     func toArray<T>(type: T.Type) -> [T] {
         return compactMap { $0 as? T }
+    }
+}
+extension UITextView {
+    override open var contentSize: CGSize {
+        didSet {
+            var topCorrection = (bounds.size.height - contentSize.height * zoomScale) / 2.0
+            topCorrection = max(0, topCorrection)
+            contentInset = UIEdgeInsets(top: topCorrection, left: 0, bottom: 0, right: 0)
+        }
     }
 }

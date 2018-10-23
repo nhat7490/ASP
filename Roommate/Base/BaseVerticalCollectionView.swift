@@ -35,8 +35,8 @@ class BaseVerticalCollectionView: UICollectionView {
     }
     func setupUI(){
         setCollectionViewLayout(BaseVerticalCollectionViewFlowLayout(), animated: false)
-        showsVerticalScrollIndicator = false
-        showsHorizontalScrollIndicator = false
+//        showsVerticalScrollIndicator = false
+//        showsHorizontalScrollIndicator = false
 //        allowsMultipleSelection = false
 //                alwaysBounceHorizontal  = true
 //        isPagingEnabled = true

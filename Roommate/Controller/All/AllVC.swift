@@ -103,6 +103,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         super.viewDidLoad()
         setupUI()
         setupDataAndDelegate()
+        loadRoomData()
         
     }
     
@@ -201,13 +202,13 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         tableView.dataSource = self
         tableView.register(OrderTVCell.self, forCellReuseIdentifier: Constants.CELL_ORDERTV)
         roomFilter.searchRequestModel = nil
-        roomFilter.userId.value = DBManager.shared.getUser()!.userId//DBManager.shared.getUser()?.userId
+        roomFilter.userId.value = DBManager.shared.getUser()!.userId
         roomFilter.typeId.value = 1
         roomFilter.page.value = 1
         roomFilter.offset.value = 15
         roomFilter.cityId.value = 45
         roommateFilter.searchRequestModel = nil
-        roommateFilter.userId.value = DBManager.shared.getUser()!.userId//DBManager.shared.getUser()?.userId
+        roommateFilter.userId.value = DBManager.shared.getUser()!.userId
         roommateFilter.typeId.value = 2
         roommateFilter.page.value = 1
         roommateFilter.offset.value = 15
@@ -218,7 +219,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
 //            //            filterArgModel =
 //            apiRouter = APIRouter.postForBookmark(model: roomFilter)
 //        }
-        loadRoomData()
+        
     }
     
     func loadRoomData(){
@@ -444,6 +445,8 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         if segmentControl.selectedSegmentIndex == 0{
             if rooms.count == 0{
                 loadRoomData()
+            }else{
+                
             }
         }else{
             if roommates.count == 0{
@@ -481,7 +484,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     
     
-    func newRoomCVCellDelegate(cell: NewRoomCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
+    func newRoomCVCellDelegate(roomCVCell: NewRoomCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
         guard let row = indexPath?.row else{
             return
         }
@@ -519,28 +522,30 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         let model = BookmarkRequestModel()
         model.postId = roommate.postId!
         model.userId = DBManager.shared.getUser()!.userId
-        if allVCType == .all{
-            let apiRouter = roommate.favourite == true ? APIRouter.removeBookmark(id: 0) : APIRouter.createBookmark(model: model)
-            self.request(apiRouter: apiRouter, errorNetworkConnectedHander: {
-                APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-            }) { (error, statusCode) -> (Void) in
-                if error == .SERVER_NOT_RESPONSE{
-                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
-                }else{
-                    if statusCode == .OK{
-                        DispatchQueue.main.async {
-                            self.collectionView.reloadData()
+        let apiRouter = roommate.favourite == true ? APIRouter.removeBookmark(id: roommate.postId!) : APIRouter.createBookmark(model: model)
+        self.request(apiRouter: apiRouter, errorNetworkConnectedHander: {
+            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+        }) { (error, statusCode) -> (Void) in
+            if error == .SERVER_NOT_RESPONSE{
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+            }else{
+                if statusCode == .OK{
+                    DispatchQueue.main.async {
+                        
+                        if self.allVCType == .all{
+                            roommate.favourite = roommate.favourite == true ? false : true
+                        }else if self.allVCType == .bookmark{
+                            roommate.favourite =  false
+                            self.roommates.remove(at: row)
                         }
-                    }else{
-                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+                        self.collectionView.reloadData()
                     }
+                }else{
+                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
                 }
             }
-            
-        }else if allVCType == .bookmark{
-            roommate.favourite =  false//for api
-            roommates.remove(at: row)
         }
+        
         
     }
     //MARK: FilterVCDelegate

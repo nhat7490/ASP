@@ -98,8 +98,8 @@ class RoomDetailForFinderVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,Utili
         let padding:UIEdgeInsets = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
 //        let membersViewHeight = room.users?.count != 0 ? Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES : 30.0
         let numberOfRow = room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1
-        let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITY * Double(numberOfRow) + 60.0
-        let totalContentViewHeight = CGFloat(715  + utilitiesViewHeight+Constants.HEIGHT_SPACE)
+        let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITYCV * Double(numberOfRow) + 60.0
+        let totalContentViewHeight = CGFloat(715  + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE)
         
         //Add View
         view.addSubview(scrollView)

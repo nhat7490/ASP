@@ -24,7 +24,6 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
         let bookmark = AllVC()
         bookmark.allVCType = .bookmark
         var vcs = [UIViewController]()
-                vcs.append(CERoomVC())
         vcs.append(all)
         vcs.append(bookmark)
         vcs.append(NotificationVC())
@@ -32,8 +31,8 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
         //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
         //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_RESET_PASSWORD, sbName: Constants.STORYBOARD_MAIN))
         //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
-        
-        viewControllers = vcs.map({UINavigationController(rootViewController: $0)})
+        viewControllers = [HomeVC()]
+//        viewControllers = vcs.map({UINavigationController(rootViewController: $0)})
         self.selectedIndex = 1
     }
     

@@ -63,7 +63,7 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         print("Size Of cell \(UIScreen.main.bounds.width/2-2*Constants.MARGIN_10-5.0)")
-        return CGSize(width: UIScreen.main.bounds.width/2-Constants.MARGIN_10-2.5, height:CGFloat(Constants.HEIGHT_CELL_NEW_UTILITY-2.5))
+        return CGSize(width: UIScreen.main.bounds.width/2-Constants.MARGIN_10-2.5, height:CGFloat(Constants.HEIGHT_CELL_NEW_UTILITYCV-2.5))
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 5//Item in diffrence row

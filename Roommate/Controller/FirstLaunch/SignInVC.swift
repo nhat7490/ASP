@@ -75,7 +75,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
         if username.isValidUsername() && password.isValidPassword(){
 //            self.showIndicator()
             let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
-            hub.mode = .annularDeterminate
+            hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
             hub.contentColor = .defaultBlue
             hub.label.text = "MB_SIGN_IN_TITLE".localized

@@ -64,106 +64,28 @@ class DBManager {
         }
     }
     
-//    //For Utilities
-//
-//    func getUtility(id:Int) -> UtilityModel?{
-//        return  realm.object(ofType: UtilityModel.self, forPrimaryKey: id)
-//    }
-//
-//    func getUtilities() -> Results<UtilityModel>?{
-//        return  realm.objects(UtilityModel.self)
-//    }
-//
-//    func addUtilities(utilities:[UtilityModel])->Bool{
-//
-//        do{
-//            try realm.write {
-//                realm.add(utilities)
-//            }
-//            return true
-//        }catch{
-//            return false
-//        }
-//    }
-//
-//    func deleteAllUtility() {
-//        do {
-//            let districts = realm.objects(UtilityModel.self)
-//            try realm.write {
-//                realm.delete(districts)
-//            }
-//        } catch  {
-//            print("Cannot delete all Disctrict")
-//        }
-//    }
-//
-//    //For district
-//    func getDistrict(id:Int) -> DistrictModel?{
-//        return  realm.object(ofType: DistrictModel.self, forPrimaryKey: id)
-//    }
-//
-//    func getDistrictsByCityId(id:Int) -> Results<DistrictModel>?{
-//        return  realm.objects(DistrictModel.self).filter("cityId = %d", id)
-//    }
-//    func getDistricts() -> Results<DistrictModel>?{
-//        return  realm.objects(DistrictModel.self)
-//    }
-//
-//    func addDistricts(districts:[DistrictModel])->Bool{
-//
-//        do{
-//            try realm.write {
-//                realm.add(districts)
-//            }
-//            return true
-//        }catch{
-//            return false
-//        }
-//    }
-//
-//    func deleteAllDistricts() {
-//        do {
-//            let districts = realm.objects(DistrictModel.self)
-//            try realm.write {
-//                realm.delete(districts)
-//            }
-//        } catch  {
-//            print("Cannot delete all Disctrict")
-//        }
-//    }
-//
-//
-//    //For city
-//    func getCity(id:Int) -> CityModel?{
-//        return  realm.object(ofType: CityModel.self, forPrimaryKey: id)
-//    }
-//
-//    func getCities() -> Results<CityModel>?{
-//        return  realm.objects(CityModel.self)
-//    }
-//
-//    func addCities(cities:[CityModel])->Bool{
-//
-//        do{
-//            try realm.write {
-//                realm.add(cities)
-//            }
-//            return true
-//        }catch{
-//            return false
-//        }
-//    }
-//
-//    func deleteAllCities() {
-//        do {
-//            let cities = realm.objects(CityModel.self)
-//            try realm.write {
-//                realm.delete(cities)
-//            }
-//        } catch  {
-//            print("Cannot delete all city")
-//        }
-//    }
+    func getRecordsInUserRealm<T:BaseModel>(user:UserModel,ofType:T.Type) -> Results<T>?{
+        let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: user.username, withExtension: "realm"),readOnly:false)
+        let realm = try! Realm(configuration: config)
+        return  realm.objects(T.self)
+    }
+    
+    func addRecordInUserRealm<T:BaseModel>(user:UserModel,ofType:T.Type,object:T)->Bool{
+        let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: user.username, withExtension: "realm"),readOnly:false)
+        let realm = try! Realm(configuration: config)
+        do{
+            try realm.write {
+                realm.add(object)
+            }
+            print("Value")
+            print(realm.objects(UtilityModel.self).count)
+            print(realm.objects(CityModel.self).count)
+            print(realm.objects(DistrictModel.self).count)
+            return true
+        }catch{
+            return false
+        }
+    }
 
 
     //For User
@@ -174,7 +96,9 @@ class DBManager {
     }
 
     func addUser(user:UserModel)->Bool{
-        let realm = try! Realm()
+        let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: user.username, withExtension: "realm"),readOnly:false)
+        let realm = try! Realm(configuration: config)
+        
         do{
             self.deleteAllUsers()//delete all relative data when logout
             guard let _ = getUser() else{
@@ -191,7 +115,8 @@ class DBManager {
     }
 
     func updateUser(user:UserModel)->Bool{
-        let realm = try! Realm()
+        let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: user.username, withExtension: "realm"),readOnly:false)
+        let realm = try! Realm(configuration: config)
         do{
             try realm.write {
                 realm.add(user, update:true)
@@ -203,11 +128,8 @@ class DBManager {
     }
 
     func deleteUser(user:UserModel)->Bool{
-        let realm = try! Realm()
         do{
-            try realm.write {
-                realm.delete(user)
-            }
+            try FileManager.default.removeItem(at: Bundle.main.url(forResource: user.username, withExtension: "realm")!)
             return true
         }catch{
             return false

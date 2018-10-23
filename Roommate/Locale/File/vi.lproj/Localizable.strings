@@ -33,6 +33,13 @@
 "ORDER_TITLE"="Sắp xếp theo : ";
 
 
+//MARK: HOMEVC
+"PLACE_HOLDER_SEARCH"="Tìm địa chỉ quận...";
+"TITLE_SUGGEST_ROOM" = "Phòng ở ghép có thể phù hợp với bạn";
+"TITLE_NEW_ROOM" = "Bài đăng tìm người ở ghép mới";
+"TITLE_NEW_ROOMMATE" = "Bài đăng tìm phòng mới";
+"TITLE_VIEW_ALL" = "Xem tất cả";
+
 //MARK: Utilies
 "FEMALE"="Nữ";
 "MALE"="Nam";
@@ -132,7 +139,7 @@
 "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE"="Không thể kết nối mạng, chạm để thử lại";
 "NETWORK_STATUS_ERROR_MESSAGE"="Lỗi mạng, chạm để thử lại";
 "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"="Không thể kết nối máy chủ, chạm để thử lại";
-"NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Ops. Lỗi máy chủ, chạm để thử lại";
+"NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Ops.Lỗi máy chủ, chạm để thử lại";
 //MARK: Alert
 "ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
 "ALERT_INVALID_USERNAME_PASSWORD"="Mật khẩu không đúng";
@@ -158,7 +165,6 @@
 
 
 //MARK: Progresshub title
-
 "MB_SIGN_IN_TITLE" = "Đăng nhập...";
 "MB_LOAD_DATA_TITLE" = "Đang tải dữ liệu";
 

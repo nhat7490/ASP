@@ -1,0 +1,48 @@
+//
+//  LocationSearchView.swift
+//  Roommate
+//
+//  Created by TrinhHC on 10/22/18.
+//  Copyright © 2018 TrinhHC. All rights reserved.
+//
+
+import UIKit
+
+class LocationSearchView: UIView {
+
+    @IBOutlet weak var btnLocation: UIButton!
+    @IBOutlet weak var tfSearch: UITextField!
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        backgroundColor = UIColor(hexString: "f7f7f7")
+        layer.cornerRadius = 10
+        clipsToBounds = true
+        btnLocation.backgroundColor = .clear
+        tfSearch.backgroundColor = .clear
+        tfSearch.borderStyle = .none
+        tfSearch.textAlignment  = .left
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.alignment = .center
+        tfSearch.attributedPlaceholder = NSAttributedString(string: "PLACE_HOLDER_SEARCH".localized, attributes: [NSAttributedStringKey.paragraphStyle:paraStyle])
+        
+        let lblTitle = UILabel()
+        lblTitle.text = "Hồ Chí minh"
+        lblTitle.font = .smallTitle
+        lblTitle.textColor = .defaultBlue
+        lblTitle.textAlignment = .center
+        
+        let imageView = UIImageView(image: UIImage(named: "location"))
+        imageView.tintColor = .defaultBlue
+        imageView.contentMode = .scaleAspectFit
+        
+        btnLocation.addSubview(imageView)
+        btnLocation.addSubview(lblTitle)
+        _ = imageView.anchor(btnLocation.topAnchor, btnLocation.leftAnchor, btnLocation.bottomAnchor, nil,UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
+        _ = imageView.anchorWidth(equalTo: btnLocation.heightAnchor, constant: -24)
+        _ = lblTitle.anchor(btnLocation.topAnchor,imageView.rightAnchor,btnLocation.bottomAnchor,btnLocation.rightAnchor)
+    }
+
+}

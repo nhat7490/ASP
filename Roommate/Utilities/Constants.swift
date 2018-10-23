@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://localhost:8080/"
+    static let BASE_URL_API = "http://192.168.1.60:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //    static let BASE_URL = "https://asp-backend.herokuapp.com/"
     
@@ -49,7 +49,7 @@ class Constants{
     static let CELL_NEWROOMCV = "NewRoomCVCell"
     static let CELL_ORDERTV = "OrderTVCell"
     static let CELL_NEWUTILITYCV = "NewUtilityCVCell"
-    static let CELL_UTILITYCV = "UtilityCVCell"
+    static let CELL_NAVIGATIONCV = "NavigationCVCell"
     static let CELL_IMAGECV = "ImageCVCell"
     static let CELL_ICONTITLETV = "IconTitleTVCell"
     
@@ -71,6 +71,8 @@ class Constants{
     static let MARGIN_6:CGFloat = 6
     static let MARGIN_12:CGFloat = 12
     static let MARGIN_10:CGFloat = 10
+    static let MARGIN_20:CGFloat = 20
+    
     
     
     //MARK: Constant for customView and cell
@@ -85,9 +87,17 @@ class Constants{
     static let HEIGHT_VIEW_OPTION:Double = 70.0
     static let HEIGHT_VIEW_DROPDOWN_LIST:Double = 81.0
     static let HEIGHT_VIEW_SLIDER:Double = 90.0
-    static let HEIGHT_SPACE:Double = 20.0
+    static let HEIGHT_LARGE_SPACE:Double = 20.0
+    static let HEIGHT_MEDIUM_SPACE:Double = 10.0
     static let HEIGHT_CELL_NEWROOMCV:Double = 240
     static let HEIGHT_CELL_NEWROOMMATECV:Double = 175
+    
+    //MARK: HomeVC
+    static let HEIGHT_LOCATION_SEARCH_VIEW:Double = 40
+    static let HEIGHT_TOP_CONTAINER_VIEW:Double = 160
+    static let HEIGHT_HORIZONTAL_ROOM_VIEW:Double = 280
+    static let MAX_ROOM_ROW:Int = 3//Two room in a line
+    static let MAX_POST:Int = 6
     
     //MARK: AlertViewVC
     static let POPUP_SELECT_TABLE_MAX_HEIGHT:Double = 400
@@ -97,7 +107,8 @@ class Constants{
     static let HEIGHT_UTILITY_INPUT_VIEW:Double = 160.0
     static let HEIGHT_UTILITY_DETAIL_VIEW:Double = 160.0
     static let HEIGHT_NEW_INPUT_VIEW:Double = 70.0
-    static let HEIGHT_CELL_NEW_UTILITY:Double = 50.0
+    static let HEIGHT_CELL_NEW_UTILITYCV:Double = 50.0
+    static let HEIGHT_CELL_NAVIGATIONCV:Double = 50.0
     static let HEIGHT_ROOM_INFOR_TITLE:Double = 30.0
     static let MAX_MEMBER:Int = 10
     static let MIN_MEMBER:Int = 0

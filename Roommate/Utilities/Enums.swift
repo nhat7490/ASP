@@ -136,3 +136,7 @@ enum APIResponseAlertType{
 enum AlertType{
     case normal,city,district
 }
+
+enum VerticalPostViewType{
+    case room,roommate
+}

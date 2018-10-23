@@ -21,6 +21,7 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
     }
     override func awakeFromNib() {
         super.awakeFromNib()
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(UINib(nibName: Constants.CELL_IMAGECV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_IMAGECV)
         pageControl.pageIndicatorTintColor = .lightSubTitle
         pageControl.currentPage = 0
@@ -38,7 +39,7 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: frame.width, height: CGFloat(Constants.HEIGHT_CELL_IMAGECV))
+        return CGSize(width: frame.width, height: Constants.HEIGHT_CELL_IMAGECV.cgFloat)
     }
     
     //MARK: ScrollViewDelegate

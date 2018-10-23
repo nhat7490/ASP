@@ -70,19 +70,6 @@ class BaseVC:UIViewController{
             if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
             
             DispatchQueue.main.async {
-                print("Utilities")
-                DBManager.shared.getRecords(ofType: UtilityModel.self)?.forEach({ (value) in
-                    print(value.name)
-                })
-                
-                print("Cities")
-                DBManager.shared.getRecords(ofType: CityModel.self)?.forEach({ (value) in
-                    print(value.name)
-                })
-                print("Districts")
-                DBManager.shared.getRecords(ofType: DistrictModel.self)?.forEach({ (value) in
-                    print(value.name)
-                })
                 MBProgressHUD.hide(for: view, animated: true)
             }
             if !DBManager.shared.isExisted(ofType: UtilityModel.self) || !DBManager.shared.isExisted(ofType: CityModel.self) || !DBManager.shared.isExisted(ofType: DistrictModel.self){
@@ -98,9 +85,9 @@ class BaseVC:UIViewController{
         }
     }
     
-    func requestArray<T:Mappable>(apiRouter:APIRouter,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
+    func requestArray<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander:(()->Void)? =  nil,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
         //        self.group.enter()
-        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: nil, returnType: T.self) { (values, error, statusCode) -> (Void) in
+        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: errorNetworkConnectedHander, returnType: T.self) { (values, error, statusCode) -> (Void) in
             if error == nil{
                 //200
                 if statusCode == .OK{
@@ -143,8 +130,6 @@ class BaseVC:UIViewController{
                         self.group.leave()
                         return
                     }
-                    print("Add Database for \(T.self)")
-                    print("Existed:\(values.count)")
                     print(DBManager.shared.addRecords(ofType: T.self, objects: values))
                 }
             }
@@ -152,4 +137,5 @@ class BaseVC:UIViewController{
         }
         self.group.wait()
     }
+    
 }

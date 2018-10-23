@@ -31,6 +31,7 @@ class NewRoommateCVCell: UICollectionViewCell {
                     self.imgvLeftAvatar.image = image
                 }
             }
+            
             self.lblRightName.text = roommate?.userResponseModel?.fullname
             self.lblRightPrice.text = "ROMMATE_RIGHT_PRICE".localized
             self.tvRightPriceValue.text = "\(roommate!.minPrice.toString)vnd - \(roommate!.maxPrice.toString)vnd"
@@ -70,9 +71,22 @@ class NewRoommateCVCell: UICollectionViewCell {
         tvRightCityValue.font = UIFont.boldSystemFont(ofSize: .small)
         tvRightPriceValue.font = UIFont.boldSystemFont(ofSize: .small)
         
+        
+        tvRightPriceValue.isEditable = false
         tvRightPositionValue.isEditable = false
         tvRightCityValue.isEditable = false
-        tvRightPriceValue.isEditable = false
+        
+        tvRightPriceValue.isScrollEnabled = false
+        tvRightPositionValue.isScrollEnabled = false
+        tvRightCityValue.isScrollEnabled = false
+        
+        tvRightPriceValue.textContainerInset = .zero
+        tvRightPositionValue.textContainerInset = .zero
+        tvRightCityValue.textContainerInset = .zero
+        
+        tvRightPriceValue.textContainer.lineBreakMode = .byWordWrapping
+        tvRightPositionValue.textContainer.lineBreakMode = .byWordWrapping
+        tvRightCityValue.textContainer.lineBreakMode = .byWordWrapping
     }
     
     func setBookMark(isBookMark:Bool){

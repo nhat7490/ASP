@@ -25,6 +25,7 @@ enum APIRouter:URLRequestConvertible{
     case postForBookmark(model:FilterArgumentModel)
     case createBookmark(model:BookmarkRequestModel)
     case removeBookmark(id:Int)
+    case suggestBestMatch(model:FilterArgumentModel)
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -36,7 +37,7 @@ enum APIRouter:URLRequestConvertible{
     
     var httpMethod:HTTPMethod{
         switch self{
-        case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark:
+        case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch:
             return .post
         case .removeBookmark:
             return .delete
@@ -70,6 +71,8 @@ enum APIRouter:URLRequestConvertible{
             return "favourites/createFavourite"
         case .removeBookmark(let id):
             return "favourite/remove/\(id)"
+        case .suggestBestMatch:
+            return "post/suggestBestMatch"
         }
     }
     
@@ -93,6 +96,8 @@ enum APIRouter:URLRequestConvertible{
         case .postForBookmark(let model):
             return Mapper().toJSON(model)
         case .createBookmark(let model):
+            return Mapper().toJSON(model)
+        case .suggestBestMatch(let model):
             return Mapper().toJSON(model)
         default:
             return [:]
