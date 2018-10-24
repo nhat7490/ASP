@@ -40,14 +40,12 @@ public class Filter implements Specification<TbPost> {
                 Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
                 Root<TbRoomHasUtility> roomHasUtilityRoot = criteriaQuery.from(TbRoomHasUtility.class);
                 Root<TbUtilities> utilitiesRoot = criteriaQuery.from(TbUtilities.class);
-                Root<TbCity> cityRoot = criteriaQuery.from(TbCity.class);
 
                 List<Predicate> districtList = new ArrayList<>();
                 List<Predicate> utilityList = new ArrayList<>();
                 List<Predicate> priceList = new ArrayList<>();
                 List<Predicate> genderList = new ArrayList<>();
                 List<Predicate> typeList = new ArrayList<>();
-                List<Predicate> cityList = new ArrayList<>();
 
                 if (filterArgumentModel.getOrderBy() == NEWPOST) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("datePost")));

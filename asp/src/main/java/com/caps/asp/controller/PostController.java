@@ -189,6 +189,7 @@ public class PostController {
                     roommatePostResponseModel.setUserResponeModel(userResponeModel);
                     if (favourite != null) {
                         roommatePostResponseModel.setFavourite(true);
+                        roommatePostResponseModel.setFavouriteId(favourite.getId());
                     } else {
                         roommatePostResponseModel.setFavourite(false);
                     }
@@ -218,6 +219,7 @@ public class PostController {
                     roomPostResponseModel.setUserResponeModel(userResponeModel);
                     if (favourite != null) {
                         roomPostResponseModel.setFavourite(true);
+                        roomPostResponseModel.setFavouriteId(favourite.getId());
                     } else {
                         roomPostResponseModel.setFavourite(false);
                     }
@@ -259,6 +261,9 @@ public class PostController {
                 Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> {
 
                     RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
+                    TbFavourite favourite = favouriteService
+                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
+
 
                     List<TbUtilitiesReference> utilitiesReferences = utilityReferenceService.findAllByUserId(tbPost.getUserId());
                     List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(tbPost.getUserId());
@@ -286,6 +291,7 @@ public class PostController {
                     roommatePostResponseModel.setDate(tbPost.getDatePost());
                     roommatePostResponseModel.setUserResponeModel(userResponeModel);
                     roommatePostResponseModel.setFavourite(true);
+                    roommatePostResponseModel.setFavouriteId(favourite.getId());
                     roommatePostResponseModel.setMinPrice(tbPost.getMinPrice());
 //                    roommatePostResponseModel.setMaxPrice(tbPost.getMaxPrice());
                     return roommatePostResponseModel;
@@ -301,6 +307,9 @@ public class PostController {
                     TbRoom room = roomService.findRoomById(tbPost.getRoomId());
                     List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
                     UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                    TbFavourite favourite = favouriteService
+                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
+
 
                     roomPostResponseModel.setName(tbPost.getName());
                     roomPostResponseModel.setPostId(tbPost.getPostId());
@@ -308,6 +317,7 @@ public class PostController {
                     roomPostResponseModel.setDate(tbPost.getDatePost());
                     roomPostResponseModel.setUserResponeModel(userResponeModel);
                     roomPostResponseModel.setFavourite(true);
+                    roomPostResponseModel.setFavouriteId(favourite.getId());
                     roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
                     roomPostResponseModel.setAddress(room.getAddress());
                     roomPostResponseModel.setArea(room.getArea());
@@ -475,13 +485,22 @@ public class PostController {
                     TbRoom room = roomService.findRoomById(tbPost.getRoomId());
                     List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
                     UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                    TbFavourite favourite = favouriteService
+                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
 
                     roomPostResponseModel.setName(tbPost.getName());
                     roomPostResponseModel.setPostId(tbPost.getPostId());
                     roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                     roomPostResponseModel.setDate(tbPost.getDatePost());
                     roomPostResponseModel.setUserResponeModel(userResponeModel);
-                    roomPostResponseModel.setFavourite(true);
+
+                    if (favourite != null) {
+                        roomPostResponseModel.setFavouriteId(favourite.getId());
+                        roomPostResponseModel.setFavourite(true);
+                    } else {
+                        roomPostResponseModel.setFavourite(false);
+                    }
+
                     roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
                     roomPostResponseModel.setAddress(room.getAddress());
                     roomPostResponseModel.setArea(room.getArea());
@@ -506,6 +525,10 @@ public class PostController {
 
                     List<TbUtilitiesReference> utilitiesReferences = utilityReferenceService.findAllByUserId(tbPost.getUserId());
                     List<TbDistrictReference> districtReference = districtReferenceService.findAllByUserId(tbPost.getUserId());
+                    TbFavourite favourite = favouriteService
+                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
+
+
                     TbDistrict district = new TbDistrict();
 
                     if (districtReference != null) {
@@ -529,7 +552,14 @@ public class PostController {
                     roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                     roommatePostResponseModel.setDate(tbPost.getDatePost());
                     roommatePostResponseModel.setUserResponeModel(userResponeModel);
-                    roommatePostResponseModel.setFavourite(true);
+
+                    if (favourite != null) {
+                        roommatePostResponseModel.setFavouriteId(favourite.getId());
+                        roommatePostResponseModel.setFavourite(true);
+                    } else {
+                        roommatePostResponseModel.setFavourite(false);
+                    }
+
                     roommatePostResponseModel.setMinPrice(tbPost.getMinPrice());
 //                    roommatePostResponseModel.setMaxPrice(tbPost.getMaxPrice());
                     return roommatePostResponseModel;

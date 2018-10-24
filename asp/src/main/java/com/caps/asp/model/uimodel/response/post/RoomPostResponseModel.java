@@ -29,7 +29,6 @@ public class RoomPostResponseModel extends BasePostResponeModel {
     }
 
     public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner, String description) {
-        super(postId, phoneContact, date, userResponeModel, isFavourite, minPrice);
         this.name = name;
         this.area = area;
         this.address = address;

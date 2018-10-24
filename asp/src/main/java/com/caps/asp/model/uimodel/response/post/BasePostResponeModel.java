@@ -11,17 +11,19 @@ public class BasePostResponeModel {
     private UserResponeModel userResponeModel;
     private boolean isFavourite;
     private double minPrice;
+    private Integer favouriteId;
 
-    public BasePostResponeModel() {
-    }
-
-    public BasePostResponeModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice) {
+    public BasePostResponeModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice, Integer favouriteId) {
         this.postId = postId;
         this.phoneContact = phoneContact;
         this.date = date;
         this.userResponeModel = userResponeModel;
         this.isFavourite = isFavourite;
         this.minPrice = minPrice;
+        this.favouriteId = favouriteId;
+    }
+
+    public BasePostResponeModel() {
     }
 
     public Integer getPostId() {
@@ -70,5 +72,13 @@ public class BasePostResponeModel {
 
     public void setMinPrice(double minPrice) {
         this.minPrice = minPrice;
+    }
+
+    public Integer getFavouriteId() {
+        return favouriteId;
+    }
+
+    public void setFavouriteId(Integer favouriteId) {
+        this.favouriteId = favouriteId;
     }
 }
