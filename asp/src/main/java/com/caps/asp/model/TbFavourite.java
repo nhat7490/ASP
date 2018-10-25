@@ -11,6 +11,7 @@ public class TbFavourite {
     private Integer postId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public Integer getId() {
         return id;

@@ -1,6 +1,7 @@
 package com.caps.asp.controller;
 
 import com.caps.asp.model.TbFavourite;
+import com.caps.asp.model.uimodel.response.common.CreateResponseModel;
 import com.caps.asp.service.FavouriteService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,8 @@ public class FavouriteController {
     @PostMapping("/favourites/createFavourite")
     public ResponseEntity addFavorite(@RequestBody TbFavourite favourite) {
         try {
-            favouriteService.addFavourite(favourite);
-            return ResponseEntity.status(OK).build();
+            favourite.setId(0);
+            return ResponseEntity.status(OK).body(new CreateResponseModel(favouriteService.addFavourite(favourite).getId()));
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
         }
@@ -46,6 +47,16 @@ public class FavouriteController {
     public ResponseEntity remove(@PathVariable int id) {
         try {
             favouriteService.remove(id);
+            return ResponseEntity.status(OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/favourite/remove/v1")
+    public ResponseEntity remove(@RequestBody TbFavourite favourite) {
+        try {
+            favouriteService.remove(favourite.getUserId(),favourite.getPostId());
             return ResponseEntity.status(OK).build();
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();

@@ -24,12 +24,15 @@ public class FavouriteService {
         return favouriteRepository.findAllByUserId(userId, pageable);
     }
 
-    public void addFavourite(TbFavourite tbFavourite) {
-        favouriteRepository.save(tbFavourite);
+    public TbFavourite addFavourite(TbFavourite tbFavourite) {
+        return favouriteRepository.save(tbFavourite);
     }
 
     public void remove(int id) {
         favouriteRepository.deleteById(id);
+    }
+    public boolean remove(int userId, int postId){
+        return favouriteRepository.removeByUserIdAndAndPostId(userId,postId);
     }
 
     public TbFavourite findByUserIdAndPostId(int userId, int postId){
