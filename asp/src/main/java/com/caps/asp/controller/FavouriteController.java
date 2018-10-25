@@ -24,8 +24,11 @@ public class FavouriteController {
     @PostMapping("/favourites/createFavourite")
     public ResponseEntity addFavorite(@RequestBody TbFavourite favourite) {
         try {
-            favourite.setId(0);
-            return ResponseEntity.status(OK).body(new CreateResponseModel(favouriteService.addFavourite(favourite).getId()));
+            if (favouriteService.findByUserIdAndPostId(favourite.getUserId(), favourite.getPostId()) == null) {
+                favourite.setId(0);
+                return ResponseEntity.status(OK).body(new CreateResponseModel(favouriteService.addFavourite(favourite).getId()));
+            }
+            return ResponseEntity.status(CONFLICT).build();
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
         }
@@ -56,7 +59,7 @@ public class FavouriteController {
     @PostMapping("/favourite/remove/v1")
     public ResponseEntity remove(@RequestBody TbFavourite favourite) {
         try {
-            favouriteService.remove(favourite.getUserId(),favourite.getPostId());
+            favouriteService.remove(favourite.getUserId(), favourite.getPostId());
             return ResponseEntity.status(OK).build();
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
