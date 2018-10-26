@@ -404,7 +404,6 @@ public class PostController {
                 roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                 roomPostResponseModel.setDate(tbPost.getDatePost());
                 roomPostResponseModel.setUserResponeModel(userResponeModel);
-                roomPostResponseModel.setFavourite(true);
                 if (favourite != null) {
                     roomPostResponseModel.setFavourite(true);
                     roomPostResponseModel.setFavouriteId(favourite.getId());
