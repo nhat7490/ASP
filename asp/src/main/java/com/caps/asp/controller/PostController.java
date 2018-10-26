@@ -379,70 +379,46 @@ public class PostController {
     @PostMapping("/user/suggestRoomMaster")
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
         try {
-            TbPost tbPost = postService.findPostByUserIdAndTypeId(baseSuggestRequestModel.getUserId(), PARTNER_POST);
-            TbRoom tbRoom = roomService.findRoomById(tbPost.getRoomId());
-            List<TbRoom> roomList = roomService.findAllRoomByDistrictId(tbRoom.getDistrictId());
-            List<TbPost> postList = postService.getPostList(roomList, tbRoom.getRoomId());
-
-            CalculateDistance calculateDistance = new CalculateDistance();
-            HashMap<TbPost, Double> listSort = new HashMap<>();
-
-            for (int i = 0; i < postList.size(); i++) {
-                double distance = calculateDistance.distance(tbPost.getLattitude(), tbPost.getLongtitude(),
-                        postList.get(i).getLattitude(), postList.get(i).getLongtitude());
-                listSort.put(postList.get(i), distance);
-            }
-            List<Map.Entry<TbPost, Double>> postAfterSort = new LinkedList<>(listSort.entrySet());
-
-            Collections.sort(postAfterSort, new Comparator<Map.Entry<TbPost, Double>>() {
-                @Override
-                public int compare(Map.Entry<TbPost, Double> e1, Map.Entry<TbPost, Double> e2) {
-                    return (e1.getValue()).compareTo(e2.getValue());
-                }
-            });
-
-            for (Map.Entry<TbPost, Double> entry : postAfterSort) {
-                System.out.println(entry.getKey().getPostId() + " : " + entry.getValue());
-            }
-
-            List<TbPost> posts = new ArrayList<>();
-            for (Map.Entry<TbPost, Double> post : postAfterSort) {
-                posts.add(post.getKey());
-            }
-
-            int page = 1;
-            int size = 10;
-            int toIndex = (page - 1) * size + size;
+            List<TbPost> postList = postService.getSuggestedList(baseSuggestRequestModel.getUserId(), 1, 4);
 
             List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
-            for (TbPost post : posts) {
-                RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
-                TbRoom room = roomService.findRoomById(post.getRoomId());
-                List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(post.getUserId()));
+            for (TbPost tbPost : postList) {
 
-                roomPostResponseModel.setName(post.getName());
-                roomPostResponseModel.setPostId(post.getPostId());
-                roomPostResponseModel.setPhoneContact(post.getPhoneContact());
-                roomPostResponseModel.setDate(post.getDatePost());
+                RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
+
+                TbRoom room = roomService.findRoomById(tbPost.getRoomId());
+                List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
+                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                TbFavourite favourite = favouriteService
+                        .findByUserIdAndPostId(baseSuggestRequestModel.getUserId(), tbPost.getPostId());
+
+                roomPostResponseModel.setName(tbPost.getName());
+                roomPostResponseModel.setPostId(tbPost.getPostId());
+                roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
+                roomPostResponseModel.setDate(tbPost.getDatePost());
                 roomPostResponseModel.setUserResponeModel(userResponeModel);
                 roomPostResponseModel.setFavourite(true);
-                roomPostResponseModel.setMinPrice(post.getMinPrice());//price for room post
+                if (favourite != null) {
+                    roomPostResponseModel.setFavourite(true);
+                    roomPostResponseModel.setFavouriteId(favourite.getId());
+                } else {
+                    roomPostResponseModel.setFavourite(false);
+                }
+                roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
                 roomPostResponseModel.setAddress(room.getAddress());
                 roomPostResponseModel.setArea(room.getArea());
-                roomPostResponseModel.setGenderPartner(post.getGenderPartner());
-                roomPostResponseModel.setDescription(post.getDescription());
+                roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
+                roomPostResponseModel.setDescription(tbPost.getDescription());
                 //missing
                 List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
                 roomPostResponseModel.setImageUrls(images.stream().map(image -> image.getLinkUrl()).collect(Collectors.toList()));
 
                 roomPostResponseModel.setUtilities(roomHasUtilities);
-                roomPostResponseModel.setNumberPartner(post.getNumberPartner());
+                roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
                 roomPostResponseModels.add(roomPostResponseModel);
             }
 
-            return ResponseEntity.status(OK).body(roomPostResponseModels.subList((page - 1) * size, roomPostResponseModels.size() < toIndex ? roomPostResponseModels.size() : toIndex));
-
+            return ResponseEntity.status(OK).body(roomPostResponseModels);
         } catch (Exception e) {
             return ResponseEntity.status((NOT_FOUND)).build();
         }

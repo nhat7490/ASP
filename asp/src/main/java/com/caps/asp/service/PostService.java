@@ -6,18 +6,24 @@ import com.caps.asp.repository.PostRepository;
 import com.caps.asp.service.filter.BookmarkFilter;
 import com.caps.asp.service.filter.Filter;
 import com.caps.asp.util.CalculateDistance;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.StoredProcedureQuery;
 import java.util.*;
 
 @Service
 @Transactional
 public class PostService {
     public final PostRepository postRepository;
+
+    @Autowired
+    EntityManager em = null;
 
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
@@ -93,5 +99,14 @@ public class PostService {
     }
     public List<TbPost> search(Filter filter){
         return postRepository.findAll(filter);
+    }
+
+    public List<TbPost> getSuggestedList(int userId, int pageOf, int size) {
+        StoredProcedureQuery sp = em.createNamedStoredProcedureQuery("getSuggestedList")
+                .setParameter("userId", userId)
+                .setParameter("pageOf", pageOf)
+                .setParameter("size", size);
+        List<TbPost> suggestedList = sp.getResultList();
+        return suggestedList;
     }
 }
