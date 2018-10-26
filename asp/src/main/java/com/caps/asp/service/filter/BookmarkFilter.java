@@ -11,9 +11,8 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.caps.asp.constant.Constant.NEWPOST;
-import static com.caps.asp.constant.Constant.PRICEASC;
-import static com.caps.asp.constant.Constant.PRICEDESC;
+import static com.caps.asp.constant.Constant.*;
+import static com.caps.asp.constant.Constant.MALE;
 
 public class BookmarkFilter implements Specification<TbPost> {
 
@@ -74,8 +73,9 @@ public class BookmarkFilter implements Specification<TbPost> {
                     utilityList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getGender() == 1
-                        || filterArgumentModel.getSearchRequestModel().getGender() == 2) {
+                if (filterArgumentModel.getSearchRequestModel().getGender() != null
+                        && (filterArgumentModel.getSearchRequestModel().getGender() == FEMALE
+                        || filterArgumentModel.getSearchRequestModel().getGender() == MALE)) {
 
                     genderList.add(cb.equal(postRoot.get("genderPartner"), filterArgumentModel.getSearchRequestModel().getGender()));
                 } else {
