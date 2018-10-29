@@ -16,7 +16,7 @@ public class RoomHasUserService {
         this.roomHasUserRepository = roomHasUserRepository;
     }
 
-    public void saveRoomMember(TbRoomHasUser tbRoomHasUser) {
+    public void addRoomMember(TbRoomHasUser tbRoomHasUser) {
         roomHasUserRepository.save(tbRoomHasUser);
     }
 
@@ -26,21 +26,5 @@ public class RoomHasUserService {
 
     public TbRoomHasUser findByUserIdAndRoomId(int userId, int roomId) {
         return roomHasUserRepository.findByUserIdAndRoomId(userId, roomId);
-    }
-
-    public void removeRoomMember(int userId) {
-        roomHasUserRepository.removeByUserId(userId);
-    }
-
-    public TbRoomHasUser findByUserId(int userId) {
-        return roomHasUserRepository.findByUserId(userId);
-    }
-
-    public List<TbRoomHasUser> findByRoomIdAndOutIsNull(int roomId){
-        return roomHasUserRepository.findAllByRoomIdAndDateOutIsNull(roomId);
-    }
-
-    public void removeAllByRoomId(int roomId){
-        roomHasUserRepository.readAllByRoomId(roomId);
     }
 }

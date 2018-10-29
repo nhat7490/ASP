@@ -3,18 +3,23 @@ package com.caps.asp.controller;
 import com.caps.asp.exception.UserException;
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.UserLoginModel;
+import com.caps.asp.model.uimodel.request.suggest.BaseSuggestRequestModel;
+import com.caps.asp.model.uimodel.response.UserResponeModel;
+import com.caps.asp.model.uimodel.response.post.RoomPostResponseModel;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.RoomService;
 import com.caps.asp.service.UserService;
 //import com.caps.asp.util.ResetPassword;
+import com.caps.asp.util.CalculateDistance;
 //import com.caps.asp.util.ResetPassword;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-import static com.caps.asp.constant.Constant.MEMBER;
+import static com.caps.asp.constant.Constant.PARTNER_POST;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -33,59 +38,81 @@ public class UserController {
 
     @PostMapping("/user/login")
     public ResponseEntity login(@RequestBody UserLoginModel model) {
-        TbUser user = userService.findByUsername(model.getUsername());
-        boolean isRight = this.passwordEncoder.matches(model.getPassword(), user.getPassword());
-        System.out.println(isRight);
-        return isRight
-                ? ResponseEntity.status(OK).body(user)
-                : ResponseEntity.status(FORBIDDEN).build();//need to encrypt here
+        try {
+            TbUser user = userService.findByUsername(model.getUsername());
+            boolean isRight = this.passwordEncoder.matches(model.getPassword(), user.getPassword());
+            System.out.println(isRight);
+            return isRight
+                    ? ResponseEntity.status(OK).body(user)
+                    : ResponseEntity.status(FORBIDDEN).build();//need to encrypt here
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/user/findByUsername/{username}")
     public ResponseEntity<TbUser> findByUsername(@PathVariable String username) {
-        return ResponseEntity.status(OK)
-                .body(userService.findByUsername(username));
+        try {
+            return ResponseEntity.status(OK)
+                    .body(userService.findByUsername(username));
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/user/listUser")
     public ResponseEntity<List<TbUser>> getAllUsers() {
-        return ResponseEntity.status(OK)
-                .body(userService.getAllUsers());
+        try {
+            return ResponseEntity.status(OK)
+                    .body(userService.getAllUsers());
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/user/findById/{id}")
     public ResponseEntity<TbUser> findById(@PathVariable int id) {
-        return ResponseEntity.status(OK)
-                .body(userService.findById(id));
+        try {
+            return ResponseEntity.status(OK)
+                    .body(userService.findById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @PutMapping("/user/updateUser")
     public ResponseEntity updateUserById(@RequestBody TbUser user) {
-        userService.updateUserById(user);
-        return ResponseEntity.status(OK).build();
+        try {
+            userService.updateUserById(user);
+            return ResponseEntity.status(OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status((NOT_MODIFIED)).build();
+        }
     }
 
     @PostMapping("/user/createUser")
     public ResponseEntity createUSer(@RequestBody TbUser user) {
-        TbUser tbUser = userService.findByUsername(user.getUsername());
-        if (tbUser != null) {
+        try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setRoleId(MEMBER);
-            int id = userService.saveUser(user);
+            int id = userService.createUser(user);
             return ResponseEntity.status(CREATED).body(id);
+        } catch (UserException.UsernameExistedException e) {
+            return ResponseEntity.status((CONFLICT)).build();
         }
-        return ResponseEntity.status(CONFLICT).build();
     }
 
 
-    @GetMapping("/user/memberPermission/{userId}")
-    public ResponseEntity checkMemberPermission(@PathVariable int userId) {
-        TbUser user = userService.findById(userId);
-        if (user.getRoleId() == MEMBER) {
-            return ResponseEntity.status(OK).build();
-        }
-        return ResponseEntity.status(FORBIDDEN).build();
-    }
-
-
+//    @GetMapping("/user/resetPassword/{email}")
+//    public ResponseEntity resetPassword(@PathVariable String email) {
+//        try {
+//            TbUser user = userService.findByEmail(email);
+//            ResetPassword resetPassword = new ResetPassword();
+//            String newPassword = resetPassword.sendEmail(email);
+//            user.setPassword(passwordEncoder.encode(newPassword));
+//            userService.updateUserById(user);
+//            return ResponseEntity.status(OK).build();
+//        } catch (Exception e) {
+//            return ResponseEntity.status((NOT_FOUND)).build();
+//        }
+//    }
 }

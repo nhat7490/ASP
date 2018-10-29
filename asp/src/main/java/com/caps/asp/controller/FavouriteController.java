@@ -23,32 +23,46 @@ public class FavouriteController {
 
     @PostMapping("/favourites/createFavourite")
     public ResponseEntity addFavorite(@RequestBody TbFavourite favourite) {
-        if (favouriteService.findByUserIdAndPostId(favourite.getUserId(), favourite.getPostId()) == null) {
-            favourite.setId(0);
-            return ResponseEntity.status(OK).body(new CreateResponseModel(favouriteService.addFavourite(favourite).getId()));
+        try {
+            if (favouriteService.findByUserIdAndPostId(favourite.getUserId(), favourite.getPostId()) == null) {
+                favourite.setId(0);
+                return ResponseEntity.status(OK).body(new CreateResponseModel(favouriteService.addFavourite(favourite).getId()));
+            }
+            return ResponseEntity.status(CONFLICT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT).build();
         }
-        return ResponseEntity.status(CONFLICT).build();
     }
 
     @GetMapping("/favourites/getFavourite/{userId}")
     public ResponseEntity findAllFavouritesByUserId(@PathVariable int userId,
                                                     @RequestParam(defaultValue = "1") String page) {
-        Page<TbFavourite> favourites = favouriteService.findAllByUserId(userId, Integer.parseInt(page), 10);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(favourites.getContent());
+        try {
+            Page<TbFavourite> favourites = favouriteService.findAllByUserId(userId, Integer.parseInt(page), 10);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(favourites.getContent());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping("/favourite/remove/{id}")
     public ResponseEntity remove(@PathVariable int id) {
-        favouriteService.remove(id);
-        return ResponseEntity.status(OK).build();
-
+        try {
+            favouriteService.remove(id);
+            return ResponseEntity.status(OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @PostMapping("/favourite/remove/v1")
     public ResponseEntity remove(@RequestBody TbFavourite favourite) {
-        favouriteService.remove(favourite.getUserId(), favourite.getPostId());
-        return ResponseEntity.status(OK).build();
-
+        try {
+            favouriteService.remove(favourite.getUserId(), favourite.getPostId());
+            return ResponseEntity.status(OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 }

@@ -25,14 +25,18 @@ public class DistrictController {
 
     @GetMapping("/district/{cityId}")
     public ResponseEntity<List<TbDistrict>> getAllDistrictByCity(@PathVariable int cityId) {
-        List<TbDistrict> districts = districtService.findAllByCity(cityId);
-        Collections.sort(districts, new Comparator<TbDistrict>() {
-                    @Override
-                    public int compare(TbDistrict d1, TbDistrict d2) {
-                        return d1.getName().compareTo(d2.getName());
+        try {
+            List<TbDistrict> districts = districtService.findAllByCity(cityId);
+            Collections.sort(districts, new Comparator<TbDistrict>() {
+                        @Override
+                        public int compare(TbDistrict d1, TbDistrict d2) {
+                            return d1.getName().compareTo(d2.getName());
+                        }
                     }
-                }
-        );
-        return ResponseEntity.status(OK).body(districts);
+            );
+            return ResponseEntity.status(OK).body(districts);
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 }
