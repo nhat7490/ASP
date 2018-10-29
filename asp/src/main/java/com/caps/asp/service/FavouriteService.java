@@ -38,4 +38,8 @@ public class FavouriteService {
     public TbFavourite findByUserIdAndPostId(int userId, int postId){
         return favouriteRepository.findByUserIdAndPostId(userId, postId);
     }
+
+    public void removeAllByPostId(int postId){
+        favouriteRepository.removeAllByPostId(postId);
+    }
 }

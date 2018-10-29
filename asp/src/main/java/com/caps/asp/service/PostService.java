@@ -109,4 +109,8 @@ public class PostService {
         List<TbPost> suggestedList = sp.getResultList();
         return suggestedList;
     }
+
+    public void removeByRoomId(int roomId){
+        postRepository.removeByRoomId(roomId);
+    }
 }

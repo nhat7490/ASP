@@ -27,7 +27,9 @@ public class UserService {
         return userRepository.findByUserId(id);
     }
 
-    public TbUser findByEmail(String email) throws UserException.EmailNotFoundException{ return userRepository.findByEmail(email);}
+    public TbUser findByEmail(String email) throws UserException.EmailNotFoundException {
+        return userRepository.findByEmail(email);
+    }
 
     public void updateUserById(TbUser user) {
         TbUser tbUser = userRepository.findByUserId(user.getUserId());
@@ -44,15 +46,8 @@ public class UserService {
         userRepository.save(tbUser);
     }
 
-    public Integer createUser(TbUser user) throws UserException.UsernameExistedException {
-        TbUser tbUser = userRepository.findByUsername(user.getUsername());
-        if (tbUser == null) {
-            user.setRoleId(MEMBER);
-            userRepository.saveAndFlush(user);
-        }else{
-            throw new UserException.UsernameExistedException();
-        }
-        return user.getUserId();
+    public Integer saveUser(TbUser user) {
+        return userRepository.saveAndFlush(user).getUserId();
     }
 
     //For test in heroku
