@@ -25,4 +25,6 @@ public interface PostRepository extends JpaRepository<TbPost, Integer>, JpaSpeci
 
     List<TbPost> findAllByRoomIdIn(List<Integer> roomIds);
 
+    void removeByRoomId(int roomId);
+
 }
