@@ -52,11 +52,10 @@ public class AmazonService {
     }
 
     public String uploadFile(MultipartFile multipartFile) throws Exception{
-
         String fileUrl = "";
         File file = convertMultiPartToFile(multipartFile);
         String fileName = generateFileName(multipartFile);
-        fileUrl = endpointUrl + "/" + bucketName + fileName;
+        fileUrl = endpointUrl + "/" + bucketName +"/"+ fileName;
         uploadFileTos3bucket(fileName, file);
         file.delete();
         return fileUrl;

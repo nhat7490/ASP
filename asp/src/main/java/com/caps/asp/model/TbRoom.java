@@ -24,6 +24,7 @@ public class TbRoom {
     private Double lattitude;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id", nullable = false)
     public Integer getRoomId() {
         return roomId;

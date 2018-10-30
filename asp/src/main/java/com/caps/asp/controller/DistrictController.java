@@ -35,4 +35,8 @@ public class DistrictController {
         );
         return ResponseEntity.status(OK).body(districts);
     }
+    @GetMapping("/district")
+    public ResponseEntity<List<TbDistrict>> getAll() {
+        return ResponseEntity.status(OK).body(districtService.findAll());
+    }
 }
