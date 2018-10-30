@@ -17,7 +17,7 @@ public class RoomService {
     }
 
     public int saveRoom(TbRoom room) {
-        return roomRepository.save(room).getRoomId();
+        return roomRepository.saveAndFlush(room).getRoomId();
     }
 
     public TbRoom findRoomByName(String roomName) {

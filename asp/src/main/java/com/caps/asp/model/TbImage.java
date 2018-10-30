@@ -11,6 +11,7 @@ public class TbImage {
     private Integer roomId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id", nullable = false)
     public Integer getImageId() {
         return imageId;

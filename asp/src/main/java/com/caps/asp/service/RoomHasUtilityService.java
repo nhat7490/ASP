@@ -17,9 +17,8 @@ public class RoomHasUtilityService {
     }
 
     public void saveRoomHasUtility(TbRoomHasUtility roomHasUtility){
-        roomHasUtilityRepository.save(roomHasUtility);
+        roomHasUtilityRepository.saveAndFlush(roomHasUtility);
     }
-
     public void deleteAllRoomHasUtilityByRoomId(int roomId){
         roomHasUtilityRepository.deleteAllByRoomId(roomId);
     }
