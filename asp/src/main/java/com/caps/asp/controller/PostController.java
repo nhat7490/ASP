@@ -403,7 +403,7 @@ public class PostController {
             filterArgumentModel.setTypeId(baseSuggestRequestModel.getTypeId());
             filterArgumentModel.setPage(baseSuggestRequestModel.getPage());
             filterArgumentModel.setOffset(baseSuggestRequestModel.getOffset());
-            filterArgumentModel.setOrderBy(1);
+            filterArgumentModel.setOrderBy(NEWPOST);
             filterArgumentModel.setUserId(baseSuggestRequestModel.getUserId());
             filterArgumentModel.setCityId(baseSuggestRequestModel.getCity());
             filterArgumentModel.setSearchRequestModel(searchRequestModel);

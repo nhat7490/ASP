@@ -115,6 +115,7 @@ public class Filter implements Specification<TbPost> {
 
                 );
             } else {
+                Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
                 if (filterArgumentModel.getOrderBy() == NEWPOST) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("datePost")));
                 } else if (filterArgumentModel.getOrderBy() == PRICEDESC) {
@@ -123,7 +124,8 @@ public class Filter implements Specification<TbPost> {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("minPrice")));
                 }
                 return cb.and(
-                        cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId())
+                        cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()),
+                        cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId())
                 );
             }
         } else {
@@ -217,7 +219,7 @@ public class Filter implements Specification<TbPost> {
                         cb.or(priceList.toArray(new Predicate[priceList.size()]))
                 );
             } else {
-
+                Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
                 if (filterArgumentModel.getOrderBy() == NEWPOST) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("datePost")));
                 } else if (filterArgumentModel.getOrderBy() == PRICEDESC) {
@@ -227,7 +229,8 @@ public class Filter implements Specification<TbPost> {
                 }
 
                 return cb.and(
-                        cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId())
+                        cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()),
+                        cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId())
                 );
             }
         }
