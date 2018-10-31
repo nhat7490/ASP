@@ -27,7 +27,7 @@ public class UserService {
         return userRepository.findByUserId(id);
     }
 
-    public TbUser findByEmail(String email) throws UserException.EmailNotFoundException {
+    public TbUser findByEmail(String email){
         return userRepository.findByEmail(email);
     }
 

@@ -8,16 +8,42 @@ public class BaseSuggestRequestModel {
     private int typeId;
     private Integer page;
     private Integer offset;
+    private Integer city;
+
+
+//suggest (BASE)
+    //TH1: role gi
+        //Master
+            //check co bai dang chua
+                //Co roi-> bai dang cua roomaster khac  gan nhat
+                //chua
+                    //suggest giong member
+
+        //Member
+            //check co setting chua
+                //co roi ->suggest cai nao phu hop nhat
+                //chua cos -> check long lat
+                    //co long lat -> gan nhat
+                    //chua co long lat -> moi nhat
 
     public BaseSuggestRequestModel() {
     }
 
-    public BaseSuggestRequestModel(int userId, Double longitude, Double latitude, int typeId, Integer offset) {
+    public BaseSuggestRequestModel(int userId, Double longitude, Double latitude, int typeId, Integer offset, Integer city) {
         this.userId = userId;
         this.longitude = longitude;
         this.latitude = latitude;
         this.typeId = typeId;
         this.offset = offset;
+        this.city = city;
+    }
+
+    public Integer getCity() {
+        return city;
+    }
+
+    public void setCity(Integer city) {
+        this.city = city;
     }
 
     public Integer getPage() {

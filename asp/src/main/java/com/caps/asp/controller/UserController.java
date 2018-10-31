@@ -8,6 +8,7 @@ import com.caps.asp.service.RoomService;
 import com.caps.asp.service.UserService;
 //import com.caps.asp.util.ResetPassword;
 //import com.caps.asp.util.ResetPassword;
+import com.caps.asp.util.ResetPassword;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -88,4 +89,16 @@ public class UserController {
     }
 
 
+    @GetMapping("/user/resetPassword/{email}")
+    public ResponseEntity resetPassword(@PathVariable String email) {
+        TbUser user = userService.findByEmail(email);
+        if (user != null) {
+            ResetPassword resetPassword = new ResetPassword();
+            String newPassword = resetPassword.sendEmail(email);
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userService.updateUserById(user);
+            return ResponseEntity.status(OK).build();
+        }
+        return ResponseEntity.status(NOT_FOUND).build();
+    }
 }

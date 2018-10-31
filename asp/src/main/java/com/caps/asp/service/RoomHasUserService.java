@@ -36,7 +36,7 @@ public class RoomHasUserService {
         return roomHasUserRepository.findByUserId(userId);
     }
 
-    public List<TbRoomHasUser> findByRoomIdAndOutIsNull(int roomId){
+    public List<TbRoomHasUser> findByRoomIdAndDateOutIsNull(int roomId){
         return roomHasUserRepository.findAllByRoomIdAndDateOutIsNull(roomId);
     }
 

@@ -164,12 +164,12 @@ public class RoomController {
     @Transactional
     @PostMapping("room/editMember")
     public ResponseEntity editMember(@RequestBody RoomMemberRequestModel roomMemberModel) {
-        List<TbRoomHasUser> roomMembers = roomHasUserService.findByRoomIdAndOutIsNull(roomMemberModel.getRoomId());
+        List<TbRoomHasUser> roomMembers = roomHasUserService.findByRoomIdAndDateOutIsNull(roomMemberModel.getRoomId());
 
         if (roomMemberModel.getMemberRequestModels() == null) {
 
             TbPost post = postService.findByRoomId(roomMemberModel.getRoomId());
-            roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomMemberModel.getRoomId());
+//            roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomMemberModel.getRoomId());
             postHasDistrictService.removeAllByPostId(post.getPostId());
             favouriteService.removeAllByPostId(post.getPostId());
             postService.removeByRoomId(roomMemberModel.getRoomId());
