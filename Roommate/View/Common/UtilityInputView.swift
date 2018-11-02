@@ -32,6 +32,7 @@ class UtilityInputView: UIView,UITextViewDelegate,UITextFieldDelegate {
         tfBrand.delegate = self
         tfQuantity.delegate = self
         tvDescription.delegate = self
+        
          
         //Init data
         utilityModel = UtilityModel()

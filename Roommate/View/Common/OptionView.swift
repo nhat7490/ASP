@@ -14,18 +14,17 @@ protocol OptionViewDelegate:class {
 class OptionView: UIView {
 
     @IBOutlet weak var imgvLeft: UIImageView!
-    @IBOutlet weak var lblTop: UILabel!
-    @IBOutlet weak var lblBottom: UILabel!
+    @IBOutlet weak var tvPrice: UITextView!
     @IBOutlet weak var btnEdit: UIButton!
     @IBOutlet weak var btnRight: UIButton!
     weak var delegate:OptionViewDelegate?
     var viewType:ViewType?{
         didSet{
             switch viewType! {
-            case .detailForMaster:
+            case .detailForOwner:
                 btnEdit.setImage(UIImage(named: "edit"), for: .normal)
                 btnRight.setImage(UIImage(named: "remove"), for: .normal)
-            case .detailForMember,.detailForFinder:
+            case .detailForMember,.roomPostDetailForFinder,.roommatePostDetailForFinder:
                 btnEdit.setImage(UIImage(named: "sms"), for: .normal)
                 btnRight.setImage(UIImage(named: "call"), for: .normal)
             default:
@@ -46,10 +45,11 @@ class OptionView: UIView {
         setupUI(forButton: btnEdit,imageName: "edit")
         setupUI(forButton: btnRight,imageName:"remove" )
         
-        lblTop.font = .small
-        lblBottom.font = .small
-        lblTop.textColor = .defaultBlue
-        lblBottom.textColor = .defaultBlue
+        tvPrice.font = .small
+        tvPrice.textContainer.lineBreakMode = .byWordWrapping
+        tvPrice.isEditable = false
+        tvPrice.isUserInteractionEnabled = false
+        tvPrice.textColor = .red
 
         addBorder(side: .Top, color: .lightGray, width: 1.0)
     }

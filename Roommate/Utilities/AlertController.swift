@@ -8,17 +8,40 @@
 
 import UIKit
 protocol AlertControllerDelegate {
-    func alertControllerDelegate(ofController:UIAlertController,withAlertType type:AlertType,atIndexPaths indexs:[IndexPath]?)
+    func alertControllerDelegate(alertController:AlertController,withAlertType type:AlertType,onCompleted indexs:[IndexPath]?)
+    
+    func alertControllerDelegate(alertController:AlertController,onSelected selectedIndexs:[IndexPath]?)
+    
+}
+extension AlertControllerDelegate{
+    func alertControllerDelegate(alertController:AlertController,onSelected selectedIndexs:[IndexPath]?){}
 }
 class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelegate  {
     var delegate:AlertControllerDelegate?
     var listItem:[String]?
+    var listSelectedItemIndex:[Int]?
     var tableView:UITableView!
     var alertType:AlertType = .normal
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if alertType != .normal , let listSelectedItemIndex = self.listSelectedItemIndex{
+            listSelectedItemIndex.forEach { (row) in
+                tableView.selectRow(at: IndexPath(row: row, section: 0), animated: true, scrollPosition: UITableViewScrollPosition.none)
+            }
+        }
+    }
     static func showAlertInfor(withTitle title:String?,forMessage message:String?,inViewController controller:UIViewController) {
         let alertController = AlertController(title: title, message: message, preferredStyle: .alert)
         if let _ = title {
             alertController.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: nil))
+        }
+        controller.present(alertController, animated: true, completion: nil)
+    }
+    static func showAlertInfor(withTitle title:String?,forMessage message:String?,inViewController controller:UIViewController,rhsButtonHandler:((UIAlertAction)->Void)?) {
+        let alertController = AlertController(title: title, message: message, preferredStyle: .alert)
+        if let _ = title {
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: rhsButtonHandler))
         }
         controller.present(alertController, animated: true, completion: nil)
     }
@@ -46,16 +69,19 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         controller.present(alertController, animated: true, completion: nil)
     }
     
-    static func showAlertList(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,alertType:AlertType = .normal,isMultiSelected:Bool = false,forViewController controller:UIViewController,data:[String]?,rhsButtonTitle:String?)->AlertController{
+    static func showAlertList(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,alertType:AlertType = .normal,isMultiSelected:Bool = false,forViewController controller:UIViewController,data:[String]?,selectedItemIndex:[Int]? = [],rhsButtonTitle:String?)->AlertController{
         let alertController = AlertController(title: title, message: message, preferredStyle: alertStyle)
         if let _ = rhsButtonTitle {
-            alertController.addAction(UIAlertAction(title: title, style: .default, handler: { (action) in
-                alertController.delegate?.alertControllerDelegate(ofController: alertController, withAlertType: alertController.alertType, atIndexPaths: alertController.tableView.indexPathsForSelectedRows)
+            alertController.addAction(UIAlertAction(title: rhsButtonTitle, style: .default, handler: { (action) in
+                alertController.delegate?.alertControllerDelegate(alertController: alertController, withAlertType: alertType, onCompleted: alertController.tableView.indexPathsForSelectedRows)
             }))
+            
         }
         alertController.addAction(UIAlertAction(title: "CANCEL".localized, style: .cancel, handler: nil))
+        
         alertController.alertType = alertType
         alertController.listItem = data
+        alertController.listSelectedItemIndex = selectedItemIndex
         alertController.addTableView(withCellIdentifier: Constants.CELL_POPUP_SELECT_LISTTV,isMultiSelected:isMultiSelected)
         controller.present(alertController, animated: true, completion: nil)
         return alertController
@@ -92,12 +118,14 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         //Create View Controller and TableView
         let vc = UIViewController()
         
+        let height = listItem!.count*50 < 400 ? listItem!.count*50 : 400
+        
         //Size of content in popup viewcontroller
         vc.preferredContentSize  = CGSize(width: 242,
-                                          height:  400)
+                                          height:  height)
         
         tableView.register(UINib.init(nibName: Constants.CELL_POPUP_SELECT_LISTTV, bundle: nil), forCellReuseIdentifier: cellIdentifier)
-        tableView.frame = CGRect(x: 0, y: 0, width: 242, height: 400)
+        tableView.frame = CGRect(x: 0, y: 0, width: 242, height: height)
         tableView.dataSource = self
         tableView.delegate = self
         vc.view.addSubview(tableView)
@@ -117,10 +145,13 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_POPUP_SELECT_LISTTV) as! PopupSelectListTVCell
         cell.lblTitle.text = self.listItem![indexPath.row]
+        
+//        cell.isSelected = self.listSelectedItemIndex?.contains(indexPath.row) ?? false
         print(self.listItem![indexPath.row])
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.alertControllerDelegate(alertController: self, onSelected: tableView.indexPathsForSelectedRows)
         
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

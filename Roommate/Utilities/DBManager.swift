@@ -7,7 +7,7 @@ import Foundation
 import RealmSwift
 class DBManager {
     static let shared:DBManager = DBManager()
-
+    
     //For check data
     func isExistedUtility()->Bool{
         let realm = try! Realm()
@@ -37,15 +37,11 @@ class DBManager {
     }
     
     func addRecords<T:BaseModel>(ofType:T.Type,objects:[T])->Bool{
-         let realm = try! Realm()
+        let realm = try! Realm()
         do{
             try realm.write {
                 realm.add(objects)
             }
-            print("Value")
-            print(realm.objects(UtilityModel.self).count)
-            print(realm.objects(CityModel.self).count)
-            print(realm.objects(DistrictModel.self).count)
             return true
         }catch{
             return false
@@ -63,47 +59,63 @@ class DBManager {
             print("Cannot delete all Disctrict")
         }
     }
-    
-    func getRecordsInUserRealm<T:BaseModel>(user:UserModel,ofType:T.Type) -> Results<T>?{
-        let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: user.username, withExtension: "realm"),readOnly:false)
-        let realm = try! Realm(configuration: config)
-        return  realm.objects(T.self)
-    }
-    
-    func addRecordInUserRealm<T:BaseModel>(user:UserModel,ofType:T.Type,object:T)->Bool{
-        let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: user.username, withExtension: "realm"),readOnly:false)
-        let realm = try! Realm(configuration: config)
+    func updateRecord<T:BaseModel>(ofType:T.Type,object:T)->Bool{
+        let realm = try! Realm()
         do{
             try realm.write {
-                realm.add(object)
+                realm.add(object, update: true)
             }
-            print("Value")
-            print(realm.objects(UtilityModel.self).count)
-            print(realm.objects(CityModel.self).count)
-            print(realm.objects(DistrictModel.self).count)
             return true
         }catch{
             return false
         }
     }
-
-
+    
+    //For Setting
+    func getSetting() -> SettingModel?{
+        let realm = try! Realm()
+        return  realm.objects(SettingModel.self).first
+        
+    }
+    func addSetting(setting:SettingModel)->Bool{
+        let realm = try! Realm()
+        do{
+            try realm.write {
+                realm.add(setting, update: true)
+            }
+            return false
+        }catch{
+            return false
+        }
+    }
+    func deleteAllSetting(){
+        let realm = try! Realm()
+        do {
+            guard let setting = getSetting() else{
+                return
+            }
+            try realm.write {
+                realm.delete(setting)
+            }
+        } catch  {
+            print("Cannot delete all user")
+        }
+    }
+    
+    
     //For User
     func getUser() -> UserModel?{
         let realm = try! Realm()
         return  realm.objects(UserModel.self).first
         
     }
-
+    
     func addUser(user:UserModel)->Bool{
-        let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: user.username, withExtension: "realm"),readOnly:false)
-        let realm = try! Realm(configuration: config)
-        
+        let realm = try! Realm()
         do{
             self.deleteAllUsers()//delete all relative data when logout
             guard let _ = getUser() else{
                 try realm.write {
-
                     realm.add(user)
                 }
                 return true
@@ -113,10 +125,9 @@ class DBManager {
             return false
         }
     }
-
+    
     func updateUser(user:UserModel)->Bool{
-        let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: user.username, withExtension: "realm"),readOnly:false)
-        let realm = try! Realm(configuration: config)
+        let realm = try! Realm()
         do{
             try realm.write {
                 realm.add(user, update:true)
@@ -126,10 +137,13 @@ class DBManager {
             return false
         }
     }
-
+    
     func deleteUser(user:UserModel)->Bool{
+        let realm = try! Realm()
         do{
-            try FileManager.default.removeItem(at: Bundle.main.url(forResource: user.username, withExtension: "realm")!)
+            try realm.write {
+                realm.delete(user)
+            }
             return true
         }catch{
             return false

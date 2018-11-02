@@ -174,14 +174,14 @@ class RoomCVCell:UICollectionViewCell{
         self.room = room
         self.indexPath = indexPath
         imgvAvatar.image = UIImage(named: "room")
-        setBookMark(isBookMark: room.favourite!)
+        setBookMark(isBookMark: room.isFavourite!)
         imgvCertificate.image =  UIImage(named: "certificated")
         lblMaxNumberOfPerson.text = room.genderPartner == 1 ?
             String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"MALE".localized) :
             room.genderPartner == 2 ? String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"FEMALE".localized) :
             String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"\("MALE".localized)/\("FEMALE".localized)")
         lblRoomName.text = room.name
-        lblPrice.text = String(format: "PRICE_OF_ROOM".localized,room.minPrice!,"PERSON".localized)
+        lblPrice.text = String(format: "PRICE_OF_ROOM".localized,room.minPrice!.formatString,"PERSON".localized)
         lblLocation.text = room.address
         if !isEvenCell{
             mainConstraints?[1].constant = 1.5*Constants.MARGIN_5

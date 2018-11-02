@@ -122,10 +122,10 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
-                <outlet property="imgvAddress" destination="fGa-8B-952" id="ZfK-KL-90M"/>
-                <outlet property="imgvArea" destination="hZh-YW-Pqa" id="P9e-0X-wKy"/>
-                <outlet property="lblAddress" destination="R7q-LT-c4k" id="l21-nh-jcN"/>
-                <outlet property="lblArea" destination="XO3-hV-Mqk" id="38w-fJ-Ovt"/>
+                <outlet property="imgvBottom" destination="hZh-YW-Pqa" id="P9e-0X-wKy"/>
+                <outlet property="imgvtop" destination="fGa-8B-952" id="ZfK-KL-90M"/>
+                <outlet property="lblInfoBottom" destination="XO3-hV-Mqk" id="38w-fJ-Ovt"/>
+                <outlet property="lblInfoTop" destination="R7q-LT-c4k" id="l21-nh-jcN"/>
                 <outlet property="lblMainTitle" destination="cNq-JJ-xll" id="eeK-Hj-fmk"/>
                 <outlet property="lblStatus" destination="xkE-Vh-fM0" id="huk-OK-slg"/>
                 <outlet property="lblStatusHeightConstraint" destination="n2k-kV-Rsa" id="AF9-0J-BFU"/>

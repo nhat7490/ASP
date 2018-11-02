@@ -20,13 +20,16 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     @IBOutlet weak var btnRight: UIButton!
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblDescription: UILabel!
+    @IBOutlet weak var popupView: UIView!
     var utilityModel = UtilityModel()
     var indexPath:IndexPath?
     var delegate:UtilityInputVCDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.backgroundColor = .clear
+        
+        popupView.layer.cornerRadius = 15
+        popupView.clipsToBounds = true
         lblTitle.textAlignment = .center
         lblTitle.text = utilityModel.name
         lblDescription.text = "DESCRIPTION".localized
@@ -47,6 +50,10 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
         tfBrand.text = utilityModel.brand
         tfQuantity.text =  utilityModel.quantity.toString
         tvDescription.text = utilityModel.utilityDescription
+        
+        btnLeft.setTitleColor(.defaultBlue, for: .normal)
+        btnRight.setTitleColor(.defaultBlue, for: .normal)
+        
         
     }
 

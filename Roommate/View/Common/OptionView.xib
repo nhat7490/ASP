@@ -7,7 +7,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,32 +32,22 @@
                                                 <constraint firstAttribute="width" secondItem="tLe-TE-Qm8" secondAttribute="height" multiplier="1:1" id="xAy-vu-VhB"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fWa-IU-7XB">
-                                            <rect key="frame" x="60" y="0.0" width="267" height="25"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zk4-fk-a2J">
-                                            <rect key="frame" x="60" y="25" width="267" height="25"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ksm-Nc-m4j">
+                                            <rect key="frame" x="60" y="0.0" width="267" height="50"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        </textView>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstItem="tLe-TE-Qm8" firstAttribute="leading" secondItem="pWp-Bx-LYs" secondAttribute="leading" id="1ab-3u-DbI"/>
-                                        <constraint firstItem="fWa-IU-7XB" firstAttribute="height" secondItem="pWp-Bx-LYs" secondAttribute="height" multiplier="0.5" id="AzJ-Du-8pv"/>
+                                        <constraint firstItem="ksm-Nc-m4j" firstAttribute="height" secondItem="pWp-Bx-LYs" secondAttribute="height" id="74Q-Pd-5uq"/>
+                                        <constraint firstItem="ksm-Nc-m4j" firstAttribute="leading" secondItem="tLe-TE-Qm8" secondAttribute="trailing" constant="10" id="DCw-Si-qmy"/>
                                         <constraint firstAttribute="bottom" secondItem="tLe-TE-Qm8" secondAttribute="bottom" id="EBC-3h-vm6"/>
-                                        <constraint firstAttribute="trailing" secondItem="fWa-IU-7XB" secondAttribute="trailing" id="ERm-zT-ZyR"/>
-                                        <constraint firstItem="fWa-IU-7XB" firstAttribute="top" secondItem="pWp-Bx-LYs" secondAttribute="top" id="Nnx-E8-ogz"/>
-                                        <constraint firstItem="zk4-fk-a2J" firstAttribute="leading" secondItem="tLe-TE-Qm8" secondAttribute="trailing" constant="10" id="OeJ-HT-lHy"/>
-                                        <constraint firstItem="fWa-IU-7XB" firstAttribute="leading" secondItem="tLe-TE-Qm8" secondAttribute="trailing" constant="10" id="UVh-Xu-ZdA"/>
+                                        <constraint firstAttribute="trailing" secondItem="ksm-Nc-m4j" secondAttribute="trailing" id="MbN-84-t4f"/>
+                                        <constraint firstItem="ksm-Nc-m4j" firstAttribute="centerY" secondItem="pWp-Bx-LYs" secondAttribute="centerY" id="P9d-04-toA"/>
                                         <constraint firstItem="tLe-TE-Qm8" firstAttribute="top" secondItem="pWp-Bx-LYs" secondAttribute="top" id="aQ5-bg-cQ9"/>
-                                        <constraint firstItem="zk4-fk-a2J" firstAttribute="top" secondItem="fWa-IU-7XB" secondAttribute="bottom" id="mSs-5h-fXK"/>
-                                        <constraint firstAttribute="bottom" secondItem="zk4-fk-a2J" secondAttribute="bottom" id="tN1-fT-al4"/>
-                                        <constraint firstAttribute="trailing" secondItem="zk4-fk-a2J" secondAttribute="trailing" id="yja-Qz-smq"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1E2-S9-zG8">
@@ -149,8 +138,7 @@
                 <outlet property="btnEdit" destination="fed-2y-luN" id="olN-Rw-k2M"/>
                 <outlet property="btnRight" destination="8ye-bj-Hzz" id="Xeh-c9-2az"/>
                 <outlet property="imgvLeft" destination="tLe-TE-Qm8" id="uul-CR-7tB"/>
-                <outlet property="lblBottom" destination="zk4-fk-a2J" id="0fE-qR-NuK"/>
-                <outlet property="lblTop" destination="fWa-IU-7XB" id="nrC-g2-WnX"/>
+                <outlet property="tvPrice" destination="ksm-Nc-m4j" id="297-aL-cE3"/>
             </connections>
             <point key="canvasLocation" x="130" y="-209"/>
         </view>

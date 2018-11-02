@@ -10,7 +10,7 @@ import ObjectMapper
 class UserResponseModel: Mappable {
     var userId: Int?
     var fullname: String?
-    var imageProfile: String?
+    var imageProfile: String!
     var dob, phone: String?
     var gender: Int?
     required init?(map: Map) {

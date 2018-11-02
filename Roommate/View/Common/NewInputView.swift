@@ -9,7 +9,7 @@
 import UIKit
 import SkyFloatingLabelTextField
 protocol NewInputViewDelegate:class {
-    func newInputViewDelegate(newInputView view:NewInputView,shouldChangeCharactersTo string:String)
+    func newInputViewDelegate(newInputView view:NewInputView,shouldChangeCharactersTo string:String)->Bool
 //    func newInputViewDelegate(newInputView view:NewInputView,textFieldShouldClear string:String)
 }
 class NewInputView: UIView,UITextFieldDelegate {
@@ -93,18 +93,18 @@ class NewInputView: UIView,UITextFieldDelegate {
                 tfInput.errorMessage = "ERROR_TYPE_NAME_MAX_CHAR_50".localized
             }
         case .price:
-            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                return false
-            }
+//            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+//                return false
+//            }
             if updatedString.isValidPrice(){
                 tfInput.errorMessage = ""
             }else{
                 tfInput.errorMessage = "ERROR_TYPE_PRICE".localized
             }
         case .area:
-            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                return false
-            }
+//            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+//                return false
+//            }
             if updatedString.isValidArea(){
                 tfInput.errorMessage = ""
             }else{
@@ -126,17 +126,16 @@ class NewInputView: UIView,UITextFieldDelegate {
                 tfInput.errorMessage = "ERROR_TYPE_ADDRESS".localized
             }
         case .phone:
-            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                return false
-            }
+//            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+//                return false
+//            }
             if updatedString.isValidPhoneNumber(){
                 tfInput.errorMessage = ""
             }else{
                 tfInput.errorMessage = "ERROR_TYPE_PHONE".localized
             }
         }
-        delegate?.newInputViewDelegate(newInputView: self, shouldChangeCharactersTo: updatedString)
-        return true
+        return delegate?.newInputViewDelegate(newInputView: self, shouldChangeCharactersTo: updatedString) ?? false
         
     }
     

@@ -20,23 +20,46 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
     }
     func setupUI() {
         self.tabBar.backgroundColor = .white
+        self.tabBar.tintColor = .defaultBlue
+//        self.tabBar.barTintColor = .white
+//        self.tabBar.unselectedItemTintColor = .black
+        var vcs = [UIViewController]()
+        
+        let home = HomeVC()
+        home.tabBarItem = UITabBarItem(title: "HOME_VC".localized , image: UIImage(named: "home")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "home"))
+        
         let all = AllVC()
+        all.allVCType = .all
+        all.tabBarItem = UITabBarItem(title: "ALL_VC".localized , image: UIImage(named: "all")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "all"))
+        
         let bookmark = AllVC()
         bookmark.allVCType = .bookmark
-        var vcs = [UIViewController]()
+        bookmark.tabBarItem = UITabBarItem(title: "BOOKMARK_VC".localized , image: UIImage(named: "bookmark-blue")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "bookmark-blue"))
+        
+        let notification = NotificationVC()
+        notification.tabBarItem = UITabBarItem(title: "NOTIFICATION_VC".localized, image: UIImage(named: "notification")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "notification"))
+        
+        let account = AccountVC()
+        account.tabBarItem = UITabBarItem(title: "ACCOUNT_VC".localized, image: UIImage(named: "account")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "manage-account"))
+        vcs.append(home)
         vcs.append(all)
         vcs.append(bookmark)
-        vcs.append(NotificationVC())
-        //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_IN, sbName: Constants.STORYBOARD_MAIN))
-        //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
-        //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_RESET_PASSWORD, sbName: Constants.STORYBOARD_MAIN))
-        //        vcs.append(Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN))
-        viewControllers = [HomeVC()]
-//        viewControllers = vcs.map({UINavigationController(rootViewController: $0)})
-        self.selectedIndex = 1
+        vcs.append(notification)
+        vcs.append(account)
+        viewControllers = vcs.map({
+            if $0 is HomeVC || $0 is AccountVC{
+                return $0
+            }else{
+                return UINavigationController(rootViewController: $0)
+            }
+        })
     }
     
-
+    override var selectedIndex: Int{
+        didSet{
+            
+        }
+    }
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         view.layoutIfNeeded()
         return true

@@ -16,8 +16,8 @@ class NewRoommateCVCell: UICollectionViewCell {
     @IBOutlet weak var lblRightName: UILabel!
     @IBOutlet weak var lblRightPrice: UILabel!
     @IBOutlet weak var tvRightPriceValue: UITextView!
-    @IBOutlet weak var lblRightPosition: UILabel!
-    @IBOutlet weak var tvRightPositionValue: UITextView!
+    @IBOutlet weak var lblRightDistricts: UILabel!
+    @IBOutlet weak var tvRightDistrictsValue: UITextView!
     @IBOutlet weak var lblRightCity: UILabel!
     @IBOutlet weak var tvRightCityValue: UITextView!
     var delegate:NewRoommateCVCellDelegate?
@@ -34,15 +34,17 @@ class NewRoommateCVCell: UICollectionViewCell {
             
             self.lblRightName.text = roommate?.userResponseModel?.fullname
             self.lblRightPrice.text = "ROMMATE_RIGHT_PRICE".localized
-            self.tvRightPriceValue.text = "\(roommate!.minPrice.toString)vnd - \(roommate!.maxPrice.toString)vnd"
-            self.lblRightPosition.text = "ROMMATE_RIGHT_POSITION".localized
+            self.tvRightPriceValue.text = "\(roommate!.minPrice.formatString)vnd - \(roommate!.maxPrice.formatString)vnd"
+            self.lblRightDistricts.text = "ROMMATE_RIGHT_POSITION".localized
             let dictrictsString = roommate?.districtIds?.map({ (districtId) -> String in
                 (DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.name)!
             })
-            self.tvRightPositionValue.text = dictrictsString?.joined(separator: ",")
+            self.tvRightDistrictsValue.text = dictrictsString?.joined(separator: ",")
             self.lblRightCity.text = "ROMMATE_RIGHT_CITY".localized
             self.tvRightCityValue.text = DBManager.shared.getRecord(id: (roommate?.cityId)!, ofType: CityModel.self)?.name
-            self.imgvLeftBookmark.image = (roommate?.favourite)! ? UIImage(named: "bookmarked"):UIImage(named: "bookmark-black")
+            self.imgvLeftBookmark.image = (roommate?.isFavourite)! ? UIImage(named: "bookmarked"):UIImage(named: "bookmark-black")
+            
+            
             
         }
     }
@@ -64,29 +66,40 @@ class NewRoommateCVCell: UICollectionViewCell {
         
         lblRightName.font = UIFont.boldSystemFont(ofSize:.medium)
         lblRightPrice.font = UIFont.systemFont(ofSize: .small)
-        lblRightPosition.font = UIFont.systemFont(ofSize: .small)
+        lblRightDistricts.font = UIFont.systemFont(ofSize: .small)
         lblRightCity.font = UIFont.systemFont(ofSize: .small)
         
-        tvRightPositionValue.font = UIFont.boldSystemFont(ofSize: .small)
+        tvRightDistrictsValue.font = UIFont.boldSystemFont(ofSize: .small)
         tvRightCityValue.font = UIFont.boldSystemFont(ofSize: .small)
         tvRightPriceValue.font = UIFont.boldSystemFont(ofSize: .small)
         
         
         tvRightPriceValue.isEditable = false
-        tvRightPositionValue.isEditable = false
+        tvRightDistrictsValue.isEditable = false
         tvRightCityValue.isEditable = false
         
+        tvRightPriceValue.isUserInteractionEnabled = false
+        tvRightDistrictsValue.isUserInteractionEnabled = false
+        tvRightCityValue.isUserInteractionEnabled = false
+        
         tvRightPriceValue.isScrollEnabled = false
-        tvRightPositionValue.isScrollEnabled = false
+        tvRightDistrictsValue.isScrollEnabled = false
         tvRightCityValue.isScrollEnabled = false
         
         tvRightPriceValue.textContainerInset = .zero
-        tvRightPositionValue.textContainerInset = .zero
+        tvRightDistrictsValue.textContainerInset = .zero
         tvRightCityValue.textContainerInset = .zero
         
         tvRightPriceValue.textContainer.lineBreakMode = .byWordWrapping
-        tvRightPositionValue.textContainer.lineBreakMode = .byWordWrapping
+        tvRightDistrictsValue.textContainer.lineBreakMode = .byWordWrapping
         tvRightCityValue.textContainer.lineBreakMode = .byWordWrapping
+        
+        tvRightPriceValue.textColor = .defaultBlue
+        tvRightDistrictsValue.textColor = .defaultPink
+        tvRightCityValue.textColor = .defaultPurple
+        
+        addBorder(side: BorderSide.Bottom, color: .lightGray, width: 0.5)
+        
     }
     
     func setBookMark(isBookMark:Bool){

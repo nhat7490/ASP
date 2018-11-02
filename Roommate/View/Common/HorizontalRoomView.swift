@@ -8,8 +8,9 @@
 
 import UIKit
 protocol HorizontalRoomViewDelegate:class{
-    func horizontalRoomViewDelegate(roomCVCell cell:NewRoomCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?)
-    func horizontalRoomViewDelegate(onClickButton button:UIButton)
+    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell:NewRoomCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndexPath indexPath:IndexPath?)
+    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell:NewRoomCVCell,didSelectCellAt indexPath:IndexPath?)
+    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,onClickButton button:UIButton)
 }
 class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,NewRoomCVCellDelegate,UICollectionViewDelegateFlowLayout{
     
@@ -24,7 +25,7 @@ class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataS
     override func awakeFromNib() {
         super.awakeFromNib()
         lblTitle.text = "TITLE_SUGGEST_ROOM".localized
-        lblTitle.font = .boldSmall
+        lblTitle.font = .boldMedium
         lblTitle.textColor = .red
         
         btnViewAll.setTitle("TITLE_VIEW_ALL".localized, for: .normal)
@@ -49,16 +50,18 @@ class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataS
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWROOMCV, for: indexPath) as! NewRoomCVCell
         cell.delegate  = self
         cell.room = rooms[indexPath.row]
+        cell.indexPath = indexPath
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         print(frame.width/2)
-        return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_NEWROOMCV.cgFloat)
+        return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_NEWROOMCV)
     }
-    //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-    //        return 10
-    //    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! NewRoomCVCell
+        delegate?.horizontalRoomViewDelegate(horizontalRoomView: self, collectionCell: cell, didSelectCellAt: indexPath)
+    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         //space dif line but here is same line because horizontal scroll
         return 10
@@ -66,10 +69,10 @@ class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataS
     
     //MARK: NewRoomCVCellDelegate
     func newRoomCVCellDelegate(roomCVCell cell:NewRoomCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?){
-        delegate?.horizontalRoomViewDelegate(roomCVCell: cell, onClickUIImageView: imgvBookmark, atIndextPath: indexPath)
+        delegate?.horizontalRoomViewDelegate(horizontalRoomView: self, collectionCell: cell, onClickUIImageView: imgvBookmark, atIndexPath: indexPath)
     }
     
     @IBAction func onClickBtnViewAll(_ sender: UIButton) {
-        delegate?.horizontalRoomViewDelegate(onClickButton: sender)
+        delegate?.horizontalRoomViewDelegate(horizontalRoomView: self, onClickButton: sender)
     }
 }

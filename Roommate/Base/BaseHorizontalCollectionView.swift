@@ -42,7 +42,7 @@ class BaseHorizontalCollectionView: UICollectionView {
 //        showsVerticalScrollIndicator = false
 //        showsHorizontalScrollIndicator = false
 //        allowsMultipleSelection = false
-        bounces = false
+//        bounces = false
 //        isPagingEnabled = true
         backgroundColor = .white
     }

@@ -30,6 +30,9 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="NGw-hZ-yrE"/>
                     </constraints>
+                    <connections>
+                        <action selector="onClickBtnViewAll:" destination="iN0-l3-epB" eventType="touchUpInside" id="mub-LC-D7e"/>
+                    </connections>
                 </button>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="4C5-Tn-Qdr" customClass="BaseVerticalCollectionView" customModule="Roommate" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="40" width="490" height="360"/>
@@ -59,6 +62,7 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="btnViewAll" destination="rFn-9m-34f" id="pyN-j3-HoY"/>
+                <outlet property="btnViewAllHeightConstraint" destination="NGw-hZ-yrE" id="oCc-qM-hJP"/>
                 <outlet property="collectionView" destination="4C5-Tn-Qdr" id="ZBF-Bl-8YR"/>
                 <outlet property="lblTitle" destination="hd0-hL-vOy" id="pSG-Z2-HEe"/>
             </connections>

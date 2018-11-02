@@ -43,7 +43,7 @@ enum SystemAppType {
     case phone, message, email
 }
 enum ViewType{
-    case detailForMaster,detailForMember,cEForOwner,detailForFinder
+    case detailForOwner,detailForMember,cEForOwner,roomPostDetailForFinder,roommatePostDetailForFinder
 }
 enum DropdownListViewType{
     case city,district
@@ -56,7 +56,7 @@ enum CERoomVCType{
     case create,edit
 }
 enum AllVCType{
-    case all,bookmark,search
+    case all,bookmark,search,suggestRoom
 }
 enum FilterVCType{
     case room,roommate
@@ -138,5 +138,14 @@ enum AlertType{
 }
 
 enum VerticalPostViewType{
-    case room,roommate
+    case room,roommate,roomOwner
+}
+enum FilterType{
+    case room,roommmate
+}
+enum ImageCVCellType{
+    case normal,upload
+}
+enum RequestType{
+    case room,suggest
 }

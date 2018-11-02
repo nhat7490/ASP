@@ -19,9 +19,18 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     //MARK: Data for UICollectionView And UITableView
     var roommates:[RoommatePostResponseModel] = []
     var rooms:[RoomPostResponseModel] = []
-    var roomFilter:FilterArgumentModel = FilterArgumentModel()
-    var roommateFilter:FilterArgumentModel = FilterArgumentModel()
-    
+    var roomFilter:FilterArgumentModel = {
+        let filter = FilterArgumentModel()
+        filter.cityId = DBManager.shared.getSetting()?.cityId
+        return filter
+    }()
+    var roommateFilter:FilterArgumentModel = {
+        let filter = FilterArgumentModel()
+        filter.typeId = 2
+        filter.cityId = DBManager.shared.getSetting()?.cityId
+        return filter
+    }()
+//    var isLoadingData = false
     let orders = [
         OrderType.newest:"NEWEST",
         OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
@@ -91,33 +100,32 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     //MARK: Components for UICollectionView
     lazy var collectionView:UICollectionView = {
-        return BaseVerticalCollectionView()
+        let cv = BaseVerticalCollectionView()
+        cv.showsVerticalScrollIndicator = false
+        cv.showsHorizontalScrollIndicator = false
+        return cv
     }()
     lazy var bottomView:UIView = {
         let v = UIView()
         return v
     }()
     
-    
+    //MARK: Viewcontroller
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupDataAndDelegate()
-        loadRoomData()
-        
+        loadRoomData(withNewFilterArgModel: true)
+        registerNotification()
     }
     
     //MARK: Setup UI
     func setupUI(){
         view.backgroundColor = .white
         automaticallyAdjustsScrollViewInsets = false
-        //        let statusBarHeight = UIApplication.shared.statusBarFrame.size.height;
-        //        let navigationBarHeight = navigationController?.navigationBar.frame.size.height;
         let tabBarHeight = self.tabBarController?.tabBar.frame.size.height;
         let adjustForTabbarInsets = UIEdgeInsets(top: 0,left: 0,bottom: tabBarHeight!,right: 0)
         navigationController?.navigationBar.backgroundColor = .white
-        //For tabbar
-        tabBarItem = UITabBarItem(title: allVCType == .all ? "ALL_VC".localized : "BOOKMARK_VC".localized, image: UIImage(named: "icons8-home-page-51")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "icons8-home-page-50"))
         
         
         //UI for navigation bar
@@ -170,8 +178,8 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         _ = imageView.anchorWidth(equalTo: btnOrderBy.heightAnchor, constant: -10)
         _ = lblSelectTitle.anchor(btnOrderBy.topAnchor,btnOrderBy.leftAnchor,btnOrderBy.bottomAnchor,imageView.leftAnchor,UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
         
-//        bottomView.backgroundColor = .red
-//        collectionView.backgroundColor = .blue
+        //        bottomView.backgroundColor = .red
+        //        collectionView.backgroundColor = .blue
         if #available(iOS 11.0, *) {
             _ = bottomView.anchor(orderByView.bottomAnchor, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -2, right: -Constants.MARGIN_10))
         } else {
@@ -183,7 +191,6 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         view.bringSubview(toFront: tableView)
         tableHeightLayoutConstraint = tableView.anchorTopRight(orderByView.bottomAnchor, btnOrderBy.rightAnchor, 150.0, 1)[3]
         
-        view.layoutIfNeeded()
     }
     
     func setupDataAndDelegate(){
@@ -201,57 +208,46 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(OrderTVCell.self, forCellReuseIdentifier: Constants.CELL_ORDERTV)
-        roomFilter.searchRequestModel = nil
-        roomFilter.userId.value = DBManager.shared.getUser()!.userId
-        roomFilter.typeId.value = 1
-        roomFilter.page.value = 1
-        roomFilter.offset.value = 15
-        roomFilter.cityId.value = 45
-        roommateFilter.searchRequestModel = nil
-        roommateFilter.userId.value = DBManager.shared.getUser()!.userId
-        roommateFilter.typeId.value = 2
-        roommateFilter.page.value = 1
-        roommateFilter.offset.value = 15
-        roommateFilter.cityId.value = 45
-//        if self.allVCType == .all{
-//            apiRouter = APIRouter.postForAll(model: roomFilter)
-//        }else if self.allVCType == .bookmark{
-//            //            filterArgModel =
-//            apiRouter = APIRouter.postForBookmark(model: roomFilter)
-//        }
+        
+        
+        //        if self.allVCType == .all{
+        //            apiRouter = APIRouter.postForAll(model: roomFilter)
+        //        }else if self.allVCType == .bookmark{
+        //            //            filterArgModel =
+        //            apiRouter = APIRouter.postForBookmark(model: roomFilter)
+        //        }
         
     }
     
-    func loadRoomData(){
+    func loadRoomData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
                 self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                    self.requestRoom(apiRouter:self.allVCType == .all ? APIRouter.postForAll(model: self.roomFilter) : APIRouter.postForBookmark(model: self.roomFilter),withNewFilterArgModel: true, page: 1)
+                    self.requestRoom(apiRouter:self.allVCType == .all ? APIRouter.postForAll(model: self.roomFilter) : APIRouter.postForBookmark(model: self.roomFilter),withNewFilterArgModel: withNewFilterArgModel)
                 }
             }
         }else{
             self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                self.requestRoom(apiRouter: self.allVCType == .all ? APIRouter.postForAll(model: self.roomFilter) : APIRouter.postForBookmark(model: self.roomFilter), withNewFilterArgModel: true, page: 1)
+                self.requestRoom(apiRouter: self.allVCType == .all ? APIRouter.postForAll(model: self.roomFilter) : APIRouter.postForBookmark(model: self.roomFilter), withNewFilterArgModel: withNewFilterArgModel)
             }
         }
     }
-    func loadRoommateData(){
+    func loadRoommateData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
                 self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                    self.requestRoommate(apiRouter: self.allVCType == .all ? APIRouter.postForAll(model: self.roommateFilter) : APIRouter.postForBookmark(model: self.roommateFilter),withNewFilterArgModel: true, page: 1)
+                    self.requestRoommate(apiRouter: self.allVCType == .all ? APIRouter.postForAll(model: self.roommateFilter) : APIRouter.postForBookmark(model: self.roommateFilter),withNewFilterArgModel: withNewFilterArgModel)
                 }
             }
         }else{
             self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                self.requestRoommate(apiRouter: self.allVCType == .all ? APIRouter.postForAll(model: self.roommateFilter) : APIRouter.postForBookmark(model: self.roommateFilter), withNewFilterArgModel: true, page: 1)
+                self.requestRoommate(apiRouter: self.allVCType == .all ? APIRouter.postForAll(model: self.roommateFilter) : APIRouter.postForBookmark(model: self.roommateFilter), withNewFilterArgModel: withNewFilterArgModel)
             }
         }
     }
-//    if self.allVCType == AllVCType.
+    //    if self.allVCType == AllVCType.
     
-    func  requestRoom(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool,page:Int,offset:Int=15){
-//        roomFilter.searchRequestModel = nil
+    func  requestRoom(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
@@ -269,7 +265,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                 if error != nil{
                     DispatchQueue.main.async {
                         self.showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
-                            self.requestRoom(apiRouter:apiRouter,withNewFilterArgModel: newFilterArgModel, page: page,offset: offset)
+                            self.requestRoom(apiRouter:apiRouter,withNewFilterArgModel: newFilterArgModel)
                         })
                     }
                 }else{
@@ -280,22 +276,23 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                             //                        self.group.leave()
                             return
                         }
-                        if newFilterArgModel { self.rooms.removeAll()}
-                        values.forEach({ (room) in
-                            print(room.postId)
-                            print(room.name)
-                        })
+                        if newFilterArgModel {
+                            self.rooms.removeAll()
+                        }
+                        if values.count == 0, self.roomFilter.page! > 1{
+                            self.roomFilter.page = self.roomFilter.page!-1
+                        }
                         self.rooms.append(contentsOf: values)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
+//                            self.isLoadingData = false
                         }
                     }
                 }
             })
         }
     }
-    func  requestRoommate(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool,page:Int,offset:Int=15){
-        roomFilter.searchRequestModel = nil
+    func  requestRoommate(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
@@ -313,7 +310,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                 if error != nil{
                     DispatchQueue.main.async {
                         self.showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
-                            self.requestRoommate(apiRouter:apiRouter,withNewFilterArgModel: newFilterArgModel, page: page,offset: offset)
+                            self.requestRoommate(apiRouter:apiRouter,withNewFilterArgModel: newFilterArgModel)
                         })
                     }
                 }else{
@@ -328,12 +325,91 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                         self.roommates.append(contentsOf: values)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
+//                            self.isLoadingData = false
                         }
                     }
                 }
             })
         }
     }
+    //MARK: Notification
+    func registerNotification(){
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAddBookmarkNotification(_:)), name: Constants.NOTIFICATION_ADD_BOOKMARK, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveBookmarkNotification(_:)), name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: nil)
+    }
+    @objc func didReceiveRemoveBookmarkNotification(_ notification:Notification) {
+        if allVCType == .all{
+            if notification.object is RoomPostResponseModel{
+                if let room = notification.object as? RoomPostResponseModel{
+                    if let index = rooms.index(of: room){
+                        rooms[index].isFavourite = room.isFavourite
+                        self.collectionView.reloadData()
+                    }
+                }
+            }else{
+                if let roommate = notification.object as? RoommatePostResponseModel{
+                    if let index = roommates.index(of: roommate){
+                        roommates[index].isFavourite = roommate.isFavourite
+                        self.collectionView.reloadData()
+                    }
+                }
+            }
+        }else if allVCType == .bookmark{
+            if notification.object is RoomPostResponseModel{
+                if let room = notification.object as? RoomPostResponseModel{
+                    if let index = rooms.index(of: room){
+                        rooms.remove(at: index)
+                    }
+                }
+                self.collectionView.reloadData()
+            }else{
+                if let roommate = notification.object as? RoommatePostResponseModel{
+                    if let index = roommates.index(of: roommate){
+                        roommates.remove(at: index)
+                    }
+                }
+                self.collectionView.reloadData()
+            }
+        }
+    }
+    @objc func didReceiveAddBookmarkNotification(_ notification:Notification) {
+        if allVCType == .all{
+            if notification.object is RoomPostResponseModel{
+                if let room = notification.object as? RoomPostResponseModel{
+                    if let index = rooms.index(of: room){
+                        rooms[index].isFavourite = room.isFavourite
+                        rooms[index].favouriteId = room.favouriteId
+                        self.collectionView.reloadData()
+                    }
+                }
+            }else{
+                if let roommate = notification.object as? RoommatePostResponseModel{
+                    if let index = roommates.index(of: roommate){
+                        roommates[index].isFavourite = roommate.isFavourite
+                        roommates[index].favouriteId = roommate.favouriteId
+                        self.collectionView.reloadData()
+                    }
+                }
+            }
+        }else{
+            if notification.object is RoomPostResponseModel{
+                if let room = notification.object as? RoomPostResponseModel{
+                    if rooms.index(of: room) == nil{
+                        rooms.append(room)
+                        self.collectionView.reloadData()
+                    }
+                }
+            }else{
+                if let roommate = notification.object as? RoommatePostResponseModel{
+                    if roommates.index(of: roommate) == nil{
+                        roommates.append(roommate)
+                        self.collectionView.reloadData()
+                    }
+                }
+            }
+        }
+    }
+    
     //MARK: UICollectionView DataSourse and Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if segmentControl.selectedSegmentIndex == 0{
@@ -346,14 +422,13 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if segmentControl.selectedSegmentIndex == 0{
-            //            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMCV, for: indexPath) as! RoomCVCell
-            //            cell.delegate = self
-            //            cell.setData(room: rooms[indexPath.row], indexPath: indexPath,isEvenCell:indexPath.row%2==0)
-            //            return cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWROOMCV, for: indexPath) as! NewRoomCVCell
             cell.delegate = self
             cell.room = rooms[indexPath.row]
             cell.indexPath = indexPath
+//            let tap = UITapGestureRecognizer(target: self, action: #selector(onClickImgvBookmark))
+//            
+//            cell.imgvBookMark.imgvBookMark.addGestureRecognizer(tap)
             return cell
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWROOMMATECV, for: indexPath) as! NewRoommateCVCell
@@ -366,38 +441,73 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        if segmentControl.selectedSegmentIndex == 0{
-//            
-//            let vc = RoomDetailForFinderVC()
-//            vc.viewType = ViewType.detailForFinder
-//            vc.room = rooms[indexPath.row]
-////            let mainVC = UIViewController()
-////            let nv = UINavigationController(rootViewController: mainVC)
-////            present(nv, animated: false) {
-//            //                nv.pushViewController(vc, animated: false)}
-//            present(vc, animated: true, completion: nil)
-//        }else{
-//            //                    let vc = RoomDetailForFinderVC()
-//            //                    vc.viewType = ViewType.detailForMember
-//            //                    navigationController?.pushViewController(vc, animated: true)
-//        }
+        
+        if segmentControl.selectedSegmentIndex == 0{
+            let vc = PostDetailVC()
+            vc.viewType = ViewType.roomPostDetailForFinder
+            vc.room = rooms[indexPath.row]
+            let mainVC = UIViewController()
+            let nv = UINavigationController(rootViewController: mainVC)
+            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            //            present(vc, animated: true, completion: nil)
+        }else{
+            let vc = PostDetailVC()
+            vc.viewType = ViewType.roommatePostDetailForFinder
+            vc.roommate = roommates[indexPath.row]
+            let mainVC = UIViewController()
+            let nv = UINavigationController(rootViewController: mainVC)
+            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if segmentControl.selectedSegmentIndex == 0{
-            return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_NEWROOMCV.cgFloat)
+            return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_NEWROOMCV)
         }else{
-            return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_NEWROOMMATECV.cgFloat)
+            return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_NEWROOMMATECV)
         }
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         //dif row space
         return 2
     }
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        //same row
-//        return 0
-//    }
+    
+    //MARK: UIScrollviewDelegate
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let offset = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        print("OFFSET:\(scrollView.contentOffset.y)")
+        print("ContentframeHeight:\(scrollView.frame.height)")
+        print("ContentContentHeight:\(scrollView.contentSize.height)")
+        print("Refresh Data:\(offset < -Constants.MAX_Y_OFFSET)")
+        print("Load more data:\((offset - contentHeight + scrollView.frame.height) > Constants.MAX_Y_OFFSET)")
+        if offset < -Constants.MAX_Y_OFFSET {
+//            isLoadingData = true
+            print("Refresh data")
+            if segmentControl.selectedSegmentIndex == 0{
+                roomFilter.page = 1
+                loadRoomData(withNewFilterArgModel: true)//for remove all  and reload data
+            }else{
+                roommateFilter.page = 1
+                loadRoommateData(withNewFilterArgModel: true)//for remove all  and reload data
+            }
+            
+            //Load more data
+            //because offset = 0 when view loading ==> need to plus scrollView.frame.height
+            //to equal contentHeight
+        }else if (offset - contentHeight + scrollView.frame.height) > Constants.MAX_Y_OFFSET{
+//            isLoadingData = true
+            print("Loading more data")
+            if segmentControl.selectedSegmentIndex == 0{
+                roomFilter.page = rooms.count/15+2
+                loadRoomData(withNewFilterArgModel: false)//for remove all  and reload data
+            }else{
+                roommateFilter.page = roommates.count/15+2
+                loadRoommateData(withNewFilterArgModel: false)//for remove all  and reload data
+            }
+        }
+    }
     
     //MARK: UITableView DataSourse and Delegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -426,12 +536,14 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         lblSelectTitle.text = orders[selectedOrder]?.localized
         onClickBtnOrder()
         if segmentControl.selectedSegmentIndex == 0{
-            roomFilter.orderBy.value = indexPath.row + 1
-            loadRoomData()
+            roomFilter.orderBy = indexPath.row + 1
+            roomFilter.page = 1
+            loadRoomData(withNewFilterArgModel: true)
         }else{
             
-            roommateFilter.orderBy.value = indexPath.row + 1
-            loadRoommateData()
+            roommateFilter.orderBy = indexPath.row + 1
+            roommateFilter.page = 1
+            loadRoommateData(withNewFilterArgModel: true)
         }
         
         
@@ -444,16 +556,18 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     @objc func segmentChanged() {
         if segmentControl.selectedSegmentIndex == 0{
             if rooms.count == 0{
-                loadRoomData()
+                loadRoomData(withNewFilterArgModel: true)
             }else{
-                
+                self.collectionView.reloadData()
             }
         }else{
             if roommates.count == 0{
-                loadRoommateData()
+                loadRoommateData(withNewFilterArgModel: true)
+            }else{
+                self.collectionView.reloadData()
             }
         }
-        collectionView.reloadData()
+        
     }
     
     //Filter bar button item event
@@ -478,7 +592,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
             }else{
                 self.tableHeightLayoutConstraint?.constant = 0
             }
-            self.view.layoutIfNeeded()
+            //            self.view.layoutIfNeeded()
         }
     }
     
@@ -488,94 +602,128 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         guard let row = indexPath?.row else{
             return
         }
-        
-        let room = rooms[row]
-        if allVCType == .all{
-            room.favourite =  room.favourite! == true ? false : true
-        }else if allVCType == .bookmark{
-            room.favourite =  false//for api
-            rooms.remove(at: row)
-        }
-        collectionView.reloadData()
-    }
-    
-//    func roommateCVCellDelegate(roommateCVCell cell: RoommateCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
-//        guard let row = indexPath?.row else{
-//            return
-//        }
 //
-//        let roommate = roommates[row]
+//        let room = rooms[row]
 //        if allVCType == .all{
-//            roommate.favourite =  roommate.favourite == true ? false : true
+//            room.isFavourite =  room.isFavourite! == true ? false : true
 //        }else if allVCType == .bookmark{
-//            roommate.favourite =  false//for api
-//            roommates.remove(at: row)
+//            room.isFavourite =  false//for api
+//            rooms.remove(at: row)
 //        }
 //        collectionView.reloadData()
-//    }
-    func newRoommateCVCellDelegate(newRoommateCVCell cell: NewRoommateCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
-        guard let row = indexPath?.row else{
-            return
-        }
-        
-        let roommate = roommates[row]
-        let model = BookmarkRequestModel()
-        model.postId = roommate.postId!
-        model.userId = DBManager.shared.getUser()!.userId
-        let apiRouter = roommate.favourite == true ? APIRouter.removeBookmark(id: roommate.postId!) : APIRouter.createBookmark(model: model)
-        self.request(apiRouter: apiRouter, errorNetworkConnectedHander: {
-            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-        }) { (error, statusCode) -> (Void) in
-            if error == .SERVER_NOT_RESPONSE{
-                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
-            }else{
-                if statusCode == .OK{
-                    DispatchQueue.main.async {
-                        
-                        if self.allVCType == .all{
-                            roommate.favourite = roommate.favourite == true ? false : true
-                        }else if self.allVCType == .bookmark{
-                            roommate.favourite =  false
-                            self.roommates.remove(at: row)
-                        }
-                        self.collectionView.reloadData()
-                    }
+        processBookmark(view: self.collectionView, model: rooms[row], row: row){model in
+            if self.allVCType == .all{
+                if model.isFavourite!{
+                    NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_BOOKMARK, object: model)
                 }else{
-                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+                    NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
                 }
+            }else if self.allVCType == .bookmark{
+//                model.isFavourite =  false//for api
+                self.rooms.remove(at: row)
+                 NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
+            }
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
             }
         }
+    }
+    
+    //    func roommateCVCellDelegate(roommateCVCell cell: RoommateCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
+    //        guard let row = indexPath?.row else{
+    //            return
+    //        }
+    //
+    //        let roommate = roommates[row]
+
+    //        collectionView.reloadData()
+    //    }
+    func newRoommateCVCellDelegate(newRoommateCVCell cell: NewRoommateCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
+                guard let row = indexPath?.row else{
+                    return
+                }
+        processBookmark(view: self.collectionView, model: roommates[row], row: row){model in
+            if self.allVCType == .all{
+                if model.isFavourite!{
+                    NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_BOOKMARK, object: model)
+                }else{
+                    NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
+                }
+            }else if self.allVCType == .bookmark{
+                model.isFavourite =  false//for api
+                self.roommates.remove(at: row)
+                NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
+            }
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+
+//
+//        cell.imgvLeftAvatar.isUserInteractionEnabled = false
+//        let roommate = roommates[row]
+//        let model = BookmarkRequestModel()
+//        model.postId = roommate.postId!
+//        model.userId = DBManager.shared.getUser()!.userId
+//
+//        let apiRouter = roommate.isFavourite == true ? APIRouter.removeBookmark(favoriteId: roommate.favouriteId!) : APIRouter.createBookmark(model: model)
+//        APIConnection.requestObject(apiRouter: apiRouter, errorNetworkConnectedHander: {
+//            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+//        }, returnType: CreateResponseModel.self){ (value,error, statusCode) -> (Void) in
+//            if error == .SERVER_NOT_RESPONSE{
+//                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+//            }else{
+//                if statusCode == .OK{
+//                    if let value = value{
+//                        roommate.favouriteId = value.id
+//                    }
+//                    if self.allVCType == .all{
+//                        roommate.isFavourite = roommate.isFavourite == true ? false : true
+//                    }else if self.allVCType == .bookmark{
+//                        roommate.isFavourite =  false
+//                        self.roommates.remove(at: row)
+//                    }
+//                    DispatchQueue.main.async {
+//                        cell.imgvLeftAvatar.isUserInteractionEnabled = true
+//                        self.collectionView.reloadData()
+//                    }
+//                }else{
+//                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+//                }
+//            }
+//        }
+//
         
         
     }
     //MARK: FilterVCDelegate
     
     func filterVCDelegate(filterVC: FilterVC, onCompletedWithFilter filter: FilterArgumentModel) {
-        print(filter.page.value)
-        print(filter.offset.value)
-        print(filter.userId.value)
-        print(filter.typeId.value)
-        print("Districts")
-        filter.searchRequestModel?.districts.forEach({ (id) in
-            print(id)
-        })
-        print("Utilities")
-        filter.searchRequestModel?.utilities.forEach({ (id) in
-            print(id)
-        })
-        print("Price")
-        filter.searchRequestModel?.price.forEach({ (price) in
-            print(price)
-        })
-        print("Gender")
-        print(filter.searchRequestModel?.gender.value)
+//        print(filter.page)
+//        print(filter.offset)
+//        print(filter.userId)
+//        print(filter.typeId)
+//        print("Districts")
+//        filter.searchRequestModel?.districts?.forEach({ (id) in
+//            print(id)
+//        })
+//        print("Utilities")
+//        filter.searchRequestModel?.utilities?.forEach({ (id) in
+//            print(id)
+//        })
+//        print("Price")
+//        filter.searchRequestModel?.price?.forEach({ (price) in
+//            print(price)
+//        })
+//        print("Gender")
+        print(filter.searchRequestModel?.gender)
         
         if segmentControl.selectedSegmentIndex == 0{
             self.roomFilter = filter
-            loadRoomData()
+            loadRoomData(withNewFilterArgModel: true)
         }else{
             self.roommateFilter = filter
-            loadRoommateData()
+            loadRoommateData(withNewFilterArgModel: true)
         }
     }
     
@@ -592,6 +740,20 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         }
     }
     
+    override func resetFilter(filterType:FilterType) {
+        self.collectionView.reloadData()
+        selectedOrder = .newest
+        lblSelectTitle.text = orders[selectedOrder]?.localized
+        if filterType == .room{
+            roomFilter.searchRequestModel = nil
+            roomFilter.page = 1
+            roomFilter.orderBy = 1
+        }else{
+            roommateFilter.searchRequestModel = nil
+            roommateFilter.page = 1
+            roommateFilter.orderBy = 1
+        }
+    }
     
     
 }

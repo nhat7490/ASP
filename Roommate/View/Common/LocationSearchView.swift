@@ -7,11 +7,20 @@
 //
 
 import UIKit
-
+protocol LocationSearchViewDelegate:class{
+    func locationSearchViewDelegate(locationSearchView view:LocationSearchView,onClickButtonLocation btnLocation:UIButton)
+}
 class LocationSearchView: UIView {
 
     @IBOutlet weak var btnLocation: UIButton!
     @IBOutlet weak var tfSearch: UITextField!
+    weak var delegate:LocationSearchViewDelegate?
+    var lblTitle = UILabel()
+    var location:String?{
+        didSet{
+            lblTitle.text = location
+        }
+    }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -28,11 +37,18 @@ class LocationSearchView: UIView {
         paraStyle.alignment = .center
         tfSearch.attributedPlaceholder = NSAttributedString(string: "PLACE_HOLDER_SEARCH".localized, attributes: [NSAttributedStringKey.paragraphStyle:paraStyle])
         
-        let lblTitle = UILabel()
-        lblTitle.text = "Hồ Chí minh"
+        
+        
         lblTitle.font = .smallTitle
         lblTitle.textColor = .defaultBlue
         lblTitle.textAlignment = .center
+        
+//        if let setting = DBManager.shared.getSetting(),let name = DBManager.shared.getRecord(id: setting.cityId, ofType: CityModel.self)?.name{
+//            lblTitle.text = name
+//        }else{
+//            lblTitle.text = "LIST_CITY_TITLE".localized
+//        }
+        
         
         let imageView = UIImageView(image: UIImage(named: "location"))
         imageView.tintColor = .defaultBlue
@@ -44,5 +60,7 @@ class LocationSearchView: UIView {
         _ = imageView.anchorWidth(equalTo: btnLocation.heightAnchor, constant: -24)
         _ = lblTitle.anchor(btnLocation.topAnchor,imageView.rightAnchor,btnLocation.bottomAnchor,btnLocation.rightAnchor)
     }
-
+    @IBAction func onClickBtnLocation(_ sender: Any) {
+        delegate?.locationSearchViewDelegate(locationSearchView: self, onClickButtonLocation: btnLocation)
+    }
 }

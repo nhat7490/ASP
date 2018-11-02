@@ -17,6 +17,7 @@ enum APIRouter:URLRequestConvertible{
     case findById(id:Int)
     case login(username:String,password:String)
     case search(input:String)
+    case placeDetail(id:String)
     case city()
     case district()
     case utility()
@@ -24,8 +25,10 @@ enum APIRouter:URLRequestConvertible{
     case postForAll(model:FilterArgumentModel)
     case postForBookmark(model:FilterArgumentModel)
     case createBookmark(model:BookmarkRequestModel)
-    case removeBookmark(id:Int)
+    case removeBookmark(favoriteId:Int)
     case suggestBestMatch(model:FilterArgumentModel)
+    case suggest(model:BaseSuggestRequestModel)
+    case getRoomsByUserId(userId:Int,page:Int,offset:Int)
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -37,7 +40,7 @@ enum APIRouter:URLRequestConvertible{
     
     var httpMethod:HTTPMethod{
         switch self{
-        case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch:
+        case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest:
             return .post
         case .removeBookmark:
             return .delete
@@ -55,6 +58,8 @@ enum APIRouter:URLRequestConvertible{
             return "user/login"
         case .search:
             return "maps/api/place/autocomplete/json"
+        case .placeDetail:
+            return "maps/api/place/details/json"
         case .city:
             return "city"
         case .district:
@@ -69,10 +74,14 @@ enum APIRouter:URLRequestConvertible{
             return "post/favouriteFilter"
         case .createBookmark:
             return "favourites/createFavourite"
-        case .removeBookmark(let id):
-            return "favourite/remove/\(id)"
+        case .removeBookmark(let favoriteId):
+            return "favourite/remove/\(favoriteId)"
         case .suggestBestMatch:
             return "post/suggestBestMatch"
+        case .suggest:
+            return "post/suggest"
+        case .getRoomsByUserId(let userId,_,_):
+            return "room/user/\(userId)"
         }
     }
     
@@ -87,8 +96,14 @@ enum APIRouter:URLRequestConvertible{
         case .search(let input):
             return ["language":"vi",
                     "input":input,
-                    "components":"country:vi",
-                    "key":"AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"]
+                    "components":"country:VN",
+                    "types":"address",
+                    "key":Constants.GOOGLE_PLACE_API_KEY]
+        case .placeDetail(let id):
+            return ["language":"vi",
+                    "placeid":id,
+                    "fields":"formatted_address,geometry",
+                    "key":Constants.GOOGLE_PLACE_API_KEY]
         case .createRoom(let model):
             return Mapper().toJSON(model)
         case .postForAll(let model):
@@ -99,6 +114,12 @@ enum APIRouter:URLRequestConvertible{
             return Mapper().toJSON(model)
         case .suggestBestMatch(let model):
             return Mapper().toJSON(model)
+        case .suggest(let model):
+            return Mapper().toJSON(model)
+        case .getRoomsByUserId(_,let page,let offset):
+            return ["page":page,
+                    "offset":offset]
+            
         default:
             return [:]
         }
@@ -107,7 +128,7 @@ enum APIRouter:URLRequestConvertible{
     func asURLRequest() throws -> URLRequest {
         let url:URL
         switch self{
-        case .search:
+        case .search,.placeDetail:
             url = try! Constants.BASE_URL_GOOGLE_PLACE_API.asURL()
         default:
             url = try!  Constants.BASE_URL_API.asURL()
@@ -115,7 +136,7 @@ enum APIRouter:URLRequestConvertible{
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.allHTTPHeaderFields = httpHeaders
         urlRequest.httpMethod = httpMethod.rawValue
-        urlRequest.timeoutInterval  = 40
+        urlRequest.timeoutInterval  = 10
         
         do{
             switch self.httpMethod {

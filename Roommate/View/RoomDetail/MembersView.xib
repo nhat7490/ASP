@@ -22,7 +22,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="445" height="260"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="poH-Dd-XZB">
-                            <rect key="frame" x="0.0" y="0.0" width="42" height="30"/>
+                            <rect key="frame" x="0.0" y="0.0" width="405" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="scy-lW-hoe"/>
                             </constraints>
@@ -30,13 +30,14 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PyT-Qp-55J">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PyT-Qp-55J">
                             <rect key="frame" x="10" y="60" width="425" height="200"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tableView>
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNS-Fd-Vv9">
                             <rect key="frame" x="405" y="0.0" width="30" height="30"/>
                             <constraints>
+                                <constraint firstAttribute="height" constant="30" id="hf9-dE-wOt"/>
                                 <constraint firstAttribute="width" secondItem="MNS-Fd-Vv9" secondAttribute="height" multiplier="1/1" id="sJu-OW-4bS"/>
                             </constraints>
                         </button>
@@ -83,15 +84,15 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="PyT-Qp-55J" secondAttribute="bottom" id="7A5-hl-LLb"/>
+                        <constraint firstItem="MNS-Fd-Vv9" firstAttribute="leading" secondItem="poH-Dd-XZB" secondAttribute="trailing" id="AFN-gW-Bbu"/>
                         <constraint firstAttribute="trailing" secondItem="p6K-Dd-9bI" secondAttribute="trailing" id="Bd2-Tq-jAL"/>
                         <constraint firstItem="MNS-Fd-Vv9" firstAttribute="top" secondItem="c1i-rg-T0T" secondAttribute="top" id="C5h-Dl-Ipt"/>
                         <constraint firstItem="poH-Dd-XZB" firstAttribute="leading" secondItem="c1i-rg-T0T" secondAttribute="leading" id="Ewe-3h-Vei"/>
                         <constraint firstAttribute="trailing" secondItem="MNS-Fd-Vv9" secondAttribute="trailing" constant="10" id="Md8-6U-1l5"/>
-                        <constraint firstAttribute="height" constant="260" id="QWJ-mJ-IwW"/>
+                        <constraint firstItem="p6K-Dd-9bI" firstAttribute="top" secondItem="poH-Dd-XZB" secondAttribute="bottom" id="MfG-BN-Kkp"/>
                         <constraint firstAttribute="trailing" secondItem="PyT-Qp-55J" secondAttribute="trailing" constant="10" id="cec-HG-v5d"/>
                         <constraint firstItem="PyT-Qp-55J" firstAttribute="leading" secondItem="c1i-rg-T0T" secondAttribute="leading" constant="10" id="eb2-7V-TZ1"/>
                         <constraint firstItem="PyT-Qp-55J" firstAttribute="top" secondItem="p6K-Dd-9bI" secondAttribute="bottom" id="hbF-PL-txD"/>
-                        <constraint firstItem="p6K-Dd-9bI" firstAttribute="top" secondItem="poH-Dd-XZB" secondAttribute="bottom" id="kyL-66-e3g"/>
                         <constraint firstItem="poH-Dd-XZB" firstAttribute="top" secondItem="c1i-rg-T0T" secondAttribute="top" id="lDp-6O-E3z"/>
                         <constraint firstItem="p6K-Dd-9bI" firstAttribute="leading" secondItem="c1i-rg-T0T" secondAttribute="leading" id="tvV-ya-Psh"/>
                     </constraints>
@@ -99,6 +100,7 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="c1i-rg-T0T" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="5bk-sf-bzp"/>
                 <constraint firstItem="c1i-rg-T0T" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="CL8-6k-KZ2"/>
                 <constraint firstItem="c1i-rg-T0T" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="j7y-CO-OWc"/>
                 <constraint firstItem="c1i-rg-T0T" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="qED-Jj-yuI"/>
@@ -111,7 +113,7 @@
                 <outlet property="lblNumberOfMaxMember" destination="57B-YW-BPn" id="jLM-PO-yDP"/>
                 <outlet property="lblNumberOfMemberAdded" destination="Duz-cZ-rP2" id="LM7-HC-5U5"/>
                 <outlet property="lblTitle" destination="poH-Dd-XZB" id="arw-TW-c7q"/>
-                <outlet property="tblMembers" destination="PyT-Qp-55J" id="7ew-0S-3te"/>
+                <outlet property="tableView" destination="PyT-Qp-55J" id="7ew-0S-3te"/>
             </connections>
             <point key="canvasLocation" x="59.5" y="-152"/>
         </view>

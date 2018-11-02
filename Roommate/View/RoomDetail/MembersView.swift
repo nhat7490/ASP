@@ -17,20 +17,20 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTV
     
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var btnAddNewMember: UIButton!
-    @IBOutlet weak var tblMembers: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     
-    var users:[User]?{
+    var members:[MemberResponseModel]?{
         didSet{
-            tblMembers.delegate = self
-            tblMembers.dataSource = self
+            tableView.delegate = self
+            tableView.dataSource = self
             
         }
     }
     
     var viewType:ViewType?{
         didSet{
-            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForMaster{
-                tblMembers.allowsSelection = false
+            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
+                tableView.allowsSelection = false
                 btnAddNewMember.isHidden = true
             }else{
                 btnAddNewMember.isHidden = false
@@ -54,29 +54,29 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTV
         btnAddNewMember.layer.borderWidth = 1.0
         btnAddNewMember.setBackgroundImage(UIImage(named: "add"), for: .normal)
         btnAddNewMember.setTitleColor(UIColor.defaultBlue, for: .normal)
-        tblMembers.register(UINib(nibName: Constants.CELL_MEMBERTVL, bundle: Bundle.main), forCellReuseIdentifier: Constants.CELL_MEMBERTVL)
-        tblMembers.separatorStyle = .none
+        tableView.register(UINib(nibName: Constants.CELL_MEMBERTVL, bundle: Bundle.main), forCellReuseIdentifier: Constants.CELL_MEMBERTVL)
+        tableView.separatorStyle = .none
         layoutIfNeeded()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users?.count ?? 0
+        return members?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_MEMBERTVL, for: indexPath) as! MemberTVCell
         cell.viewType = viewType
         cell.indexPath = indexPath
-        let user = users![indexPath.row]
-        if user.roleInRom == 1{
+        let member = members![indexPath.row]
+        if member.roleId == Constants.ROOMMASTER{
             //Master
-            let name = NSMutableAttributedString(string: "\(user.name) ", attributes: [:])
+            let name = NSMutableAttributedString(string:member.username, attributes: [:])
             name.append(NSAttributedString(string: "ROOM_MASTER".localized, attributes: [NSAttributedStringKey.font : UIFont.small,NSAttributedStringKey.backgroundColor: UIColor.defaultBlue,NSAttributedStringKey.foregroundColor:UIColor.white]))
             cell.lblMemberName.attributedText = name
         }else{
-            cell.lblMemberName.text = user.name
+            cell.lblMemberName.text = member.username
         }
-        if  viewType == ViewType.detailForMember || viewType == ViewType.detailForMaster{
+        if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
             cell.delegate = self
             cell.selectionStyle = .default
         }else{
@@ -85,18 +85,18 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTV
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 30.0
+        return Constants.HEIGHT_CELL_MEMBERTVL
     }
     
     func memberTVCellDelegate(cell memberTVCell: MemberTVCell, onClickBtnEditMember btnRemoveMember: UIButton, atIndexPath indexPath: IndexPath?) {
-        guard let row = indexPath?.row, let user = users?[row] else {
+        guard let row = indexPath?.row, let user = members?[row] else {
             return
         }
         print("Select user \(user) at row \(row) to edit")
     }
     
     func memberTVCellDelegate(cell memberTVCell: MemberTVCell, onClickBtnRemoveMember btnRemoveMember: UIButton, atIndexPath indexPath: IndexPath?) {
-        guard let row = indexPath?.row, let user = users?[row] else {
+        guard let row = indexPath?.row, let user = members?[row] else {
             return
         }
         print("Select user \(user) at row \(row) to remove")

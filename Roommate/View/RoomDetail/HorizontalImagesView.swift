@@ -39,7 +39,7 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: frame.width, height: Constants.HEIGHT_CELL_IMAGECV.cgFloat)
+        return CGSize(width: frame.width, height: Constants.HEIGHT_CELL_IMAGECV)
     }
     
     //MARK: ScrollViewDelegate
@@ -49,5 +49,8 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
         print(collectionView.frame.width)
         print(currentPage)
         pageControl.currentPage = currentPage
+    }
+    func removePageControl(){
+        pageControl.removeFromSuperview()
     }
 }

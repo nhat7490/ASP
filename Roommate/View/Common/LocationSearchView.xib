@@ -22,6 +22,9 @@
                         <constraint firstAttribute="height" constant="40" id="92c-Pt-xVS"/>
                         <constraint firstAttribute="width" constant="100" id="ecV-3l-ZuH"/>
                     </constraints>
+                    <connections>
+                        <action selector="onClickBtnLocation:" destination="iN0-l3-epB" eventType="touchUpInside" id="pQS-tv-M2n"/>
+                    </connections>
                 </button>
                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p56-VN-E4R">
                     <rect key="frame" x="100" y="0.0" width="370" height="40"/>

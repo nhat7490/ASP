@@ -24,6 +24,7 @@ class NavigationCVCell: UICollectionViewCell {
         super.awakeFromNib()
         tvTitle.font = .small
         tvTitle.isEditable = false
+        tvTitle.isSelectable = false
         tvTitle.isScrollEnabled = false
         tvTitle.textContainerInset = .zero
         tvTitle.textContainer.lineBreakMode = .byWordWrapping

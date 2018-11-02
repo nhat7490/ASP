@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Roommate
+
+  Created by TrinhHC on 10/30/18.
+  Copyright © 2018 TrinhHC. All rights reserved.
+*/
+NSPhotoLibraryUsageDescription="$(PRODUCT_NAME) want to use photo";
+NSCameraUsageDescription="$(PRODUCT_NAME) want to user camera";

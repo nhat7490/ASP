@@ -60,24 +60,28 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         return bt
     }()
 //    var filterVCType:FilterVCType!
-    var filterArgumentModel:FilterArgumentModel!
+    var filterArgumentModel:FilterArgumentModel!{
+        didSet{
+            updateUI()
+        }
+    }
     var utilities:[UtilityModel]?
     var districts:[DistrictModel]?
     var cities:[CityModel]?
-    var selectedUtilities:List<UtilityModel>?
+    var selectedUtilities:[Int]?
     var selectedCity:CityModel?
-    var selectedDistrict:DistrictModel?
+    var selectedDistricts:[DistrictModel]?
     var selectedGender:GenderSelect?
-    var selectedPrice:List<Float>?
+    var selectedPrice:[Float]?
     weak var delegate:FilterVCDelegate?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchData()
-        
-        
     }
+    
+    //MARK: SetupUI And Data
     func fetchData(){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.contentView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
@@ -104,17 +108,20 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     }
     
     func setupUI(){
+        
         view.backgroundColor = .white
         edgesForExtendedLayout = .top// view above navigation bar
-//        automaticallyAdjustsScrollViewInsets = false
-        //Create tempview for bottom button
+        let barButtonItem = UIBarButtonItem(title: "RESET".localized, style: .done, target: self, action: #selector(onClickBtnReset))
+        barButtonItem.tintColor  = .defaultBlue
+        navigationItem.rightBarButtonItem = barButtonItem
+        
         let bottomView = UIView()
 
         //Caculate height
         let defaultBottomViewHeight:CGFloat = 60.0
         let defaultPadding = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
         let numberOfRow =  (utilities?.count)!%2==0 ? (utilities?.count)!/2 : (utilities?.count)!/2+1
-        let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITYCV * Double(numberOfRow) + 70.0
+        let utilitiesViewHeight:CGFloat =  Constants.HEIGHT_CELL_NEW_UTILITYCV * CGFloat(numberOfRow) + 70.0
         let contentViewHeight:CGFloat
             contentViewHeight = CGFloat(Constants.HEIGHT_VIEW_SLIDER+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE)
 
@@ -133,7 +140,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         //Add Constrant
        
         if #available(iOS 11.0, *) {
-             _ = scrollView.anchor(view.safeAreaLayoutGuide.topAnchor, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -defaultBottomViewHeight-2*Constants.MARGIN_10, right: -Constants.MARGIN_10))
+             _ = scrollView.anchor(view.safeAreaLayoutGuide.topAnchor, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -defaultBottomViewHeight, right: -Constants.MARGIN_10))
             _ = bottomView.anchor(scrollView.bottomAnchor, view.leftAnchor, nil, view.rightAnchor,defaultPadding,.init(width: 0, height: defaultBottomViewHeight))
         } else {
             // Fallback on earlier versions
@@ -151,14 +158,59 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         _ = genderView.anchor(priceSliderView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
         _ = utilitiesView.anchor(genderView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: utilitiesViewHeight))
 
-        _ = btnSave.anchor(view: bottomView,UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0))
+        _ = btnSave.anchor(view: bottomView,UIEdgeInsets(top: Constants.MARGIN_6, left: 0, bottom: -Constants.MARGIN_6, right: 0))
         btnSave.layer.cornerRadius = CGFloat(10)
         btnSave.clipsToBounds = true
-        btnSave.addTarget(self, action: #selector(onClickBtnSave(btnSave:)), for: .touchUpInside)
+        btnSave.addTarget(self, action: #selector(onClickBtnSave), for: .touchUpInside)
         
         
     }
-
+    func updateUI(){
+        selectedCity = CityModel()
+        selectedDistricts = []
+        selectedUtilities = []
+        selectedPrice = []
+        selectedPrice?.removeAll()
+        selectedPrice?.append(400_000)
+        selectedPrice?.append(40_000_000)
+        selectedGender = .none
+        if let setting = DBManager.shared.getSetting(), let city = DBManager.shared.getRecord(id: setting.cityId, ofType: CityModel.self){
+            selectedCity = city
+            cityDropdownListView.lblSelectTitle.text = selectedCity?.name
+        }else{
+            cityDropdownListView.lblSelectTitle.text = "LIST_CITY_TITLE".localized
+        }
+        
+        districtDropdownListView.lblSelectTitle.text = "LIST_DISTRICT_TITLE".localized
+        
+        if let searchRequestModel = filterArgumentModel.searchRequestModel{
+            if let cityId = filterArgumentModel.cityId{
+                selectedCity = DBManager.shared.getRecord(id: cityId, ofType: CityModel.self)
+                if let districts = searchRequestModel.districts,districts.count != 0{
+                    selectedDistricts = districts.map({ (districtId) -> DistrictModel   in
+                        DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)!
+                    })
+                    let dictristString = selectedDistricts?.compactMap{$0.name}
+                    districtDropdownListView.lblSelectTitle.text = dictristString?.joined(separator: ",")
+                }
+                cityDropdownListView.lblSelectTitle.text = selectedCity?.name
+            }
+            
+            if let utilities = searchRequestModel.utilities{
+                selectedUtilities = utilities
+            }
+            if let price = searchRequestModel.price{
+                selectedPrice = price
+            }
+            if let gender = searchRequestModel.gender{
+                selectedGender = GenderSelect(rawValue: gender)
+            }
+            
+        }
+        priceSliderView.setSelectedRange(leftSelectedValue: selectedPrice![0], rightSelectedValue: selectedPrice![1])
+        utilitiesView.selectedUtilities = selectedUtilities!
+        genderView.genderSelect = selectedGender
+    }
     func setData(){
         navTitle = "FILTER".localized
         btnSave.setTitle("APPLY".localized, for: .normal)
@@ -168,18 +220,8 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         districtDropdownListView.delegate = self
         cityDropdownListView.delegate = self
         genderView.delegate = self
-        
-        cityDropdownListView.lblSelectTitle.text = "LIST_CITY_TITLE".localized
-        districtDropdownListView.lblSelectTitle.text = "LIST_DISTRICT_TITLE".localized
 //        filterArgumentModel.searchRequestModel?.districts.first.
-        selectedCity = CityModel()
-        selectedDistrict = DistrictModel()
-        selectedUtilities = List<UtilityModel>()
-        selectedPrice = List<Float>()
-        selectedPrice?.removeAll()
-        selectedPrice?.append(1_000_000)
-        selectedPrice?.append(40_000_000)
-        selectedGender = .none
+        
     }
     
     //MARK: Handler utilitiesViewDelegate
@@ -187,32 +229,36 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         guard let utility = utilities?[indexPath.row] else {
             return
         }
-        if (selectedUtilities?.contains(utility))!{
+        if (selectedUtilities?.contains(utility.utilityId))!{
             utilitiesView.setState(isSelected: false, atIndexPath: indexPath)
-            let index = selectedUtilities?.index(of: utility)
+            let index = selectedUtilities?.index(of: utility.utilityId)
             selectedUtilities?.remove(at: index!)
         }else{
             utilitiesView.setState(isSelected: true, atIndexPath: indexPath)
-            selectedUtilities?.append(utility)
+            selectedUtilities?.append(utility.utilityId)
         }
         
     }
     //MARK: Handler dropdownListViewDelegate
     func dropdownListViewDelegate(view dropdownListView: DropdownListView, onClickBtnChangeSelect btnSelect: UIButton) {
         if dropdownListView == cityDropdownListView{
-            let alert = AlertController.showAlertList(withTitle: "LIST_CITY_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .city, forViewController: self, data: cities?.map({ (city) -> String     in
-                city.name!
-            }), rhsButtonTitle: "DONE".localized)
+            let data = cities?.map{$0.name!}
+            var selectDataIndexs:[Int] = []
+            if let city = selectedCity,let name = city.name, let index = data?.index(of: name){
+                selectDataIndexs = [index]
+            }
+            let alert = AlertController.showAlertList(withTitle: "LIST_CITY_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .city,forViewController: self, data: data,selectedItemIndex: selectDataIndexs, rhsButtonTitle: "DONE".localized)
             alert.delegate = self
             
         }else{
-            
             if self.selectedCity?.cityId != 0{
-                let alert = AlertController.showAlertList(withTitle: "LIST_DISTRICT_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .district, forViewController: self, data: districts?.filter({ (district) -> Bool in
+                let data = districts?.filter({ (district) -> Bool in
                     district.cityId == self.selectedCity?.cityId
                 }).map({ (district) -> String in
                     district.name!
-                }), rhsButtonTitle: "DONE".localized)
+                })
+                let selectDataIndexs = selectedDistricts?.compactMap{data?.index(of: $0.name!)}
+                let alert = AlertController.showAlertList(withTitle: "LIST_DISTRICT_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .district, isMultiSelected:true, forViewController: self, data: data,selectedItemIndex: selectDataIndexs, rhsButtonTitle: "DONE".localized)
                 alert.delegate = self
             }
             
@@ -220,7 +266,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     }
     //MARK: Handler genderViewDelegate
     func genderViewDelegate(genderView view: GenderView, onChangeGenderSelect genderSelect: GenderSelect?) {
-        
+        filterArgumentModel.searchRequestModel?.gender = genderView.genderSelect?.rawValue
     }
     //MARK: Handler sliderView
     func sliderView(view sliderView: SliderView, didChangeSelectedMinValue selectedMin: Float, andMaxValue selectedMax: Float) {
@@ -229,8 +275,10 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         selectedPrice?.append(selectedMax)
     }
     //MARK: UIAlertControllerDelegate
-    func alertControllerDelegate(ofController: UIAlertController,withAlertType type:AlertType, atIndexPaths indexs: [IndexPath]?) {
+    func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
         guard let indexs = indexs else {
+            selectedDistricts =  []
+            self.districtDropdownListView.lblSelectTitle.text  = "LIST_DISTRICT_TITLE".localized
             return
         }
         if type == AlertType.city{
@@ -238,7 +286,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
                 return
             }
             selectedCity = city
-            selectedDistrict? =  DistrictModel()
+            selectedDistricts =  []
             self.cityDropdownListView.lblSelectTitle.text = self.selectedCity?.name
             self.districtDropdownListView.lblSelectTitle.text  = "LIST_DISTRICT_TITLE".localized
         }else if type == AlertType.district{
@@ -252,30 +300,38 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
                 print(d.districtId)
                 print(d.cityId)
             }
-            let district =  districtOfCity[(indexs.first?.row)!]
-            selectedDistrict = district
-            self.districtDropdownListView.lblSelectTitle.text  = self.selectedDistrict?.name
+            selectedDistricts?.removeAll()
+            indexs.forEach { (index) in
+                selectedDistricts?.append(districtOfCity[index.row])
+            }
+            let dictrictsString = selectedDistricts?.map({ (district) -> String     in
+                district.name!
+            })
+            self.districtDropdownListView.lblSelectTitle.text  = dictrictsString?.joined(separator: ",")
         }
     }
     //MARK: Handler for save button
-    @objc  func onClickBtnSave(btnSave:UIButton){
+    @objc  func onClickBtnSave(){
         //handler for save filter
+        filterArgumentModel.page = 1
         filterArgumentModel.searchRequestModel = SearchRequestModel()
-        filterArgumentModel.searchRequestModel?.gender.value = genderView.genderSelect?.rawValue
         filterArgumentModel.searchRequestModel?.price = selectedPrice!
-        if selectedCity?.cityId != 0 && selectedDistrict?.districtId != 0{
-            let districts = List<Int>()
-            districts.append((selectedDistrict?.districtId)!)
-            filterArgumentModel.searchRequestModel?.districts = districts
-        }
-        let utilities = List<Int>()
-        selectedUtilities?.forEach({ (utility) in
-            utilities.append(utility.utilityId)
+        filterArgumentModel.searchRequestModel?.gender = genderView.genderSelect?.rawValue
+        filterArgumentModel.cityId = selectedCity?.cityId
+        filterArgumentModel.searchRequestModel?.districts = selectedDistricts?.compactMap{$0.districtId}
+        var utilities:[Int] = []
+        selectedUtilities?.forEach({ (utilityId) in
+            utilities.append(utilityId)
         })
         filterArgumentModel.searchRequestModel?.utilities = utilities
         
         self.delegate?.filterVCDelegate(filterVC: self, onCompletedWithFilter: filterArgumentModel)
         self.navigationController?.popViewController(animated: true)
     }
-
+    //MARK: Handler for reset button
+    @objc  func onClickBtnReset(){
+        filterArgumentModel.searchRequestModel = nil
+        updateUI()
+        utilitiesView.resetView()
+    }
 }

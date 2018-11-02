@@ -21,7 +21,6 @@ class NewRoomCVCell: UICollectionViewCell {
     var delegate:NewRoomCVCellDelegate?
     var room:RoomPostResponseModel?{
         didSet{
-            print(room?.imageUrls?.first)
             imgvAvatar.sd_setImage(with: URL(string: (room?.imageUrls?.first)!), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
                 guard let image = image else{
                     return
@@ -30,7 +29,7 @@ class NewRoomCVCell: UICollectionViewCell {
                     self.imgvAvatar.image = image
                 }
             }
-            guard let favorite = room?.favourite ,let genderOfPatner = room?.genderPartner,let numberOfPatner = room?.numberPartner,let name = room?.name,let price = room?.minPrice,let address = room?.address else {
+            guard let favorite = room?.isFavourite ,let genderOfPatner = room?.genderPartner,let numberOfPatner = room?.numberPartner,let name = room?.name,let price = room?.minPrice,let address = room?.address else {
                 return
             }
             print("Gender of patner:\(genderOfPatner)")
@@ -42,7 +41,7 @@ class NewRoomCVCell: UICollectionViewCell {
 //            print(tvPrice.contentInset)
 //            print(tvPrice.conte)
 //            tvPrice.contentOffset = CGPoint(x: 0, y: -tvPrice.contentInset.top)
-            tvPrice.text = String(format: "PRICE_OF_ROOM".localized,price,"PERSON".localized)
+            tvPrice.text = String(format: "PRICE_OF_ROOM".localized,price.formatString,"PERSON".localized)
             tvAddress.text = address
         }
     }
@@ -56,7 +55,7 @@ class NewRoomCVCell: UICollectionViewCell {
         imgvAvatar.clipsToBounds  = true
         
         imgvBookMark.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(onClickImgvBookmark(geture:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onClickImgvBookmark))
         imgvBookMark.addGestureRecognizer(tap)
         
         tvNumberOfPatner.isEditable = false
@@ -69,7 +68,12 @@ class NewRoomCVCell: UICollectionViewCell {
         tvPrice.isScrollEnabled = false
         tvAddress.isScrollEnabled = false
         
-        tvNumberOfPatner.textContainerInset = .zero
+        tvNumberOfPatner.isUserInteractionEnabled = false
+        tvName.isUserInteractionEnabled = false
+        tvPrice.isUserInteractionEnabled = false
+        tvAddress.isUserInteractionEnabled = false
+        
+        tvNumberOfPatner.textContainerInset = UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0)
         tvName.textContainerInset = .zero
         tvPrice.textContainerInset = .zero
         tvAddress.textContainerInset = .zero
@@ -87,21 +91,19 @@ class NewRoomCVCell: UICollectionViewCell {
         
         tvPrice.textColor = .defaultBlue
         tvNumberOfPatner.textColor = .lightGray
-//        tvPrice.delegate = self
+        tvAddress.textColor = .defaultPink
+
+        self.bringSubview(toFront: imgvBookMark)
+//        self.subviews[1].removeFromSuperview()
     }
     
     func setBookMark(isBookMark:Bool){
         imgvBookMark.image = isBookMark ? UIImage(named: "bookmarked") : UIImage(named: "bookmark")
     }
     //MARK: Event for UI
-    @objc func onClickImgvBookmark(geture:UITapGestureRecognizer) {
+    @objc func onClickImgvBookmark() {
         delegate?.newRoomCVCellDelegate(roomCVCell: self, onClickUIImageView: imgvBookMark,atIndextPath: indexPath)
         
     }
-//    func textViewDidChange(_ textView: UITextView) {
-//        adjustContentSize(tv: textView)
-//    }
-//    func adjustContentSize(tv: UITextView){
-//        tv.contentInset = UIEdgeInsetsMake(0, tv.contentInset.left, 0,tv.contentInset.right)
-//    }
+    
 }

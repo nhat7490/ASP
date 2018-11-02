@@ -36,9 +36,6 @@ class NotificationVC:UIViewController,UICollectionViewDelegate,UICollectionViewD
         setupUI()
     }
     func setupUI() {
-        //For Tabar
-        tabBarItem = UITabBarItem(title: "Notification", image: UIImage(named: "icons8-home-page-51")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "icons8-home-page-50"))
-        
         //For collectionView
         view.addSubview(collectionView)
         _ = collectionView.anchorTopLeft( view.topAnchor,  view.leftAnchor,  view.widthAnchor,  view.heightAnchor)

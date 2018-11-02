@@ -115,7 +115,7 @@ class RoommateCVCell:UICollectionViewCell{
             }
             self.lblRightName.text = roommate?.userResponseModel?.fullname
             self.lblRightPrice.text = "ROMMATE_RIGHT_PRICE".localized
-            self.lblRightPriceValue.text = "\(roommate!.minPrice.toString)vnd - \(roommate!.maxPrice.toString)vnd"
+            self.lblRightPriceValue.text = "\(roommate!.minPrice.formatString)vnd - \(roommate!.maxPrice.formatString)vnd"
             self.lblRightPosition.text = "ROMMATE_RIGHT_POSITION".localized
             let dictrictsString = roommate?.districtIds?.map({ (districtId) -> String in
                 (DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.name)!
@@ -123,7 +123,7 @@ class RoommateCVCell:UICollectionViewCell{
             self.lblRightPositionValue.text = dictrictsString?.joined(separator: ",")
             self.lblRightCity.text = "ROMMATE_RIGHT_CITY".localized
             self.lblRightCityValue.text = DBManager.shared.getRecord(id: (roommate?.cityId)!, ofType: CityModel.self)?.name
-            self.imgvLeftBookmark.image = (roommate?.favourite)! ? UIImage(named: "bookmarked"):UIImage(named: "bookmark")
+            self.imgvLeftBookmark.image = (roommate?.isFavourite)! ? UIImage(named: "bookmarked"):UIImage(named: "bookmark")
         }
     }
     var indexPath:IndexPath?

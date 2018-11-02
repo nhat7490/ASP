@@ -20,6 +20,10 @@ class UtilityModel:BaseModel {
     override var hashValue: Int{
         return self.utilityId.hashValue
     }
+    init(utilityId: Int){
+        self.utilityId = utilityId
+        super.init()
+    }
     public init(utilityId: Int, name: String, quantity: Int, brand: String, utilityDescription: String) {
         self.utilityId = utilityId
         self.name = name
@@ -35,11 +39,10 @@ class UtilityModel:BaseModel {
     
     required convenience init?(map: Map) {
         self.init()
-        print("Call init?(map: Map) for utility")
     }
     
     override func mapping(map: Map) {
-        print("Call mapping(map: Map) for utility")
+        super.mapping(map: map)
         utilityId <- map["utilityId"]
         name <- map["name"]
         quantity <- map["quantity"]
@@ -48,23 +51,20 @@ class UtilityModel:BaseModel {
     }
     
     override class func primaryKey() -> String? {
-        print("Call primaryKey() for utility")
         return "utilityId"
     }
     
     required init() {
         super.init()
-        print("Call init() for utility")
+//        print("Call init() for utility")
     }
     
     required init(realm: RLMRealm, schema: RLMObjectSchema) {
         super.init(realm: realm, schema: schema)
-        print("Call init(realm: RLMRealm, schema: RLMObjectSchema) for utility")
     }
     
     required init(value: Any, schema: RLMSchema) {
         super.init(value: value, schema: schema)
-        print("Call init(value: Any, schema: RLMSchema) for utility")
     }
     
     static func ==(lhs:UtilityModel,rhs:UtilityModel)->Bool{

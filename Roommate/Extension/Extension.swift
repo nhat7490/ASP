@@ -311,13 +311,11 @@ extension UIView{
         return heightAnchor
     }
     
-    func anchorHeight(equalToConstrant heightConstant:CGFloat?) -> NSLayoutDimension {
+    func anchorHeight(equalToConstrant heightConstant:CGFloat?) -> NSLayoutConstraint {
         translatesAutoresizingMaskIntoConstraints = false
-        
-        if let heightConstant = heightConstant{
-            heightAnchor.constraint(equalToConstant: heightConstant) .isActive = true
-        }
-        return heightAnchor
+        let constraint = heightAnchor.constraint(equalToConstant: heightConstant ?? 0.0)
+        constraint.isActive = true
+        return constraint
     }
 }
 
@@ -405,6 +403,8 @@ extension UIColor {
     static let lightSubTitle:UIColor!  = UIColor(hexString: "555")
     static let normalTitle:UIColor!  = UIColor(hexString: "000")
     static let defaultBlue:UIColor!  = UIColor(hexString: "00A8B5")
+    static let defaultPink:UIColor!  = UIColor(hexString: "ff008b")
+    static let defaultPurple:UIColor!  = UIColor(hexString: "feb062")
     
 }
 
@@ -434,6 +434,26 @@ extension Int{
     }
     var toDouble:Double{
         return Double(self)
+    }
+    var toString:String{
+        return "\(self)"
+    }
+    var toIntObject:IntObject{
+        return IntObject(value: self)
+    }
+    var formatString:String{
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.decimalSeparator = "."
+        formatter.groupingSeparator = ","
+        return formatter.string(from: NSNumber(value: self))!
+    }
+    
+}
+
+extension Float{
+    var toIntObject:IntObject{
+        return IntObject(value: Int(self))
     }
     var toString:String{
         return "\(self)"
@@ -544,12 +564,12 @@ extension Results {
         return compactMap { $0 as? T }
     }
 }
-extension UITextView {
-    override open var contentSize: CGSize {
-        didSet {
-            var topCorrection = (bounds.size.height - contentSize.height * zoomScale) / 2.0
-            topCorrection = max(0, topCorrection)
-            contentInset = UIEdgeInsets(top: topCorrection, left: 0, bottom: 0, right: 0)
-        }
-    }
-}
+//extension UITextView {
+//    override open var contentSize: CGSize {
+//        didSet {
+//            var topCorrection = (bounds.size.height - contentSize.height * zoomScale) / 2.0
+//            topCorrection = max(0, topCorrection)
+//            contentInset = UIEdgeInsets(top: topCorrection, left: 0, bottom: 0, right: 0)
+//        }
+//    }
+//}

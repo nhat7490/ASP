@@ -11,6 +11,15 @@
 "ALL_VC"="Tất cả";
 "BOOKMARK_VC"="Đánh dấu";
 "SIGN_IN_TITLE" = "Đăng nhập";
+"HOME_VC" = "Trang chủ";
+"NOTIFICATION_VC" = "Thông báo";
+"ACCOUNT_VC" = "Tài khoản";
+
+//MARK: AccountVC
+"TITLE_CREATED_ROOM" = "Phòng đã tạo";
+"CURRENT_NUMBER_OF_PERSON" = "Số người hiện tại:%d/%d";
+"NO_OWNER_ROOM"="Bạn chưa tạo phòng nào";
+"NO_MEMBER_ROOM"="Phòng chưa thêm thành viên nào";
 
 //MARK: Roommate cell
 "ROMMATE_RIGHT_PRICE"="Mức giá";
@@ -23,7 +32,8 @@
 
 //MARK: Room cell
 "NUMBER_OF_PERSON"="Tìm ở ghép %d %@";
-"PRICE_OF_ROOM"="%d VND/%@";
+"PRICE_OF_ROOM"="%@ VND/%@";
+"PRICE_OF_ROOMMATE"="Từ %@ đến %@ VND/%@";
 "PERSON"="Người";
 
 //MARK: OrderType
@@ -73,12 +83,15 @@
 "CONFIRM_TITLE_BUTTON_MESSAGE" = "Gửi ngay";
 "CONFIRM_MESSAGE_CALL_ALERT" = "Bạn muốn gọi điện cho chủ nhà";
 "CONFIRM_MESSAGE_SMS_ALERT" = "Bạn muốn nhắn tin cho chủ nhà";
+"CONFIRM_MESSAGE_POST_CALL_ALERT" = "Bạn muốn gọi điện cho người đăng tin";
+"CONFIRM_MESSAGE_POST_SMS_ALERT" = "Bạn muốn nhắn tin cho người đăng tin";
 
 //MARK:FilterVC
 "LIST_CITY_TITLE"="Chọn thành phố";
 "LIST_CITY_MESSAGE"="";
 "LIST_DISTRICT_TITLE"="Chọn quận";
 "LIST_DISTRICT_MESSAGE"="";
+"RESET" = "Đặt lại";
 
 //MARK: UtilityDetail
 "BRAND_TITLE"="Nhãn hiệu: %@";
@@ -91,6 +104,9 @@
 
 
 //MARK: Common
+"INFORMATION"="Thông báo";
+"NO_DATA"="Không có dữ liệu";
+
 "BASE_INFORMATION"="Thông tin cơ bản";
 "UTILITY_TITLE"="Tiện ích";
 "UTILITY_INFOR_TITLE"="Thông tin tiện ích";
@@ -100,7 +116,7 @@
 "AREA"="Diện tích : %d m2";
 "AREA_TITLE"="Diện tích :";
 "MONTH"="Tháng";
-"TIME"="Chỉnh sửa 2 tháng trước";
+"TIME"="Chỉnh sửa %@";
 "CONFIRM_TITLE" = "Xác nhận";
 "CONFIRM_MESSAGE_EMAIL_ALERT" = "Gửi";
 "GENDER_REQUIRED_DESCRIPTION" = "Có thể chọn cả 2";
@@ -118,7 +134,27 @@
 "MAX_NUMBER_OF_PERSON" = "Số người tối đa";
 "ALERT_TITLE" = "Thông báo";
 "INVALID_INFOR"="Vui lòng nhập đầy đủ thông tin hợp lệ";
+
+
+//MARK: Validator
+"ERROR_TYPE_USERNAME"="Tên đăng nhập từ 6 - 50 ký tự";
+"ERROR_TYPE_PASSWORD"="Mật khẩu từ 6 - 50 ký tự";
+"ERROR_TYPE_NAME_MAX_CHAR_50"="Tên Từ 6 đến 50 ký tự";
+"ERROR_TYPE_QUANTITY"="Số lượng Từ 1 đến 20";
+"ERROR_TYPE_BRAND"="Nhãn Từ 2 đến 50 ký tự";
+"ERROR_TYPE_PRICE"="Giá từ 300,000 VND đến 50,000,000 VND";
+"ERROR_TYPE_CITY"="Yêu cầu chọn";
+"ERROR_TYPE_DISTRICT"="Yêu cầu chọn";
+"ERROR_TYPE_AREA"="Diện tích từ 10 - 1000 m2";
+"ERROR_TYPE_PHONE"="Định dạng số điện thoại sai";
+"ERROR_TYPE_ADDRESS"="Số nhà đường phường từ 5 đến 250 ký tự";
+"ERROR_TYPE_ADDRESS_SUGGEST"="Địa chỉ phải chọn từ gợi ý";
+"ERROR_TYPE_INPUT"="Vui lòng nhập thông tin hợp lệ";
+"ERROR_TYPE_DESCRIPTION"="Mô tả từ 5 đến 250 ký tự";
+"ERROR_TYPE_UTILITY"="chọn tối thiểu 5 tiện ích";
+
 //MARK: CERoomVC
+"ROOM_CREATE"="Tạo phòng";
 "ROOM_INFOR_TITLE"="Thông tin phòng";
 "ROOM_NAME_TITLE"="Tên Phòng";
 "ROOM_ADDRESS_TITLE"="Địa chỉ";
@@ -128,6 +164,32 @@
 "ROOM_FIND_NUMBER_OF_PERSON_TITLE"="Số người cần tìm";
 "ROOM_HOLDER_CITY_TITLE"="Chọn ngay";
 "ROOM_DISTRICT_TITLE"="Chọn ngay";
+"ROOM_UPLOAD_IMAGE_TITLE"="Đăng ảnh";
+"ROOM_UPLOAD_LIMIT"="Tải tối thiểu 2 và tối đa 12 ảnh dung lượng max:5MB";
+"ROOM_UPLOAD_SELECT_IMAGE"="Chọn ảnh";
+"ROOM_UPLOAD_SELECT_IMAGE_CAMERA"="Máy ảnh";
+"ROOM_UPLOAD_SELECT_IMAGE_PHOTO"="Thư viện";
+"ROOM_UPLOAD_ERROR"="Tải ảnh lên lỗi, vui lòng thử lại";
+
+
+
+"ROOM_UPLOAD_OPEN_CAMERA_SETTING"="Roommate chưa có quyền truy cập \"Máy ảnh\". Bật quyền truy cập máy giúp bạn tải ảnh lên từ Máy ảnh";
+"ROOM_UPLOAD_OPEN_PHOTO_SETTING"="Roommate chưa có quyền truy cập \"Thư viện\". Bật quyền truy cập thư viện giúp bạn tải ảnh lên từ Thư viện";
+"ROOM_UPLOAD_SKIP"="Bỏ qua";
+"ROOM_UPLOAD_OPEN_SETTING"="Mở cài đặt";
+"ROOM_UPLOAD_CAMERA_QUESTION"="Bạn có muổn tải ảnh lên từ Máy ảnh không";
+"ROOM_UPLOAD_PHOTO_QUESTION"="Bạn có muổn tải ảnh lên từ thư viện không";
+"YES"="Có";
+"NO"="Không";
+"ROOM_UPLOAD_SELECT"="Tải ảnh lên";
+"ROOM_UPLOAD_MAX"="Tải lên tối đa 12 ảnh";
+"CAMERA"="Máy ảnh";
+"PHOTO"="Thư viện";
+"DEVICE_CAMERA_NOT_EXISTED"="Máy của bạn không hỗ trợ camera";
+
+
+
+
 
 
 //MARK: Validation
@@ -139,7 +201,7 @@
 "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE"="Không thể kết nối mạng, chạm để thử lại";
 "NETWORK_STATUS_ERROR_MESSAGE"="Lỗi mạng, chạm để thử lại";
 "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"="Không thể kết nối máy chủ, chạm để thử lại";
-"NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Ops.Lỗi máy chủ, chạm để thử lại";
+"NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Oops.Lỗi máy chủ, chạm để thử lại";
 //MARK: Alert
 "ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
 "ALERT_INVALID_USERNAME_PASSWORD"="Mật khẩu không đúng";
@@ -149,22 +211,9 @@
 "PLACE_HOLDER_USERNAME"="Tên đăng nhập";
 "PLACE_HOLDER_PASSWORD"="Mật khẩu";
 
-//MARK: Validator
-"ERROR_TYPE_USERNAME"="Tên đăng nhập từ 6 - 50 ký tự";
-"ERROR_TYPE_PASSWORD"="Mật khẩu từ 6 - 50 ký tự";
-"ERROR_TYPE_NAME_MAX_CHAR_50"="Tên Từ 6 đến 50 ký tự";
-"ERROR_TYPE_QUANTITY"="Số lượng Từ 1 đến 20";
-"ERROR_TYPE_BRAND"="Nhãn Từ 2 đến 50 ký tự";
-"ERROR_TYPE_PRICE"="Giá từ 300,000 VND đến 50,000,000 VND";
-"ERROR_TYPE_AREA"="Diện tích từ 10 - 1000 m2";
-"ERROR_TYPE_PHONE"="Định dạng số điện thoại sai";
-"ERROR_TYPE_ADDRESS"="Số nhà đường phường từ 5 đến 250 ký tự";
-"ERROR_TYPE_INPUT"="Vui lòng nhập thông tin hợp lệ";
-"ERROR_TYPE_DESCRIPTION"="Mô tả từ 5 đến 250 ký tự";
-
-
 
 //MARK: Progresshub title
 "MB_SIGN_IN_TITLE" = "Đăng nhập...";
 "MB_LOAD_DATA_TITLE" = "Đang tải dữ liệu";
-
+"MB_LOAD_UPLOAD_IMAGE" = "Đang tải ảnh lên";
+"MB_LOAD_CREATE_ROOM" = "Đang tạo phòng";

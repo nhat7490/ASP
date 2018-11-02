@@ -14,12 +14,18 @@ class BaseInformationView: UIView {
     @IBOutlet weak var lblMainTitle: UILabel!
     @IBOutlet weak var lblStatus: UILabel!
     @IBOutlet weak var lblSubTitle: UILabel!
-    @IBOutlet weak var imgvAddress: UIImageView!
-    @IBOutlet weak var lblAddress: UILabel!
-    @IBOutlet weak var imgvArea: UIImageView!
-    @IBOutlet weak var lblArea: UILabel!
-    
+    @IBOutlet weak var imgvtop: UIImageView!
+    @IBOutlet weak var lblInfoTop: UILabel!
+    @IBOutlet weak var imgvBottom: UIImageView!
+    @IBOutlet weak var lblInfoBottom: UILabel!
     @IBOutlet weak var lblStatusHeightConstraint: NSLayoutConstraint!
+    var viewType:ViewType?{
+        didSet{
+            if viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
+                lblStatus.anchorHeight(equalToConstrant: 0)
+            }
+        }
+    }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -27,14 +33,15 @@ class BaseInformationView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         lblMainTitle.font = .boldMedium
+        lblMainTitle.textColor = .red
         lblStatus.font = .smallTitle
         lblMainTitle.lineBreakMode = .byWordWrapping
         lblMainTitle.numberOfLines = 2
         lblSubTitle.font = .smallTitle
-        lblAddress.font = .small
-        lblArea.font = .small
-        imgvAddress.image = UIImage(named: "address")
-        imgvArea.image = UIImage(named: "area")
+        lblInfoTop.font = .small
+        lblInfoBottom.font = .small
+        imgvtop.image = UIImage(named: "address")
+        imgvBottom.image = UIImage(named: "area")
     }
 
 }

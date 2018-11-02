@@ -166,11 +166,11 @@
                 <outlet property="imgvLeftAvatar" destination="n7S-Dc-UMx" id="uWe-eD-0HJ"/>
                 <outlet property="imgvLeftBookmark" destination="Cc0-HJ-3Ne" id="wgs-Vo-vts"/>
                 <outlet property="lblRightCity" destination="L3c-HM-k8e" id="Pln-Pg-4zO"/>
+                <outlet property="lblRightDistricts" destination="R4y-k2-202" id="lIN-MR-FMy"/>
                 <outlet property="lblRightName" destination="zxO-ph-uKl" id="mnY-EX-Id1"/>
-                <outlet property="lblRightPosition" destination="R4y-k2-202" id="lIN-MR-FMy"/>
                 <outlet property="lblRightPrice" destination="26K-JA-2t0" id="Jec-9H-c9u"/>
                 <outlet property="tvRightCityValue" destination="5Zp-Rj-jF2" id="47P-ya-nUb"/>
-                <outlet property="tvRightPositionValue" destination="boF-Uf-liM" id="GDF-OY-4Dk"/>
+                <outlet property="tvRightDistrictsValue" destination="boF-Uf-liM" id="GDF-OY-4Dk"/>
                 <outlet property="tvRightPriceValue" destination="O52-HK-q5U" id="UEB-hN-lnC"/>
             </connections>
             <point key="canvasLocation" x="123" y="89"/>

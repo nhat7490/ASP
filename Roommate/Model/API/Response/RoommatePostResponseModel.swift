@@ -8,34 +8,17 @@
 
 import UIKit
 import ObjectMapper
-import RealmSwift
-import ObjectMapper_Realm
-import Realm
-class RoommatePostResponseModel:Mappable {
-    var postId: Int?
-    var name:String?
-    var phoneContact:String!
-    var date: Date?
-    var userResponseModel: UserResponseModel!
-    var minPrice: Double!
-    var favourite: Bool!
+class RoommatePostResponseModel:BasePostResponseModel {
     var utilityIds:[Int]!
-    var maxPrice:Double!
+    var maxPrice:Int!
     var districtIds:[Int]!
     var cityId:Int!
     required init?(map: Map) {
-        
+        super.init(map: map)
     }
     
-    func mapping(map: Map) {
-        postId <- map["postId"]
-        name <- map["name"]
-        print("PostName:\(map["name"].currentValue)")
-        phoneContact <- map["phoneContact"]
-        date <- (map["date"],DateTransform())
-        userResponseModel <- map["userResponeModel"]
-        minPrice <- map["minPrice"]
-        favourite <- map["favourite"]
+    override func mapping(map: Map) {
+        super.mapping(map: map)
         utilityIds <- map["utilityIds"]
         maxPrice <- map["maxPrice"]
         districtIds <- map["districtIds"]
