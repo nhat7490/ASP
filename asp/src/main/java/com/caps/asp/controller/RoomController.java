@@ -2,10 +2,14 @@ package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.MemberRequestModel;
+import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
+import com.caps.asp.model.uimodel.response.common.RoomResponseModel;
 import com.caps.asp.model.uimodel.room.RoomMemberRequestModel;
-import com.caps.asp.model.uimodel.room.RoomModel;
+import com.caps.asp.model.uimodel.room.RoomRequestModel;
 import com.caps.asp.model.uimodel.request.UtilityRequestModel;
 import com.caps.asp.service.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -44,31 +48,31 @@ public class RoomController {
 
     @Transactional
     @PostMapping("/room/create")
-    public ResponseEntity createRoom(@RequestBody RoomModel roomModel) {
-        TbUser user = userService.findById(roomModel.getUserId());
+    public ResponseEntity createRoom(@RequestBody RoomRequestModel roomRequestModel) {
+        TbUser user = userService.findById(roomRequestModel.getUserId());
         int roomId = 0;
         if (user.getRoleId() == HOUSE_OWNER) {
             TbRoom room = new TbRoom();
             room.setRoomId(0);
-            room.setName(roomModel.getName());
-            room.setPrice(roomModel.getPrice());
-            room.setArea(roomModel.getArea());
-            room.setAddress(roomModel.getAddress());
-            room.setMaxGuest(roomModel.getMaxGuest());
+            room.setName(roomRequestModel.getName());
+            room.setPrice(roomRequestModel.getPrice());
+            room.setArea(roomRequestModel.getArea());
+            room.setAddress(roomRequestModel.getAddress());
+            room.setMaxGuest(roomRequestModel.getMaxGuest());
 
             Date date = new Date(System.currentTimeMillis());
             room.setDate(date);
             room.setCurrentNumber(0);
-            room.setDescription(roomModel.getDescription());
+            room.setDescription(roomRequestModel.getDescription());
             room.setStatusId(AUTHENTICATED);
-            room.setUserId(roomModel.getUserId());
-            room.setCityId(roomModel.getCityId());
-            room.setDistrictId(roomModel.getDistrictId());
-            room.setLattitude(roomModel.getLatitude());
-            room.setLongtitude(roomModel.getLongitude());
+            room.setUserId(roomRequestModel.getUserId());
+            room.setCityId(roomRequestModel.getCityId());
+            room.setDistrictId(roomRequestModel.getDistrictId());
+            room.setLattitude(roomRequestModel.getLatitude());
+            room.setLongtitude(roomRequestModel.getLongitude());
             roomId = roomService.saveRoom(room);
 
-            for (UtilityRequestModel utilityRequestModel : roomModel.getUtilities()) {
+            for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
                 TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
                 roomHasUtility.setId(0);
                 roomHasUtility.setRoomId(roomId);
@@ -79,7 +83,7 @@ public class RoomController {
                 roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
             }
 
-            for (String url : roomModel.getImageUrls()) {
+            for (String url : roomRequestModel.getImageUrls()) {
                 TbImage image = new TbImage();
                 image.setImageId(0);
                 image.setRoomId(roomId);
@@ -95,34 +99,34 @@ public class RoomController {
 
     @Transactional
     @PutMapping("/room/update")
-    public ResponseEntity updateRoom(@RequestBody RoomModel roomModel) {
+    public ResponseEntity updateRoom(@RequestBody RoomRequestModel roomRequestModel) {
         //update room info
-        TbRoom room = roomService.findRoomById(roomModel.getRoomId());
-        TbUser user = userService.findById(roomModel.getUserId());
+        TbRoom room = roomService.findRoomById(roomRequestModel.getRoomId());
+        TbUser user = userService.findById(roomRequestModel.getUserId());
         if (room != null) {
-            room.setRoomId(roomModel.getRoomId());
-            room.setName(roomModel.getName());
-            room.setPrice(roomModel.getPrice());
-            room.setArea(roomModel.getArea());
-            room.setAddress(roomModel.getAddress());
-            room.setMaxGuest(roomModel.getMaxGuest());
+            room.setRoomId(roomRequestModel.getRoomId());
+            room.setName(roomRequestModel.getName());
+            room.setPrice(roomRequestModel.getPrice());
+            room.setArea(roomRequestModel.getArea());
+            room.setAddress(roomRequestModel.getAddress());
+            room.setMaxGuest(roomRequestModel.getMaxGuest());
             room.setDate(new Date(System.currentTimeMillis()));//Edit with current time not in request
-            room.setCurrentNumber(roomModel.getCurrentNumber());
-            room.setDescription(roomModel.getDescription());
-            room.setStatusId(roomModel.getStatus());
-            room.setUserId(roomModel.getUserId());
-            room.setCityId(roomModel.getCityId());
-            room.setDistrictId(roomModel.getDistrictId());
-            room.setLongtitude(roomModel.getLongitude());
-            room.setLattitude(roomModel.getLatitude());
+            room.setCurrentNumber(roomRequestModel.getCurrentNumber());
+            room.setDescription(roomRequestModel.getDescription());
+            room.setStatusId(roomRequestModel.getStatus());
+            room.setUserId(roomRequestModel.getUserId());
+            room.setCityId(roomRequestModel.getCityId());
+            room.setDistrictId(roomRequestModel.getDistrictId());
+            room.setLongtitude(roomRequestModel.getLongitude());
+            room.setLattitude(roomRequestModel.getLatitude());
             roomService.saveRoom(room);
         }
 
         //update room utilities
-        roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomModel.getRoomId());
-        for (UtilityRequestModel utilityRequestModel : roomModel.getUtilities()) {
+        roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomRequestModel.getRoomId());
+        for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
             TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
-            roomHasUtility.setRoomId(roomModel.getRoomId());
+            roomHasUtility.setRoomId(roomRequestModel.getRoomId());
             roomHasUtility.setBrand(utilityRequestModel.getBrand());
             roomHasUtility.setDescription(utilityRequestModel.getDescription());
             roomHasUtility.setQuantity(utilityRequestModel.getQuantity());
@@ -130,11 +134,11 @@ public class RoomController {
         }
 
         //update room images
-        imageService.deleteAllImageByRoomId(roomModel.getRoomId());
-        for (String url : roomModel.getImageUrls()) {
+        imageService.deleteAllImageByRoomId(roomRequestModel.getRoomId());
+        for (String url : roomRequestModel.getImageUrls()) {
             TbImage image = new TbImage();
             image.setImageId(0);
-            image.setRoomId(roomModel.getRoomId());
+            image.setRoomId(roomRequestModel.getRoomId());
             image.setLinkUrl(url);
             imageService.saveImage(image);
         }
@@ -161,6 +165,41 @@ public class RoomController {
         }
     }
 
+    @GetMapping("room/user/{userId}")
+    public ResponseEntity findRoomByUserId(@PathVariable Integer userId,Pageable pageable) {
+        if (userId != null) {
+            List<TbRoom> rooms = roomService.findAllRoomByUserId(userId,PageRequest.of(pageable.getPageNumber() -1,pageable.getPageSize())).getContent();
+            List<RoomResponseModel> roomResponseModels = new ArrayList();
+            rooms.forEach(tbRoom -> {
+                RoomResponseModel roomResponseModel = new RoomResponseModel();
+                roomResponseModel.setRoomId(tbRoom.getRoomId());
+                roomResponseModel.setName(tbRoom.getName());
+                roomResponseModel.setPrice(tbRoom.getPrice());
+                roomResponseModel.setArea(tbRoom.getArea());
+                roomResponseModel.setAddress(tbRoom.getAddress());
+                roomResponseModel.setMaxGuest(tbRoom.getMaxGuest());
+                roomResponseModel.setCurrentMember(tbRoom.getCurrentNumber());
+                roomResponseModel.setUserId(tbRoom.getUserId());
+                roomResponseModel.setCityId(tbRoom.getCityId());
+                roomResponseModel.setDistrictId(tbRoom.getDistrictId());
+                roomResponseModel.setDate(tbRoom.getDate());
+                roomResponseModel.setStatusId(tbRoom.getStatusId());
+                roomResponseModel.setDescription(tbRoom.getDescription());
+
+                roomResponseModel.setUtilities(roomHasUtilityService.findAllByRoomId(tbRoom.getRoomId()));
+                roomResponseModel.setImageUrls(imageService.findAllByRoomId(tbRoom.getRoomId()).stream().map(tbImage -> tbImage.getLinkUrl()).collect(Collectors.toList()));
+                roomResponseModel.setMembers(roomHasUserService.findByRoomIdAndDateOutIsNull(tbRoom.getRoomId()).stream().map(tbRoomHasUser -> {
+                    return new MemberResponseModel(tbRoomHasUser.getUserId(),tbRoomHasUser.getRoomId(),userService.findById(tbRoomHasUser.getUserId()).getRoleId());
+                }).collect(Collectors.toList()));
+                roomResponseModels.add(roomResponseModel);
+            });
+            return ResponseEntity.status(OK).body(roomResponseModels);
+        } else {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
+    }
+
+
     @Transactional
     @PostMapping("room/editMember")
     public ResponseEntity editMember(@RequestBody RoomMemberRequestModel roomMemberModel) {
@@ -175,9 +214,7 @@ public class RoomController {
             postService.removeByRoomId(roomMemberModel.getRoomId());
 
             roomMembers.forEach(tbRoomHasUser -> {
-
                 TbUser user = userService.findById(tbRoomHasUser.getUserId());
-
                 Date date = new Date(System.currentTimeMillis());
                 tbRoomHasUser.setDateOut(date);
                 roomHasUserService.saveRoomMember(tbRoomHasUser);

@@ -1,6 +1,6 @@
 package com.caps.asp.model.uimodel;
 
-import com.caps.asp.model.uimodel.room.RoomModel;
+import com.caps.asp.model.uimodel.room.RoomRequestModel;
 
 import java.sql.Date;
 
@@ -12,6 +12,6 @@ public class PostRequestModel {
     private Integer genderPartner;
     private Date date;
     private Integer userId;
-    private RoomModel room;
+    private RoomRequestModel room;
 
 }

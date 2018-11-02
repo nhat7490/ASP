@@ -2,6 +2,9 @@ package com.caps.asp.service;
 
 import com.caps.asp.model.TbRoom;
 import com.caps.asp.repository.RoomRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +23,7 @@ public class RoomService {
         return roomRepository.saveAndFlush(room).getRoomId();
     }
 
-    public TbRoom findRoomByName(String roomName) {
-        return roomRepository.findByName(roomName);
-    }
+
 
     public TbRoom findRoomById(int roomId) {
         return roomRepository.findByRoomId(roomId);
@@ -34,6 +35,9 @@ public class RoomService {
 
     public List<TbRoom> findAllRoom(){
         return roomRepository.findAll();
+    }
+    public Page<TbRoom> findAllRoomByUserId(int userId, Pageable pageable){
+        return roomRepository.findAllByUserId(userId,pageable);
     }
 
     public TbRoom findByUserIdAndRoomId(int userId, int roomId){

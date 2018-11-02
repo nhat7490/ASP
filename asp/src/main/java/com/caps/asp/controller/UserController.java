@@ -34,12 +34,16 @@ public class UserController {
 
     @PostMapping("/user/login")
     public ResponseEntity login(@RequestBody UserLoginModel model) {
-        TbUser user = userService.findByUsername(model.getUsername());
-        boolean isRight = this.passwordEncoder.matches(model.getPassword(), user.getPassword());
-        System.out.println(isRight);
-        return isRight
-                ? ResponseEntity.status(OK).body(user)
-                : ResponseEntity.status(FORBIDDEN).build();//need to encrypt here
+        try {
+            TbUser user = userService.findByUsername(model.getUsername());
+            boolean isRight = this.passwordEncoder.matches(model.getPassword(), user.getPassword());
+            System.out.println(isRight);
+            return isRight
+                    ? ResponseEntity.status(OK).body(user)
+                    : ResponseEntity.status(FORBIDDEN).build();//need to encrypt here
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/user/findByUsername/{username}")

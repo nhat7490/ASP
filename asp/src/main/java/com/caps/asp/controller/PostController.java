@@ -75,7 +75,6 @@ public class PostController {
             post.setUserId(user.getUserId());
             post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
             post.setMinPrice(roommatePostRequestModel.getMinPrice());
-
             post.setUserId(roommatePostRequestModel.getUserId());
             post.setPostId(0);
             postService.savePost(post);
@@ -325,7 +324,7 @@ public class PostController {
         return ResponseEntity.status(NOT_FOUND).build();
     }
 
-    @PostMapping("/user/suggest")
+    @PostMapping("/post/suggest")
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
         TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
 
