@@ -114,7 +114,7 @@ public class PostService {
         postRepository.removeByRoomId(roomId);
     }
 
-    public TbPost findPostByUserId(int userId) {
-        return postRepository.findByUserId(userId);
+    public List<TbPost> findPostByUserId(int userId) {
+        return postRepository.findAllByUserId(userId);
     }
 }

@@ -327,9 +327,10 @@ public class PostController {
     @PostMapping("/post/suggest")
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
         TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
+        List<TbPost> checkPost = postService.findPostByUserId(baseSuggestRequestModel.getUserId());
 
         //sugesst for room master
-        if (tbUser.getRoleId() == ROOM_MASTER){
+        if (tbUser.getRoleId() == ROOM_MASTER && checkPost != null) {
             List<TbPost> postList = postService.getSuggestedList(baseSuggestRequestModel.getUserId()
                     , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
 
@@ -373,7 +374,7 @@ public class PostController {
             }
             return ResponseEntity.status(OK).body(roomPostResponseModels);
 
-        }else if(tbUser.getRoleId() == MEMBER){//sugesst for room master
+        } else if (referenceService.getByUserId(baseSuggestRequestModel.getUserId()) != null) {//sugesst for room master
 
             SearchRequestModel searchRequestModel = new SearchRequestModel();
             List<TbUtilitiesReference> utilitiesReference = utilityReferenceService
@@ -416,36 +417,23 @@ public class PostController {
                 Page<RoommatePostResponseModel> roommatePostResponseModels = suggest.roommatePostSuggestion(filter);
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
             }
-        }else{
+        } else if (baseSuggestRequestModel.getLatitude() == null
+                && baseSuggestRequestModel.getLongitude() == null) { //not access location, suggest new post
+            FilterArgumentModel filterArgumentModel = new FilterArgumentModel();
+            filterArgumentModel.setOrderBy(NEWPOST);
+            filterArgumentModel.setPage(baseSuggestRequestModel.getPage());
+            filterArgumentModel.setOffset(baseSuggestRequestModel.getOffset());
+            filterArgumentModel.setTypeId(baseSuggestRequestModel.getTypeId());
+            filterArgumentModel.setCityId(baseSuggestRequestModel.getCity());
+            Filter filter = new Filter();
+            filter.setFilterArgumentModel(filterArgumentModel);
+            Page<RoomPostResponseModel> roomPostResponseModels = suggest.partnerPostSuggestion(filter);
+            return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
+        } else { //access location, suggest nearby post
+
             return ResponseEntity.status(NOT_FOUND).build();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @PostMapping("post/suggestBestMatch")
