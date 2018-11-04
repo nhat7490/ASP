@@ -42,7 +42,7 @@ public class TbRoomHasUser {
         this.dateOut = dateOut;
     }
 
-    @Basic
+    @Id
     @Column(name = "room_id", nullable = false)
     public Integer getRoomId() {
         return roomId;

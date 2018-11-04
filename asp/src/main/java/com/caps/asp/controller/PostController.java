@@ -65,28 +65,23 @@ public class PostController {
     }
 
 
-
-
     @PostMapping("/post/createRoommatePost")
     public ResponseEntity createRoommatePost(@RequestBody RoommatePostRequestModel roommatePostRequestModel) {
         TbUser user = userService.findById(roommatePostRequestModel.getUserId());
-        if (user.getRoleId() == MEMBER) {
-            TbPost post = new TbPost();
-            post.setTypeId(PARTNER_POST);
-            Date date = new Date(System.currentTimeMillis());
-            post.setDatePost(date);
-            post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
-            post.setTypeId(ROOM_POST);
-            post.setUserId(user.getUserId());
-            post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
-            post.setMinPrice(roommatePostRequestModel.getMinPrice());
-            post.setUserId(roommatePostRequestModel.getUserId());
-            post.setPostId(0);
-            postService.savePost(post);
-            return ResponseEntity.status(CREATED).build();
-        } else {
-            return ResponseEntity.status(CONFLICT).build();
-        }
+        TbPost post = new TbPost();
+        post.setTypeId(PARTNER_POST);
+        Date date = new Date(System.currentTimeMillis());
+        post.setDatePost(date);
+        post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
+        post.setTypeId(ROOM_POST);
+        post.setUserId(user.getUserId());
+        post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
+        post.setMinPrice(roommatePostRequestModel.getMinPrice());
+        post.setUserId(roommatePostRequestModel.getUserId());
+        post.setPostId(0);
+        postService.savePost(post);
+        return ResponseEntity.status(CREATED).build();
+
     }
 
     @PostMapping("/post/createRoomPost")
