@@ -79,25 +79,27 @@ public class PostService {
     public Page<TbPost> finAllByFilter(int page, int items, Filter filter) {
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
-        return postRepository.findAll(filter,pageable);
+        return postRepository.findAll(filter, pageable);
     }
 
     public Page<TbPost> finAllBookmarkByFilter(int page, int items, BookmarkFilter filter) {
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
-        return postRepository.findAll(filter,pageable);
+        return postRepository.findAll(filter, pageable);
     }
 
-    public Page<TbPost> findAllByTypeId(int page, int items, int typeId){
+    public Page<TbPost> findAllByTypeId(int page, int items, int typeId) {
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
         return postRepository.findAllByTypeId(typeId, pageable);
     }
-    public List<TbPost> findAllByTypeId(int typeId){
-        return   postRepository.findAllByTypeId(typeId);
+
+    public List<TbPost> findAllByTypeId(int typeId) {
+        return postRepository.findAllByTypeId(typeId);
 
     }
-    public List<TbPost> search(Filter filter){
+
+    public List<TbPost> search(Filter filter) {
         return postRepository.findAll(filter);
     }
 
@@ -110,11 +112,17 @@ public class PostService {
         return suggestedList;
     }
 
-    public void removeByRoomId(int roomId){
+    public void removeByRoomId(int roomId) {
         postRepository.removeByRoomId(roomId);
     }
 
     public List<TbPost> findPostByUserId(int userId) {
         return postRepository.findAllByUserId(userId);
+    }
+
+    public Page<TbPost> findByUserIdAndTypeId(int page, int items, int userId, int typeId) {
+        int actualPage = page - 1;
+        Pageable pageable = PageRequest.of(actualPage, items);
+        return postRepository.findAllByUserIdAndTypeIdOrderByDatePostDesc(userId,typeId,pageable);
     }
 }

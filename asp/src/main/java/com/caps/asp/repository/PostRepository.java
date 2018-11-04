@@ -28,4 +28,6 @@ public interface PostRepository extends JpaRepository<TbPost, Integer>, JpaSpeci
     void removeByRoomId(int roomId);
 
     List<TbPost> findAllByUserId(int userId);
+
+    Page<TbPost> findAllByUserIdAndTypeIdOrderByDatePostDesc(int userId, int typeId, Pageable pageable);
 }

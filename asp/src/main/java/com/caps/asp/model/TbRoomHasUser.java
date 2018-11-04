@@ -7,12 +7,23 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_room_has_user", schema = "asp", catalog = "")
 public class TbRoomHasUser {
+    private Integer id;
     private Integer userId;
+    private Integer roomId;
     private Date dateIn;
     private Date dateOut;
-    private Integer roomId;
 
     @Id
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Basic
     @Column(name = "user_id", nullable = false)
     public Integer getUserId() {
         return userId;
@@ -23,7 +34,17 @@ public class TbRoomHasUser {
     }
 
     @Basic
-    @Column(name = "date_in", nullable = true)
+    @Column(name = "room_id", nullable = false)
+    public Integer getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
+    }
+
+    @Basic
+    @Column(name = "date_in", nullable = false)
     public Date getDateIn() {
         return dateIn;
     }
@@ -42,30 +63,21 @@ public class TbRoomHasUser {
         this.dateOut = dateOut;
     }
 
-    @Id
-    @Column(name = "room_id", nullable = false)
-    public Integer getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(Integer roomId) {
-        this.roomId = roomId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbRoomHasUser that = (TbRoomHasUser) o;
-        return Objects.equals(userId, that.userId) &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(roomId, that.roomId) &&
                 Objects.equals(dateIn, that.dateIn) &&
-                Objects.equals(dateOut, that.dateOut) &&
-                Objects.equals(roomId, that.roomId);
+                Objects.equals(dateOut, that.dateOut);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(userId, dateIn, dateOut, roomId);
+        return Objects.hash(id, userId, roomId, dateIn, dateOut);
     }
 }

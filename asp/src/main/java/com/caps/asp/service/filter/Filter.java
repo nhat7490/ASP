@@ -33,7 +33,7 @@ public class Filter implements Specification<TbPost> {
             return cb.conjunction();
         criteriaQuery.distinct(true);
 
-        if (filterArgumentModel.getTypeId() == 1) {
+        if (filterArgumentModel.getTypeId() == MASTER_POST) {
 
             if (filterArgumentModel.getSearchRequestModel() != null) {
                 Root<TbRoom> roomRoot = criteriaQuery.from(TbRoom.class);

@@ -9,6 +9,7 @@ import com.caps.asp.model.uimodel.room.RoomMemberRequestModel;
 import com.caps.asp.model.uimodel.room.RoomRequestModel;
 import com.caps.asp.model.uimodel.request.UtilityRequestModel;
 import com.caps.asp.service.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -167,9 +168,9 @@ public class RoomController {
     }
 
     @GetMapping("room/user/{userId}")
-    public ResponseEntity findRoomByUserId(@PathVariable Integer userId,Pageable pageable) {
+    public ResponseEntity findRoomByUserId(@PathVariable Integer userId, Pageable pageable) {
         if (userId != null) {
-            List<TbRoom> rooms = roomService.findAllRoomByUserId(userId,PageRequest.of(pageable.getPageNumber() -1,pageable.getPageSize())).getContent();
+            List<TbRoom> rooms = roomService.findAllRoomByUserId(userId, PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize())).getContent();
             List<RoomResponseModel> roomResponseModels = new ArrayList();
             rooms.forEach(tbRoom -> {
                 RoomResponseModel roomResponseModel = new RoomResponseModel();
@@ -191,7 +192,7 @@ public class RoomController {
                 roomResponseModel.setImageUrls(imageService.findAllByRoomId(tbRoom.getRoomId()).stream().map(tbImage -> tbImage.getLinkUrl()).collect(Collectors.toList()));
                 roomResponseModel.setMembers(roomHasUserService.findByRoomIdAndDateOutIsNull(tbRoom.getRoomId()).stream().map(tbRoomHasUser -> {
                     TbUser user = userService.findById(tbRoomHasUser.getUserId());
-                    return new MemberResponseModel(tbRoomHasUser.getUserId(),user.getRoleId(),user.getUsername());
+                    return new MemberResponseModel(tbRoomHasUser.getUserId(), user.getRoleId(), user.getUsername());
                 }).collect(Collectors.toList()));
                 roomResponseModels.add(roomResponseModel);
             });
@@ -202,14 +203,81 @@ public class RoomController {
     }
 
     @GetMapping("/post/user/currentRoom/{userId}")
-    public ResponseEntity getCurrentRoom(@PathVariable Integer userId,Pageable pageable) {
-        return ResponseEntity.status(OK)
+    public ResponseEntity getCurrentRoom(@PathVariable Integer userId, Pageable pageable) {
+        TbRoomHasUser roomHasUser = roomHasUserService.getCurrentRoom(userId);
+        if (roomHasUser != null) {
+            TbRoom room = roomService.findRoomById(roomHasUser.getRoomId());
+            RoomResponseModel roomResponseModel = new RoomResponseModel();
+            roomResponseModel.setRoomId(room.getRoomId());
+            roomResponseModel.setName(room.getName());
+            roomResponseModel.setPrice(room.getPrice());
+            roomResponseModel.setArea(room.getArea());
+            roomResponseModel.setAddress(room.getAddress());
+            roomResponseModel.setMaxGuest(room.getMaxGuest());
+            roomResponseModel.setCurrentMember(room.getCurrentNumber());
+            roomResponseModel.setUserId(room.getUserId());
+            roomResponseModel.setCityId(room.getCityId());
+            roomResponseModel.setDistrictId(room.getDistrictId());
+            roomResponseModel.setDate(room.getDate());
+            roomResponseModel.setStatusId(room.getStatusId());
+            roomResponseModel.setDescription(room.getDescription());
+
+            roomResponseModel.setUtilities(roomHasUtilityService.findAllByRoomId(room.getRoomId()));
+            roomResponseModel.setImageUrls(imageService.findAllByRoomId(room.getRoomId())
+                    .stream()
+                    .map(tbImage -> tbImage.getLinkUrl())
+                    .collect(Collectors.toList()));
+            roomResponseModel.setMembers(roomHasUserService.findByRoomIdAndDateOutIsNull(room.getRoomId())
+                    .stream()
+                    .map(tbRoomHasUser -> {
+                        TbUser user = userService.findById(tbRoomHasUser.getUserId());
+                        return new MemberResponseModel(user.getUserId(), user.getRoleId(), user.getUsername());
+                    }).collect(Collectors.toList()));
+            return ResponseEntity.status(OK).body(roomResponseModel);
+        }
+        return ResponseEntity.status(NOT_FOUND)
                 .build();
     }
+
     @GetMapping("/post/user/history/{userId}")
-    public ResponseEntity getHistoryRoom(@PathVariable Integer userId,Pageable pageable) {
-        return ResponseEntity.status(OK)
-                .build();
+    public ResponseEntity getHistoryRoom(@PathVariable Integer userId, Pageable pageable) {
+        Page<TbRoomHasUser> roomHasUsers = roomHasUserService.getHistoryRoom(pageable.getPageNumber(), pageable.getPageSize()
+                , userId);
+        if (!roomHasUsers.getContent().isEmpty()){
+            Page<RoomResponseModel> roomResponseModels = roomHasUsers.map(tbRoomHasUser -> {
+                RoomResponseModel roomResponseModel = new RoomResponseModel();
+                TbRoom room = roomService.findRoomById(tbRoomHasUser.getRoomId());
+                roomResponseModel.setRoomId(room.getRoomId());
+                roomResponseModel.setName(room.getName());
+                roomResponseModel.setPrice(room.getPrice());
+                roomResponseModel.setArea(room.getArea());
+                roomResponseModel.setAddress(room.getAddress());
+                roomResponseModel.setMaxGuest(room.getMaxGuest());
+                roomResponseModel.setCurrentMember(room.getCurrentNumber());
+                roomResponseModel.setUserId(room.getUserId());
+                roomResponseModel.setCityId(room.getCityId());
+                roomResponseModel.setDistrictId(room.getDistrictId());
+                roomResponseModel.setDate(room.getDate());
+                roomResponseModel.setStatusId(room.getStatusId());
+                roomResponseModel.setDescription(room.getDescription());
+
+                roomResponseModel.setUtilities(roomHasUtilityService.findAllByRoomId(room.getRoomId()));
+                roomResponseModel.setImageUrls(imageService.findAllByRoomId(room.getRoomId())
+                        .stream()
+                        .map(tbImage -> tbImage.getLinkUrl())
+                        .collect(Collectors.toList()));
+                roomResponseModel.setMembers(roomHasUserService.findByRoomIdAndDateOutIsNull(room.getRoomId())
+                        .stream()
+                        .map(roomHasUser -> {
+                            TbUser user = userService.findById(tbRoomHasUser.getUserId());
+                            return new MemberResponseModel(user.getUserId(), user.getRoleId(), user.getUsername());
+                        }).collect(Collectors.toList()));
+                return roomResponseModel;
+            });
+            return ResponseEntity.status(OK)
+                    .body(roomResponseModels.getContent());
+        }
+        return ResponseEntity.status(NOT_FOUND).build();
     }
 
     @Transactional
