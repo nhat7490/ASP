@@ -9,6 +9,7 @@ import com.caps.asp.service.UserService;
 //import com.caps.asp.util.ResetPassword;
 //import com.caps.asp.util.ResetPassword;
 import com.caps.asp.util.ResetPassword;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/user/login")
+    @PostMapping(value = "/user/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity login(@RequestBody UserLoginModel model) {
         try {
             TbUser user = userService.findByUsername(model.getUsername());
