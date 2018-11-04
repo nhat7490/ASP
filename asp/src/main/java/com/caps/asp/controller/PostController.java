@@ -54,13 +54,18 @@ public class PostController {
         this.suggest = suggest;
     }
 
-    @GetMapping("/post/findByUserId/{userId}")
-    public ResponseEntity getPostByUserId(@PathVariable int userId,
-                                          @RequestParam(defaultValue = "1") String page) {
-        Page<TbPost> posts = postService.findAllByUserId(Integer.parseInt(page), 10, userId);
+    @GetMapping("/post/user")
+    public ResponseEntity getPost(@RequestBody FilterArgumentModel filterArgumentModel) {
+        //filter nay co page, offset, user id, typeid la co gia tri
+        //search response model  = null
+        //can mapping to Roommate response model va room response model
+//        Page<TbPost> posts = postService.findAllByUserId(Integer.parseInt(page), 10, userId);
         return ResponseEntity.status(OK)
-                .body(posts.getContent());
+                .build();
     }
+
+
+
 
     @PostMapping("/post/createRoommatePost")
     public ResponseEntity createRoommatePost(@RequestBody RoommatePostRequestModel roommatePostRequestModel) {

@@ -1,6 +1,7 @@
 package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
+import com.caps.asp.model.uimodel.request.FilterArgumentModel;
 import com.caps.asp.model.uimodel.request.MemberRequestModel;
 import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
 import com.caps.asp.model.uimodel.response.common.RoomResponseModel;
@@ -189,7 +190,8 @@ public class RoomController {
                 roomResponseModel.setUtilities(roomHasUtilityService.findAllByRoomId(tbRoom.getRoomId()));
                 roomResponseModel.setImageUrls(imageService.findAllByRoomId(tbRoom.getRoomId()).stream().map(tbImage -> tbImage.getLinkUrl()).collect(Collectors.toList()));
                 roomResponseModel.setMembers(roomHasUserService.findByRoomIdAndDateOutIsNull(tbRoom.getRoomId()).stream().map(tbRoomHasUser -> {
-                    return new MemberResponseModel(tbRoomHasUser.getUserId(),tbRoomHasUser.getRoomId(),userService.findById(tbRoomHasUser.getUserId()).getRoleId());
+                    TbUser user = userService.findById(tbRoomHasUser.getUserId());
+                    return new MemberResponseModel(tbRoomHasUser.getUserId(),user.getRoleId(),user.getUsername());
                 }).collect(Collectors.toList()));
                 roomResponseModels.add(roomResponseModel);
             });
@@ -199,6 +201,16 @@ public class RoomController {
         }
     }
 
+    @GetMapping("/post/user/currentRoom/{userId}")
+    public ResponseEntity getCurrentRoom(@PathVariable Integer userId,Pageable pageable) {
+        return ResponseEntity.status(OK)
+                .build();
+    }
+    @GetMapping("/post/user/history/{userId}")
+    public ResponseEntity getHistoryRoom(@PathVariable Integer userId,Pageable pageable) {
+        return ResponseEntity.status(OK)
+                .build();
+    }
 
     @Transactional
     @PostMapping("room/editMember")
@@ -208,7 +220,6 @@ public class RoomController {
         if (roomMemberModel.getMemberRequestModels() == null) {
 
             TbPost post = postService.findByRoomId(roomMemberModel.getRoomId());
-//            roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomMemberModel.getRoomId());
             postHasDistrictService.removeAllByPostId(post.getPostId());
             favouriteService.removeAllByPostId(post.getPostId());
             postService.removeByRoomId(roomMemberModel.getRoomId());

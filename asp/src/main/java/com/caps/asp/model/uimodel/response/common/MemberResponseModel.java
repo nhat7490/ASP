@@ -3,12 +3,12 @@ package com.caps.asp.model.uimodel.response.common;
 public class MemberResponseModel {
     private int userId;
     private int roleId;
-    private int username;
+    private String username;
 
     public MemberResponseModel() {
     }
 
-    public MemberResponseModel(int userId, int roleId, int username) {
+    public MemberResponseModel(int userId, int roleId, String username) {
         this.userId = userId;
         this.roleId = roleId;
         this.username = username;
@@ -30,11 +30,11 @@ public class MemberResponseModel {
         this.roleId = roleId;
     }
 
-    public int getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(int username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 }
