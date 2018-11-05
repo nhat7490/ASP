@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -43,7 +44,7 @@ public class AmazonService {
     }
 
     private String generateFileName(MultipartFile multiPart) {
-        return new Date().getTime() + "-" + multiPart.getOriginalFilename().replace(" ", "_");
+        return new SimpleDateFormat("HH_mm_ss_dd_MM_yyyy").format(new Date()) + "-" + multiPart.getOriginalFilename().replace(" ", "_");
     }
 
     private void uploadFileTos3bucket(String fileName, File file) {
