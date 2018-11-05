@@ -22,11 +22,12 @@ public class RoomResponseModel {
     private List<String> imageUrls;
     private List<MemberResponseModel> members;
     private String description;
+    private String  phoneNumber;
 
     public RoomResponseModel() {
     }
 
-    public RoomResponseModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, Integer currentMember, int userId, int cityId, int districtId, Date date, int statusId, List<TbRoomHasUtility> utilities, List<String> imageUrls, List<MemberResponseModel> members, String description) {
+    public RoomResponseModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, Integer currentMember, int userId, int cityId, int districtId, Date date, int statusId, List<TbRoomHasUtility> utilities, List<String> imageUrls, List<MemberResponseModel> members, String description, String phoneNumber) {
         this.roomId = roomId;
         this.name = name;
         this.price = price;
@@ -43,6 +44,7 @@ public class RoomResponseModel {
         this.imageUrls = imageUrls;
         this.members = members;
         this.description = description;
+        this.phoneNumber = phoneNumber;
     }
 
     public int getRoomId() {
@@ -171,5 +173,13 @@ public class RoomResponseModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

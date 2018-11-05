@@ -67,7 +67,6 @@ public class UserController {
         }else{
             return ResponseEntity.status(NOT_FOUND).build();
         }
-
     }
 
     @GetMapping("/user/listUser")

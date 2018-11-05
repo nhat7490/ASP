@@ -171,8 +171,7 @@ public class RoomController {
     public ResponseEntity findRoomByUserId(@PathVariable Integer userId, Pageable pageable) {
         if (userId != null) {
             List<TbRoom> rooms = roomService.findAllRoomByUserId(userId, PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize())).getContent();
-            List<RoomResponseModel> roomResponseModels = new ArrayList();
-            rooms.forEach(tbRoom -> {
+            List<RoomResponseModel> roomResponseModels = rooms.stream().map(tbRoom -> {
                 RoomResponseModel roomResponseModel = new RoomResponseModel();
                 roomResponseModel.setRoomId(tbRoom.getRoomId());
                 roomResponseModel.setName(tbRoom.getName());
@@ -187,26 +186,32 @@ public class RoomController {
                 roomResponseModel.setDate(tbRoom.getDate());
                 roomResponseModel.setStatusId(tbRoom.getStatusId());
                 roomResponseModel.setDescription(tbRoom.getDescription());
-
                 roomResponseModel.setUtilities(roomHasUtilityService.findAllByRoomId(tbRoom.getRoomId()));
-                roomResponseModel.setImageUrls(imageService.findAllByRoomId(tbRoom.getRoomId()).stream().map(tbImage -> tbImage.getLinkUrl()).collect(Collectors.toList()));
-                roomResponseModel.setMembers(roomHasUserService.findByRoomIdAndDateOutIsNull(tbRoom.getRoomId()).stream().map(tbRoomHasUser -> {
+                roomResponseModel.setImageUrls(imageService.findAllByRoomId(tbRoom.getRoomId())
+                        .stream()
+                        .map(tbImage -> tbImage.getLinkUrl())
+                        .collect(Collectors.toList()));
+                roomResponseModel.setMembers(roomHasUserService.findByRoomIdAndDateOutIsNull(tbRoom.getRoomId())
+                        .stream()
+                        .map(tbRoomHasUser -> {
                     TbUser user = userService.findById(tbRoomHasUser.getUserId());
                     return new MemberResponseModel(tbRoomHasUser.getUserId(), user.getRoleId(), user.getUsername());
                 }).collect(Collectors.toList()));
-                roomResponseModels.add(roomResponseModel);
-            });
+                return roomResponseModel;
+            }).collect(Collectors.toList());
+
             return ResponseEntity.status(OK).body(roomResponseModels);
         } else {
             return ResponseEntity.status(NOT_FOUND).build();
         }
     }
 
-    @GetMapping("/post/user/currentRoom/{userId}")
+    @GetMapping("room/user/currentRoom/{userId}")
     public ResponseEntity getCurrentRoom(@PathVariable Integer userId, Pageable pageable) {
         TbRoomHasUser roomHasUser = roomHasUserService.getCurrentRoom(userId);
         if (roomHasUser != null) {
             TbRoom room = roomService.findRoomById(roomHasUser.getRoomId());
+            TbUser roomOwner = userService.findById(room.getUserId());
             RoomResponseModel roomResponseModel = new RoomResponseModel();
             roomResponseModel.setRoomId(room.getRoomId());
             roomResponseModel.setName(room.getName());
@@ -221,6 +226,7 @@ public class RoomController {
             roomResponseModel.setDate(room.getDate());
             roomResponseModel.setStatusId(room.getStatusId());
             roomResponseModel.setDescription(room.getDescription());
+            roomResponseModel.setPhoneNumber(roomOwner.getPhone());
 
             roomResponseModel.setUtilities(roomHasUtilityService.findAllByRoomId(room.getRoomId()));
             roomResponseModel.setImageUrls(imageService.findAllByRoomId(room.getRoomId())
@@ -239,7 +245,7 @@ public class RoomController {
                 .build();
     }
 
-    @GetMapping("/post/user/history/{userId}")
+    @GetMapping("room/user/history/{userId}")
     public ResponseEntity getHistoryRoom(@PathVariable Integer userId, Pageable pageable) {
         Page<TbRoomHasUser> roomHasUsers = roomHasUserService.getHistoryRoom(pageable.getPageNumber(), pageable.getPageSize()
                 , userId);
@@ -247,6 +253,7 @@ public class RoomController {
             Page<RoomResponseModel> roomResponseModels = roomHasUsers.map(tbRoomHasUser -> {
                 RoomResponseModel roomResponseModel = new RoomResponseModel();
                 TbRoom room = roomService.findRoomById(tbRoomHasUser.getRoomId());
+                TbUser roomOwner = userService.findById(room.getUserId());
                 roomResponseModel.setRoomId(room.getRoomId());
                 roomResponseModel.setName(room.getName());
                 roomResponseModel.setPrice(room.getPrice());
@@ -260,6 +267,7 @@ public class RoomController {
                 roomResponseModel.setDate(room.getDate());
                 roomResponseModel.setStatusId(room.getStatusId());
                 roomResponseModel.setDescription(room.getDescription());
+                roomResponseModel.setPhoneNumber(roomOwner.getPhone());
 
                 roomResponseModel.setUtilities(roomHasUtilityService.findAllByRoomId(room.getRoomId()));
                 roomResponseModel.setImageUrls(imageService.findAllByRoomId(room.getRoomId())
@@ -309,7 +317,7 @@ public class RoomController {
             }).collect(Collectors.toList());
 
             //Case 1: Existed in two list
-            roomHasUsersMapToMemberRequestModel.stream().filter(memberRequestModels::contains).forEach(memberRequestModel -> {
+            memberRequestModels.stream().filter(roomHasUsersMapToMemberRequestModel::contains).forEach(memberRequestModel -> {
                 TbUser user = userService.findById(memberRequestModel.getUserId());
                 user.setRoleId(memberRequestModel.getRoleId());
                 userService.saveUser(user);
@@ -327,7 +335,6 @@ public class RoomController {
                                 , roomMemberModel.getRoomId());
                         Date date = new Date(System.currentTimeMillis());
                         roomHasUser.setDateOut(date);
-
                         roomHasUserService.saveRoomMember(roomHasUser);
                     });
             //Case 3: Exist in request list  but not in db list
@@ -340,6 +347,7 @@ public class RoomController {
                         userService.saveUser(user);
                         //Set Date in
                         TbRoomHasUser roomHasUser = new TbRoomHasUser();
+                        roomHasUser.setId(0);
                         Date date = new Date(System.currentTimeMillis());
                         roomHasUser.setDateIn(date);
                         roomHasUser.setUserId(memberRequestModel.getUserId());

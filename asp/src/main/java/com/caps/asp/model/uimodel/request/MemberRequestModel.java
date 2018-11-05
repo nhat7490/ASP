@@ -36,12 +36,11 @@ public class MemberRequestModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MemberRequestModel that = (MemberRequestModel) o;
-        return userId == that.userId &&
-                roleId == that.roleId;
+        return userId == that.userId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, roleId);
+        return Objects.hash(userId);
     }
 }
