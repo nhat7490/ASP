@@ -151,6 +151,7 @@ public class RoomController {
 
     }
 
+    @Transactional
     @DeleteMapping("room/deleteRoom/{roomId}")
     public ResponseEntity deleteRoom(@PathVariable int roomId) {
         roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomId);
@@ -163,6 +164,10 @@ public class RoomController {
         });
         imageService.deleteAllImageByRoomId(roomId);
         roomHasUserService.removeAllByRoomId(roomId);
+
+        TbPost post = postService.findByRoomId(roomId);
+        favouriteService.removeAllByPostId(post.getPostId());
+        postService.removeByRoomId(roomId);
 
         roomService.deleteRoom(roomId);
         return ResponseEntity.status(OK).build();
