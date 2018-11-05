@@ -1,6 +1,5 @@
 package com.caps.asp.controller;
 
-import com.caps.asp.exception.UserException;
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.UserLoginModel;
 import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
@@ -55,7 +54,8 @@ public class UserController {
     public ResponseEntity<TbUser> findByUsername(@PathVariable String username) {
         TbUser user = userService.findByUsername(username);
         if (user != null) {
-            MemberResponseModel memberResponseModel = new MemberResponseModel(user.getUserId(),MEMBER,user.getUsername());
+            MemberResponseModel memberResponseModel = new MemberResponseModel(user.getUserId()
+                    ,MEMBER,user.getUsername(), user.getPhone());
             if(roomHasUserService.findTbRoomHasUserByUserIdAnAndDateOutIsNull(user.getUserId())==null){
                 return ResponseEntity.status(OK)
                         .body(user);

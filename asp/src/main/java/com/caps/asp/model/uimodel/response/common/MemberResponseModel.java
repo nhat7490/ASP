@@ -4,14 +4,24 @@ public class MemberResponseModel {
     private int userId;
     private int roleId;
     private String username;
+    private String phoneNumber;
 
     public MemberResponseModel() {
     }
 
-    public MemberResponseModel(int userId, int roleId, String username) {
+    public MemberResponseModel(int userId, int roleId, String username, String phoneNumber) {
         this.userId = userId;
         this.roleId = roleId;
         this.username = username;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public int getUserId() {

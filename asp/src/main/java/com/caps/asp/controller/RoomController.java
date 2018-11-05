@@ -205,7 +205,8 @@ public class RoomController {
                         .stream()
                         .map(tbRoomHasUser -> {
                     TbUser user = userService.findById(tbRoomHasUser.getUserId());
-                    return new MemberResponseModel(tbRoomHasUser.getUserId(), user.getRoleId(), user.getUsername());
+                    return new MemberResponseModel(user.getUserId()
+                            , user.getRoleId(), user.getUsername(), user.getPhone());
                 }).collect(Collectors.toList()));
                 return roomResponseModel;
             }).collect(Collectors.toList());
@@ -247,7 +248,8 @@ public class RoomController {
                     .stream()
                     .map(tbRoomHasUser -> {
                         TbUser user = userService.findById(tbRoomHasUser.getUserId());
-                        return new MemberResponseModel(user.getUserId(), user.getRoleId(), user.getUsername());
+                        return new MemberResponseModel(user.getUserId(), user.getRoleId()
+                                , user.getUsername(), user.getPhone());
                     }).collect(Collectors.toList()));
             return ResponseEntity.status(OK).body(roomResponseModel);
         }
@@ -288,7 +290,8 @@ public class RoomController {
                         .stream()
                         .map(roomHasUser -> {
                             TbUser user = userService.findById(tbRoomHasUser.getUserId());
-                            return new MemberResponseModel(user.getUserId(), user.getRoleId(), user.getUsername());
+                            return new MemberResponseModel(user.getUserId(), user.getRoleId()
+                                    , user.getUsername(), user.getPhone());
                         }).collect(Collectors.toList()));
                 return roomResponseModel;
             });
