@@ -60,4 +60,8 @@ public class RoomHasUserService {
         Pageable pageable = PageRequest.of(actualPage, items);
         return roomHasUserRepository.findAllByUserIdAndDateOutIsNotNullOrderByDateOutDesc(userId, pageable);
     }
+
+    public void removeAllById(int roomId){
+        roomHasUserRepository.readAllByRoomId(roomId);
+    }
 }

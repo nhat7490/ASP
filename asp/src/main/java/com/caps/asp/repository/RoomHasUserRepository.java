@@ -26,4 +26,6 @@ public interface RoomHasUserRepository extends JpaRepository<TbRoomHasUser, Inte
     void readAllByRoomId(int roomId);
 
     Page<TbRoomHasUser> findAllByUserIdAndDateOutIsNotNullOrderByDateOutDesc(int userId, Pageable pageable);
+
+    void removeAllByRoomId(int roomId);
 }

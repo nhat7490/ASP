@@ -23,8 +23,6 @@ public class RoomService {
         return roomRepository.saveAndFlush(room).getRoomId();
     }
 
-
-
     public TbRoom findRoomById(int roomId) {
         return roomRepository.findByRoomId(roomId);
     }
