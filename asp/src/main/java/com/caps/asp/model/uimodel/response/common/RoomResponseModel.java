@@ -16,18 +16,20 @@ public class RoomResponseModel {
     private int userId;
     private int cityId;
     private int districtId;
-    private Date date;
+    private Date dateCreated;
     private int statusId;
     private List<TbRoomHasUtility> utilities;
     private List<String> imageUrls;
     private List<MemberResponseModel> members;
     private String description;
     private String  phoneNumber;
+    private Double latitude;
+    private Double longitude;
 
     public RoomResponseModel() {
     }
 
-    public RoomResponseModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, Integer currentMember, int userId, int cityId, int districtId, Date date, int statusId, List<TbRoomHasUtility> utilities, List<String> imageUrls, List<MemberResponseModel> members, String description, String phoneNumber) {
+    public RoomResponseModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, Integer currentMember, int userId, int cityId, int districtId, Date dateCreated, int statusId, List<TbRoomHasUtility> utilities, List<String> imageUrls, List<MemberResponseModel> members, String description, String phoneNumber, Double latitude, Double longitude) {
         this.roomId = roomId;
         this.name = name;
         this.price = price;
@@ -38,13 +40,15 @@ public class RoomResponseModel {
         this.userId = userId;
         this.cityId = cityId;
         this.districtId = districtId;
-        this.date = date;
+        this.dateCreated = dateCreated;
         this.statusId = statusId;
         this.utilities = utilities;
         this.imageUrls = imageUrls;
         this.members = members;
         this.description = description;
         this.phoneNumber = phoneNumber;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public int getRoomId() {
@@ -127,12 +131,12 @@ public class RoomResponseModel {
         this.districtId = districtId;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public int getStatusId() {
@@ -181,5 +185,21 @@ public class RoomResponseModel {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

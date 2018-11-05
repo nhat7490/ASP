@@ -114,10 +114,10 @@ public class RoomController {
             room.setArea(roomRequestModel.getArea());
             room.setAddress(roomRequestModel.getAddress());
             room.setMaxGuest(roomRequestModel.getMaxGuest());
-            room.setDate(new Date(System.currentTimeMillis()));//Edit with current time not in request
-            room.setCurrentNumber(roomRequestModel.getCurrentNumber());
+//            room.setDate(new Date(System.currentTimeMillis()));//Edit with current time not in request
+            room.setCurrentNumber(roomRequestModel.getCurrentMember());
             room.setDescription(roomRequestModel.getDescription());
-            room.setStatusId(roomRequestModel.getStatus());
+            room.setStatusId(roomRequestModel.getStatusId());
             room.setUserId(roomRequestModel.getUserId());
             room.setCityId(roomRequestModel.getCityId());
             room.setDistrictId(roomRequestModel.getDistrictId());
@@ -130,6 +130,8 @@ public class RoomController {
         roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomRequestModel.getRoomId());
         for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
             TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
+            roomHasUtility.setId(0);
+            roomHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
             roomHasUtility.setRoomId(roomRequestModel.getRoomId());
             roomHasUtility.setBrand(utilityRequestModel.getBrand());
             roomHasUtility.setDescription(utilityRequestModel.getDescription());
@@ -155,20 +157,20 @@ public class RoomController {
     @DeleteMapping("room/deleteRoom/{roomId}")
     public ResponseEntity deleteRoom(@PathVariable int roomId) {
         roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomId);
-        List<String> url = imageService.findAllByRoomId(roomId)
-                .stream()
-                .map(image -> image.getLinkUrl())
-                .collect(Collectors.toList());
-        url.forEach(s -> {
-            amazonService.deleteFileFromS3Bucket(s);
-        });
+//        List<String> url = imageService.findAllByRoomId(roomId)
+//                .stream()
+//                .map(image -> image.getLinkUrl())
+//                .collect(Collectors.toList());
+//        url.forEach(s -> {
+//            amazonService.deleteFileFromS3Bucket(s);
+//        });
         imageService.deleteAllImageByRoomId(roomId);
         roomHasUserService.removeAllByRoomId(roomId);
 
         TbPost post = postService.findByRoomId(roomId);
         favouriteService.removeAllByPostId(post.getPostId());
+        postHasDistrictService.removeAllByPostId(post.getPostId());
         postService.removeByRoomId(roomId);
-
         roomService.deleteRoom(roomId);
         return ResponseEntity.status(OK).build();
     }
@@ -198,9 +200,11 @@ public class RoomController {
                 roomResponseModel.setUserId(tbRoom.getUserId());
                 roomResponseModel.setCityId(tbRoom.getCityId());
                 roomResponseModel.setDistrictId(tbRoom.getDistrictId());
-                roomResponseModel.setDate(tbRoom.getDate());
+                roomResponseModel.setDateCreated(tbRoom.getDate());
                 roomResponseModel.setStatusId(tbRoom.getStatusId());
                 roomResponseModel.setDescription(tbRoom.getDescription());
+                roomResponseModel.setLongitude(tbRoom.getLongtitude());
+                roomResponseModel.setLatitude(tbRoom.getLattitude());
                 roomResponseModel.setUtilities(roomHasUtilityService.findAllByRoomId(tbRoom.getRoomId()));
                 roomResponseModel.setImageUrls(imageService.findAllByRoomId(tbRoom.getRoomId())
                         .stream()
@@ -239,7 +243,7 @@ public class RoomController {
             roomResponseModel.setUserId(room.getUserId());
             roomResponseModel.setCityId(room.getCityId());
             roomResponseModel.setDistrictId(room.getDistrictId());
-            roomResponseModel.setDate(room.getDate());
+            roomResponseModel.setDateCreated(room.getDate());
             roomResponseModel.setStatusId(room.getStatusId());
             roomResponseModel.setDescription(room.getDescription());
             roomResponseModel.setPhoneNumber(roomOwner.getPhone());
@@ -281,7 +285,7 @@ public class RoomController {
                 roomResponseModel.setUserId(room.getUserId());
                 roomResponseModel.setCityId(room.getCityId());
                 roomResponseModel.setDistrictId(room.getDistrictId());
-                roomResponseModel.setDate(room.getDate());
+                roomResponseModel.setDateCreated(room.getDate());
                 roomResponseModel.setStatusId(room.getStatusId());
                 roomResponseModel.setDescription(room.getDescription());
                 roomResponseModel.setPhoneNumber(roomOwner.getPhone());

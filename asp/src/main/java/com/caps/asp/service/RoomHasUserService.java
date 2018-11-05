@@ -48,7 +48,7 @@ public class RoomHasUserService {
     }
 
     public void removeAllByRoomId(int roomId) {
-        roomHasUserRepository.readAllByRoomId(roomId);
+        roomHasUserRepository.removeAllByRoomId(roomId);
     }
 
     public TbRoomHasUser getCurrentRoom(int userId) {
@@ -61,7 +61,4 @@ public class RoomHasUserService {
         return roomHasUserRepository.findAllByUserIdAndDateOutIsNotNullOrderByDateOutDesc(userId, pageable);
     }
 
-    public void removeAllById(int roomId){
-        roomHasUserRepository.readAllByRoomId(roomId);
-    }
 }

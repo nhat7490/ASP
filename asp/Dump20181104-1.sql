@@ -164,7 +164,7 @@ CREATE TABLE `tb_post` (
   `phone_contact` varchar(15) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `number_partner` int(11) DEFAULT NULL,
   `gender_partner` int(11) DEFAULT NULL,
-  `date_post` date DEFAULT NULL,
+  `date_post` dateCreated DEFAULT NULL,
   `type_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `room_id` int(11) DEFAULT NULL,
@@ -323,7 +323,7 @@ CREATE TABLE `tb_room` (
   `user_id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL,
   `district_id` int(11) NOT NULL,
-  `date` date DEFAULT NULL,
+  `dateCreated` dateCreated DEFAULT NULL,
   `status_id` int(11) NOT NULL,
   `longtitude` double DEFAULT NULL,
   `lattitude` double DEFAULT NULL,
@@ -360,9 +360,11 @@ CREATE TABLE `tb_room_has_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL,
-  `date_in` date NOT NULL,
-  `date_out` date DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `date_in` dateCreated NOT NULL,
+  `date_out` dateCreated DEFAULT NULL,
+  PRIMARY KEY (`id`),
+CONSTRAINT `fk_tb_room_has_user_tb_room` FOREIGN KEY (`room_id`) REFERENCES `tb_room` (`room_id`),
+    CONSTRAINT `kk_tb_room_has_user_tb_user` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -499,7 +501,7 @@ CREATE TABLE `tb_user` (
   `email` varchar(100) COLLATE utf8_icelandic_ci NOT NULL,
   `fullname` varchar(100) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `image_profile` varchar(255) COLLATE utf8_icelandic_ci DEFAULT NULL,
-  `dob` date DEFAULT NULL,
+  `dob` dateCreated DEFAULT NULL,
   `phone` varchar(15) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `gender` int(11) DEFAULT NULL,
   `role_id` int(11) NOT NULL,

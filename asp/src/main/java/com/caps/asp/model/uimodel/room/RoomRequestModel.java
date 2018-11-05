@@ -16,9 +16,9 @@ public class RoomRequestModel {
     private Integer maxGuest;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dateCreated;
-    private Integer currentNumber;
+    private Integer currentMember;
     private String description;
-    private int status;
+    private int statusId;
     private int userId;
     private int cityId;
     private int districtId;
@@ -26,14 +26,8 @@ public class RoomRequestModel {
     private Double latitude;
     private List<UtilityRequestModel> utilities;
     private List<String> imageUrls;
-    List<Integer> userIds;
 
-    public List<Integer> getUserIds() {
-        return userIds;
-    }
-
-    public void setUserIds(List<Integer> userIds) {
-        this.userIds = userIds;
+    public RoomRequestModel() {
     }
 
     public int getRoomId() {
@@ -92,12 +86,12 @@ public class RoomRequestModel {
         this.dateCreated = dateCreated;
     }
 
-    public Integer getCurrentNumber() {
-        return currentNumber;
+    public Integer getCurrentMember() {
+        return currentMember;
     }
 
-    public void setCurrentNumber(Integer currentNumber) {
-        this.currentNumber = currentNumber;
+    public void setCurrentMember(Integer currentMember) {
+        this.currentMember = currentMember;
     }
 
     public String getDescription() {
@@ -108,12 +102,12 @@ public class RoomRequestModel {
         this.description = description;
     }
 
-    public int getStatus() {
-        return status;
+    public int getStatusId() {
+        return statusId;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
     }
 
     public int getUserId() {
