@@ -43,6 +43,10 @@ public class RoomHasUserService {
         return roomHasUserRepository.findAllByRoomIdAndDateOutIsNull(roomId);
     }
 
+    public TbRoomHasUser findTbRoomHasUserByUserIdAnAndDateOutIsNull(int userId) {
+        return roomHasUserRepository.findTbRoomHasUserByUserIdAndDateOutIsNull(userId);
+    }
+
     public void removeAllByRoomId(int roomId) {
         roomHasUserRepository.readAllByRoomId(roomId);
     }

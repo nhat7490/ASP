@@ -3,7 +3,9 @@ package com.caps.asp.controller;
 import com.caps.asp.exception.UserException;
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.UserLoginModel;
+import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
 import com.caps.asp.service.PostService;
+import com.caps.asp.service.RoomHasUserService;
 import com.caps.asp.service.RoomService;
 import com.caps.asp.service.UserService;
 //import com.caps.asp.util.ResetPassword;
@@ -25,12 +27,14 @@ public class UserController {
     public final PostService postService;
     public final RoomService roomService;
     public final BCryptPasswordEncoder passwordEncoder;
+    public final RoomHasUserService roomHasUserService;
 
-    public UserController(UserService userService, PostService postService, RoomService roomService, BCryptPasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PostService postService, RoomService roomService,RoomHasUserService roomHasUserService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.postService = postService;
         this.roomService = roomService;
         this.passwordEncoder = passwordEncoder;
+        this.roomHasUserService = roomHasUserService;
     }
 
     @PostMapping(value = "/user/login", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -49,8 +53,21 @@ public class UserController {
 
     @GetMapping("/user/findByUsername/{username}")
     public ResponseEntity<TbUser> findByUsername(@PathVariable String username) {
-        return ResponseEntity.status(OK)
-                .body(userService.findByUsername(username));
+        TbUser user = userService.findByUsername(username);
+        if (user != null) {
+            MemberResponseModel memberResponseModel = new MemberResponseModel(user.getUserId(),MEMBER,user.getUsername());
+            if(roomHasUserService.findTbRoomHasUserByUserIdAnAndDateOutIsNull(user.getUserId())==null){
+                return ResponseEntity.status(OK)
+                        .body(user);
+            }else{
+                return ResponseEntity.status(CONFLICT)
+                        .body(user);
+            }
+
+        }else{
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
+
     }
 
     @GetMapping("/user/listUser")
