@@ -89,7 +89,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
 //        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = backImage
 //
         /*** If needed Assign Title Here ***/
-        navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(onClickBackButton))
+        navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(onClickBtnBack))
         navigationItem.leftBarButtonItem?.tintColor = .defaultBlue
         
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -154,7 +154,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             //Data for baseInformationView
             baseInformationView.lblMainTitle.text = room.name
             baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
-            baseInformationView.lblInfoTop.text = room.address
+            baseInformationView.tvInfoTop.text = room.address
             baseInformationView.lblInfoBottom.text = String(format: "AREA".localized,room.area!)
             
             //Data for genderview
@@ -183,7 +183,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             })
             baseInformationView.imgvBottom.image = UIImage(named: "city")
             baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
-            baseInformationView.lblInfoTop.text = dictrictsString?.joined(separator: ",")
+            baseInformationView.tvInfoTop.text = dictrictsString?.joined(separator: ",")
             baseInformationView.lblInfoBottom.text = DBManager.shared.getRecord(id: roommate.cityId, ofType: CityModel.self)!.name
             
             //Data for utilityView
@@ -233,15 +233,15 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     func utilitiesViewDelegate(utilitiesView view: UtilitiesView, didSelectUtilityAt indexPath: IndexPath) {
         if viewType == .roomPostDetailForFinder{
             let utility = room.utilities[indexPath.row]
-            utility.name = DBManager.shared.getRecord(id: utility.utilityId, ofType: UtilityModel.self)?.name
-            let customTitle = NSAttributedString(string: utility.name!, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
+            utility.name = DBManager.shared.getRecord(id: utility.utilityId, ofType: UtilityModel.self)!.name
+            let customTitle = NSAttributedString(string: utility.name, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
             let customMessage = NSMutableAttributedString(string: "Brand: \(utility.brand)\n", attributes: [NSAttributedStringKey.font:UIFont.small])
             customMessage.append(NSAttributedString(string: "Quantity: \(utility.quantity)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
             customMessage.append(NSAttributedString(string: "Description: \(utility.utilityDescription)", attributes: [NSAttributedStringKey.font:UIFont.small]))
             AlertController.showAlertInfoWithAttributeString(withTitle: customTitle, forMessage: customMessage, inViewController: self)
         }
     }
-    @objc func onClickBackButton(){
+    @objc func onClickBtnBack(){
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
 }

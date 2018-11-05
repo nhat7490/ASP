@@ -8,12 +8,12 @@
 
 import UIKit
 import MBProgressHUD
-class AccountVC:BaseVC,VerticalPostViewDelegate{
+class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
     
     
     lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
-        sv.bounces = false
+        sv.alwaysBounceVertical = true
         sv.showsVerticalScrollIndicator = false
         sv.showsHorizontalScrollIndicator = false
         return sv
@@ -109,31 +109,42 @@ class AccountVC:BaseVC,VerticalPostViewDelegate{
         
     }
     func setupDelegateAndDataSource(){
+        scrollView.delegate = self
         horizontalImagesView.images = [DBManager.shared.getUser()!.imageProfile!]
         verticalRoomView.delegate = self
         btnSetting.addTarget(self, action: #selector(onClickBtnSetting), for: .touchUpInside)
     }
     func loadRemoteData(){
-        requestRoom(view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, offset: 15))
+        let hub = MBProgressHUD.showAdded(to: self.verticalRoomView.collectionView, animated: true)
+        hub.mode = .indeterminate
+        hub.bezelView.backgroundColor = .white
+        hub.contentColor = .defaultBlue
+        requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, offset: 15))
     }
-    func  requestRoom(view:UICollectionView,apiRouter:APIRouter){
+    func  requestRoom(hub:MBProgressHUD,view:UICollectionView,apiRouter:APIRouter){
         //        roomFilter.searchRequestModel = nil
-        DispatchQueue.main.async {
-            let hub = MBProgressHUD.showAdded(to: self.verticalRoomView.collectionView, animated: true)
-            hub.mode = .indeterminate
-            hub.bezelView.backgroundColor = .white
-            hub.contentColor = .defaultBlue
-        }
+        
         DispatchQueue.global(qos: .background).async {
-            self.requestArray(apiRouter:apiRouter, returnType:RoomResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            self.requestArray(apiRouter:apiRouter,
+                              errorNetworkConnectedHander: {
+                                DispatchQueue.main.async {
+                                    MBProgressHUD.hide(for: self.view, animated: true)
+                                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+                                    self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_CONNECTED_ERROR_MESSAGE".localized, onCompleted: { () -> (Void) in
+                                        hub.show(animated: true)
+                                        self.requestRoom(hub:hub,view:view, apiRouter: apiRouter)
+                                    })
+                                }
+                                
+            }, returnType:RoomResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
-                    MBProgressHUD.hide(for: view, animated: true)
+                    hub.hide(animated: true)
                 }
                 //404, cant parse
                 if error != nil{
                     DispatchQueue.main.async {
                         self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
-                            self.requestRoom(view: view, apiRouter: apiRouter)
+                            self.requestRoom(hub:hub,view:view, apiRouter: apiRouter)
                         })
                     }
                 }else{
@@ -143,15 +154,21 @@ class AccountVC:BaseVC,VerticalPostViewDelegate{
                             return
                         }
                         if values.count == 0{
+                            DispatchQueue.main.async {
                             self.showNoDataView(inView:self.verticalRoomView.collectionView, withTitle: "NO_OWNER_ROOM".localized)
+                            }
                         }else{
                             self.rooms = values
-                            self.verticalRoomViewHeightConstraint?.constant = Constants.HEIGHT_CELL_ROOMFOROWNERCV*CGFloat(values.count) + 80.0
-                            self.bottomContainerViewHeightConstraint?.constant = self.verticalRoomViewHeightConstraint!.constant
-                            self.contentViewHeightConstraint?.constant = self.bottomContainerViewHeightConstraint!.constant + self.topContainerViewHeight!
-                            self.verticalRoomView.showbtnViewAllButton()
-                            self.view.layoutIfNeeded()
-                            self.verticalRoomView.roomsOwner = values
+                            DispatchQueue.main.async {
+                                self.hideNoDataView(inView: self.verticalRoomView.collectionView)
+                                self.verticalRoomViewHeightConstraint?.constant = Constants.HEIGHT_CELL_ROOMFOROWNERCV*CGFloat(values.count) + 80.0
+                                self.bottomContainerViewHeightConstraint?.constant = self.verticalRoomViewHeightConstraint!.constant
+                                self.contentViewHeightConstraint?.constant = self.bottomContainerViewHeightConstraint!.constant + self.topContainerViewHeight!
+                                self.verticalRoomView.showbtnViewAllButton()
+                                self.view.layoutIfNeeded()
+                                self.verticalRoomView.roomsOwner = values
+                            }
+                            
                         }
                         
                         DispatchQueue.main.async {
@@ -160,6 +177,23 @@ class AccountVC:BaseVC,VerticalPostViewDelegate{
                     }
                 }
             })
+        }
+    }
+    //MARK: UIScrollviewDelegate
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let offset = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        print("OFFSET:\(scrollView.contentOffset.y)")
+        print("ContentframeHeight:\(scrollView.frame.height)")
+        print("ContentContentHeight:\(scrollView.contentSize.height)")
+        print("Refresh Data:\(offset < -Constants.MAX_Y_OFFSET)")
+        print("Load more data:\((offset - contentHeight + scrollView.frame.height) > Constants.MAX_Y_OFFSET)")
+        if offset < -Constants.MAX_Y_OFFSET {
+            let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
+            hub.mode = .indeterminate
+            hub.bezelView.backgroundColor = .white
+            hub.contentColor = .defaultBlue
+            requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, offset: 15))
         }
     }
     //MARK: VerticalPostViewDelegate

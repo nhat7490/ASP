@@ -15,12 +15,21 @@ class DropdownListView: UIView {
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var btnSelect: UIButton!
     weak var delegate:DropdownListViewDelegate?
-    
+    var text:String?{
+        didSet{
+            lblSelectTitle.text = text
+        }
+    }
     var dropdownListViewType:DropdownListViewType?{
         didSet{
-            if dropdownListViewType == DropdownListViewType.city{
+            if dropdownListViewType == .city{
                 lblTitle.text = "CITY".localized
+            }else if dropdownListViewType == .district{
+                lblTitle.text = "DISTRICT".localized
+            }else if dropdownListViewType == .roomMaster{
+                lblTitle.text = "EDIT_MEMBER_ROOM_MASTER".localized
             }
+            lblSelectTitle.text = "SELECT".localized
         }
     }
     var  lblSelectTitle:UILabel = {
@@ -43,7 +52,7 @@ class DropdownListView: UIView {
         btnSelect.layer.borderWidth = 0.5
         btnSelect.layer.borderColor = UIColor.lightGray.cgColor
         
-        lblTitle.text = "DISTRICT".localized
+        
         lblTitle.font = .smallTitle
         let imageView = UIImageView(image: UIImage(named: "down-arrow"))
         imageView.tintColor = .defaultBlue

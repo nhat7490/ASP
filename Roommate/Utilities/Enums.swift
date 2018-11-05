@@ -43,10 +43,10 @@ enum SystemAppType {
     case phone, message, email
 }
 enum ViewType{
-    case detailForOwner,detailForMember,cEForOwner,roomPostDetailForFinder,roommatePostDetailForFinder
+    case detailForOwner,detailForMember,createForOwner,roomPostDetailForFinder,roommatePostDetailForFinder,editForOwner
 }
 enum DropdownListViewType{
-    case city,district
+    case city,district,roomMaster
 }
 
 enum UtilityCVCellType{
@@ -131,10 +131,10 @@ enum HTTPStatusCode: Int {
     case NetworkAuthenticationRequired
 }
 enum APIResponseAlertType{
-    case invalidPassword,invalidUsername,internalServerError
+    case invalidPassword,invalidUsername,internalServerError,invalidMember,nonExistedUsername,addMemberSuccess,existedRoomMember,requiredRoomMaster,invalidMaxGuest
 }
 enum AlertType{
-    case normal,city,district
+    case normal,city,district,roomMaster
 }
 
 enum VerticalPostViewType{

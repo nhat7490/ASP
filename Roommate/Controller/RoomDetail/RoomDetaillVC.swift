@@ -8,10 +8,15 @@
 
 import Foundation
 import UIKit
-class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
+class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDelegate{
     
-    
-    var room:RoomResponseModel! = nil//RoomModel(name: "Tên phòng hiện tại là Thanh xuân -  Dalab Dalab Dalab", price: 500000, area: 50, address: "1B Nguyễn thị Minh Khai", maxGuest: 5, date_create: Date(), current_member: 3, description: "Mình rất yêu căn phòng này nhưng do đi làm xa quá mình cho thuê lại giá 1.7tr, toilet riêng, rửa chén riêng, như hình, có giếng trời mát lắm điện 2.500, xe free ko thêm gì, à quên nước tháng hình như 40k thì phải mình ko Care luôn, bà chủ dễ thương dịu dàng, nhà cực sạch , an ninh, 11h tối đóng cửa, đi khua hơn thì báo tiếng là đc Alo cho mình nha - oanh", status: StatusModel(status: 1, name: "Active"), city: CityModel(id: 1, name: "Hồ chí minh"), district: DistrictModel(districtId: 1, name: "Quận 1",city_id:1), image: [ImageModel(id: 1, link_url: "https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?cs=srgb&dl=4k-wallpaper-background-beautiful-853199.jpg&fm=jpg"), ImageModel(id: 2, link_url: "https://images.pexels.com/photos/534049/pexels-photo-534049.jpeg?cs=srgb&dl=beach-calm-cliffs-534049.jpg&fm=jpg"), ImageModel(id: 2, link_url: "https://images.pexels.com/photos/534049/pexels-photo-534049.jpeg?cs=srgb&dl=beach-calm-cliffs-534049.jpg&fm=jpg")], utilities: [UtilityModel(utility_id: 1, name: "24-hours", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "parking", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "toilet", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 2, name: "aircondition", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 3, name: "cctv", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 4, name: "cooking", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 5, name: "fan", quantity: 15, brand: "Hello", description: "nothing")] ,users:[User(id: 1, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 1),User(id: 2, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom: 2),User(id: 3, name: "Ho nguyen hai trieu", imageUrl: "", roleInRom:2)], requiredGender: 1)
+    var room:RoomResponseModel!{
+        didSet{
+            if room.members == nil{
+                room.members = []
+            }
+        }
+    }
     
     let scrollView:UIScrollView = {
         let sv = UIScrollView()
@@ -62,14 +67,17 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
         return ov
     }()
     
-    var viewType:ViewType = .detailForMember
+    var viewType:ViewType = .detailForOwner
     
     
-    
+    //MARK: RoomDetailVC
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setData()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setDelegateAndDataSource()
     }
     
     override func viewDidLayoutSubviews() {
@@ -84,7 +92,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
         //Navigation bar
         view.backgroundColor = .white
         let backImage = UIImage(named: "back")
-        navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(onClickBackButton))
+        navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(onClickBtnBack))
         navigationItem.leftBarButtonItem?.tintColor = .defaultBlue
         
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -146,7 +154,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
         _ = optionView.anchor(nil, view.leftAnchor, view.bottomAnchor, view.rightAnchor,.zero,CGSize(width: 0, height: Constants.HEIGHT_VIEW_OPTION))
     }
     
-    func setData() {
+    func setDelegateAndDataSource() {
         //Delegate , Datasource and other
         let status = NSAttributedString(string: "ROOM_DETAIL_STATUS_CERTIFICATED".localized, attributes: [NSAttributedStringKey.font : UIFont.boldMedium,
                                                                                                           NSAttributedStringKey.backgroundColor: UIColor.defaultBlue,
@@ -156,7 +164,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
         baseInformationView.lblMainTitle.text = room.name
         baseInformationView.lblStatus.attributedText = status
         baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
-        baseInformationView.lblInfoTop.text = room.address
+        baseInformationView.tvInfoTop.text = room.address
         baseInformationView.lblInfoBottom.text = String(format: "AREA".localized,room.area)
         
 //        //Data for genderview
@@ -167,10 +175,11 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
         //Data for memberview
         membersView.viewType = viewType
         membersView.members = room.members
+        membersView.delegate = self
         membersView.lblTitle.text = "ROOM_DETAIL_MEMBER_TITLE".localized
-        membersView.lblNumberOfMaxMember.text = String(format: "ROOM_DETAIL_MAX_NUMBER_OF_MEMBER".localized,room.maxGuest)
-        membersView.lblNumberOfCurrentMember.text = String(format: "ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER".localized,room.currentMember)
-        membersView.lblNumberOfMemberAdded.text = String(format: "ROOM_DETAIL_ADDED_NUMBER_OF_MEMBER".localized,room.members?.count ?? 0)
+        membersView.lblLeft.text = String(format: "ROOM_DETAIL_MAX_NUMBER_OF_MEMBER".localized,room.maxGuest)
+        membersView.lblCenter.text = String(format: "ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER".localized,room.currentMember)
+        membersView.lblRight.text = String(format: "ROOM_DETAIL_ADDED_NUMBER_OF_MEMBER".localized,room.members?.count ?? 0)
         
         
         //Data for utilityView
@@ -187,6 +196,15 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
         optionView.delegate = self
         optionView.tvPrice.attributedText = NSAttributedString(string: String(format: "PRICE_OF_ROOM".localized, room.price.formatString,"MONTH".localized), attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
 //        optionView.lblBottom.attributedText = NSAttributedString(string: String(format: "TIME".localized, room.price,"MONTH".localized), attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
+    }
+    //MARK: MembersViewDelegate
+    func membersViewDelegate(membersView view: MembersView, onClickBtnEdit button:UIButton) {
+        let vc = EditMemberVC()
+        vc.room = room
+        self.navigationController?.pushViewController(vc, animated: true)
+//        let mainVC = UIViewController()
+//        let nv = UINavigationController(rootViewController: mainVC)
+//        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
     }
     
     
@@ -209,20 +227,24 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate{
     func optionViewDelegate(view optionView: OptionView, onClickBtnRight btnRight: UIButton) {
         switch viewType {
         case .detailForOwner:
-            print("Need to set to show edit screen here")
+            AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_TITLE_DELETE_ROOM".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_DELETE_ROOM_OK".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
+                
+                Utilities.openSystemApp(type: .phone, forController: self, withContent: "0918170105", completionHander: nil)
+            })
         case .detailForMember:
             AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_SMS_ALERT".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_CALL".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
                 
                 Utilities.openSystemApp(type: .phone, forController: self, withContent: "0918170105", completionHander: nil)
             })
-        case .cEForOwner:
+        case .createForOwner:
             break
         default:
             break
         }
+        
     }
     //MARK: Back button on navigation bar
-    @objc func onClickBackButton(){
+    @objc func onClickBtnBack(){
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
     

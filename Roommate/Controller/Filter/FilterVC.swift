@@ -34,6 +34,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     }()
     lazy var districtDropdownListView:DropdownListView = {
         let dv:DropdownListView = .fromNib()
+        dv.dropdownListViewType = .district
         return dv
     }()
     
@@ -176,12 +177,8 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         selectedGender = .none
         if let setting = DBManager.shared.getSetting(), let city = DBManager.shared.getRecord(id: setting.cityId, ofType: CityModel.self){
             selectedCity = city
-            cityDropdownListView.lblSelectTitle.text = selectedCity?.name
-        }else{
-            cityDropdownListView.lblSelectTitle.text = "LIST_CITY_TITLE".localized
+            cityDropdownListView.text = selectedCity?.name
         }
-        
-        districtDropdownListView.lblSelectTitle.text = "LIST_DISTRICT_TITLE".localized
         
         if let searchRequestModel = filterArgumentModel.searchRequestModel{
             if let cityId = filterArgumentModel.cityId{
@@ -191,9 +188,9 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
                         DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)!
                     })
                     let dictristString = selectedDistricts?.compactMap{$0.name}
-                    districtDropdownListView.lblSelectTitle.text = dictristString?.joined(separator: ",")
+                    districtDropdownListView.text = dictristString?.joined(separator: ",")
                 }
-                cityDropdownListView.lblSelectTitle.text = selectedCity?.name
+                cityDropdownListView.text = selectedCity?.name
             }
             
             if let utilities = searchRequestModel.utilities{
@@ -264,6 +261,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
             
         }
     }
+    
     //MARK: Handler genderViewDelegate
     func genderViewDelegate(genderView view: GenderView, onChangeGenderSelect genderSelect: GenderSelect?) {
         filterArgumentModel.searchRequestModel?.gender = genderView.genderSelect?.rawValue
@@ -278,7 +276,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
         guard let indexs = indexs else {
             selectedDistricts =  []
-            self.districtDropdownListView.lblSelectTitle.text  = "LIST_DISTRICT_TITLE".localized
+            self.districtDropdownListView.dropdownListViewType = .district
             return
         }
         if type == AlertType.city{
@@ -287,8 +285,8 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
             }
             selectedCity = city
             selectedDistricts =  []
-            self.cityDropdownListView.lblSelectTitle.text = self.selectedCity?.name
-            self.districtDropdownListView.lblSelectTitle.text  = "LIST_DISTRICT_TITLE".localized
+            self.cityDropdownListView.text = self.selectedCity?.name
+            self.districtDropdownListView.dropdownListViewType = .district
         }else if type == AlertType.district{
             guard let districtOfCity = districts?.filter({ (district) -> Bool in
                 district.cityId == self.selectedCity?.cityId
@@ -307,7 +305,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
             let dictrictsString = selectedDistricts?.map({ (district) -> String     in
                 district.name!
             })
-            self.districtDropdownListView.lblSelectTitle.text  = dictrictsString?.joined(separator: ",")
+            self.districtDropdownListView.text  = dictrictsString?.joined(separator: ",")
         }
     }
     //MARK: Handler for save button

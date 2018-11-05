@@ -7,33 +7,50 @@
 //
 
 import UIKit
-
-class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTVCellDelegate {
+protocol MembersViewDelegate:class{
+    func membersViewDelegate(membersView view:MembersView,onDeleteRecordAtIndexPath indexPath:IndexPath?)
+    func membersViewDelegate(membersView view:MembersView,onClickBtnEdit button:UIButton)
+}
+extension MembersViewDelegate{
+    func membersViewDelegate(membersView view:MembersView,onDeleteRecordAtIndexPath indexPath:IndexPath?){}
+    func membersViewDelegate(membersView view:MembersView,onClickBtnEdit button:UIButton){}
+}
+class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
     
 
-    @IBOutlet weak var lblNumberOfMaxMember: UILabel!
-    @IBOutlet weak var lblNumberOfCurrentMember: UILabel!
-    @IBOutlet weak var lblNumberOfMemberAdded: UILabel!
+    @IBOutlet weak var lblLeft: UILabel!
+    @IBOutlet weak var lblCenter: UILabel!
+    @IBOutlet weak var lblRight: UILabel!
     
     @IBOutlet weak var lblTitle: UILabel!
-    @IBOutlet weak var btnAddNewMember: UIButton!
+    @IBOutlet weak var btnRight: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var lblUserGuide: UILabel!
+    @IBOutlet weak var vInformationHeightConstraint: NSLayoutConstraint!
     var members:[MemberResponseModel]?{
         didSet{
-            tableView.delegate = self
-            tableView.dataSource = self
-            
+            tableView.reloadData()
         }
     }
+    weak var delegate:MembersViewDelegate?
     
     var viewType:ViewType?{
         didSet{
-            if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
-                tableView.allowsSelection = false
-                btnAddNewMember.isHidden = true
+            if viewType == .detailForOwner {
+                tableView.allowsMultipleSelectionDuringEditing = false
+//                tableView.allowsSelection = false
+//                tableView.isEditing = false
+                btnRight.isHidden = false
+            }else if viewType == .editForOwner{
+                tableView.allowsMultipleSelectionDuringEditing = true
+                lblUserGuide.text = "USER_GUIDE_SLIDE_TO_DELETE".localized
+                btnRight.isHidden = true
             }else{
-                btnAddNewMember.isHidden = false
+                tableView.allowsMultipleSelectionDuringEditing = false
+//                tableView.allowsSelection = false
+//                tableView.isEditing = false
+                btnRight.isHidden = true
             }
         }
     }
@@ -45,17 +62,27 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTV
     override func awakeFromNib() {
         super.awakeFromNib()
         lblTitle.font = .smallTitle
-        lblNumberOfMaxMember.font = .small
-        lblNumberOfCurrentMember.font = .small
-        lblNumberOfMemberAdded.font = .small
+        lblTitle.text = "ROOM_DETAIL_MEMBER_TITLE".localized
+        lblLeft.font = .small
+        lblCenter.font = .small
+        lblRight.font = .small
+        lblUserGuide.font = .verySmall
         
-        btnAddNewMember.layer.borderColor = UIColor.defaultBlue.cgColor
-        btnAddNewMember.layer.cornerRadius = btnAddNewMember.frame.width/2
-        btnAddNewMember.layer.borderWidth = 1.0
-        btnAddNewMember.setBackgroundImage(UIImage(named: "add"), for: .normal)
-        btnAddNewMember.setTitleColor(UIColor.defaultBlue, for: .normal)
+        lblUserGuide.textColor = .red
+        
+        btnRight.layer.borderColor = UIColor.defaultBlue.cgColor
+        btnRight.layer.cornerRadius = 10.0
+        btnRight.backgroundColor = .defaultBlue
+//        btnRight.layer.borderWidth = 1.0
+        btnRight.setTitle("EDIT".localized, for: .normal)
+        btnRight.tintColor = .white
+        
         tableView.register(UINib(nibName: Constants.CELL_MEMBERTVL, bundle: Bundle.main), forCellReuseIdentifier: Constants.CELL_MEMBERTVL)
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .singleLine
         layoutIfNeeded()
     }
     
@@ -65,43 +92,46 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource , MemberTV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_MEMBERTVL, for: indexPath) as! MemberTVCell
-        cell.viewType = viewType
         cell.indexPath = indexPath
         let member = members![indexPath.row]
         if member.roleId == Constants.ROOMMASTER{
             //Master
-            let name = NSMutableAttributedString(string:member.username, attributes: [:])
+            let name = NSMutableAttributedString(string:"\(member.username!) ", attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
             name.append(NSAttributedString(string: "ROOM_MASTER".localized, attributes: [NSAttributedStringKey.font : UIFont.small,NSAttributedStringKey.backgroundColor: UIColor.defaultBlue,NSAttributedStringKey.foregroundColor:UIColor.white]))
             cell.lblMemberName.attributedText = name
         }else{
-            cell.lblMemberName.text = member.username
+            cell.lblMemberName.attributedText  =  NSMutableAttributedString(string:"\(member.username!) ", attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
         }
         if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
-            cell.delegate = self
             cell.selectionStyle = .default
         }else{
             cell.selectionStyle = .none
         }
         return cell
     }
+    func setUserGuide(text:String){
+        lblUserGuide.text = text
+    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Constants.HEIGHT_CELL_MEMBERTVL
     }
     
-    func memberTVCellDelegate(cell memberTVCell: MemberTVCell, onClickBtnEditMember btnRemoveMember: UIButton, atIndexPath indexPath: IndexPath?) {
-        guard let row = indexPath?.row, let user = members?[row] else {
-            return
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            delegate?.membersViewDelegate(membersView: self, onDeleteRecordAtIndexPath: indexPath)
         }
-        print("Select user \(user) at row \(row) to edit")
+    }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if viewType == .editForOwner{
+            return .delete
+        }else{
+            return .none
+        }
     }
     
-    func memberTVCellDelegate(cell memberTVCell: MemberTVCell, onClickBtnRemoveMember btnRemoveMember: UIButton, atIndexPath indexPath: IndexPath?) {
-        guard let row = indexPath?.row, let user = members?[row] else {
-            return
-        }
-        print("Select user \(user) at row \(row) to remove")
+    @IBAction func onClickBtnEdit(_ sender: Any) {
+        delegate?.membersViewDelegate(membersView: self, onClickBtnEdit: sender as! UIButton)
     }
-    
     
     
 }

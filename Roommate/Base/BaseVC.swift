@@ -44,6 +44,13 @@ class BaseVC:UIViewController{
         view.bringSubview(toFront: noDataView)
         view.layoutSubviews()
     }
+    func hideNoDataView(inView view:UIView){
+        view.subviews.forEach { (view) in
+            if view is NoDataView, let view = view as? NoDataView{
+                view.removeFromSuperview()
+            }
+        }
+    }
     func showErrorView(inView view:UIView,withTitle title:String?,onCompleted completed:@escaping ()->(Void)){
         let errorView:ErrorView = .fromNib()
         if let title = title {

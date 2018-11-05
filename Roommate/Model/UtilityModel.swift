@@ -13,7 +13,7 @@ import Realm
 import ObjectMapper_Realm
 class UtilityModel:BaseModel {
     @objc dynamic var utilityId = 0
-    @objc dynamic var name:String?
+    @objc dynamic var name = ""
     @objc dynamic var quantity = 1
     @objc dynamic var brand = ""
     @objc dynamic var utilityDescription = ""
@@ -33,7 +33,7 @@ class UtilityModel:BaseModel {
         super.init()
     }
     override func copy(with zone: NSZone?) -> Any {
-        let utilityModel = UtilityModel(utilityId: utilityId, name: name!, quantity: quantity, brand: brand, utilityDescription: utilityDescription)
+        let utilityModel = UtilityModel(utilityId: utilityId, name: name, quantity: quantity, brand: brand, utilityDescription: utilityDescription)
         return utilityModel
     }
     

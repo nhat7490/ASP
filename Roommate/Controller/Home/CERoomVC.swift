@@ -275,7 +275,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             descriptionsView.text = newRoomModel.roomDescription ?? ""
         }else{
             utilitiesView.utilities = Array(utilities!)
-            descriptionsView.viewType = ViewType.cEForOwner
+            descriptionsView.viewType = ViewType.createForOwner
         }
         uploadImageView.images = uploadImageModels
         
@@ -415,8 +415,8 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                 cityName = city.name!
                 newRoomModel.districtId = 0
                 addressInputView.isSelectedFromSuggest = false
-                self.cityDropdownListView.lblSelectTitle.text = self.cityName
-                self.districtDropdownListView.lblSelectTitle.text  = "LIST_DISTRICT_TITLE".localized
+                self.cityDropdownListView.text = self.cityName
+                self.districtDropdownListView.dropdownListViewType = .district
             }else if type == AlertType.district{
                 guard let districtOfCity = districts?.filter({ (district) -> Bool in
                     district.cityId == self.newRoomModel.cityId
@@ -435,11 +435,8 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                 addressInputView.isSelectedFromSuggest = false
                 newRoomModel.districtId = district.districtId
                 self.districtName = district.name!
-                self.cityDropdownListView.lblSelectTitle.text = self.cityName
-                self.districtDropdownListView.lblSelectTitle.text = self.districtName
-            }else{
-                //                districtDropdownListView.lblSelectTitle.text = district.name
-                
+                self.cityDropdownListView.text = self.cityName
+                self.districtDropdownListView.text = self.districtName
             }
         }
     }
@@ -516,64 +513,6 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         }
     }
     
-    //MARK: Handler for save button
-    @objc  func onClickBtnSubmit(btnSubmit:UIButton){
-        newRoomModel.userId = DBManager.shared.getUser()!.userId
-        if checkValidInformation(){
-            let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
-            hub.mode = .indeterminate
-            hub.bezelView.backgroundColor = .white
-            hub.contentColor = .defaultBlue
-            hub.label.text = "MB_LOAD_UPLOAD_IMAGE".localized
-            DispatchQueue.global(qos: .userInteractive).async {
-                
-                self.uploadImageModels.filter{$0.linkUrl==nil}.forEach({ (model) in
-                    self.group.enter()
-                    self.uploadImage(model)
-                    self.group.wait()
-                })
-                DispatchQueue.main.async {
-                     hub.label.text = "MB_LOAD_CREATE_ROOM".localized
-                }
-                if (self.uploadImageModels.filter{$0.linkUrl==nil}).count == 0{
-                    Alamofire.request(APIRouter.createRoom(model: self.newRoomModel)).response { (response) in
-                        DispatchQueue.main.async {
-                            MBProgressHUD.hide(for: self.view, animated: true)
-                            self.navigationController?.dismiss(animated: true, completion: {
-                                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_CREATE_SUCCESS".localized, inViewController: self)
-                            })
-                        }
-                    }
-                }else{
-                    DispatchQueue.main.async {
-                        MBProgressHUD.hide(for: self.view, animated: true)
-                    }
-                    
-                    AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_UPLOAD_ERROR".localized, inViewController: self)
-                }
-            }
-        }
-//        images.forEach { (str) in
-//            newRoomModel.imageUrls.append(str)
-//        }
-//        print(newRoomModel.toJSONString())
-//        if isValid(){
-//            Alamofire.request(APIRouter.createRoom(model: newRoomModel)).response { (response) in
-//                MBProgressHUD.hide(for: self.view, animated: true)
-////                print(response.response?.statusCode)
-//            }
-//        }else{
-//            MBProgressHUD.hide(for: self.view, animated: true)
-//            AlertController.showAlertInfor(withTitle: "ALERT_TITLE".localized, forMessage: "INVALID_INFOR".localized, inViewController: self)
-//        }
-        
-        
-        
-    }
-    
-    @objc  func onClickBtnBack(btnBack:UIButton){
-        self.navigationController?.dismiss(animated: true, completion: nil)
-    }
     
     //MARK: UploadImageViewDelegate
     func uploadImageViewDelegate(uploadImageView view: UploadImageView, onClickBtnSelectImage button: UIButton) {
@@ -699,6 +638,51 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             self.scrollView.setContentOffset(bottomOffset, animated: true)
         }
     }
+    //MARK: Handler for save button
+    @objc  func onClickBtnSubmit(btnSubmit:UIButton){
+        newRoomModel.userId = DBManager.shared.getUser()!.userId
+        if checkValidInformation(){
+            let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
+            hub.mode = .indeterminate
+            hub.bezelView.backgroundColor = .white
+            hub.contentColor = .defaultBlue
+            hub.label.text = "MB_LOAD_UPLOAD_IMAGE".localized
+            DispatchQueue.global(qos: .userInteractive).async {
+                
+                self.uploadImageModels.filter{$0.linkUrl==nil}.forEach({ (model) in
+                    self.group.enter()
+                    self.uploadImage(model)
+                    self.group.wait()
+                })
+                DispatchQueue.main.async {
+                    hub.label.text = "MB_LOAD_CREATE_ROOM".localized
+                }
+                if (self.uploadImageModels.filter{$0.linkUrl==nil}).count == 0{
+                    Alamofire.request(APIRouter.createRoom(model: self.newRoomModel)).response { (response) in
+                        DispatchQueue.main.async {
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                            self.navigationController?.dismiss(animated: true, completion: {
+                                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_CREATE_SUCCESS".localized, inViewController: self)
+                            })
+                        }
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        MBProgressHUD.hide(for: self.view, animated: true)
+                    }
+                    
+                    AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_UPLOAD_ERROR".localized, inViewController: self)
+                }
+            }
+        }
+        
+        
+    }
+    
+    @objc  func onClickBtnBack(btnBack:UIButton){
+        self.navigationController?.dismiss(animated: true, completion: nil)
+    }
+    
     //MARK: Custom method
     func search(text:String) {
         APIConnection.requestObject(apiRouter: APIRouter.search(input:text), errorNetworkConnectedHander: nil, returnType: GPAutocompletePrediction.self) { (predictions, error, statusCode) -> (Void) in

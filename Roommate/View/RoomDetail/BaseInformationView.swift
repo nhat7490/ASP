@@ -15,7 +15,7 @@ class BaseInformationView: UIView {
     @IBOutlet weak var lblStatus: UILabel!
     @IBOutlet weak var lblSubTitle: UILabel!
     @IBOutlet weak var imgvtop: UIImageView!
-    @IBOutlet weak var lblInfoTop: UILabel!
+    @IBOutlet weak var tvInfoTop: UITextView!
     @IBOutlet weak var imgvBottom: UIImageView!
     @IBOutlet weak var lblInfoBottom: UILabel!
     @IBOutlet weak var lblStatusHeightConstraint: NSLayoutConstraint!
@@ -36,10 +36,16 @@ class BaseInformationView: UIView {
         lblMainTitle.textColor = .red
         lblStatus.font = .smallTitle
         lblMainTitle.lineBreakMode = .byWordWrapping
+        
         lblMainTitle.numberOfLines = 2
         lblSubTitle.font = .smallTitle
-        lblInfoTop.font = .small
+        tvInfoTop.font = .small
         lblInfoBottom.font = .small
+        
+        tvInfoTop.isEditable = false
+        tvInfoTop.isUserInteractionEnabled = false
+        tvInfoTop.textContainer.lineBreakMode = .byWordWrapping
+        
         imgvtop.image = UIImage(named: "address")
         imgvBottom.image = UIImage(named: "area")
     }

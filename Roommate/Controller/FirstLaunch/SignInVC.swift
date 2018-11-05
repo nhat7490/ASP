@@ -121,8 +121,10 @@ class SignInVC: BaseVC,UITextFieldDelegate {
     //MARK:Other methods
     func requestUser(){
         APIConnection.requestObject(apiRouter: APIRouter.login(username: username, password: password), errorNetworkConnectedHander: {
-            MBProgressHUD.hide(for: self.view, animated: true)
-            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+            DispatchQueue.main.async {
+                MBProgressHUD.hide(for: self.view, animated: true)
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+            }
         }, returnType: UserModel.self) { (user, error, statusCode) -> (Void) in
             DispatchQueue.main.async {
                 MBProgressHUD.hide(for: self.view, animated: true)

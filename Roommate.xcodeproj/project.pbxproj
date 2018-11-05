@@ -23,6 +23,8 @@
 		690A61E42176850500BA9564 /* UserResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A61E32176850500BA9564 /* UserResponseModel.swift */; };
 		690B2065215BA0DE00DAD053 /* RoomDetailForMasterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */; };
 		690B2067215BA14500DAD053 /* PostDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690B2066215BA14500DAD053 /* PostDetailVC.swift */; };
+		690BA6DE218F8FE3003C38F2 /* RoomMemberRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690BA6DD218F8FE3003C38F2 /* RoomMemberRequestModel.swift */; };
+		690BA6E0218F902A003C38F2 /* MemberRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690BA6DF218F902A003C38F2 /* MemberRequestModel.swift */; };
 		691727B0215509D100104A19 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 691727B2215509D100104A19 /* Localizable.strings */; };
 		691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B62155122D00104A19 /* NotificationCVCell.swift */; };
 		691727BA2155129700104A19 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B92155129700104A19 /* NotificationModel.swift */; };
@@ -48,6 +50,9 @@
 		692E8FAC21638F1B00AF5927 /* HorizontalImagesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 692E8FAB21638F1B00AF5927 /* HorizontalImagesView.xib */; };
 		692E8FAE21638F3400AF5927 /* HorizontalImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692E8FAD21638F3400AF5927 /* HorizontalImagesView.swift */; };
 		692EE6722181F70B004E5D10 /* BasePostResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692EE6712181F70B004E5D10 /* BasePostResponseModel.swift */; };
+		69355ED2218CC09D003339E2 /* EditMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69355ED1218CC09D003339E2 /* EditMemberVC.swift */; };
+		69355ED4218CC6E0003339E2 /* AddMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69355ED3218CC6E0003339E2 /* AddMemberView.swift */; };
+		69355ED6218CC6EF003339E2 /* AddMemberView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69355ED5218CC6EF003339E2 /* AddMemberView.xib */; };
 		6943D9622153E769002CFEBB /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9612153E769002CFEBB /* BaseVC.swift */; };
 		6943D9642153EBDF002CFEBB /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6943D9632153EBDF002CFEBB /* Home.storyboard */; };
 		6943D9662153EBF7002CFEBB /* All.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6943D9652153EBF7002CFEBB /* All.storyboard */; };
@@ -195,6 +200,8 @@
 		690A61E32176850500BA9564 /* UserResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponseModel.swift; sourceTree = "<group>"; };
 		690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailForMasterVC.swift; sourceTree = "<group>"; };
 		690B2066215BA14500DAD053 /* PostDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailVC.swift; sourceTree = "<group>"; };
+		690BA6DD218F8FE3003C38F2 /* RoomMemberRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberRequestModel.swift; sourceTree = "<group>"; };
+		690BA6DF218F902A003C38F2 /* MemberRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberRequestModel.swift; sourceTree = "<group>"; };
 		691727AC2155099700104A19 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		691727AD2155099C00104A19 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		691727B1215509D100104A19 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -223,6 +230,9 @@
 		692E8FAB21638F1B00AF5927 /* HorizontalImagesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HorizontalImagesView.xib; sourceTree = "<group>"; };
 		692E8FAD21638F3400AF5927 /* HorizontalImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalImagesView.swift; sourceTree = "<group>"; };
 		692EE6712181F70B004E5D10 /* BasePostResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePostResponseModel.swift; sourceTree = "<group>"; };
+		69355ED1218CC09D003339E2 /* EditMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemberVC.swift; sourceTree = "<group>"; };
+		69355ED3218CC6E0003339E2 /* AddMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberView.swift; sourceTree = "<group>"; };
+		69355ED5218CC6EF003339E2 /* AddMemberView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddMemberView.xib; sourceTree = "<group>"; };
 		6943D9612153E769002CFEBB /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		6943D9632153EBDF002CFEBB /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		6943D9652153EBF7002CFEBB /* All.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = All.storyboard; sourceTree = "<group>"; };
@@ -384,6 +394,7 @@
 				6925AA932164B03100232311 /* RoomDetaillVC.swift */,
 				690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */,
 				690B2066215BA14500DAD053 /* PostDetailVC.swift */,
+				69355ED1218CC09D003339E2 /* EditMemberVC.swift */,
 			);
 			path = RoomDetail;
 			sourceTree = "<group>";
@@ -491,6 +502,8 @@
 				690660552180883D00E446F9 /* SearchRequestModel.swift */,
 				690660572180886900E446F9 /* FilterArgumentModel.swift */,
 				695B1A2E2189ADF600C004DB /* BaseSuggestRequestModel.swift */,
+				690BA6DD218F8FE3003C38F2 /* RoomMemberRequestModel.swift */,
+				690BA6DF218F902A003C38F2 /* MemberRequestModel.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -578,6 +591,8 @@
 				697A752E2163188800B7618B /* MembersView.xib */,
 				692E8F9D21634EF700AF5927 /* MemberTVCell.swift */,
 				692E8F9E21634EF700AF5927 /* MemberTVCell.xib */,
+				69355ED3218CC6E0003339E2 /* AddMemberView.swift */,
+				69355ED5218CC6EF003339E2 /* AddMemberView.xib */,
 			);
 			path = RoomDetail;
 			sourceTree = "<group>";
@@ -934,6 +949,7 @@
 				698B0A542178D750005221F9 /* ErrorView.xib in Resources */,
 				6943D9682153F03A002CFEBB /* Bookmark.storyboard in Resources */,
 				69A02FBF21538C950087897F /* LaunchScreen.storyboard in Resources */,
+				69355ED6218CC6EF003339E2 /* AddMemberView.xib in Resources */,
 				6977C7FA21627A1E003C58F4 /* DescriptionView.xib in Resources */,
 				69CAE6BF21855A90003D3399 /* UploadImageView.xib in Resources */,
 				692E8FAC21638F1B00AF5927 /* HorizontalImagesView.xib in Resources */,
@@ -1131,9 +1147,11 @@
 				6943D9622153E769002CFEBB /* BaseVC.swift in Sources */,
 				69BA0D7F2167D398006AEEDC /* UtilityDetailView.swift in Sources */,
 				69A0300A2153923E0087897F /* Extension.swift in Sources */,
+				690BA6E0218F902A003C38F2 /* MemberRequestModel.swift in Sources */,
 				690B2065215BA0DE00DAD053 /* RoomDetailForMasterVC.swift in Sources */,
 				6943D96E2153F07C002CFEBB /* AccountVC.swift in Sources */,
 				69D00ED52160B6A400FF034E /* Generic.swift in Sources */,
+				690BA6DE218F8FE3003C38F2 /* RoomMemberRequestModel.swift in Sources */,
 				691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */,
 				69859C77217EC5F80022AB3B /* VerticalPostView.swift in Sources */,
 				6943D9A22153F572002CFEBB /* IntroduceVC.swift in Sources */,
@@ -1164,6 +1182,7 @@
 				6925AA942164B03200232311 /* RoomDetaillVC.swift in Sources */,
 				6943D9A82153F5F3002CFEBB /* ListRoommateVC.swift in Sources */,
 				692C24F721671E5E008C16A7 /* APIRouter.swift in Sources */,
+				69355ED2218CC09D003339E2 /* EditMemberVC.swift in Sources */,
 				6993A72A217CBBBC00E8112C /* NewRoommateCVCell.swift in Sources */,
 				69ECD510217DB8EC00976B33 /* BookmarkRequestModel.swift in Sources */,
 				69232A1F21614A7E00C782F9 /* BaseHorizontalCollectionView.swift in Sources */,
@@ -1183,6 +1202,7 @@
 				6977C7FC21627ED0003C58F4 /* OptionView.swift in Sources */,
 				69DA16AA2160DBAD00F9EDA0 /* UtilitiesView.swift in Sources */,
 				046853D82158C8F500C9CA6C /* TableViewController.swift in Sources */,
+				69355ED4218CC6E0003339E2 /* AddMemberView.swift in Sources */,
 				6923A8E021621DE300068B4B /* BaseInformationView.swift in Sources */,
 				69E496832158D81600444211 /* RoomCVCell.swift in Sources */,
 				69834F6321539AD800845AB8 /* Constants.swift in Sources */,

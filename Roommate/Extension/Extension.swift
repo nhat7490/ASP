@@ -564,12 +564,21 @@ extension Results {
         return compactMap { $0 as? T }
     }
 }
-//extension UITextView {
-//    override open var contentSize: CGSize {
-//        didSet {
-//            var topCorrection = (bounds.size.height - contentSize.height * zoomScale) / 2.0
-//            topCorrection = max(0, topCorrection)
-//            contentInset = UIEdgeInsets(top: topCorrection, left: 0, bottom: 0, right: 0)
-//        }
-//    }
-//}
+protocol Copying {
+    init(original: Self)
+}
+
+extension Copying {
+    func copy() -> Self {
+        return Self.init(original: self)
+    }
+}
+
+extension Array {
+    func copiedElements() -> Array<Element> {
+        return self.map{
+            let copiable = $0 as! NSCopying
+            return copiable.copy() as! Element
+        }
+    }
+}

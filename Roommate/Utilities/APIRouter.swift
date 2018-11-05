@@ -29,6 +29,8 @@ enum APIRouter:URLRequestConvertible{
     case suggestBestMatch(model:FilterArgumentModel)
     case suggest(model:BaseSuggestRequestModel)
     case getRoomsByUserId(userId:Int,page:Int,offset:Int)
+    case findUserByUsername(username:String)
+    case editMember(roomMemberRequestModel:RoomMemberRequestModel)
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -40,7 +42,7 @@ enum APIRouter:URLRequestConvertible{
     
     var httpMethod:HTTPMethod{
         switch self{
-        case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest:
+        case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember:
             return .post
         case .removeBookmark:
             return .delete
@@ -82,6 +84,10 @@ enum APIRouter:URLRequestConvertible{
             return "post/suggest"
         case .getRoomsByUserId(let userId,_,_):
             return "room/user/\(userId)"
+        case .findUserByUsername(let username):
+            return "user/findByUsername/\(username)"
+        case .editMember:
+            return "room/editMember"
         }
     }
     
@@ -119,7 +125,8 @@ enum APIRouter:URLRequestConvertible{
         case .getRoomsByUserId(_,let page,let offset):
             return ["page":page,
                     "offset":offset]
-            
+        case .editMember(let model):
+            return Mapper().toJSON(model)
         default:
             return [:]
         }

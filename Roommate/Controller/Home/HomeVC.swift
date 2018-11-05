@@ -70,6 +70,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     var filterForRoomPost = FilterArgumentModel()
     var filterForRoommatePost = FilterArgumentModel()
     var baseSuggestRequestModel = BaseSuggestRequestModel()
+    
     var actionsForMember:[[String]] = [
         ["Tìm phòng","find-room"],
         ["Tìm bạn","find-roommate"],
@@ -81,6 +82,10 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         ["Quản lý phòng","account"]
     ]
     lazy var user = DBManager.shared.getUser()
+    var suggestRoomViewHeightConstraint:NSLayoutConstraint?
+    var newRoomViewHeightConstraint:NSLayoutConstraint?
+    var newRoommateViewHeightConstraint:NSLayoutConstraint?
+    var contentViewHeightConstraint:NSLayoutConstraint?
     
     
     //MARK:ViewController
@@ -96,8 +101,11 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     func setupUI(){
         
         view.backgroundColor  = .white
-        let newRoomViewHeight:CGFloat = 80 + Constants.HEIGHT_CELL_NEWROOMCV * CGFloat(Constants.MAX_ROOM_ROW) + Constants.HEIGHT_MEDIUM_SPACE
-        let newRoommmateViewHeight:CGFloat = 80 + Constants.HEIGHT_CELL_NEWROOMMATECV * CGFloat(Constants.MAX_POST) + Constants.HEIGHT_MEDIUM_SPACE
+        let suggestRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
+        let newRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
+//            80 + Constants.HEIGHT_CELL_NEWROOMCV * CGFloat(Constants.MAX_ROOM_ROW) + Constants.HEIGHT_MEDIUM_SPACE
+        let newRoommmateViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
+//            80 + Constants.HEIGHT_CELL_NEWROOMMATECV * CGFloat(Constants.MAX_POST) + Constants.HEIGHT_MEDIUM_SPACE
         let totalContentViewHeight:CGFloat
         
         view.addSubview(scrollView)
@@ -107,7 +115,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         topContainerView.addSubview(locationSearchView)
         topContainerView.addSubview(topNavigation)
         if user?.roleId != 2{
-            totalContentViewHeight = newRoomViewHeight + newRoommmateViewHeight + Constants.HEIGHT_TOP_CONTAINER_VIEW + Constants.HEIGHT_HORIZONTAL_ROOM_VIEW
+            totalContentViewHeight = newRoomViewHeight + newRoommmateViewHeight + Constants.HEIGHT_TOP_CONTAINER_VIEW + suggestRoomViewHeight
             bottomContainerView.addSubview(suggestRoomView)
         }else{
             totalContentViewHeight = newRoomViewHeight + newRoommmateViewHeight + Constants.HEIGHT_TOP_CONTAINER_VIEW
@@ -123,7 +131,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         }
         _ = contentView.anchor(view: scrollView)
         _ = contentView.anchorWidth(equalTo: scrollView.widthAnchor)
-        _ = contentView.anchorHeight(equalToConstrant: totalContentViewHeight)
+        contentViewHeightConstraint = contentView.anchorHeight(equalToConstrant: totalContentViewHeight)
         
         _ = topContainerView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero, CGSize(width: 0, height: Constants.HEIGHT_TOP_CONTAINER_VIEW))
         _ = locationSearchView.anchor(topContainerView.topAnchor, topContainerView.leftAnchor, nil, topContainerView.rightAnchor, UIEdgeInsets(top: Constants.MARGIN_10, left: Constants.MARGIN_20, bottom: 0, right: -Constants.MARGIN_20), CGSize(width: 0, height: Constants.HEIGHT_LOCATION_SEARCH_VIEW))
@@ -140,14 +148,18 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         _ = bottomContainerView.anchor(topContainerView.bottomAnchor, contentView.leftAnchor, contentView.bottomAnchor, contentView.rightAnchor)
         
         if user?.roleId != 2{
-        _ = suggestRoomView.anchor(bottomContainerView.topAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height:
-            Constants.HEIGHT_HORIZONTAL_ROOM_VIEW))
-            _ = newRoomView.anchor(suggestRoomView.bottomAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: newRoomViewHeight))
+        suggestRoomViewHeightConstraint = suggestRoomView.anchor(bottomContainerView.topAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height:
+            Constants.HEIGHT_HORIZONTAL_ROOM_VIEW))[3]
+            newRoomViewHeightConstraint = newRoomView.anchor(suggestRoomView.bottomAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: newRoomViewHeight))[3]
         }else{
-            _ = newRoomView.anchor(bottomContainerView.topAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: newRoomViewHeight))
+            newRoomViewHeightConstraint = newRoomView.anchor(bottomContainerView.topAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: newRoomViewHeight))[3]
         }
-        _ = newRoommateView.anchor(newRoomView.bottomAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: newRoommmateViewHeight))
+        newRoommateViewHeightConstraint = newRoommateView.anchor(newRoomView.bottomAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: newRoommmateViewHeight))[3]
         
+        
+        //hide bottom button
+        newRoomView.hidebtnViewAllButton()
+        newRoommateView.hidebtnViewAllButton()
     }
     func setupDelegateAndDataSource(){
         //        horizontalRoomView.collectionView
@@ -299,12 +311,20 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                             self.suggestRooms.removeAll()
                             self.suggestRooms.append(contentsOf: values)
                             self.suggestRoomView.rooms = self.suggestRooms
+                            self.suggestRoomView.translatesAutoresizingMaskIntoConstraints = false
+                            self.suggestRoomViewHeightConstraint?.constant = Constants.HEIGHT_HORIZONTAL_ROOM_VIEW
+                            self.updateContentViewHeight()
                         }else if view == self.newRoomView.collectionView{
                             self.newRooms.removeAll()
                             self.newRooms.append(contentsOf: values)
                             self.newRoomView.rooms = self.newRooms
+                            self.newRoomView.translatesAutoresizingMaskIntoConstraints = false
+                            self.newRoomViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_NEWROOMCV * CGFloat(Constants.MAX_ROOM_ROW)
+                            self.newRoomView.showbtnViewAllButton()
+                            self.updateContentViewHeight()
                         }
                         DispatchQueue.main.async {
+                            self.view.layoutIfNeeded()
                             view.reloadData()
                         }
                     }
@@ -348,9 +368,14 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                             self.newRoommates.removeAll()
                             self.newRoommates.append(contentsOf: values)
                             self.newRoommateView.roommates = self.newRoommates
+                            self.newRoommateView.translatesAutoresizingMaskIntoConstraints = false
+                            self.newRoommateViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_NEWROOMMATECV * CGFloat(Constants.MAX_POST)
+                            self.newRoommateView.showbtnViewAllButton()
+                            self.updateContentViewHeight()
                         }else{
                         }
                         DispatchQueue.main.async {
+                            self.view.layoutIfNeeded()
                             view.reloadData()
                         }
                     }
@@ -599,5 +624,20 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             case .notDetermined:
                 break
         }
+    }
+    
+    //MARK: update constraint
+    func updateContentViewHeight(){
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+        print("contentViewHeightConstraint:\(contentViewHeightConstraint)")
+        print("newRoommateViewHeightConstraint:\(newRoommateViewHeightConstraint)")
+        print("contentViewHeightConstraint:\(contentViewHeightConstraint)")
+        print("contentViewHeightConstraint:\(contentViewHeightConstraint)")
+        if user?.roleId == Constants.ROOMOWNER{
+            self.contentViewHeightConstraint?.constant = self.newRoomViewHeightConstraint!.constant + self.newRoommateViewHeightConstraint!.constant + Constants.HEIGHT_TOP_CONTAINER_VIEW +  Constants.HEIGHT_MEDIUM_SPACE
+        }else{
+            self.contentViewHeightConstraint?.constant = self.suggestRoomViewHeightConstraint!.constant + self.newRoomViewHeightConstraint!.constant + self.newRoommateViewHeightConstraint!.constant + Constants.HEIGHT_TOP_CONTAINER_VIEW + Constants.HEIGHT_MEDIUM_SPACE
+        }
+        
     }
 }

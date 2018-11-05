@@ -99,7 +99,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     
     //MARK: Components for UICollectionView
-    lazy var collectionView:UICollectionView = {
+    lazy var collectionView:BaseVerticalCollectionView = {
         let cv = BaseVerticalCollectionView()
         cv.showsVerticalScrollIndicator = false
         cv.showsHorizontalScrollIndicator = false

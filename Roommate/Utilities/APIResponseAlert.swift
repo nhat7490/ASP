@@ -32,6 +32,20 @@ class APIResponseAlert {
              message = "ALERT_INVALID_PASSWORD_MESSAGE"
         case .internalServerError:
              message = "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"
+        case .invalidMember:
+            message = "ALERT_INVALID_MEMBER"
+        case .nonExistedUsername:
+            message = "ALERT_NON_EXIST_USERNAME"
+        case .existedRoomMember:
+            message = "ALERT_EXISTED_ROOM_MEMBER"
+        case .addMemberSuccess:
+            message = "ALERT_ADD_MEMBER_SUCCESS"
+        case .requiredRoomMaster:
+            message = "EDIT_ROOM_MASTER_REQUIRED"
+        case .invalidMaxGuest:
+            message = "EDIT_ROOM_INVALID_MAXGUEST"
+            
+            
         }
         AlertController.showAlertInfor(withTitle: "NETWORK_STATUS_TITLE".localized, forMessage: message?.localized, inViewController: controller)
     }

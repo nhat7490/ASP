@@ -14,6 +14,7 @@
 "HOME_VC" = "Trang chủ";
 "NOTIFICATION_VC" = "Thông báo";
 "ACCOUNT_VC" = "Tài khoản";
+"EDIT_MEMBER_VC" = "Chỉnh sửa thành viên";
 
 //MARK: AccountVC
 "TITLE_CREATED_ROOM" = "Phòng đã tạo";
@@ -81,6 +82,9 @@
 "ROOM_MASTER"="Quản lý";
 "CONFIRM_TITLE_BUTTON_CALL" = "Gọi";
 "CONFIRM_TITLE_BUTTON_MESSAGE" = "Gửi ngay";
+"CONFIRM_TITLE_DELETE_ROOM_OK" = "Xoá ngay";
+"CONFIRM_TITLE_DELETE_ROOM" = "Bạn muốn xoá phòng?";
+"CONFIRM_TITLE_EDIT_ROOM" = "Bạn muốn sửa phòng";
 "CONFIRM_MESSAGE_CALL_ALERT" = "Bạn muốn gọi điện cho chủ nhà";
 "CONFIRM_MESSAGE_SMS_ALERT" = "Bạn muốn nhắn tin cho chủ nhà";
 "CONFIRM_MESSAGE_POST_CALL_ALERT" = "Bạn muốn gọi điện cho người đăng tin";
@@ -106,6 +110,7 @@
 //MARK: Common
 "INFORMATION"="Thông báo";
 "NO_DATA"="Không có dữ liệu";
+"EDIT"="Sửa";
 
 "BASE_INFORMATION"="Thông tin cơ bản";
 "UTILITY_TITLE"="Tiện ích";
@@ -172,6 +177,20 @@
 "ROOM_UPLOAD_ERROR"="Tải ảnh lên lỗi, vui lòng thử lại";
 
 
+//MARK: EditMemberVC
+"USER_GUIDE_SLIDE_TO_DELETE"="Vuốt từ phải sang trái để xoá";
+"EDIT_MEMBER_TITLE"="Thêm thành viên vào phòng";
+"EDIT_MEMBER_USERNAME"="Tên người dùng";
+"EDIT_MEMBER_ERROR"="Người dùng không tồn tại";
+"EDIT_MEMBER_ADD"="Thêm";
+"EDIT_SELECT_ROOM_MASTER"="Chọn người quản lý";
+"EDIT_SUCCESS"="Cập nhập thành viên thành công";
+"EDIT_ROOM_MASTER_REQUIRED"="Bạn phải chọn người quản lý phòng";
+"EDIT_ROOM_INVALID_MAXGUEST"="Phòng đã đủ người";
+"EDIT_MEMBER_ROOM_MASTER"="Chọn người quản lý phòng";
+
+
+
 
 "ROOM_UPLOAD_OPEN_CAMERA_SETTING"="Roommate chưa có quyền truy cập \"Máy ảnh\". Bật quyền truy cập máy giúp bạn tải ảnh lên từ Máy ảnh";
 "ROOM_UPLOAD_OPEN_PHOTO_SETTING"="Roommate chưa có quyền truy cập \"Thư viện\". Bật quyền truy cập thư viện giúp bạn tải ảnh lên từ Thư viện";
@@ -200,11 +219,15 @@
 "NETWORK_STATUS_CONNECTED_ERROR_MESSAGE"="Không thể kết nối mạng, vui lòng kiểm tra lại";
 "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE"="Không thể kết nối mạng, chạm để thử lại";
 "NETWORK_STATUS_ERROR_MESSAGE"="Lỗi mạng, chạm để thử lại";
-"NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"="Không thể kết nối máy chủ, chạm để thử lại";
+"NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"="Không thể kết nối máy chủ, Vui lòng thử lại sau";
 "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Oops.Lỗi máy chủ, chạm để thử lại";
 //MARK: Alert
 "ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
+"ALERT_NON_EXIST_USERNAME"="Tên người dùng không tồn tại";
+"ALERT_ADD_MEMBER_SUCCESS"="Thêm thành viên thành công";
 "ALERT_INVALID_USERNAME_PASSWORD"="Mật khẩu không đúng";
+"ALERT_INVALID_MEMBER"="Thành viên này đang ở 1 phòng khác";
+"ALERT_EXISTED_ROOM_MEMBER"="Thành viên đã tồn tại trong phòng";
 
 
 //MARK: SignInVC

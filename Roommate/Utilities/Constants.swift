@@ -83,7 +83,7 @@ class Constants{
     static let HEIGHT_CELL_MEMBERTV:CGFloat = 50.0
     static let HEIGHT_VIEW_MEMBERS:CGFloat = 260.0
     static let HEIGHT_VIEW_DESCRIPTION:CGFloat = 180.0
-    static let HEIGHT_VIEW_BASE_INFORMATION:CGFloat = 180.0
+    static let HEIGHT_VIEW_BASE_INFORMATION:CGFloat = 200.0
     static let HEIGHT_CELL_IMAGECV:CGFloat = 200.0
     static let HEIGHT_VIEW_HORIZONTAL_IMAGES:CGFloat = 200.0
     static let HEIGHT_VIEW_OPTION:CGFloat = 70.0
@@ -104,13 +104,14 @@ class Constants{
     static let HEIGHT_HORIZONTAL_ROOM_VIEW:CGFloat = 280
     static let MAX_ROOM_ROW:Int = 3//Two room in a line
     static let MAX_POST:Int = 6
+    static let HEIGHT_DEFAULT_BEFORE_LOAD_DATA:CGFloat = 120
     
     
     //MARK: AlertViewVC
     static let POPUP_SELECT_TABLE_MAX_HEIGHT:Double = 400
     static let POPUP_SELECT_TABLE_DEFATUL_WIDTH:Double = 272.0
     
-    //CERoomVC
+    //MARK: Common height
     static let HEIGHT_UTILITY_INPUT_VIEW:CGFloat = 160.0
     static let HEIGHT_UTILITY_DETAIL_VIEW:CGFloat = 160.0
     static let HEIGHT_NEW_INPUT_VIEW:CGFloat = 70.0
@@ -128,8 +129,9 @@ class Constants{
     static let MAX_LENGHT_ADDRESS:Int = 250
     static let MAX_LENGHT_DESCRIPTION:Int = 250
     static let MAX_LENGHT_NORMAL_TEXT:Int = 50
+    static let HEIGHT_CELL_ADD_MEMBER_VIEW:CGFloat = 100.0
     
-    //Common
+    //MARK: Common
     static let MAX_Y_OFFSET:CGFloat = 50.0
     static let MAX_IMAGE:Int = 12
     static let MAX_OFFSET:Int = 12
@@ -138,6 +140,7 @@ class Constants{
     static let ROOMOWNER:Int = 2
     static let ROOMMASTER:Int = 3
     static let MEMBER:Int = 4
+    
 
     //MARK: NSNotification name
     static let NOTIFICATION_REMOVE_BOOKMARK_OUTSIDE_BOOKMARKTAB:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_BOOKMARK_OUTSIDE_BOOKMARKTAB")
