@@ -1,7 +1,6 @@
 package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
-import com.caps.asp.model.uimodel.request.FilterArgumentModel;
 import com.caps.asp.model.uimodel.request.MemberRequestModel;
 import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
 import com.caps.asp.model.uimodel.response.common.RoomResponseModel;
@@ -35,9 +34,11 @@ public class RoomController {
     public final PostService postService;
     public final FavouriteService favouriteService;
     public final PostHasDistrictService postHasDistrictService;
+    public final AmazonService amazonService;
 
 
-    public RoomController(RoomService roomService, RoomHasUtilityService roomHasUtilityService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService) {
+
+    public RoomController(RoomService roomService, RoomHasUtilityService roomHasUtilityService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, AmazonService amazonService) {
         this.roomService = roomService;
         this.roomHasUtilityService = roomHasUtilityService;
         this.imageService = imageService;
@@ -46,6 +47,7 @@ public class RoomController {
         this.postService = postService;
         this.favouriteService = favouriteService;
         this.postHasDistrictService = postHasDistrictService;
+        this.amazonService = amazonService;
     }
 
     @Transactional
@@ -152,7 +154,15 @@ public class RoomController {
     @DeleteMapping("room/deleteRoom/{roomId}")
     public ResponseEntity deleteRoom(@PathVariable int roomId) {
         roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomId);
+        List<String> url = imageService.findAllByRoomId(roomId)
+                .stream()
+                .map(image -> image.getLinkUrl())
+                .collect(Collectors.toList());
+        url.forEach(s -> {
+            amazonService.deleteFileFromS3Bucket(s);
+        });
         imageService.deleteAllImageByRoomId(roomId);
+        roomHasUserService.removeAllByRoomId(roomId);
 
         roomService.deleteRoom(roomId);
         return ResponseEntity.status(OK).build();
