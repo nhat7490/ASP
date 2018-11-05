@@ -21,7 +21,7 @@ class RoomForOwnerCVCell: UICollectionViewCell {
             guard let room = room else {
                 return
             }
-            imgvAvatar.sd_setImage(with: URL(string: (room.imageUrls?.first)!), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
+            imgvAvatar.sd_setImage(with: URL(string: room.imageUrls.first!), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
                 guard let image = image else{
                     return
                 }

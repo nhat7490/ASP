@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://10.82.135.205:8080/"
+    static let BASE_URL_API = "http://192.168.1.91:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
@@ -149,6 +149,8 @@ class Constants{
     static let NOTIFICATION_ADD_BOOKMARK_INSIDE_BOOKMARKTAB:NSNotification.Name = NSNotification.Name("NOTIFICATION_ADD_BOOKMARK_INSIDE_BOOKMARKTAB")
     static let NOTIFICATION_ADD_BOOKMARK:NSNotification.Name = NSNotification.Name("NOTIFICATION_ADD_BOOKMARK")
     static let NOTIFICATION_REMOVE_BOOKMARK:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_BOOKMARK")
+    static let NOTIFICATION_REMOVE_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_ROOM")
+    static let NOTIFICATION_EDIT_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_EDIT_ROOM")
     
     
 }

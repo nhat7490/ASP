@@ -6,8 +6,8 @@
 //  Copyright © 2018 TrinhHC. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import MBProgressHUD
 class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDelegate{
     
     var room:RoomResponseModel!{
@@ -189,7 +189,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         //Data for descriptionView
         descriptionsView.viewType = viewType
         descriptionsView.lblTitle.text = "DESCRIPTION".localized
-        descriptionsView.tvContent.text = room.description
+        descriptionsView.tvContent.text = room.roomDescription
         
         //Data for optionView
         optionView.viewType = viewType
@@ -213,11 +213,16 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         //Valid information at time input. So we dont need to valid here
         switch viewType { 
         case .detailForOwner:
-            print("Need to set to show edit screen here")
+            AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_TITLE_EDIT_ROOM".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_EDIT_ROOM_OK".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
+                let vc = CERoomVC()
+                vc.newRoomModel = self.room
+                vc.cERoomVCType = .edit
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
         case .detailForMember:
             AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_SMS_ALERT".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_MESSAGE".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
                 
-                Utilities.openSystemApp(type: .message, forController: self, withContent: "0918170105", completionHander: nil)
+                Utilities.openSystemApp(type: .message, forController: self, withContent: self.room.phoneNumber, completionHander: nil)
             })
         default:
             break
@@ -228,13 +233,12 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         switch viewType {
         case .detailForOwner:
             AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_TITLE_DELETE_ROOM".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_DELETE_ROOM_OK".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
-                
-                Utilities.openSystemApp(type: .phone, forController: self, withContent: "0918170105", completionHander: nil)
+                self.requestRemove()
             })
         case .detailForMember:
             AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_SMS_ALERT".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_CALL".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
                 
-                Utilities.openSystemApp(type: .phone, forController: self, withContent: "0918170105", completionHander: nil)
+                Utilities.openSystemApp(type: .phone, forController: self, withContent: self.room.phoneNumber, completionHander: nil)
             })
         case .createForOwner:
             break
@@ -246,6 +250,48 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     //MARK: Back button on navigation bar
     @objc func onClickBtnBack(){
         self.navigationController?.dismiss(animated: true, completion: nil)
+    }
+    //MARK: API Connection
+    func  requestRemove(){
+        //        roomFilter.searchRequestModel = nil
+        let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hub.mode = .indeterminate
+        hub.bezelView.backgroundColor = .white
+        hub.contentColor = .defaultBlue
+        DispatchQueue.global(qos: .background).async {
+            APIConnection.request(apiRouter: APIRouter.removeRoom(roomId: self.room.roomId),  errorNetworkConnectedHander: {
+                DispatchQueue.main.async {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+                }
+            }, completion: { (error, statusCode) -> (Void) in
+                DispatchQueue.main.async {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                }
+                if error != nil{
+                    DispatchQueue.main.async {
+                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+                    }
+                }else{
+                    if statusCode == .OK{
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_ROOM, object: self.room)
+                            AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "REMOVE_SUCCESS".localized, inViewController:self,rhsButtonHandler:{
+                                (action) in
+                                self.navigationController?.dismiss(animated: true, completion: nil)
+                            })
+                            
+                            
+                            
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+                        }
+                    }
+                }
+            })
+        }
     }
     
 }

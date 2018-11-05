@@ -10,7 +10,7 @@ import ObjectMapper
 import RealmSwift
 import ObjectMapper_Realm
 import Realm
-class RoomRequestModel:BaseModel{
+class Temp:BaseModel{
     @objc dynamic var roomId:Int = 0
     @objc dynamic var name:String?
     @objc dynamic var price:Double = 0.0
@@ -33,6 +33,8 @@ class RoomRequestModel:BaseModel{
     required convenience init?(map: Map) {
         self.init()
     }
+    
+    
     
     override func mapping(map: Map){
 //        super.mapping(map: map)

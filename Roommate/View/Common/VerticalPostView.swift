@@ -36,8 +36,22 @@ class VerticalPostView: UIView ,UICollectionViewDelegate,UICollectionViewDataSou
     }
 
     var rooms:[RoomPostResponseModel] = []
+    {
+        didSet{
+            collectionView.reloadData()
+        }
+    }
     var roommates:[RoommatePostResponseModel] = []
-    var roomsOwner:[RoomResponseModel] = []
+    {
+        didSet{
+            collectionView.reloadData()
+        }
+    }
+    var roomsOwner:[RoomResponseModel] = []{
+        didSet{
+            collectionView.reloadData()
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

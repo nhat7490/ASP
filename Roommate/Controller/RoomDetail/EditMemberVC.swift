@@ -169,7 +169,7 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
         if !username.isEmpty{
             let tempMember = MemberResponseModel(username: self.username)
             if originMember.contains(tempMember){
-                if copyRoom.members!.contains(tempMember){
+                if copyRoom!.members!.contains(tempMember){
                     APIResponseAlert.apiResponseError(controller: self, type: .existedRoomMember)
                 }else{
                     addMember(member: originMember[originMember.index(of: tempMember)!])
@@ -294,13 +294,10 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
                     if statusCode == .OK{
                         DispatchQueue.main.async {
                             self.room.members = self.copyRoom.members
-                            CATransaction.begin()
-                            self.navigationController?.popViewController(animated: true)
-                            CATransaction.setCompletionBlock({ [weak self] in
-                                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "EDIT_SUCCESS".localized, inViewController: self!)
-                                
+                            AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "EDIT_MEMBER_SUCCESS".localized, inViewController: self,rhsButtonHandler:{
+                                (action) in
+                                self.navigationController?.popViewController(animated: true)
                             })
-                            CATransaction.commit()
                             
                         }
                     }else{

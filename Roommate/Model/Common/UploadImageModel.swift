@@ -27,9 +27,11 @@ class UploadImageModel:Equatable,Hashable {
         self.image = image
         self.linkUrl = linkUrl
     }
-    public init(name: String?, image: UIImage?) {
-        self.name = name
-        self.image = image
+    public convenience init(name: String?, image: UIImage?) {
+        self.init(name: name, image: image, linkUrl: nil)
+    }
+    public convenience init(name: String?, linkUrl: String?) {
+        self.init(name: name, image: nil, linkUrl: linkUrl)
     }
     static func ==(lhs:UploadImageModel,rhs:UploadImageModel)->Bool{
         return lhs.name == rhs.name

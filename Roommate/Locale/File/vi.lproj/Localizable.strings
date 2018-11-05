@@ -85,7 +85,13 @@
 "CONFIRM_TITLE_DELETE_ROOM_OK" = "Xoá ngay";
 "CONFIRM_TITLE_DELETE_ROOM" = "Bạn muốn xoá phòng?";
 "CONFIRM_TITLE_EDIT_ROOM" = "Bạn muốn sửa phòng";
+"CONFIRM_TITLE_EDIT_ROOM_OK" = "Sửa ngay";
 "CONFIRM_MESSAGE_CALL_ALERT" = "Bạn muốn gọi điện cho chủ nhà";
+
+//MARK: EditRoomVC
+
+
+"REMOVE_SUCCESS"="Xoá phòng thành công";
 "CONFIRM_MESSAGE_SMS_ALERT" = "Bạn muốn nhắn tin cho chủ nhà";
 "CONFIRM_MESSAGE_POST_CALL_ALERT" = "Bạn muốn gọi điện cho người đăng tin";
 "CONFIRM_MESSAGE_POST_SMS_ALERT" = "Bạn muốn nhắn tin cho người đăng tin";
@@ -175,23 +181,6 @@
 "ROOM_UPLOAD_SELECT_IMAGE_CAMERA"="Máy ảnh";
 "ROOM_UPLOAD_SELECT_IMAGE_PHOTO"="Thư viện";
 "ROOM_UPLOAD_ERROR"="Tải ảnh lên lỗi, vui lòng thử lại";
-
-
-//MARK: EditMemberVC
-"USER_GUIDE_SLIDE_TO_DELETE"="Vuốt từ phải sang trái để xoá";
-"EDIT_MEMBER_TITLE"="Thêm thành viên vào phòng";
-"EDIT_MEMBER_USERNAME"="Tên người dùng";
-"EDIT_MEMBER_ERROR"="Người dùng không tồn tại";
-"EDIT_MEMBER_ADD"="Thêm";
-"EDIT_SELECT_ROOM_MASTER"="Chọn người quản lý";
-"EDIT_SUCCESS"="Cập nhập thành viên thành công";
-"EDIT_ROOM_MASTER_REQUIRED"="Bạn phải chọn người quản lý phòng";
-"EDIT_ROOM_INVALID_MAXGUEST"="Phòng đã đủ người";
-"EDIT_MEMBER_ROOM_MASTER"="Chọn người quản lý phòng";
-
-
-
-
 "ROOM_UPLOAD_OPEN_CAMERA_SETTING"="Roommate chưa có quyền truy cập \"Máy ảnh\". Bật quyền truy cập máy giúp bạn tải ảnh lên từ Máy ảnh";
 "ROOM_UPLOAD_OPEN_PHOTO_SETTING"="Roommate chưa có quyền truy cập \"Thư viện\". Bật quyền truy cập thư viện giúp bạn tải ảnh lên từ Thư viện";
 "ROOM_UPLOAD_SKIP"="Bỏ qua";
@@ -205,7 +194,20 @@
 "CAMERA"="Máy ảnh";
 "PHOTO"="Thư viện";
 "DEVICE_CAMERA_NOT_EXISTED"="Máy của bạn không hỗ trợ camera";
+"ROOM_CREATE_SUCCESS"="Tạo phòng thành công";
 
+//MARK: EditMemberVC
+"USER_GUIDE_SLIDE_TO_DELETE"="Vuốt từ phải sang trái để xoá";
+"EDIT_MEMBER_TITLE"="Thêm thành viên vào phòng";
+"EDIT_MEMBER_USERNAME"="Tên người dùng";
+"EDIT_MEMBER_ERROR"="Người dùng không tồn tại";
+"EDIT_MEMBER_ADD"="Thêm";
+"EDIT_SELECT_ROOM_MASTER"="Chọn người quản lý";
+"EDIT_MEMBER_SUCCESS"="Cập nhập thành viên thành công";
+"EDIT_ROOM_SUCCESS"="Cập nhập phòng thành công";
+"EDIT_ROOM_MASTER_REQUIRED"="Bạn phải chọn người quản lý phòng";
+"EDIT_ROOM_INVALID_MAXGUEST"="Phòng đã đủ người";
+"EDIT_MEMBER_ROOM_MASTER"="Chọn người quản lý phòng";
 
 
 
@@ -240,3 +242,4 @@
 "MB_LOAD_DATA_TITLE" = "Đang tải dữ liệu";
 "MB_LOAD_UPLOAD_IMAGE" = "Đang tải ảnh lên";
 "MB_LOAD_CREATE_ROOM" = "Đang tạo phòng";
+"MB_LOAD_EDIT_ROOM" = "Đang cập nhập thông tin phòng";

@@ -118,7 +118,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     var districts:Results<DistrictModel>?
     
     var cERoomVCType:CERoomVCType = .create
-    var newRoomModel:RoomRequestModel = RoomRequestModel()
+    var newRoomModel:RoomResponseModel = RoomResponseModel()
     var cityName:String = ""
     var districtName:String = ""
     var selectedCity:CityModel?
@@ -271,8 +271,20 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             areaInputView.text = newRoomModel.area.toString
             addressInputView.text = newRoomModel.address
             maxMemberSelectView.text = newRoomModel.maxGuest.toString
-            utilitiesView.utilities = Array(newRoomModel.utilities)
+            
+            cityName = DBManager.shared.getRecord(id: newRoomModel.cityId, ofType: CityModel.self)?.name ?? ""
+            cityDropdownListView.text = cityName
+            
+            districtName = DBManager.shared.getRecord(id: newRoomModel.districtId, ofType: DistrictModel.self)?.name ?? ""
+            districtDropdownListView.text = districtName
+            
+            addressInputView.isSelectedFromSuggest = true
+            utilitiesView.selectedUtilities = Array(newRoomModel.utilities).map{$0.utilityId}
+            utilitiesView.utilities = Array(utilities!)
             descriptionsView.text = newRoomModel.roomDescription ?? ""
+            descriptionsView.viewType = ViewType.editForOwner
+            uploadImageModels = newRoomModel.imageUrls.compactMap{UploadImageModel(name: URL(string: $0)?.lastPathComponent, linkUrl: $0)}
+            calculatorHeight()
         }else{
             utilitiesView.utilities = Array(utilities!)
             descriptionsView.viewType = ViewType.createForOwner
@@ -313,7 +325,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     
     //MARK: Delegate for subview
     func descriptionViewDelegate(descriptionView view: DescriptionView, textViewDidEndEditing textView: UITextView) {
-        newRoomModel.roomDescription = descriptionsView.text
+        newRoomModel.roomDescription = descriptionsView.text!
         descriptionsView.tvContent.resignFirstResponder()
         descriptionsView.tvContent.endEditing(true)
     }
@@ -358,7 +370,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             newRoomModel.name = string
         case priceInputView:
             if string.isEmpty{return true}
-            guard let price = Double(string) else{
+            guard let price = Int(string) else{
                 return false
             }
             newRoomModel.price = price
@@ -373,6 +385,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                 addressInputView.setupUI(placeholder: "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT", title: "ROOM_ADDRESS_TITLE")
                 return false
             }else{
+                addressInputView.isSelectedFromSuggest = false
                 addressInputView.setupUI(placeholder: "ROOM_ADDRESS_TITLE", title: "ROOM_ADDRESS_TITLE")
                 search(text: string)
 //                newRoomModel.address = string
@@ -494,7 +507,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                 return
             }
             addressInputView.isSelectedFromSuggest = true
-            self.newRoomModel.address = selectedRecord.keys.first?.address
+            self.newRoomModel.address = selectedRecord.keys.first!.address
             self.newRoomModel.latitude = selectedRecord.values.first!.lat
             self.newRoomModel.longitude = selectedRecord.values.first!.lng
             addressInputView.tfInput.text = selectedRecord.keys.first?.address
@@ -625,58 +638,10 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             
         }
     }
-    func calculatorHeight(){
-        let numberOfImageRow =  self.uploadImageModels.count%3==0 ? self.uploadImageModels.count/3 : self.uploadImageModels.count/3+1
-        let uploadImageViewHeight:CGFloat = CGFloat(numberOfImageRow) * self.imageWith  + Constants.HEIGHT_VIEW_UPLOAD_IMAGE_BASE+Constants.HEIGHT_LARGE_SPACE
-        let contentViewHeight:CGFloat = uploadImageViewHeight + self.fixSizeHeight
-        self.view.layoutIfNeeded()
-        self.contentViewHeightConstraint?.constant = contentViewHeight
-        self.uploadImageViewHeightConstraint?.constant = uploadImageViewHeight
-        self.uploadImageView.images = self.uploadImageModels
-        let bottomOffset = CGPoint(x: 0, y: self.scrollView.contentSize.height - self.scrollView.bounds.size.height + self.scrollView.contentInset.bottom)
-        if(bottomOffset.y > 0) {
-            self.scrollView.setContentOffset(bottomOffset, animated: true)
-        }
-    }
+    
     //MARK: Handler for save button
     @objc  func onClickBtnSubmit(btnSubmit:UIButton){
-        newRoomModel.userId = DBManager.shared.getUser()!.userId
-        if checkValidInformation(){
-            let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
-            hub.mode = .indeterminate
-            hub.bezelView.backgroundColor = .white
-            hub.contentColor = .defaultBlue
-            hub.label.text = "MB_LOAD_UPLOAD_IMAGE".localized
-            DispatchQueue.global(qos: .userInteractive).async {
-                
-                self.uploadImageModels.filter{$0.linkUrl==nil}.forEach({ (model) in
-                    self.group.enter()
-                    self.uploadImage(model)
-                    self.group.wait()
-                })
-                DispatchQueue.main.async {
-                    hub.label.text = "MB_LOAD_CREATE_ROOM".localized
-                }
-                if (self.uploadImageModels.filter{$0.linkUrl==nil}).count == 0{
-                    Alamofire.request(APIRouter.createRoom(model: self.newRoomModel)).response { (response) in
-                        DispatchQueue.main.async {
-                            MBProgressHUD.hide(for: self.view, animated: true)
-                            self.navigationController?.dismiss(animated: true, completion: {
-                                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_CREATE_SUCCESS".localized, inViewController: self)
-                            })
-                        }
-                    }
-                }else{
-                    DispatchQueue.main.async {
-                        MBProgressHUD.hide(for: self.view, animated: true)
-                    }
-                    
-                    AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_UPLOAD_ERROR".localized, inViewController: self)
-                }
-            }
-        }
-        
-        
+        saveRoom()
     }
     
     @objc  func onClickBtnBack(btnBack:UIButton){
@@ -721,8 +686,8 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     }
     func checkValidInformation()->Bool{
         var message = NSMutableAttributedString(string: "")
-        //        print("Valid:")
-        if newRoomModel.name == nil || !newRoomModel.name!.isValidName(){
+        
+        if newRoomModel.name == nil || !newRoomModel.name.isValidName(){
             message.append(NSAttributedString(string: "\("ROOM_NAME_TITLE".localized) :  \("ERROR_TYPE_NAME_MAX_CHAR_50".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         
@@ -762,7 +727,69 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         dateFormater.dateFormat = "HH_mm_ss_dd_MM_yyyy"
         return "\(dateFormater.string(from: Date())).jpg"
     }
-    
+    func saveRoom(){
+        newRoomModel.userId = DBManager.shared.getUser()!.userId
+        if checkValidInformation(){
+            
+            let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
+            hub.mode = .indeterminate
+            hub.bezelView.backgroundColor = .white
+            hub.contentColor = .defaultBlue
+            hub.label.text = "MB_LOAD_UPLOAD_IMAGE".localized
+            DispatchQueue.global(qos: .userInteractive).async {
+                
+                self.uploadImageModels.filter{$0.linkUrl==nil}.forEach({ (model) in
+                    self.group.enter()
+                    self.uploadImage(model)
+                    self.group.wait()
+                })
+                DispatchQueue.main.async {
+                    hub.label.text = self.cERoomVCType == .create ?  "MB_LOAD_CREATE_ROOM".localized : "MB_LOAD_EDIT_ROOM".localized
+                }
+                if (self.uploadImageModels.filter{$0.linkUrl==nil}).count == 0{
+                    self.newRoomModel.imageUrls = self.uploadImageModels.compactMap{$0.linkUrl}
+                    APIConnection.request(apiRouter: self.cERoomVCType == .create ? APIRouter.createRoom(model: self.newRoomModel) : APIRouter.updateRoom(model: self.newRoomModel),  errorNetworkConnectedHander: {
+                        DispatchQueue.main.async {
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+                        }
+                    }, completion: { (error, statusCode) -> (Void) in
+                        DispatchQueue.main.async {
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                        }
+                        if error != nil{
+                            DispatchQueue.main.async {
+                                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+                            }
+                        }else{
+                            if statusCode == .OK{
+                                DispatchQueue.main.async {
+                                    MBProgressHUD.hide(for: self.view, animated: true)
+                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_ROOM, object: self.newRoomModel)
+                                    AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage:  self.cERoomVCType == .create ? "ROOM_CREATE_SUCCESS".localized : "EDIT_ROOM_SUCCESS".localized, inViewController: self,rhsButtonHandler: {
+                                        (action) in
+                                        self.navigationController?.dismiss(animated: true, completion:nil)
+                                    })
+                                    
+                                    
+                                }
+                            }else{
+                                DispatchQueue.main.async {
+                                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+                                }
+                            }
+                        }
+                    })
+                }else{
+                    DispatchQueue.main.async {
+                        MBProgressHUD.hide(for: self.view, animated: true)
+                    }
+                    
+                    AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_UPLOAD_ERROR".localized, inViewController: self)
+                }
+            }
+        }
+    }
     func uploadImage(_ uploadImageModel:UploadImageModel){
         var urlRequest = try! URLRequest(url: URL(string: "\(Constants.BASE_URL_API)image/upload")!, method: .post, headers:nil)
         urlRequest.timeoutInterval = 60
@@ -792,5 +819,18 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                 
             }
         }
+    }
+    func calculatorHeight(){
+        let numberOfImageRow =  self.uploadImageModels.count%3==0 ? self.uploadImageModels.count/3 : self.uploadImageModels.count/3+1
+        let uploadImageViewHeight:CGFloat = CGFloat(numberOfImageRow) * self.imageWith  + Constants.HEIGHT_VIEW_UPLOAD_IMAGE_BASE+Constants.HEIGHT_LARGE_SPACE
+        let contentViewHeight:CGFloat = uploadImageViewHeight + self.fixSizeHeight
+        self.contentViewHeightConstraint?.constant = contentViewHeight
+        self.uploadImageViewHeightConstraint?.constant = uploadImageViewHeight
+        self.uploadImageView.images = self.uploadImageModels
+        let bottomOffset = CGPoint(x: 0, y: self.scrollView.contentSize.height - self.scrollView.bounds.size.height + self.scrollView.contentInset.bottom)
+        if(bottomOffset.y > 0) {
+            self.scrollView.setContentOffset(bottomOffset, animated: true)
+        }
+        self.view.layoutIfNeeded()
     }
 }

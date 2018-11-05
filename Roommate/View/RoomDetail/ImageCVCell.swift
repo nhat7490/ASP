@@ -29,11 +29,28 @@ class ImageCVCell:UICollectionViewCell {
             }
         }
     }
+    var uploadImageModel:UploadImageModel?{
+        didSet{
+            if let image = uploadImageModel?.image{
+                imgvRoom.image = image
+            }else if let url = uploadImageModel?.linkUrl {
+                sd_showActivityIndicatorView()
+                sd_setIndicatorStyle(.gray)
+                imgvRoom.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named: "default_load_room"), options: [.continueInBackground,.retryFailed]) { [weak self] (image, error, cacheType, url) in
+                    guard let _ = error else{
+                        return
+                    }
+                    self?.imgvRoom.image = image
+                    self?.uploadImageModel?.image = image
+                }
+            }
+        }
+    }
     var link_url:String?{
         didSet{
             sd_showActivityIndicatorView()
             sd_setIndicatorStyle(.gray)
-            imgvRoom.sd_setImage(with: URL(string: self.link_url!), placeholderImage: UIImage(named: "default_load_room"), options: [.continueInBackground,.retryFailed]) { [weak self] (image, error, cacheType, url) in
+            imgvRoom.sd_setImage(with: URL(string: link_url!), placeholderImage: UIImage(named: "default_load_room"), options: [.continueInBackground,.retryFailed]) { [weak self] (image, error, cacheType, url) in
                 guard let _ = error else{
                     return
                 }
@@ -47,10 +64,6 @@ class ImageCVCell:UICollectionViewCell {
         imgvTrash.image = UIImage(named: "remove")
         self.layer.cornerRadius = 15
         self.clipsToBounds = true
-    }
-    
-    func setImage(image:UIImage){
-        imgvRoom.image = image
     }
     @objc func onClickImageView(){
         delegate?.imageCVCellDelegate(imageViewCell: self, onClickRemoveImageView: imgvTrash, atIndexPath: indexPath)

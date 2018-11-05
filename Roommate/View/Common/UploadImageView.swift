@@ -58,7 +58,7 @@ class UploadImageView: UIView ,UICollectionViewDelegate,UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_IMAGECV, for: indexPath) as! ImageCVCell
         cell.imageCVCellType = .upload
-        cell.setImage(image: images![indexPath.row].image!)
+        cell.uploadImageModel = images?[indexPath.row]
         cell.indexPath = indexPath
         cell.delegate = self
         

@@ -10,7 +10,6 @@ import UIKit
 import MBProgressHUD
 class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
     
-    
     lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
         sv.alwaysBounceVertical = true
@@ -61,6 +60,7 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
         setupUI()
         setupDelegateAndDataSource()
         loadRemoteData()
+        registerNotification()
     }
     
     func setupUI(){
@@ -74,7 +74,7 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
         } else {
             self.automaticallyAdjustsScrollViewInsets = false
         }
-        let verticalRoomViewHeight:CGFloat = 80.0
+        let verticalRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
         topContainerViewHeight = Constants.HEIGHT_CELL_IMAGECV
         let bottomContainerViewHeight:CGFloat = verticalRoomViewHeight
         let totalContentViewHeight:CGFloat = topContainerViewHeight! + bottomContainerViewHeight
@@ -114,12 +114,45 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
         verticalRoomView.delegate = self
         btnSetting.addTarget(self, action: #selector(onClickBtnSetting), for: .touchUpInside)
     }
+    
+    func registerNotification(){
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
+    }
+    //MARK: Notification
+    @objc func didReceiveRemoveRoomNotification(_ notification:Notification){
+        rooms.removeAll()
+        loadRemoteData()
+//        if notification.object is RoomResponseModel{
+//            guard let room = notification.object as? RoomResponseModel,let index = rooms.index(of: room) else{
+//                return
+//            }
+//            rooms.removeAll()
+//            loadRemoteData()
+////            rooms.remove(at: index)
+////            self.verticalRoomView.roomsOwner = rooms
+////            updateUI()
+//        }
+    }
+    
+    @objc func didReceiveEditRoomNotification(_ notification:Notification){
+        if notification.object is RoomResponseModel{
+            guard let room = notification.object as? RoomResponseModel,let index = rooms.index(of: room) else{
+                return
+            }
+            rooms[index] = room
+            verticalRoomView.roomsOwner  = rooms
+        }
+    }
+    
+    //MARK: Load Remote Data
+    
     func loadRemoteData(){
         let hub = MBProgressHUD.showAdded(to: self.verticalRoomView.collectionView, animated: true)
         hub.mode = .indeterminate
         hub.bezelView.backgroundColor = .white
         hub.contentColor = .defaultBlue
-        requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, offset: 15))
+        requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, size: 12))
     }
     func  requestRoom(hub:MBProgressHUD,view:UICollectionView,apiRouter:APIRouter){
         //        roomFilter.searchRequestModel = nil
@@ -129,6 +162,7 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
                               errorNetworkConnectedHander: {
                                 DispatchQueue.main.async {
                                     MBProgressHUD.hide(for: self.view, animated: true)
+                                    self.updateUIForNoData()
                                     APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
                                     self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_CONNECTED_ERROR_MESSAGE".localized, onCompleted: { () -> (Void) in
                                         hub.show(animated: true)
@@ -143,6 +177,7 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
                 //404, cant parse
                 if error != nil{
                     DispatchQueue.main.async {
+                        self.updateUIForNoData()
                         self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
                             self.requestRoom(hub:hub,view:view, apiRouter: apiRouter)
                         })
@@ -155,18 +190,13 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
                         }
                         if values.count == 0{
                             DispatchQueue.main.async {
-                            self.showNoDataView(inView:self.verticalRoomView.collectionView, withTitle: "NO_OWNER_ROOM".localized)
+                                self.updateUI()
                             }
                         }else{
-                            self.rooms = values
                             DispatchQueue.main.async {
-                                self.hideNoDataView(inView: self.verticalRoomView.collectionView)
-                                self.verticalRoomViewHeightConstraint?.constant = Constants.HEIGHT_CELL_ROOMFOROWNERCV*CGFloat(values.count) + 80.0
-                                self.bottomContainerViewHeightConstraint?.constant = self.verticalRoomViewHeightConstraint!.constant
-                                self.contentViewHeightConstraint?.constant = self.bottomContainerViewHeightConstraint!.constant + self.topContainerViewHeight!
-                                self.verticalRoomView.showbtnViewAllButton()
-                                self.view.layoutIfNeeded()
-                                self.verticalRoomView.roomsOwner = values
+                                self.rooms = values
+                                self.verticalRoomView.roomsOwner = self.rooms
+                                self.updateUI()
                             }
                             
                         }
@@ -193,7 +223,8 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
             hub.contentColor = .defaultBlue
-            requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, offset: 15))
+            rooms.removeAll()
+            requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, size: 12))
         }
     }
     //MARK: VerticalPostViewDelegate
@@ -208,8 +239,32 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
     func verticalPostViewDelegate(verticalPostView view:VerticalPostView,onClickButton button:UIButton){
         
     }
-    //MARK: Others
+    //MARK: Button Event
     @objc func onClickBtnSetting(){
         
+    }
+    //MARK: Other
+    func updateUI(){
+        if rooms.count != 0{
+            self.hideNoDataView(inView: self.verticalRoomView.collectionView)
+            self.updateUIForExistedData()
+        }else{
+            self.showNoDataView(inView:self.verticalRoomView.collectionView, withTitle: "NO_OWNER_ROOM".localized)
+            self.updateUIForNoData()
+        }
+    }
+    func updateUIForExistedData(){
+        self.verticalRoomViewHeightConstraint?.constant = Constants.HEIGHT_CELL_ROOMFOROWNERCV*CGFloat(rooms.count) + 80.0
+        self.bottomContainerViewHeightConstraint?.constant = self.verticalRoomViewHeightConstraint!.constant
+        self.contentViewHeightConstraint?.constant = self.bottomContainerViewHeightConstraint!.constant + self.topContainerViewHeight!
+        self.verticalRoomView.showbtnViewAllButton()
+        self.view.layoutIfNeeded()
+    }
+    func updateUIForNoData(){
+        self.verticalRoomViewHeightConstraint?.constant = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
+        self.bottomContainerViewHeightConstraint?.constant = self.verticalRoomViewHeightConstraint!.constant
+        self.contentViewHeightConstraint?.constant = self.bottomContainerViewHeightConstraint!.constant + self.topContainerViewHeight!
+        self.verticalRoomView.hidebtnViewAllButton()
+        self.view.layoutIfNeeded()
     }
 }

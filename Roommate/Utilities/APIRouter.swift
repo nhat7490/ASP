@@ -21,16 +21,19 @@ enum APIRouter:URLRequestConvertible{
     case city()
     case district()
     case utility()
-    case createRoom(model:RoomRequestModel)
+    case createRoom(model:RoomResponseModel)
     case postForAll(model:FilterArgumentModel)
     case postForBookmark(model:FilterArgumentModel)
     case createBookmark(model:BookmarkRequestModel)
     case removeBookmark(favoriteId:Int)
     case suggestBestMatch(model:FilterArgumentModel)
     case suggest(model:BaseSuggestRequestModel)
-    case getRoomsByUserId(userId:Int,page:Int,offset:Int)
+    case getRoomsByUserId(userId:Int,page:Int,size:Int)
     case findUserByUsername(username:String)
     case editMember(roomMemberRequestModel:RoomMemberRequestModel)
+    case removeRoom(roomId:Int)
+    case updateRoom(model:RoomResponseModel)
+    
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -44,8 +47,10 @@ enum APIRouter:URLRequestConvertible{
         switch self{
         case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember:
             return .post
-        case .removeBookmark:
+        case .removeBookmark,.removeRoom:
             return .delete
+        case .updateRoom:
+            return .put
         default:
             return .get
             
@@ -88,6 +93,11 @@ enum APIRouter:URLRequestConvertible{
             return "user/findByUsername/\(username)"
         case .editMember:
             return "room/editMember"
+        case .removeRoom(let roomId):
+            return "room/deleteRoom/\(roomId)"
+        case .updateRoom:
+            return "room/update";
+            
         }
     }
     
@@ -122,10 +132,12 @@ enum APIRouter:URLRequestConvertible{
             return Mapper().toJSON(model)
         case .suggest(let model):
             return Mapper().toJSON(model)
-        case .getRoomsByUserId(_,let page,let offset):
+        case .getRoomsByUserId(_,let page,let size):
             return ["page":page,
-                    "offset":offset]
+                    "size":size]
         case .editMember(let model):
+            return Mapper().toJSON(model)
+        case .updateRoom(let model):
             return Mapper().toJSON(model)
         default:
             return [:]
@@ -147,7 +159,7 @@ enum APIRouter:URLRequestConvertible{
         
         do{
             switch self.httpMethod {
-            case .post:
+            case .post,.put:
                 urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
             default:
                 urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
