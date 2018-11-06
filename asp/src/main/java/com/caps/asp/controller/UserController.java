@@ -61,7 +61,7 @@ public class UserController {
                         .body(user);
             }else{
                 return ResponseEntity.status(CONFLICT)
-                        .body(user);
+                        .build();
             }
 
         }else{

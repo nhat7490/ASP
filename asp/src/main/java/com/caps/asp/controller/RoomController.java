@@ -227,7 +227,7 @@ public class RoomController {
     }
 
     @GetMapping("room/user/currentRoom/{userId}")
-    public ResponseEntity getCurrentRoom(@PathVariable Integer userId, Pageable pageable) {
+    public ResponseEntity getCurrentRoom(@PathVariable Integer userId) {
         TbRoomHasUser roomHasUser = roomHasUserService.getCurrentRoom(userId);
         if (roomHasUser != null) {
             TbRoom room = roomService.findRoomById(roomHasUser.getRoomId());
