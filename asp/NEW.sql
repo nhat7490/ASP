@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: asp
 -- ------------------------------------------------------
--- Server version	5.7.21-log
+-- Server version	5.7.18-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -152,6 +152,61 @@ INSERT INTO `tb_image` VALUES (1,'http://www.cokhicongnghiep.com/assets/upload/c
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_notification`
+--
+
+DROP TABLE IF EXISTS `tb_notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `notification_status_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_tb_notification_tb_notification_status1_idx` (`notification_status_id`),
+  KEY `fk_tb_notification_tb_user1_idx` (`user_id`),
+  KEY `fk_tb_notification_tb_room1_idx` (`room_id`),
+  CONSTRAINT `fk_tb_notification_tb_notification_status1` FOREIGN KEY (`notification_status_id`) REFERENCES `tb_notification_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_notification_tb_room1` FOREIGN KEY (`room_id`) REFERENCES `tb_room` (`room_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_notification_tb_user1` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_notification`
+--
+
+LOCK TABLES `tb_notification` WRITE;
+/*!40000 ALTER TABLE `tb_notification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_notification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_notification_status`
+--
+
+DROP TABLE IF EXISTS `tb_notification_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_notification_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_notification_status`
+--
+
+LOCK TABLES `tb_notification_status` WRITE;
+/*!40000 ALTER TABLE `tb_notification_status` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_notification_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_post`
 --
 
@@ -164,7 +219,7 @@ CREATE TABLE `tb_post` (
   `phone_contact` varchar(15) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `number_partner` int(11) DEFAULT NULL,
   `gender_partner` int(11) DEFAULT NULL,
-  `date_post` dateCreated DEFAULT NULL,
+  `date_post` date DEFAULT NULL,
   `type_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `room_id` int(11) DEFAULT NULL,
@@ -219,38 +274,6 @@ LOCK TABLES `tb_post_has_tb_district` WRITE;
 /*!40000 ALTER TABLE `tb_post_has_tb_district` DISABLE KEYS */;
 INSERT INTO `tb_post_has_tb_district` VALUES (1,1,465),(2,2,465),(3,3,465),(4,4,465),(5,5,465),(6,6,465),(7,7,465),(8,8,465),(9,9,465),(10,10,465),(11,11,465),(12,12,465),(13,13,465),(14,14,465),(15,15,465),(16,16,465),(17,17,465),(18,18,465),(19,19,465),(20,20,465),(21,21,465),(22,22,465),(23,23,465),(24,24,465),(25,25,465),(26,26,465),(27,26,474),(28,27,475),(30,29,475),(31,30,475),(32,31,475),(33,32,475),(34,33,475),(35,34,475),(36,35,475),(37,36,475),(38,37,475);
 /*!40000 ALTER TABLE `tb_post_has_tb_district` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tb_rate`
---
-
-DROP TABLE IF EXISTS `tb_rate`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_rate` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tb_user_user_id` int(11) NOT NULL,
-  `tb_room_room_id` int(11) NOT NULL,
-  `security_rating` double DEFAULT NULL,
-  `location_rating` double DEFAULT NULL,
-  `utility_rating` double DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_tb_user_has_tb_room_tb_room1_idx` (`tb_room_room_id`),
-  KEY `fk_tb_user_has_tb_room_tb_user1_idx` (`tb_user_user_id`),
-  CONSTRAINT `fk_tb_user_has_tb_room_tb_room1` FOREIGN KEY (`tb_room_room_id`) REFERENCES `tb_room` (`room_id`),
-  CONSTRAINT `fk_tb_user_has_tb_room_tb_user1` FOREIGN KEY (`tb_user_user_id`) REFERENCES `tb_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=231 DEFAULT CHARSET=utf8 COLLATE=utf8_icelandic_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_rate`
---
-
-LOCK TABLES `tb_rate` WRITE;
-/*!40000 ALTER TABLE `tb_rate` DISABLE KEYS */;
-INSERT INTO `tb_rate` VALUES (1,15,1,1.5,1.5,1.5),(2,16,2,2,2.5,2),(3,17,3,2.5,5,2.5),(4,18,4,3,5,3),(5,19,5,3.5,5,3.5),(6,20,6,4,4,4),(7,21,7,4.5,4,4.5),(8,22,8,5,3,5),(9,23,9,5,2,5),(10,24,10,5,1,5),(11,25,11,4,1,4),(12,26,12,1.5,1.5,1.5),(13,27,13,2.5,2,2.5),(14,28,14,1.5,2.5,1.5),(15,29,15,2,3,2),(16,30,16,2,3.5,2),(17,31,17,3,4,3),(18,32,18,4,4.5,4),(19,33,19,5,5,5),(20,34,20,5,5,5),(21,35,21,5,5,5),(22,36,22,2.5,4,2.5),(23,37,23,3.5,1.5,3.5),(24,38,24,2,2.5,2),(25,39,25,0.5,1.5,0.5),(26,40,26,1,2,1),(27,41,27,1.5,2,1.5),(28,42,28,1,3,1),(29,43,29,1,4,1),(30,44,30,1,5,1),(31,45,31,1,5,1),(32,46,32,1.5,5,1.5),(33,47,33,2,2.5,2),(34,48,34,2.5,3.5,2.5),(35,49,35,3,2,3),(36,50,36,3.5,0.5,3.5),(37,51,37,4,1,4),(38,52,38,4.5,1.5,4.5),(39,53,39,5,1,5),(40,54,40,5,1,5),(41,55,41,5,1,5),(42,56,42,4,1,4),(43,57,43,1.5,1.5,1.5),(44,58,44,2.5,2,2.5),(45,59,45,1.5,2.5,1.5),(46,60,46,2,3,2),(47,61,47,2,3.5,2),(48,62,48,3,4,3),(49,63,49,4,4.5,4),(50,64,50,5,5,5),(51,65,51,5,5,5),(52,66,52,5,5,5),(53,67,53,2.5,4,2.5),(54,68,54,3.5,1.5,3.5),(55,69,55,2,2.5,2),(56,70,56,0.5,1.5,0.5),(57,71,57,1,2,1),(58,72,58,1.5,2,1.5),(59,73,59,1,3,1),(60,74,60,1,4,1),(61,75,61,1,5,1),(62,76,62,1,5,1),(63,77,63,1.5,5,1.5),(64,78,64,2,2.5,2),(65,79,65,2.5,3.5,2.5),(66,80,66,3,2,3),(67,81,67,3.5,0.5,3.5),(68,82,68,4,1,4),(69,83,69,4.5,1.5,4.5),(70,84,70,5,1,5),(71,85,71,5,1,5),(72,86,72,5,1,5),(73,87,73,4,1,4),(74,88,74,1.5,1.5,1.5),(75,89,75,2.5,2,2.5),(76,90,76,1.5,2.5,1.5),(77,91,77,2,3,2),(78,92,78,2,3.5,2),(79,93,79,3,4,3),(80,94,80,4,4.5,4),(81,95,81,5,5,5),(82,96,82,5,5,5),(83,97,83,5,5,5),(84,98,84,2.5,4,2.5),(85,99,85,3.5,1.5,3.5),(86,100,86,2,2.5,2),(87,101,87,0.5,1.5,0.5),(88,102,88,1,2,1),(89,103,89,1.5,2,1.5),(90,104,90,1,3,1),(91,105,91,1,4,1),(92,106,92,1,5,1),(93,107,93,1,5,1),(94,108,94,1.5,5,1.5),(95,109,95,2,2.5,2),(96,110,96,2.5,3.5,2.5),(97,111,97,3,2,3),(98,112,98,3.5,0.5,3.5),(99,113,99,4,1,4),(100,114,100,4.5,1.5,4.5),(101,115,101,5,1,5),(102,116,102,5,1,5),(103,117,103,5,1,5),(104,118,104,4,1,4),(105,119,105,1.5,1.5,1.5),(106,120,106,2.5,2,2.5),(107,121,107,1.5,2.5,1.5),(108,122,108,2,3,2),(109,123,109,2,3.5,2),(110,124,110,3,4,3),(111,125,111,4,4.5,4),(112,126,112,5,5,5),(113,127,113,5,5,5),(114,128,114,5,5,5),(115,129,115,2.5,4,2.5),(116,130,116,3.5,1.5,3.5),(117,131,117,2,2.5,2),(118,132,118,1.5,1.5,1.5),(119,133,119,2,2,2),(120,134,120,2.5,2,2.5),(121,135,121,3,3,3),(122,136,122,3.5,4,3.5),(123,137,123,4,5,4),(124,138,124,4.5,5,4.5),(125,139,125,5,5,5),(126,140,126,5,2.5,5),(127,141,127,5,3.5,5),(128,142,128,4,2,4),(129,143,129,1.5,1.5,1.5),(130,144,130,2.5,2,2.5),(131,145,131,1.5,2.5,1.5),(132,146,132,2,3,2),(133,147,133,2,3.5,2),(134,148,134,3,4,3),(135,149,135,4,4.5,4),(136,150,136,5,5,5),(137,151,137,5,5,5),(138,152,138,5,5,5),(139,153,139,2.5,4,2.5),(140,154,140,3.5,1.5,3.5),(141,155,141,2,2.5,2),(142,156,142,0.5,1.5,0.5),(143,157,143,1,2,1),(144,158,144,1.5,2,1.5),(145,159,145,1,3,1),(146,160,146,1,4,1),(147,161,147,1,5,1),(148,162,148,1,5,1),(149,163,149,1.5,5,1.5),(150,164,150,2,2.5,2),(151,165,151,2.5,3.5,2.5),(152,166,152,3,2,3),(153,167,153,3.5,0.5,3.5),(154,168,154,4,1,4),(155,169,155,4.5,1.5,1.5),(156,170,156,5,1,2),(157,171,157,5,1,2.5),(158,172,158,5,1,3),(159,173,159,4,1,3.5),(160,174,160,1.5,1.5,4),(161,175,161,2.5,2,4.5),(162,176,162,1.5,2.5,5),(163,177,163,2,3,5),(164,178,164,2,3.5,5),(165,179,165,3,4,4),(166,180,166,4,1.5,1.5),(167,181,167,5,2,2.5),(168,182,168,5,2.5,1.5),(169,183,169,1.5,3,2),(170,184,170,2,3.5,2),(171,185,171,2.5,4,3),(172,186,172,3,4.5,4),(173,187,173,3.5,5,5),(174,188,174,4,5,5),(175,189,175,4.5,5,5),(176,190,176,5,4,2.5),(177,191,177,5,1.5,3.5),(178,192,178,5,2.5,2),(179,193,179,4,1.5,0.5),(180,194,180,1.5,2,1),(181,195,181,2.5,2,1.5),(182,196,182,1.5,3,1),(183,197,183,2,4,1),(184,198,184,2,5,1),(185,199,185,3,5,1),(186,200,186,4,5,1.5),(187,201,187,5,2.5,2),(188,202,188,5,3.5,2.5),(189,203,189,5,2,3),(190,204,190,2.5,0.5,3.5),(191,205,191,3.5,1,4),(192,206,192,2,1.5,4.5),(193,207,193,0.5,1,5),(194,208,194,1,1,5),(195,209,195,1.5,1,5),(196,210,196,1,1,4),(197,211,197,1,1.5,1.5),(198,212,198,1,2,2.5),(199,213,199,1,2.5,1.5),(200,214,200,1.5,3,2),(201,215,201,2,3.5,2),(202,216,202,2.5,4,3),(203,217,203,3,4.5,4),(204,218,204,3.5,5,5),(205,219,205,4,5,5),(206,220,206,4.5,5,5),(207,221,207,5,4,2.5),(208,222,208,5,1.5,3.5),(209,223,209,5,2.5,2),(210,224,210,4,1.5,0.5),(211,225,211,1.5,2,1),(212,226,212,2.5,2,1.5),(213,227,213,1.5,3,1),(214,228,214,2,4,1),(215,229,215,2,5,1),(216,230,216,3,5,1),(217,231,217,4,5,1.5),(218,232,218,5,2.5,2),(219,233,219,5,3.5,2.5),(220,234,220,5,2,3),(221,235,221,2.5,0.5,3.5),(222,236,222,3.5,1,4),(223,237,223,2,1.5,4.5),(224,238,224,0.5,1,5),(225,239,225,1,1,5),(226,240,226,1.5,1,5),(227,241,227,1,1,4),(228,242,228,1,1.5,1.5),(229,243,229,1,2,2.5),(230,244,230,1,2.5,1.5);
-/*!40000 ALTER TABLE `tb_rate` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -323,7 +346,7 @@ CREATE TABLE `tb_room` (
   `user_id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL,
   `district_id` int(11) NOT NULL,
-  `dateCreated` dateCreated DEFAULT NULL,
+  `date` date DEFAULT NULL,
   `status_id` int(11) NOT NULL,
   `longtitude` double DEFAULT NULL,
   `lattitude` double DEFAULT NULL,
@@ -360,11 +383,13 @@ CREATE TABLE `tb_room_has_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL,
-  `date_in` dateCreated NOT NULL,
-  `date_out` dateCreated DEFAULT NULL,
+  `date_in` date NOT NULL,
+  `date_out` date DEFAULT NULL,
   PRIMARY KEY (`id`),
-CONSTRAINT `fk_tb_room_has_user_tb_room` FOREIGN KEY (`room_id`) REFERENCES `tb_room` (`room_id`),
-    CONSTRAINT `kk_tb_room_has_user_tb_user` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`user_id`)
+  KEY `fk_tb_room_has_user_tb_room` (`room_id`),
+  KEY `kk_tb_room_has_user_tb_user` (`user_id`),
+  CONSTRAINT `fk_tb_room_has_user_tb_room` FOREIGN KEY (`room_id`) REFERENCES `tb_room` (`room_id`),
+  CONSTRAINT `kk_tb_room_has_user_tb_user` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -408,35 +433,6 @@ LOCK TABLES `tb_room_has_utility` WRITE;
 /*!40000 ALTER TABLE `tb_room_has_utility` DISABLE KEYS */;
 INSERT INTO `tb_room_has_utility` VALUES (1,1,1,'Panasonic',NULL,1),(2,1,2,'Electrolux',NULL,1),(3,1,3,'Sony',NULL,1),(4,1,4,'LG',NULL,1),(5,1,5,'B-Come',NULL,1),(6,2,6,'Panasonic',NULL,1),(7,2,7,'Electrolux',NULL,1),(8,2,8,'Sony',NULL,1),(9,2,9,'LG',NULL,1),(10,2,10,'B-Come',NULL,1),(11,3,11,'Panasonic',NULL,1),(12,3,12,'Electrolux',NULL,1),(13,3,13,'Sony',NULL,1),(14,3,14,'LG',NULL,1),(15,3,15,'B-Come',NULL,1),(16,4,1,'Panasonic',NULL,1),(17,4,2,'Electrolux',NULL,1),(18,4,3,'Sony',NULL,1),(19,4,4,'LG',NULL,1),(20,4,5,'B-Come',NULL,1),(21,5,6,'Panasonic',NULL,1),(22,5,7,'Electrolux',NULL,1),(23,5,8,'Sony',NULL,1),(24,5,9,'LG',NULL,1),(25,5,10,'B-Come',NULL,1),(26,6,11,'Panasonic',NULL,1),(27,6,12,'Electrolux',NULL,1),(28,6,13,'Sony',NULL,1),(29,6,14,'LG',NULL,1),(30,6,15,'B-Come',NULL,1),(31,7,1,'Panasonic',NULL,1),(32,7,2,'Electrolux',NULL,1),(33,7,3,'Sony',NULL,1),(34,7,4,'LG',NULL,1),(35,7,5,'B-Come',NULL,1),(36,8,6,'Panasonic',NULL,1),(37,8,7,'Electrolux',NULL,1),(38,8,8,'Sony',NULL,1),(39,8,9,'LG',NULL,1),(40,8,10,'B-Come',NULL,1),(41,9,11,'Panasonic',NULL,1),(42,9,12,'Electrolux',NULL,1),(43,9,13,'Sony',NULL,1),(44,9,14,'LG',NULL,1),(45,9,15,'B-Come',NULL,1),(46,10,1,'Panasonic',NULL,1),(47,10,2,'Electrolux',NULL,1),(48,10,3,'Sony',NULL,1),(49,10,4,'LG',NULL,1),(50,10,5,'Panasonic',NULL,1),(51,11,6,'Electrolux',NULL,1),(52,11,7,'Sony',NULL,1),(53,11,8,'LG',NULL,1),(54,11,9,'B-Come',NULL,1),(55,11,10,'Panasonic',NULL,1),(56,12,11,'Electrolux',NULL,1),(57,12,12,'Sony',NULL,1),(58,12,13,'LG',NULL,1),(59,12,14,'B-Come',NULL,1),(60,12,15,'Panasonic',NULL,1),(61,13,1,'Electrolux',NULL,1),(62,13,2,'Sony',NULL,1),(63,13,3,'LG',NULL,1),(64,13,4,'B-Come',NULL,1),(65,13,5,'Panasonic',NULL,1),(66,14,6,'Electrolux',NULL,1),(67,14,7,'Sony',NULL,1),(68,14,8,'LG',NULL,1),(69,14,9,'B-Come',NULL,1),(70,14,10,'Panasonic',NULL,1),(71,15,11,'Electrolux',NULL,1),(72,15,12,'Sony',NULL,1),(73,15,13,'LG',NULL,1),(74,15,14,'B-Come',NULL,1),(75,15,15,'Panasonic',NULL,1),(1952,17,2,'Sony',NULL,1),(1953,18,3,'Panasonic',NULL,1),(1954,19,4,'Panasonic',NULL,1),(1955,20,5,'Panasonic',NULL,1),(1956,21,6,'Panasonic',NULL,1),(1957,22,7,'Panasonic',NULL,1),(1958,23,8,'Panasonic',NULL,1),(1959,24,9,'Panasonic',NULL,1),(1960,25,10,'Panasonic',NULL,1),(1961,26,11,'Panasonic',NULL,1),(1962,27,12,'Panasonic',NULL,1),(1963,28,13,'Panasonic',NULL,1),(1964,29,14,'Panasonic',NULL,1),(1965,30,15,'Panasonic',NULL,1),(1966,31,1,'Panasonic',NULL,1),(1967,32,2,'Panasonic',NULL,1),(1968,33,3,'Panasonic',NULL,1),(1969,34,4,'Panasonic',NULL,1),(1970,35,5,'Panasonic',NULL,1),(1971,36,6,'Panasonic',NULL,1),(1972,37,7,'Panasonic',NULL,1),(1973,37,8,'sony',NULL,1),(1974,37,9,'samsung',NULL,1),(1975,37,10,'lg',NULL,1);
 /*!40000 ALTER TABLE `tb_room_has_utility` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tb_room_reference`
---
-
-DROP TABLE IF EXISTS `tb_room_reference`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_room_reference` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `room_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_tb_room_has_tb_user_tb_user1_idx` (`user_id`),
-  KEY `fk_tb_room_has_tb_user_tb_room1_idx` (`room_id`),
-  CONSTRAINT `fk_tb_room_has_tb_user_tb_room1` FOREIGN KEY (`room_id`) REFERENCES `tb_room` (`room_id`),
-  CONSTRAINT `fk_tb_room_has_tb_user_tb_user1` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=321 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_room_reference`
---
-
-LOCK TABLES `tb_room_reference` WRITE;
-/*!40000 ALTER TABLE `tb_room_reference` DISABLE KEYS */;
-INSERT INTO `tb_room_reference` VALUES (1,1,15),(2,2,16),(3,3,17),(4,4,18),(5,5,19),(6,6,20),(7,7,21),(8,8,22),(9,9,23),(10,10,24),(11,11,25),(12,12,26),(13,13,27),(14,14,28),(15,15,29),(16,16,30),(17,17,31),(18,18,32),(19,19,33),(20,20,34),(21,21,35),(22,22,36),(23,23,37),(24,24,38),(25,25,39),(26,26,40),(27,27,41),(28,28,42),(29,29,43),(30,30,44),(31,31,45),(32,32,46),(33,33,47),(34,34,48),(35,35,49),(36,36,50),(37,37,51),(38,38,52),(39,39,53),(40,40,54),(41,41,55),(42,42,56),(43,43,57),(44,44,58),(45,45,59),(46,46,60),(47,47,61),(48,48,62),(49,49,63),(50,50,64),(51,51,65),(52,52,66),(53,53,67),(54,54,68),(55,55,69),(56,56,70),(57,57,71),(58,58,72),(59,59,73),(60,60,74),(61,61,75),(62,62,76),(63,63,77),(64,64,78),(65,65,79),(66,66,80),(67,67,81),(68,68,82),(69,69,83),(70,70,84),(71,71,85),(72,72,86),(73,73,87),(74,74,88),(75,75,89),(76,76,90),(77,77,91),(78,78,92),(79,79,93),(80,80,94),(81,81,95),(82,82,96),(83,83,97),(84,84,98),(85,85,99),(86,86,100),(87,87,101),(88,88,102),(89,89,103),(90,90,104),(91,91,105),(92,92,106),(93,93,107),(94,94,108),(95,95,109),(96,96,110),(97,97,111),(98,98,112),(99,99,113),(100,100,114),(101,101,115),(102,102,116),(103,103,117),(104,104,118),(105,105,119),(106,106,120),(107,107,121),(108,108,122),(109,109,123),(110,110,124),(111,111,125),(112,112,126),(113,113,127),(114,114,128),(115,115,129),(116,116,130),(117,117,131),(118,118,132),(119,119,133),(120,120,134),(121,121,135),(122,122,136),(123,123,137),(124,124,138),(125,125,139),(126,126,140),(127,127,141),(128,128,142),(129,129,143),(130,130,144),(131,131,145),(132,132,146),(133,133,147),(134,134,148),(135,135,149),(136,136,150),(137,137,151),(138,138,152),(139,139,153),(140,140,154),(141,141,155),(142,142,156),(143,143,157),(144,144,158),(145,145,159),(146,146,160),(147,147,161),(148,148,162),(149,149,163),(150,150,164),(151,151,165),(152,152,166),(153,153,167),(154,154,168),(155,155,169),(156,156,170),(157,157,171),(158,158,172),(159,159,173),(160,160,174),(161,161,175),(162,162,176),(163,163,177),(164,164,178),(165,165,179),(166,166,180),(167,167,181),(168,168,182),(169,169,183),(170,170,184),(171,171,185),(172,172,186),(173,173,187),(174,174,188),(175,175,189),(176,176,190),(177,177,191),(178,178,192),(179,179,193),(180,180,194),(181,181,195),(182,182,196),(183,183,197),(184,184,198),(185,185,199),(186,186,200),(187,187,201),(188,188,202),(189,189,203),(190,190,204),(191,191,205),(192,192,206),(193,193,207),(194,194,208),(195,195,209),(196,196,210),(197,197,211),(198,198,212),(199,199,213),(200,200,214),(201,201,215),(202,202,216),(203,203,217),(204,204,218),(205,205,219),(206,206,220),(207,207,221),(208,208,222),(209,209,223),(210,210,224),(211,211,225),(212,212,226),(213,213,227),(214,214,228),(215,215,229),(216,216,230),(217,217,231),(218,218,232),(219,219,233),(220,220,234),(221,221,235),(222,222,236),(223,223,237),(224,224,238),(225,225,239),(226,226,240),(227,227,241),(228,228,242),(229,229,243),(230,230,244),(231,231,245),(232,232,246),(233,233,247),(234,234,248),(235,235,249),(236,236,250),(237,237,251),(238,238,252),(239,239,253),(240,240,254),(241,241,255),(242,242,256),(243,243,257),(244,244,258),(245,245,259),(246,246,260),(247,247,261),(248,248,262),(249,249,263),(250,250,264),(251,251,265),(252,252,266),(253,253,267),(254,254,268),(255,255,269),(256,256,270),(257,257,271),(258,258,272),(259,259,273),(260,260,274),(261,261,275),(262,262,276),(263,263,277),(264,264,278),(265,265,279),(266,266,280),(267,267,281),(268,268,282),(269,269,283),(270,270,284),(271,271,285),(272,272,286),(273,273,287),(274,274,288),(275,275,289),(276,276,290),(277,277,291),(278,278,292),(279,279,293),(280,280,294),(281,281,295),(282,282,296),(283,283,297),(284,284,298),(285,285,299),(286,286,300),(287,287,301),(288,288,302),(289,289,303),(290,290,304),(291,291,305),(292,292,306),(293,293,307),(294,294,308),(295,295,309),(296,296,310),(297,297,311),(298,298,312),(299,299,313),(300,300,314),(301,301,315),(302,302,316),(303,303,317),(304,304,318),(305,305,319),(306,306,320),(307,307,321),(308,308,322),(309,309,323),(310,310,324),(311,311,325),(312,312,326),(313,313,327),(314,314,328),(315,315,329),(316,316,330),(317,317,331),(318,318,332),(319,319,333),(320,320,334);
-/*!40000 ALTER TABLE `tb_room_reference` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -501,7 +497,7 @@ CREATE TABLE `tb_user` (
   `email` varchar(100) COLLATE utf8_icelandic_ci NOT NULL,
   `fullname` varchar(100) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `image_profile` varchar(255) COLLATE utf8_icelandic_ci DEFAULT NULL,
-  `dob` dateCreated DEFAULT NULL,
+  `dob` date DEFAULT NULL,
   `phone` varchar(15) COLLATE utf8_icelandic_ci DEFAULT NULL,
   `gender` int(11) DEFAULT NULL,
   `role_id` int(11) NOT NULL,
@@ -590,9 +586,111 @@ UNLOCK TABLES;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculateDistance`(IN userId INT, IN pageOf INT, IN size INT)
+BEGIN
+
+DECLARE theta			DOUBLE;
+DECLARE dist 			DOUBLE;
+DECLARE lon1 			DOUBLE;
+DECLARE lat1 			DOUBLE;
+DECLARE lon2 			DOUBLE;
+DECLARE lat2 			DOUBLE;
+DECLARE startIndex		INT;
+DECLARE post_id_temp	INT;
+DECLARE done 			INT DEFAULT FALSE;
+DECLARE cur1 			CURSOR FOR SELECT longtitude, lattitude FROM CalDis;
+DECLARE cur2 			CURSOR FOR SELECT post_id FROM CalDis;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+DROP TABLE IF EXISTS CalDis;
+DROP TABLE IF EXISTS PostTemp;
+
+SET lon1 = 
+	(	SELECT	longtitude
+		FROM 	tb_post AS p
+		WHERE 	p.user_id = userId
+			AND p.type_id = 1);
+
+SET lat1 = 
+	(	SELECT 	lattitude
+		FROM 	tb_post AS p
+		WHERE 	p.user_id = userId
+			AND p.type_id = 1);    
+
+CREATE TEMPORARY TABLE CalDis
+SELECT	* 
+FROM 	tb_post 
+WHERE 	tb_post.room_id 
+	IN
+    (	SELECT	room_id
+		FROM 	tb_room AS r
+		WHERE 	r.district_id = 
+			(	SELECT	district_id
+				FROM 	tb_room AS r
+				WHERE 	r.room_id = 
+					(	SELECT	room_id
+						FROM 	tb_post AS p
+						WHERE 	p.user_id = userId
+							AND p.type_id = 1)))
+	AND	tb_post.user_id <> userId;
+    
+ALTER TABLE CalDis
+ADD PRIMARY KEY (post_id),
+ADD COLUMN distance FLOAT;
+
+OPEN cur1;  
+OPEN cur2;
+read_loop: LOOP
+	FETCH cur1 INTO lon2, lat2;    
+	FETCH cur2 INTO post_id_temp;
+	IF done THEN
+		LEAVE read_loop;    
+	ELSE
+		SET theta = lon1 - lon2;
+		SET dist = sin(lat1 * PI() / 180.0) * sin(lat2 * PI() / 180.0) + cos(lat1 * PI() / 180.0) * cos(lat2 * PI() / 180.0) * cos(theta * PI() / 180.0);
+		SET dist = acos(dist);
+		SET dist = dist * 180 / PI();
+		SET dist = dist * 60 * 1.1515 * 1.609344;		
+		UPDATE	CalDis
+		SET		distance = dist
+		WHERE	post_id = post_id_temp;
+	END IF;
+END LOOP;
+CLOSE cur1; 
+CLOSE cur2; 
+
+CREATE TEMPORARY TABLE PostTemp
+SELECT		* 
+FROM 		CalDis
+ORDER BY	distance;
+
+ALTER TABLE PostTemp
+DROP COLUMN distance;
+        
+SET startIndex = (pageOf - 1) * size;
+
+SELECT	*
+FROM	PostTemp
+LIMIT	startIndex, size;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `CalculateDistanceForMember` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculateDistanceForMember`(IN userId int, IN pageOf INT, IN size INT)
 BEGIN
 
 DECLARE theta			DOUBLE;
@@ -694,4 +792,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-04 20:55:48
+-- Dump completed on 2018-11-06 14:40:58

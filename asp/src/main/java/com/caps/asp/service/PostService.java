@@ -29,7 +29,7 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public TbPost findPostByUserIdAndTypeId(int userId, int typeId) {
+    public List<TbPost> findPostByUserIdAndTypeId(int userId, int typeId) {
         return postRepository.findByUserIdAndTypeId(userId, typeId);
     }
 

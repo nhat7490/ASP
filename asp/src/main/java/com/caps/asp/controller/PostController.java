@@ -415,7 +415,7 @@ public class PostController {
     @PostMapping("/post/suggest")
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
         TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
-        List<TbPost> checkPost = postService.findPostByUserId(baseSuggestRequestModel.getUserId());
+        List<TbPost> checkPost = postService.findPostByUserIdAndTypeId(baseSuggestRequestModel.getUserId() ,MASTER_POST);
 
         //sugesst for room master
         if (tbUser.getRoleId() == ROOM_MASTER && checkPost != null) {
