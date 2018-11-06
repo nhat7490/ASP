@@ -25,6 +25,7 @@
 		690B2067215BA14500DAD053 /* PostDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690B2066215BA14500DAD053 /* PostDetailVC.swift */; };
 		690BA6DE218F8FE3003C38F2 /* RoomMemberRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690BA6DD218F8FE3003C38F2 /* RoomMemberRequestModel.swift */; };
 		690BA6E0218F902A003C38F2 /* MemberRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690BA6DF218F902A003C38F2 /* MemberRequestModel.swift */; };
+		6913339F21922BB800AE8A69 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6913339E21922BB800AE8A69 /* Toast.swift */; };
 		691727B0215509D100104A19 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 691727B2215509D100104A19 /* Localizable.strings */; };
 		691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B62155122D00104A19 /* NotificationCVCell.swift */; };
 		691727BA2155129700104A19 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B92155129700104A19 /* NotificationModel.swift */; };
@@ -37,7 +38,6 @@
 		69232A2521614C5E00C782F9 /* ImageCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69232A2421614C5E00C782F9 /* ImageCVCell.xib */; };
 		6923A8E021621DE300068B4B /* BaseInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6923A8DF21621DE300068B4B /* BaseInformationView.swift */; };
 		6925AA942164B03200232311 /* RoomDetaillVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925AA932164B03100232311 /* RoomDetaillVC.swift */; };
-		6925AA962164E86800232311 /* FilterForRoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925AA952164E86800232311 /* FilterForRoomModel.swift */; };
 		6925AA982164F22F00232311 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925AA972164F22F00232311 /* BaseModel.swift */; };
 		6929BFC92175C4B100A0EEAF /* UtilityInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6929BFC82175C4B100A0EEAF /* UtilityInputVC.swift */; };
 		692C24F721671E5E008C16A7 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692C24F621671E5E008C16A7 /* APIRouter.swift */; };
@@ -81,8 +81,6 @@
 		6943D9A82153F5F3002CFEBB /* ListRoommateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A72153F5F3002CFEBB /* ListRoommateVC.swift */; };
 		6943D9AA2153F65E002CFEBB /* RoleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A92153F65E002CFEBB /* RoleVC.swift */; };
 		6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9AD2153FA14002CFEBB /* LocalizationPreferences.swift */; };
-		695309F9215631980004BDE9 /* RoommateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695309F8215631980004BDE9 /* RoommateModel.swift */; };
-		695309FC215633B70004BDE9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695309FB215633B70004BDE9 /* User.swift */; };
 		695B1A2D21898BA900C004DB /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695B1A2C21898BA900C004DB /* SettingModel.swift */; };
 		695B1A2F2189ADF600C004DB /* BaseSuggestRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695B1A2E2189ADF600C004DB /* BaseSuggestRequestModel.swift */; };
 		695B1A362189C6D000C004DB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 695B1A352189C6D000C004DB /* Info.plist */; };
@@ -91,9 +89,8 @@
 		696219022163FDED00044EB4 /* FilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696219012163FDED00044EB4 /* FilterVC.swift */; };
 		696219072163FF4300044EB4 /* DropdownListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696219062163FF4300044EB4 /* DropdownListView.swift */; };
 		69621909216401BE00044EB4 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69621908216401BE00044EB4 /* SliderView.swift */; };
-		69678D6F21779DCA001F4352 /* NewRoomCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69678D6E21779DCA001F4352 /* NewRoomCVCell.xib */; };
-		69678D7121779E52001F4352 /* NewRoomCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69678D7021779E52001F4352 /* NewRoomCVCell.swift */; };
-		69747F0421759213005E869B /* ArrayTranform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69747F0321759212005E869B /* ArrayTranform.swift */; };
+		69678D6F21779DCA001F4352 /* RoomPostCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69678D6E21779DCA001F4352 /* RoomPostCVCell.xib */; };
+		69678D7121779E52001F4352 /* RoomPostCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69678D7021779E52001F4352 /* RoomPostCVCell.swift */; };
 		6977C7F42162269F003C58F4 /* BaseInformationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6977C7F32162269F003C58F4 /* BaseInformationView.xib */; };
 		6977C7F6216229A6003C58F4 /* Room.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6977C7F5216229A6003C58F4 /* Room.storyboard */; };
 		6977C7F821627A0C003C58F4 /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6977C7F721627A0C003C58F4 /* DescriptionView.swift */; };
@@ -111,8 +108,8 @@
 		69859C79217EC61A0022AB3B /* VerticalPostView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69859C78217EC61A0022AB3B /* VerticalPostView.xib */; };
 		698B0A542178D750005221F9 /* ErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 698B0A532178D750005221F9 /* ErrorView.xib */; };
 		698B0A562178D85D005221F9 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698B0A552178D85D005221F9 /* ErrorView.swift */; };
-		6993A728217CBB8200E8112C /* NewRoommateCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6993A727217CBB8200E8112C /* NewRoommateCVCell.xib */; };
-		6993A72A217CBBBC00E8112C /* NewRoommateCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6993A729217CBBBC00E8112C /* NewRoommateCVCell.swift */; };
+		6993A728217CBB8200E8112C /* RoommatePostCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6993A727217CBB8200E8112C /* RoommatePostCVCell.xib */; };
+		6993A72A217CBBBC00E8112C /* RoommatePostCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6993A729217CBBBC00E8112C /* RoommatePostCVCell.swift */; };
 		6993A72C217CBC3B00E8112C /* RoommatePostResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6993A72B217CBC3B00E8112C /* RoommatePostResponseModel.swift */; };
 		699EF0BA217453DF00788E17 /* NewSearchRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699EF0B9217453DF00788E17 /* NewSearchRequestModel.swift */; };
 		699EF0BC2174689A00788E17 /* NewFilterArgumentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699EF0BB2174689A00788E17 /* NewFilterArgumentModel.swift */; };
@@ -125,14 +122,13 @@
 		69A03005215391130087897F /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A03004215391130087897F /* SignUpVC.swift */; };
 		69A03007215391640087897F /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A03006215391640087897F /* MainTabBarVC.swift */; };
 		69A0300A2153923E0087897F /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A030092153923E0087897F /* Extension.swift */; };
-		69A1ECC92155F38900BC10D4 /* RoommateCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A1ECC82155F38900BC10D4 /* RoommateCVCell.swift */; };
 		69A67F0E216CEC5D0020F09F /* APIConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A67F0D216CEC5D0020F09F /* APIConnection.swift */; };
 		69A67F10216D25C80020F09F /* APIResponseAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A67F0F216D25C80020F09F /* APIResponseAlert.swift */; };
 		69A67F12216D341A0020F09F /* BaseResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A67F11216D341A0020F09F /* BaseResponseModel.swift */; };
 		69AD763E218B58C60073CD27 /* RoomResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD763D218B58C60073CD27 /* RoomResponseModel.swift */; };
 		69AD7640218B591C0073CD27 /* MemberResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD763F218B591C0073CD27 /* MemberResponseModel.swift */; };
-		69AD7644218B5F8E0073CD27 /* RoomForOwnerCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69AD7642218B5F8E0073CD27 /* RoomForOwnerCVCell.xib */; };
-		69AD7646218B66850073CD27 /* RoomForOwnerCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD7645218B66850073CD27 /* RoomForOwnerCVCell.swift */; };
+		69AD7644218B5F8E0073CD27 /* RoomCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69AD7642218B5F8E0073CD27 /* RoomCVCell.xib */; };
+		69AD7646218B66850073CD27 /* RoomCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD7645218B66850073CD27 /* RoomCVCell.swift */; };
 		69AFA9D921837C3D004244C6 /* GPAutocompletePrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AFA9D821837C3D004244C6 /* GPAutocompletePrediction.swift */; };
 		69AFA9DB21837CC2004244C6 /* GPPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AFA9DA21837CC2004244C6 /* GPPrediction.swift */; };
 		69AFA9DD21837F45004244C6 /* GPPlaceResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AFA9DC21837F45004244C6 /* GPPlaceResult.swift */; };
@@ -145,8 +141,7 @@
 		69BA0D812167D3A3006AEEDC /* UtilityInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BA0D802167D3A3006AEEDC /* UtilityInputView.swift */; };
 		69BF69EC216072E5002B5B49 /* BaseVerticalCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BF69EB216072E5002B5B49 /* BaseVerticalCollectionView.swift */; };
 		69BF69F021607917002B5B49 /* BaseVerticalCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BF69EF21607917002B5B49 /* BaseVerticalCollectionViewFlowLayout.swift */; };
-		69C854F721691D4300C22F41 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C854F621691D4300C22F41 /* InputView.swift */; };
-		69C854F921691D4F00C22F41 /* InputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69C854F821691D4F00C22F41 /* InputView.xib */; };
+		69C9F333219159BE00C15E43 /* ShowAllVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C9F332219159BE00C15E43 /* ShowAllVC.swift */; };
 		69CAE6BD21855A83003D3399 /* UploadImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAE6BC21855A83003D3399 /* UploadImageView.swift */; };
 		69CAE6BF21855A90003D3399 /* UploadImageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69CAE6BE21855A90003D3399 /* UploadImageView.xib */; };
 		69CB782F216083E7003FA0F9 /* NavigationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CB782D216083E7003FA0F9 /* NavigationCVCell.swift */; };
@@ -154,9 +149,7 @@
 		69D00EC7216099A400FF034E /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00EC6216099A400FF034E /* ImageModel.swift */; };
 		69D00EC921609A8200FF034E /* CityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00EC821609A8200FF034E /* CityModel.swift */; };
 		69D00ECB21609AF000FF034E /* DistrictModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00ECA21609AF000FF034E /* DistrictModel.swift */; };
-		69D00ECD21609DF200FF034E /* StatusModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00ECC21609DF200FF034E /* StatusModel.swift */; };
 		69D00ECF21609F2400FF034E /* UtilityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00ECE21609F2400FF034E /* UtilityModel.swift */; };
-		69D00ED12160A79500FF034E /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00ED02160A79500FF034E /* Room.swift */; };
 		69D00ED32160B0D700FF034E /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00ED22160B0D700FF034E /* AlertController.swift */; };
 		69D00ED52160B6A400FF034E /* Generic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00ED42160B6A400FF034E /* Generic.swift */; };
 		69D00ED82160B93100FF034E /* PopupSelectListTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00ED62160B93100FF034E /* PopupSelectListTVCell.swift */; };
@@ -167,15 +160,14 @@
 		69D9DA182169B68B00B38D35 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D9DA172169B68B00B38D35 /* ViewController.swift */; };
 		69DA16AA2160DBAD00F9EDA0 /* UtilitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA16A92160DBAD00F9EDA0 /* UtilitiesView.swift */; };
 		69DC86E02188AEF600D776A2 /* UploadImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DC86DF2188AEF600D776A2 /* UploadImageModel.swift */; };
-		69E496832158D81600444211 /* RoomCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E496822158D81600444211 /* RoomCVCell.swift */; };
 		69E93101215690310023ADC7 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E93100215690310023ADC7 /* Enums.swift */; };
 		69ECD510217DB8EC00976B33 /* BookmarkRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ECD50F217DB8EC00976B33 /* BookmarkRequestModel.swift */; };
 		69ECD512217DD77200976B33 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ECD511217DD77200976B33 /* LocationSearchView.swift */; };
 		69ECD514217DD78600976B33 /* LocationSearchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69ECD513217DD78600976B33 /* LocationSearchView.xib */; };
 		69ECD516217DEC5200976B33 /* HorizontalRoomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69ECD515217DEC5200976B33 /* HorizontalRoomView.xib */; };
 		69ECD518217DEC9600976B33 /* HorizontalRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ECD517217DEC9600976B33 /* HorizontalRoomView.swift */; };
-		69F4EDFB216F629A006998A7 /* NewInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69F4EDFA216F629A006998A7 /* NewInputView.xib */; };
-		69F4EDFD216F62A6006998A7 /* NewInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F4EDFC216F62A6006998A7 /* NewInputView.swift */; };
+		69F4EDFB216F629A006998A7 /* InputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69F4EDFA216F629A006998A7 /* InputView.xib */; };
+		69F4EDFD216F62A6006998A7 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F4EDFC216F62A6006998A7 /* InputView.swift */; };
 		69F6BECC216B759500DFD3B3 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F6BECB216B759500DFD3B3 /* UserModel.swift */; };
 		C0D680C4CE1811944AB4B691 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D68EAA07119A21C4B2B4DD /* DBManager.swift */; };
 		C0D681E6D7644850C1AE02EA /* BasePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D68D14E23CBCF84423F539 /* BasePost.swift */; };
@@ -202,6 +194,7 @@
 		690B2066215BA14500DAD053 /* PostDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailVC.swift; sourceTree = "<group>"; };
 		690BA6DD218F8FE3003C38F2 /* RoomMemberRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberRequestModel.swift; sourceTree = "<group>"; };
 		690BA6DF218F902A003C38F2 /* MemberRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberRequestModel.swift; sourceTree = "<group>"; };
+		6913339E21922BB800AE8A69 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		691727AC2155099700104A19 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		691727AD2155099C00104A19 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		691727B1215509D100104A19 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -217,7 +210,6 @@
 		69232A2421614C5E00C782F9 /* ImageCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCVCell.xib; sourceTree = "<group>"; };
 		6923A8DF21621DE300068B4B /* BaseInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseInformationView.swift; sourceTree = "<group>"; };
 		6925AA932164B03100232311 /* RoomDetaillVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomDetaillVC.swift; sourceTree = "<group>"; };
-		6925AA952164E86800232311 /* FilterForRoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterForRoomModel.swift; sourceTree = "<group>"; };
 		6925AA972164F22F00232311 /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseModel.swift; sourceTree = "<group>"; };
 		6929BFC82175C4B100A0EEAF /* UtilityInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityInputVC.swift; sourceTree = "<group>"; };
 		692C24F621671E5E008C16A7 /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
@@ -263,8 +255,6 @@
 		6943D9AD2153FA14002CFEBB /* LocalizationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationPreferences.swift; sourceTree = "<group>"; };
 		694F2FF8216BF00E0005323A /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		694F2FFA216BF00E0005323A /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		695309F8215631980004BDE9 /* RoommateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoommateModel.swift; sourceTree = "<group>"; };
-		695309FB215633B70004BDE9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		695B1A2C21898BA900C004DB /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		695B1A2E2189ADF600C004DB /* BaseSuggestRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSuggestRequestModel.swift; sourceTree = "<group>"; };
 		695B1A352189C6D000C004DB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Roommate/Info.plist; sourceTree = "<group>"; };
@@ -274,9 +264,8 @@
 		696219012163FDED00044EB4 /* FilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterVC.swift; sourceTree = "<group>"; };
 		696219062163FF4300044EB4 /* DropdownListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownListView.swift; sourceTree = "<group>"; };
 		69621908216401BE00044EB4 /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
-		69678D6E21779DCA001F4352 /* NewRoomCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewRoomCVCell.xib; sourceTree = "<group>"; };
-		69678D7021779E52001F4352 /* NewRoomCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRoomCVCell.swift; sourceTree = "<group>"; };
-		69747F0321759212005E869B /* ArrayTranform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTranform.swift; sourceTree = "<group>"; };
+		69678D6E21779DCA001F4352 /* RoomPostCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoomPostCVCell.xib; sourceTree = "<group>"; };
+		69678D7021779E52001F4352 /* RoomPostCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPostCVCell.swift; sourceTree = "<group>"; };
 		6977C7F32162269F003C58F4 /* BaseInformationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseInformationView.xib; sourceTree = "<group>"; };
 		6977C7F5216229A6003C58F4 /* Room.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Room.storyboard; sourceTree = "<group>"; };
 		6977C7F721627A0C003C58F4 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
@@ -294,8 +283,8 @@
 		69859C78217EC61A0022AB3B /* VerticalPostView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VerticalPostView.xib; sourceTree = "<group>"; };
 		698B0A532178D750005221F9 /* ErrorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ErrorView.xib; sourceTree = "<group>"; };
 		698B0A552178D85D005221F9 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
-		6993A727217CBB8200E8112C /* NewRoommateCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewRoommateCVCell.xib; sourceTree = "<group>"; };
-		6993A729217CBBBC00E8112C /* NewRoommateCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRoommateCVCell.swift; sourceTree = "<group>"; };
+		6993A727217CBB8200E8112C /* RoommatePostCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoommatePostCVCell.xib; sourceTree = "<group>"; };
+		6993A729217CBBBC00E8112C /* RoommatePostCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoommatePostCVCell.swift; sourceTree = "<group>"; };
 		6993A72B217CBC3B00E8112C /* RoommatePostResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoommatePostResponseModel.swift; sourceTree = "<group>"; };
 		699EF0B9217453DF00788E17 /* NewSearchRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSearchRequestModel.swift; sourceTree = "<group>"; };
 		699EF0BB2174689A00788E17 /* NewFilterArgumentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFilterArgumentModel.swift; sourceTree = "<group>"; };
@@ -312,14 +301,13 @@
 		69A03004215391130087897F /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		69A03006215391640087897F /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
 		69A030092153923E0087897F /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
-		69A1ECC82155F38900BC10D4 /* RoommateCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoommateCVCell.swift; sourceTree = "<group>"; };
 		69A67F0D216CEC5D0020F09F /* APIConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConnection.swift; sourceTree = "<group>"; };
 		69A67F0F216D25C80020F09F /* APIResponseAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponseAlert.swift; sourceTree = "<group>"; };
 		69A67F11216D341A0020F09F /* BaseResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponseModel.swift; sourceTree = "<group>"; };
 		69AD763D218B58C60073CD27 /* RoomResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomResponseModel.swift; sourceTree = "<group>"; };
 		69AD763F218B591C0073CD27 /* MemberResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberResponseModel.swift; sourceTree = "<group>"; };
-		69AD7642218B5F8E0073CD27 /* RoomForOwnerCVCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RoomForOwnerCVCell.xib; sourceTree = "<group>"; };
-		69AD7645218B66850073CD27 /* RoomForOwnerCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomForOwnerCVCell.swift; sourceTree = "<group>"; };
+		69AD7642218B5F8E0073CD27 /* RoomCVCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RoomCVCell.xib; sourceTree = "<group>"; };
+		69AD7645218B66850073CD27 /* RoomCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCVCell.swift; sourceTree = "<group>"; };
 		69AFA9D821837C3D004244C6 /* GPAutocompletePrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPAutocompletePrediction.swift; sourceTree = "<group>"; };
 		69AFA9DA21837CC2004244C6 /* GPPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPPrediction.swift; sourceTree = "<group>"; };
 		69AFA9DC21837F45004244C6 /* GPPlaceResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPPlaceResult.swift; sourceTree = "<group>"; };
@@ -332,8 +320,7 @@
 		69BA0D802167D3A3006AEEDC /* UtilityInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityInputView.swift; sourceTree = "<group>"; };
 		69BF69EB216072E5002B5B49 /* BaseVerticalCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVerticalCollectionView.swift; sourceTree = "<group>"; };
 		69BF69EF21607917002B5B49 /* BaseVerticalCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVerticalCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
-		69C854F621691D4300C22F41 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
-		69C854F821691D4F00C22F41 /* InputView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputView.xib; sourceTree = "<group>"; };
+		69C9F332219159BE00C15E43 /* ShowAllVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAllVC.swift; sourceTree = "<group>"; };
 		69CAE6BC21855A83003D3399 /* UploadImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageView.swift; sourceTree = "<group>"; };
 		69CAE6BE21855A90003D3399 /* UploadImageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadImageView.xib; sourceTree = "<group>"; };
 		69CB782D216083E7003FA0F9 /* NavigationCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCVCell.swift; sourceTree = "<group>"; };
@@ -342,9 +329,7 @@
 		69D00EC6216099A400FF034E /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		69D00EC821609A8200FF034E /* CityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityModel.swift; sourceTree = "<group>"; };
 		69D00ECA21609AF000FF034E /* DistrictModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictModel.swift; sourceTree = "<group>"; };
-		69D00ECC21609DF200FF034E /* StatusModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusModel.swift; sourceTree = "<group>"; };
 		69D00ECE21609F2400FF034E /* UtilityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityModel.swift; sourceTree = "<group>"; };
-		69D00ED02160A79500FF034E /* Room.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		69D00ED22160B0D700FF034E /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		69D00ED42160B6A400FF034E /* Generic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Generic.swift; sourceTree = "<group>"; };
 		69D00ED62160B93100FF034E /* PopupSelectListTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupSelectListTVCell.swift; sourceTree = "<group>"; };
@@ -355,15 +340,14 @@
 		69D9DA172169B68B00B38D35 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		69DA16A92160DBAD00F9EDA0 /* UtilitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilitiesView.swift; sourceTree = "<group>"; };
 		69DC86DF2188AEF600D776A2 /* UploadImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageModel.swift; sourceTree = "<group>"; };
-		69E496822158D81600444211 /* RoomCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCVCell.swift; sourceTree = "<group>"; };
 		69E93100215690310023ADC7 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		69ECD50F217DB8EC00976B33 /* BookmarkRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkRequestModel.swift; sourceTree = "<group>"; };
 		69ECD511217DD77200976B33 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
 		69ECD513217DD78600976B33 /* LocationSearchView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationSearchView.xib; sourceTree = "<group>"; };
 		69ECD515217DEC5200976B33 /* HorizontalRoomView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HorizontalRoomView.xib; sourceTree = "<group>"; };
 		69ECD517217DEC9600976B33 /* HorizontalRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalRoomView.swift; sourceTree = "<group>"; };
-		69F4EDFA216F629A006998A7 /* NewInputView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewInputView.xib; sourceTree = "<group>"; };
-		69F4EDFC216F62A6006998A7 /* NewInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewInputView.swift; sourceTree = "<group>"; };
+		69F4EDFA216F629A006998A7 /* InputView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputView.xib; sourceTree = "<group>"; };
+		69F4EDFC216F62A6006998A7 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
 		69F6BECB216B759500DFD3B3 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		69F6BECD216B761600DFD3B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		69F6BECF216B762500DFD3B3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -418,6 +402,7 @@
 				6943D9A52153F5E6002CFEBB /* ListRoomVC.swift */,
 				6943D9A72153F5F3002CFEBB /* ListRoommateVC.swift */,
 				6929BFC82175C4B100A0EEAF /* UtilityInputVC.swift */,
+				69C9F332219159BE00C15E43 /* ShowAllVC.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -532,6 +517,9 @@
 				69A67F11216D341A0020F09F /* BaseResponseModel.swift */,
 				690A61DF2176611400BA9564 /* CustomListTransform.swift */,
 				69DC86DF2188AEF600D776A2 /* UploadImageModel.swift */,
+				691727B92155129700104A19 /* NotificationModel.swift */,
+				69D00EC6216099A400FF034E /* ImageModel.swift */,
+				69D00ECE21609F2400FF034E /* UtilityModel.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -619,18 +607,16 @@
 				69BA0D7A2167D16B006AEEDC /* UtilityDetailView.xib */,
 				69BA0D802167D3A3006AEEDC /* UtilityInputView.swift */,
 				69BA0D7C2167D32E006AEEDC /* UtilityInputView.xib */,
-				69C854F621691D4300C22F41 /* InputView.swift */,
-				69C854F821691D4F00C22F41 /* InputView.xib */,
-				69F4EDFC216F62A6006998A7 /* NewInputView.swift */,
-				69F4EDFA216F629A006998A7 /* NewInputView.xib */,
+				69F4EDFC216F62A6006998A7 /* InputView.swift */,
+				69F4EDFA216F629A006998A7 /* InputView.xib */,
 				69082C4F2170459B00E77E24 /* IconTitleTVCell.swift */,
 				69082C502170459B00E77E24 /* IconTitleTVCell.xib */,
-				69678D7021779E52001F4352 /* NewRoomCVCell.swift */,
-				69678D6E21779DCA001F4352 /* NewRoomCVCell.xib */,
-				69AD7645218B66850073CD27 /* RoomForOwnerCVCell.swift */,
-				69AD7642218B5F8E0073CD27 /* RoomForOwnerCVCell.xib */,
-				6993A729217CBBBC00E8112C /* NewRoommateCVCell.swift */,
-				6993A727217CBB8200E8112C /* NewRoommateCVCell.xib */,
+				69678D7021779E52001F4352 /* RoomPostCVCell.swift */,
+				69678D6E21779DCA001F4352 /* RoomPostCVCell.xib */,
+				69AD7645218B66850073CD27 /* RoomCVCell.swift */,
+				69AD7642218B5F8E0073CD27 /* RoomCVCell.xib */,
+				6993A729217CBBBC00E8112C /* RoommatePostCVCell.swift */,
+				6993A727217CBB8200E8112C /* RoommatePostCVCell.xib */,
 				698B0A552178D85D005221F9 /* ErrorView.swift */,
 				698B0A532178D750005221F9 /* ErrorView.xib */,
 				69ECD511217DD77200976B33 /* LocationSearchView.swift */,
@@ -653,22 +639,6 @@
 				691727B62155122D00104A19 /* NotificationCVCell.swift */,
 			);
 			path = Notification;
-			sourceTree = "<group>";
-		};
-		6977C7F1216225D0003C58F4 /* Roommate */ = {
-			isa = PBXGroup;
-			children = (
-				69A1ECC82155F38900BC10D4 /* RoommateCVCell.swift */,
-			);
-			path = Roommate;
-			sourceTree = "<group>";
-		};
-		6977C7F2216225E8003C58F4 /* Room */ = {
-			isa = PBXGroup;
-			children = (
-				69E496822158D81600444211 /* RoomCVCell.swift */,
-			);
-			path = Room;
 			sourceTree = "<group>";
 		};
 		69834F6421539CCC00845AB8 /* Storyboard */ = {
@@ -763,14 +733,6 @@
 				69678D6D21778E59001F4352 /* API */,
 				69678D6C21778E53001F4352 /* Realm */,
 				69588FE6217330E100894F0D /* Common */,
-				695309FB215633B70004BDE9 /* User.swift */,
-				695309F8215631980004BDE9 /* RoommateModel.swift */,
-				691727B92155129700104A19 /* NotificationModel.swift */,
-				69D00EC6216099A400FF034E /* ImageModel.swift */,
-				69D00ECC21609DF200FF034E /* StatusModel.swift */,
-				69D00ECE21609F2400FF034E /* UtilityModel.swift */,
-				69D00ED02160A79500FF034E /* Room.swift */,
-				6925AA952164E86800232311 /* FilterForRoomModel.swift */,
 				C0D68374ACAD0BA0148A1D73 /* RequestModel */,
 			);
 			path = Model;
@@ -780,8 +742,6 @@
 			isa = PBXGroup;
 			children = (
 				696219032163FEDD00044EB4 /* Filter */,
-				6977C7F2216225E8003C58F4 /* Room */,
-				6977C7F1216225D0003C58F4 /* Roommate */,
 				6977C7F0216225C0003C58F4 /* Notification */,
 				6977C7EF21622594003C58F4 /* Common */,
 				6977C7EE21622586003C58F4 /* RoomDetail */,
@@ -803,7 +763,7 @@
 				C0D68EAA07119A21C4B2B4DD /* DBManager.swift */,
 				69A67F0D216CEC5D0020F09F /* APIConnection.swift */,
 				69A67F0F216D25C80020F09F /* APIResponseAlert.swift */,
-				69747F0321759212005E869B /* ArrayTranform.swift */,
+				6913339E21922BB800AE8A69 /* Toast.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -943,8 +903,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69678D6F21779DCA001F4352 /* NewRoomCVCell.xib in Resources */,
-				69F4EDFB216F629A006998A7 /* NewInputView.xib in Resources */,
+				69678D6F21779DCA001F4352 /* RoomPostCVCell.xib in Resources */,
+				69F4EDFB216F629A006998A7 /* InputView.xib in Resources */,
 				6977C7F6216229A6003C58F4 /* Room.storyboard in Resources */,
 				698B0A542178D750005221F9 /* ErrorView.xib in Resources */,
 				6943D9682153F03A002CFEBB /* Bookmark.storyboard in Resources */,
@@ -960,13 +920,12 @@
 				69082C522170459B00E77E24 /* IconTitleTVCell.xib in Resources */,
 				692E8FA62163721700AF5927 /* GenderView.xib in Resources */,
 				6907E89F2160E42C009A5F25 /* UtilitiesView.xib in Resources */,
-				6993A728217CBB8200E8112C /* NewRoommateCVCell.xib in Resources */,
-				69AD7644218B5F8E0073CD27 /* RoomForOwnerCVCell.xib in Resources */,
+				6993A728217CBB8200E8112C /* RoommatePostCVCell.xib in Resources */,
+				69AD7644218B5F8E0073CD27 /* RoomCVCell.xib in Resources */,
 				695B1A392189C73000C004DB /* InfoPlist.strings in Resources */,
 				69B7D45E21649CF800B3E942 /* DropdownListView.xib in Resources */,
 				697A752F2163188800B7618B /* MembersView.xib in Resources */,
 				69BA0D772167C72D006AEEDC /* NewUtilityCVCell.xib in Resources */,
-				69C854F921691D4F00C22F41 /* InputView.xib in Resources */,
 				69ECD514217DD78600976B33 /* LocationSearchView.xib in Resources */,
 				6977C7FE21627EE3003C58F4 /* OptionView.xib in Resources */,
 				695D346D2166859100DCD6EE /* SliderView.xib in Resources */,
@@ -1094,13 +1053,10 @@
 				69225643215B27320040213A /* Protocols.swift in Sources */,
 				69A02FB721538C930087897F /* MainViewVC.swift in Sources */,
 				6943D9782153F0C9002CFEBB /* FirstLaunchVC.swift in Sources */,
-				69D00ED12160A79500FF034E /* Room.swift in Sources */,
-				69C854F721691D4300C22F41 /* InputView.swift in Sources */,
 				69AFA9DB21837CC2004244C6 /* GPPrediction.swift in Sources */,
 				695B1A2D21898BA900C004DB /* SettingModel.swift in Sources */,
 				699EF0BC2174689A00788E17 /* NewFilterArgumentModel.swift in Sources */,
 				04D77E452158AFD70045C45C /* CustomSegmentedControl.swift in Sources */,
-				69747F0421759213005E869B /* ArrayTranform.swift in Sources */,
 				6943D97C2153F0EC002CFEBB /* RoommateDetailVC.swift in Sources */,
 				6943D9982153F462002CFEBB /* SuggestVC.swift in Sources */,
 				69BF69F021607917002B5B49 /* BaseVerticalCollectionViewFlowLayout.swift in Sources */,
@@ -1110,7 +1066,6 @@
 				69D2D11B216C8E780067288A /* NetworkStatus.swift in Sources */,
 				6943D9942153F3BE002CFEBB /* ResetPasswordVC.swift in Sources */,
 				692E8FAA2163823F00AF5927 /* MaxMemberSelectView.swift in Sources */,
-				69A1ECC92155F38900BC10D4 /* RoommateCVCell.swift in Sources */,
 				69A67F0E216CEC5D0020F09F /* APIConnection.swift in Sources */,
 				6943D99A2153F46E002CFEBB /* ProfileVC.swift in Sources */,
 				690B2067215BA14500DAD053 /* PostDetailVC.swift in Sources */,
@@ -1136,7 +1091,6 @@
 				69ECD518217DEC9600976B33 /* HorizontalRoomView.swift in Sources */,
 				69A67F12216D341A0020F09F /* BaseResponseModel.swift in Sources */,
 				6943D9802153F10F002CFEBB /* CERoomVC.swift in Sources */,
-				695309FC215633B70004BDE9 /* User.swift in Sources */,
 				69BA0D792167C781006AEEDC /* NewUtilityCVCell.swift in Sources */,
 				69AD7640218B591C0073CD27 /* MemberResponseModel.swift in Sources */,
 				691727BA2155129700104A19 /* NotificationModel.swift in Sources */,
@@ -1158,6 +1112,7 @@
 				6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */,
 				690660582180886900E446F9 /* FilterArgumentModel.swift in Sources */,
 				69BF69EC216072E5002B5B49 /* BaseVerticalCollectionView.swift in Sources */,
+				6913339F21922BB800AE8A69 /* Toast.swift in Sources */,
 				69082C512170459B00E77E24 /* IconTitleTVCell.swift in Sources */,
 				04D77E41215760610045C45C /* TestViewController.swift in Sources */,
 				690A61E221766E9C00BA9564 /* RoomPostResponseModel.swift in Sources */,
@@ -1168,9 +1123,7 @@
 				6925AA982164F22F00232311 /* BaseModel.swift in Sources */,
 				695B1A2F2189ADF600C004DB /* BaseSuggestRequestModel.swift in Sources */,
 				6943D97E2153F100002CFEBB /* SearchVC.swift in Sources */,
-				69D00ECD21609DF200FF034E /* StatusModel.swift in Sources */,
-				69F4EDFD216F62A6006998A7 /* NewInputView.swift in Sources */,
-				695309F9215631980004BDE9 /* RoommateModel.swift in Sources */,
+				69F4EDFD216F62A6006998A7 /* InputView.swift in Sources */,
 				69A02FB521538C930087897F /* AppDelegate.swift in Sources */,
 				69ECD512217DD77200976B33 /* LocationSearchView.swift in Sources */,
 				690A61E02176611400BA9564 /* CustomListTransform.swift in Sources */,
@@ -1178,19 +1131,20 @@
 				69AD763E218B58C60073CD27 /* RoomResponseModel.swift in Sources */,
 				69A03003215390EF0087897F /* SignInVC.swift in Sources */,
 				69CB782F216083E7003FA0F9 /* NavigationCVCell.swift in Sources */,
-				69678D7121779E52001F4352 /* NewRoomCVCell.swift in Sources */,
+				69678D7121779E52001F4352 /* RoomPostCVCell.swift in Sources */,
 				6925AA942164B03200232311 /* RoomDetaillVC.swift in Sources */,
 				6943D9A82153F5F3002CFEBB /* ListRoommateVC.swift in Sources */,
 				692C24F721671E5E008C16A7 /* APIRouter.swift in Sources */,
 				69355ED2218CC09D003339E2 /* EditMemberVC.swift in Sources */,
-				6993A72A217CBBBC00E8112C /* NewRoommateCVCell.swift in Sources */,
+				6993A72A217CBBBC00E8112C /* RoommatePostCVCell.swift in Sources */,
 				69ECD510217DB8EC00976B33 /* BookmarkRequestModel.swift in Sources */,
+				69C9F333219159BE00C15E43 /* ShowAllVC.swift in Sources */,
 				69232A1F21614A7E00C782F9 /* BaseHorizontalCollectionView.swift in Sources */,
 				6920FB4B21724DED000E06E0 /* BaseTabBarVC.swift in Sources */,
 				6993A72C217CBC3B00E8112C /* RoommatePostResponseModel.swift in Sources */,
 				6943D9702153F08C002CFEBB /* HomeVC.swift in Sources */,
 				6943D9A02153F55F002CFEBB /* PolicyVC.swift in Sources */,
-				69AD7646218B66850073CD27 /* RoomForOwnerCVCell.swift in Sources */,
+				69AD7646218B66850073CD27 /* RoomCVCell.swift in Sources */,
 				6943D9742153F0AE002CFEBB /* NotificationVC.swift in Sources */,
 				69A67F10216D25C80020F09F /* APIResponseAlert.swift in Sources */,
 				6929BFC92175C4B100A0EEAF /* UtilityInputVC.swift in Sources */,
@@ -1204,10 +1158,8 @@
 				046853D82158C8F500C9CA6C /* TableViewController.swift in Sources */,
 				69355ED4218CC6E0003339E2 /* AddMemberView.swift in Sources */,
 				6923A8E021621DE300068B4B /* BaseInformationView.swift in Sources */,
-				69E496832158D81600444211 /* RoomCVCell.swift in Sources */,
 				69834F6321539AD800845AB8 /* Constants.swift in Sources */,
 				69D886DC2167A1D200A83D1C /* RoommatePostRequestModel.swift in Sources */,
-				6925AA962164E86800232311 /* FilterForRoomModel.swift in Sources */,
 				C0D68F1955A4A6AEFE7B202F /* BaseRoomRequestModel.swift in Sources */,
 				C0D681E6D7644850C1AE02EA /* BasePost.swift in Sources */,
 				C0D680C4CE1811944AB4B691 /* DBManager.swift in Sources */,

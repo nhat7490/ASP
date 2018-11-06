@@ -56,10 +56,18 @@ enum CERoomVCType{
     case create,edit
 }
 enum AllVCType{
-    case all,bookmark,search,suggestRoom
+    case all,bookmark,search
 }
+
+enum ShowAllVCType{
+    case suggestRoom,roomForOwner,roomForMember,roomPost,roommatePost
+}
+
 enum FilterVCType{
     case room,roommate
+}
+enum InputViewType{
+    case name,price,area,address,phone
 }
 
 enum HTTPStatusCode: Int {

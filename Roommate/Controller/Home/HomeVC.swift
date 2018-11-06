@@ -172,12 +172,12 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         if user?.roleId != 2{suggestRoomView.delegate = self}
         
         filterForRoomPost.searchRequestModel = nil
-        filterForRoommatePost.typeId = 1
+        filterForRoommatePost.typeId = Constants.ROOM_POST
         filterForRoomPost.cityId = DBManager.shared.getSetting()?.cityId
         
         filterForRoommatePost.searchRequestModel = nil
         filterForRoommatePost.cityId = DBManager.shared.getSetting()?.cityId
-        filterForRoommatePost.typeId = 2
+        filterForRoommatePost.typeId = Constants.ROOMMATE_POST
     }
     
     //MARK: Notification
@@ -319,7 +319,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                             self.newRooms.append(contentsOf: values)
                             self.newRoomView.rooms = self.newRooms
                             self.newRoomView.translatesAutoresizingMaskIntoConstraints = false
-                            self.newRoomViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_NEWROOMCV * CGFloat(Constants.MAX_ROOM_ROW)
+                            self.newRoomViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_ROOMPOSTCV * CGFloat(Constants.MAX_ROOM_ROW)
                             self.newRoomView.showbtnViewAllButton()
                             self.updateContentViewHeight()
                         }
@@ -369,7 +369,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                             self.newRoommates.append(contentsOf: values)
                             self.newRoommateView.roommates = self.newRoommates
                             self.newRoommateView.translatesAutoresizingMaskIntoConstraints = false
-                            self.newRoommateViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_NEWROOMMATECV * CGFloat(Constants.MAX_POST)
+                            self.newRoommateViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_ROOMMATEPOSTCV * CGFloat(Constants.MAX_POST)
                             self.newRoommateView.showbtnViewAllButton()
                             self.updateContentViewHeight()
                         }else{
@@ -461,11 +461,11 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             newSetting.cityId = city.cityId
             newSetting.latitude = setting.latitude
             newSetting.longitude = setting.longitude
-            DBManager.shared.addSetting(setting: newSetting)
+            _ = DBManager.shared.addSetting(setting: newSetting)
         }
     }
     //MARK: HorizontalRoomViewDelegate
-    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell: NewRoomCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndexPath indexPath: IndexPath?) {
+    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell: RoomPostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndexPath indexPath: IndexPath?) {
         guard let row = indexPath?.row else{
             return
         }
@@ -482,7 +482,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     }
     
     
-    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell: NewRoomCVCell, didSelectCellAt indexPath: IndexPath?) {
+    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell: RoomPostCVCell, didSelectCellAt indexPath: IndexPath?) {
         let vc = PostDetailVC()
         vc.viewType = ViewType.roomPostDetailForFinder
         vc.room = suggestRooms[indexPath!.row]
@@ -492,7 +492,11 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     }
     
     func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,onClickButton button: UIButton) {
-        
+        let vc = ShowAllVC()
+        vc.showAllVCType = .suggestRoom
+        let mainVC = UIViewController()
+        let nv = UINavigationController(rootViewController: mainVC)
+        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
     }
     //MARK: VerticalPostViewDelegate
     
@@ -549,6 +553,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             let allVC = vc.viewControllers.first as! AllVC
             allVC.segmentControl.selectedSegmentIndex = 0
             allVC.resetFilter(filterType: .room)
+            allVC.rooms = []
             allVC.loadRoomData(withNewFilterArgModel: true)
         }else{
             let vc = (self.tabBarController?.viewControllers![1] as! UINavigationController)
@@ -556,6 +561,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             let allVC = vc.viewControllers.first as! AllVC
             allVC.segmentControl.selectedSegmentIndex = 1
             allVC.resetFilter(filterType: .roommmate)
+            allVC.roommates = []
             allVC.loadRoommateData(withNewFilterArgModel: true)
         }
         
@@ -592,15 +598,15 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         guard let location = locations.last else {
             return
         }
-        print("Update Location")
-        print("Latitude-\(location.coordinate.latitude)")
-        print("Longitude-\(location.coordinate.longitude)")
+//        print("Update Location")
+//        print("Latitude-\(location.coordinate.latitude)")
+//        print("Longitude-\(location.coordinate.longitude)")
         let newSetting = SettingModel()
         newSetting.id = setting.id
         newSetting.cityId = setting.cityId
         newSetting.latitude.value = location.coordinate.latitude
         newSetting.longitude.value = location.coordinate.longitude
-        DBManager.shared.addSetting(setting: newSetting)
+        _ = DBManager.shared.addSetting(setting: newSetting)
     }
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
@@ -629,10 +635,6 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     //MARK: update constraint
     func updateContentViewHeight(){
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
-        print("contentViewHeightConstraint:\(contentViewHeightConstraint)")
-        print("newRoommateViewHeightConstraint:\(newRoommateViewHeightConstraint)")
-        print("contentViewHeightConstraint:\(contentViewHeightConstraint)")
-        print("contentViewHeightConstraint:\(contentViewHeightConstraint)")
         if user?.roleId == Constants.ROOMOWNER{
             self.contentViewHeightConstraint?.constant = self.newRoomViewHeightConstraint!.constant + self.newRoommateViewHeightConstraint!.constant + Constants.HEIGHT_TOP_CONTAINER_VIEW +  Constants.HEIGHT_MEDIUM_SPACE
         }else{

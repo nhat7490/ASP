@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RoomForOwnerCVCell: UICollectionViewCell {
+class RoomCVCell: UICollectionViewCell {
     @IBOutlet weak var imgvAvatar: UIImageView!
     @IBOutlet weak var lblCurrentMember: UILabel!
     @IBOutlet weak var tvName: UITextView!

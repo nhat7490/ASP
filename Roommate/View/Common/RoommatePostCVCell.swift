@@ -8,9 +8,9 @@
 
 import UIKit
 protocol NewRoommateCVCellDelegate:class{
-    func newRoommateCVCellDelegate(newRoommateCVCell cell:NewRoommateCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?);
+    func newRoommateCVCellDelegate(newRoommateCVCell cell:RoommatePostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?);
 }
-class NewRoommateCVCell: UICollectionViewCell {
+class RoommatePostCVCell: UICollectionViewCell {
     @IBOutlet weak var imgvLeftAvatar: UIImageView!
     @IBOutlet weak var imgvLeftBookmark: UIImageView!
     @IBOutlet weak var lblRightName: UILabel!

@@ -12,11 +12,13 @@ import ObjectMapper
 import MBProgressHUD
 import CoreLocation
 class BaseVC:UIViewController{
-    var navTitle:String?{
-        didSet{
-            navigationController?.navigationBar.topItem?.title = navTitle
-        }
-    }
+//    var navTitle:String?{
+//        didSet{
+////            navigationController?.navigationBar.topItem?.title = navTitle
+//            title = navTitle
+//            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.defaultBlue]
+//        }
+//    }
     let locationManager = CLLocationManager()
     let group = DispatchGroup()
 //    
@@ -26,7 +28,8 @@ class BaseVC:UIViewController{
 //    }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.defaultBlue]
+        UINavigationBar.appearance().tintColor = .defaultBlue
         let tap = UITapGestureRecognizer(target: self, action: #selector(endEditting))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)

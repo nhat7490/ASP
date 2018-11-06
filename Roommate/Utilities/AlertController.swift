@@ -31,17 +31,24 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
             }
         }
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let title = self.title{
+            let titleAttrString = NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor : UIColor.defaultBlue])
+            setValue(titleAttrString, forKey: "attributedTitle")
+        }
+    }
     static func showAlertInfor(withTitle title:String?,forMessage message:String?,inViewController controller:UIViewController) {
         let alertController = AlertController(title: title, message: message, preferredStyle: .alert)
         if let _ = title {
-            alertController.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: nil))
+            alertController.addAction(action(title: "OK".localized, style: .default, handler: nil))
         }
         controller.present(alertController, animated: true, completion: nil)
     }
     static func showAlertInfor(withTitle title:String?,forMessage message:String?,inViewController controller:UIViewController,rhsButtonHandler:((UIAlertAction)->Void)?) {
         let alertController = AlertController(title: title, message: message, preferredStyle: .alert)
         if let _ = title {
-            alertController.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: rhsButtonHandler))
+            alertController.addAction(action(title: "OK".localized, style: .default, handler: rhsButtonHandler))
         }
         controller.present(alertController, animated: true, completion: nil)
     }
@@ -49,7 +56,7 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
     static func showAlertInfoWithAttributeString(withTitle title:NSAttributedString?,forMessage message:NSAttributedString?,inViewController controller:UIViewController) {
         let alertController = AlertController(title: nil, message: nil, preferredStyle: .alert)
         if let _ = title {
-            alertController.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: nil))
+            alertController.addAction(action(title: "OK".localized, style: .default, handler: nil))
         }
         
         alertController.setValue(title, forKey: "attributedTitle")
@@ -61,10 +68,10 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
     static func showAlertConfirm(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,forViewController controller:UIViewController,lhsButtonTitle:String?,rhsButtonTitle:String?,lhsButtonHandler:((UIAlertAction)->Void)?,rhsButtonHandler:((UIAlertAction)->Void)?){
         let alertController = AlertController(title: title, message: message, preferredStyle: alertStyle)
         if let _ = lhsButtonTitle {
-            alertController.addAction(UIAlertAction(title: lhsButtonTitle, style: .cancel, handler: lhsButtonHandler))
+            alertController.addAction(action(title: lhsButtonTitle, style: .cancel, handler: lhsButtonHandler))
         }
         if let _ = rhsButtonTitle {
-            alertController.addAction(UIAlertAction(title: rhsButtonTitle, style: .default, handler: rhsButtonHandler))
+            alertController.addAction(action(title: rhsButtonTitle, style: .default, handler: rhsButtonHandler))
         }
         controller.present(alertController, animated: true, completion: nil)
     }
@@ -72,12 +79,12 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
     static func showAlertList(withTitle title:String?,andMessage message:String?,alertStyle:UIAlertControllerStyle,alertType:AlertType = .normal,isMultiSelected:Bool = false,forViewController controller:UIViewController,data:[String]?,selectedItemIndex:[Int]? = [],rhsButtonTitle:String?)->AlertController{
         let alertController = AlertController(title: title, message: message, preferredStyle: alertStyle)
         if let _ = rhsButtonTitle {
-            alertController.addAction(UIAlertAction(title: rhsButtonTitle, style: .default, handler: { (action) in
+            alertController.addAction(action(title: rhsButtonTitle, style: .default, handler: { (action) in
                 alertController.delegate?.alertControllerDelegate(alertController: alertController, withAlertType: alertType, onCompleted: alertController.tableView.indexPathsForSelectedRows)
             }))
             
         }
-        alertController.addAction(UIAlertAction(title: "CANCEL".localized, style: .cancel, handler: nil))
+        alertController.addAction(action(title: "CANCEL".localized, style: .cancel, handler: nil))
         
         alertController.alertType = alertType
         alertController.listItem = data
@@ -91,10 +98,10 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
         let alertController = AlertController(title: title, message: message, preferredStyle: alertStyle)
         
         if let _ = lhsButtonTitle {
-            alertController.addAction(UIAlertAction(title: lhsButtonTitle, style: .default, handler: lhsButtonHandler))
+            alertController.addAction(action(title: lhsButtonTitle, style: .default, handler: lhsButtonHandler))
         }
         if let _ = rhsButtonTitle {
-            alertController.addAction(UIAlertAction(title: rhsButtonTitle, style: .default, handler: rhsButtonHandler))
+            alertController.addAction(action(title: rhsButtonTitle, style: .default, handler: rhsButtonHandler))
         }
         
         let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_UTILITY_INPUT, sbName: Constants.STORYBOARD_MAIN)
@@ -156,5 +163,10 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
+    }
+    static func action(title: String?, style: UIAlertActionStyle, handler: ((UIAlertAction)->Void)?) ->UIAlertAction{
+        let action = UIAlertAction(title: title, style: style, handler: handler)
+        action.setValue(UIColor.defaultBlue, forKey: "titleTextColor")
+        return action
     }
 }

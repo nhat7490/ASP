@@ -152,7 +152,7 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
         hub.mode = .indeterminate
         hub.bezelView.backgroundColor = .white
         hub.contentColor = .defaultBlue
-        requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, size: 12))
+        requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, size: Constants.MAX_OFFSET))
     }
     func  requestRoom(hub:MBProgressHUD,view:UICollectionView,apiRouter:APIRouter){
         //        roomFilter.searchRequestModel = nil
@@ -224,7 +224,7 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
             hub.bezelView.backgroundColor = .white
             hub.contentColor = .defaultBlue
             rooms.removeAll()
-            requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, size: 12))
+            requestRoom(hub:hub,view: verticalRoomView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: DBManager.shared.getUser()!.userId, page: 1, size: Constants.MAX_OFFSET))
         }
     }
     //MARK: VerticalPostViewDelegate
@@ -237,7 +237,11 @@ class AccountVC:BaseVC,VerticalPostViewDelegate,UIScrollViewDelegate{
         present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
     }
     func verticalPostViewDelegate(verticalPostView view:VerticalPostView,onClickButton button:UIButton){
-        
+        let vc = ShowAllVC()
+        vc.showAllVCType = .roomForOwner
+        let mainVC = UIViewController()
+        let nv = UINavigationController(rootViewController: mainVC)
+        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
     }
     //MARK: Button Event
     @objc func onClickBtnSetting(){

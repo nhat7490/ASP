@@ -34,7 +34,7 @@ class FilterArgumentModel : Mappable{
     init() {
         page = 1
         offset = Constants.MAX_OFFSET
-        typeId = 1
+        typeId = Constants.ROOM_POST
         orderBy = 1
         userId = DBManager.shared.getUser()?.userId
     }

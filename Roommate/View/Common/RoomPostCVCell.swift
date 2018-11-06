@@ -9,9 +9,9 @@
 import UIKit
 import SDWebImage
 protocol NewRoomCVCellDelegate:class {
-    func newRoomCVCellDelegate(roomCVCell cell:NewRoomCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?)
+    func newRoomCVCellDelegate(roomCVCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?)
 }
-class NewRoomCVCell: UICollectionViewCell {
+class RoomPostCVCell: UICollectionViewCell {
     @IBOutlet weak var imgvBookMark: UIImageView!
     @IBOutlet weak var imgvAvatar: UIImageView!
     @IBOutlet weak var tvNumberOfPatner: UITextView!

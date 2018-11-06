@@ -22,7 +22,7 @@ class BaseInformationView: UIView {
     var viewType:ViewType?{
         didSet{
             if viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
-                lblStatus.anchorHeight(equalToConstrant: 0)
+                _ = lblStatus.anchorHeight(equalToConstrant: 0)
             }
         }
     }

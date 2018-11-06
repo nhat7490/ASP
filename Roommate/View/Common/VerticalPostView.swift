@@ -68,9 +68,9 @@ class VerticalPostView: UIView ,UICollectionViewDelegate,UICollectionViewDataSou
         btnViewAll.layer.cornerRadius = 15
         btnViewAll.clipsToBounds = true
         
-        collectionView.register(UINib(nibName: Constants.CELL_NEWROOMCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_NEWROOMCV)
-        collectionView.register(UINib(nibName: Constants.CELL_NEWROOMMATECV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_NEWROOMMATECV)
-        collectionView.register(UINib(nibName: Constants.CELL_ROOMFOROWNERCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMFOROWNERCV)
+        collectionView.register(UINib(nibName: Constants.CELL_ROOMPOSTCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMPOSTCV)
+        collectionView.register(UINib(nibName: Constants.CELL_ROOMMATEPOSTCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMMATEPOSTCV)
+        collectionView.register(UINib(nibName: Constants.CELL_ROOMCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMCV)
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -94,19 +94,19 @@ class VerticalPostView: UIView ,UICollectionViewDelegate,UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if verticalPostViewType == .room{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWROOMCV, for: indexPath) as! NewRoomCVCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMPOSTCV, for: indexPath) as! RoomPostCVCell
             cell.delegate  = self
             cell.room = rooms[indexPath.row]
             cell.indexPath = indexPath
             return cell
         }else if verticalPostViewType == .roommate{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWROOMMATECV, for: indexPath) as! NewRoommateCVCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMMATEPOSTCV, for: indexPath) as! RoommatePostCVCell
             cell.delegate  = self
             cell.roommate = roommates[indexPath.row]
             cell.indexPath = indexPath
             return cell
         }else{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMFOROWNERCV, for: indexPath) as! RoomForOwnerCVCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMCV, for: indexPath) as! RoomCVCell
             cell.room = roomsOwner[indexPath.row]
             return cell
         }
@@ -115,22 +115,22 @@ class VerticalPostView: UIView ,UICollectionViewDelegate,UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if verticalPostViewType == .room{
-            return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_NEWROOMCV)
+            return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_ROOMPOSTCV)
         }else if verticalPostViewType == .roommate{
-            return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_NEWROOMMATECV)
+            return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_ROOMMATEPOSTCV)
         }else{
             return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_ROOMFOROWNERCV)
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if verticalPostViewType == .room{
-            let cell = collectionView.cellForItem(at: indexPath) as! NewRoomCVCell
+            let cell = collectionView.cellForItem(at: indexPath) as! RoomPostCVCell
             delegate?.verticalPostViewDelegate(verticalPostView:self,collectionCell: cell, didSelectCellAt: indexPath)
         }else if verticalPostViewType == .roommate{
-            let cell = collectionView.cellForItem(at: indexPath) as! NewRoommateCVCell
+            let cell = collectionView.cellForItem(at: indexPath) as! RoommatePostCVCell
             delegate?.verticalPostViewDelegate(verticalPostView:self,collectionCell: cell, didSelectCellAt: indexPath)
         }else{
-            let cell = collectionView.cellForItem(at: indexPath) as! RoomForOwnerCVCell
+            let cell = collectionView.cellForItem(at: indexPath) as! RoomCVCell
             delegate?.verticalPostViewDelegate(verticalPostView:self,collectionCell: cell, didSelectCellAt: indexPath)
         }
     }
@@ -140,11 +140,11 @@ class VerticalPostView: UIView ,UICollectionViewDelegate,UICollectionViewDataSou
     }
     
     //MARK: NewRoomCVCellDelegate
-    func newRoomCVCellDelegate(roomCVCell cell:NewRoomCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?){
+    func newRoomCVCellDelegate(roomCVCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?){
         delegate?.verticalPostViewDelegate(verticalPostView:self,collectionCell: cell, onClickUIImageView: imgvBookmark, atIndexPath: indexPath)
     }
     //MARK: NewRoommateCVCellDelegate
-    func newRoommateCVCellDelegate(newRoommateCVCell cell: NewRoommateCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
+    func newRoommateCVCellDelegate(newRoommateCVCell cell: RoommatePostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
         delegate?.verticalPostViewDelegate(verticalPostView:self,collectionCell: cell, onClickUIImageView: imgvBookmark, atIndexPath: indexPath)
     }
     @IBAction func onClickBtnViewAll(_ sender: UIButton) {

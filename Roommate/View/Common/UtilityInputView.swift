@@ -17,7 +17,7 @@ class UtilityInputView: UIView,UITextViewDelegate,UITextFieldDelegate {
     var utilityModel:UtilityModel?{
         didSet{
             tfBrand.text = utilityModel?.brand
-            tfQuantity.text = "\(utilityModel?.quantity)"
+            tfQuantity.text = utilityModel?.quantity.toString
             tvDescription.text = utilityModel?.description
         }
     }

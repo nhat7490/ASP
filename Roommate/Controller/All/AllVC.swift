@@ -17,8 +17,8 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     
     //MARK: Data for UICollectionView And UITableView
-    var roommates:[RoommatePostResponseModel] = []
-    var rooms:[RoomPostResponseModel] = []
+    var roommates:[RoommatePostResponseModel]?
+    var rooms:[RoomPostResponseModel]?
     var roomFilter:FilterArgumentModel = {
         let filter = FilterArgumentModel()
         filter.cityId = DBManager.shared.getSetting()?.cityId
@@ -26,11 +26,10 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     }()
     var roommateFilter:FilterArgumentModel = {
         let filter = FilterArgumentModel()
-        filter.typeId = 2
+        filter.typeId = Constants.ROOMMATE_POST
         filter.cityId = DBManager.shared.getSetting()?.cityId
         return filter
     }()
-//    var isLoadingData = false
     let orders = [
         OrderType.newest:"NEWEST",
         OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
@@ -115,6 +114,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         super.viewDidLoad()
         setupUI()
         setupDataAndDelegate()
+        rooms = []
         loadRoomData(withNewFilterArgModel: true)
         registerNotification()
     }
@@ -123,8 +123,6 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     func setupUI(){
         view.backgroundColor = .white
         automaticallyAdjustsScrollViewInsets = false
-        let tabBarHeight = self.tabBarController?.tabBar.frame.size.height;
-        let adjustForTabbarInsets = UIEdgeInsets(top: 0,left: 0,bottom: tabBarHeight!,right: 0)
         navigationController?.navigationBar.backgroundColor = .white
         
         
@@ -167,11 +165,6 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         
         //Add Constraint
         _ = orderByView.anchor(view.topAnchor, view.leftAnchor, nil, nil, UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0), CGSize(width: orderByViewWidth, height: orderByViewHeight))
-        if #available(iOS 11.0, *) {
-            print(view.safeAreaLayoutGuide.topAnchor)
-        } else {
-            // Fallback on earlier versions
-        }
         _ =  btnOrderBy.anchorTopRight(orderByView.topAnchor, orderByView.rightAnchor, 150.0, orderByViewHeight)
         _ = lblOrderBy.anchorTopRight(orderByView.topAnchor, btnOrderBy.leftAnchor, orderByViewWidth-150.0, orderByViewHeight)
         _ = imageView.anchor(btnOrderBy.topAnchor,nil,btnOrderBy.bottomAnchor,btnOrderBy.rightAnchor,UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
@@ -195,14 +188,14 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     func setupDataAndDelegate(){
         //Event for BtnOrderBy
-        btnOrderBy.addTarget(self, action: #selector(onClickBtnOrder), for: .touchUpInside)
+        btnOrderBy.addTarget(self, action: #selector(updateUIWhenClickBtnOrder), for: .touchUpInside)
         
         
         //Register delegate , datasource & cell collectionview
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(UINib(nibName: Constants.CELL_NEWROOMMATECV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_NEWROOMMATECV)
-        collectionView.register(UINib(nibName: Constants.CELL_NEWROOMCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_NEWROOMCV)
+        collectionView.register(UINib(nibName: Constants.CELL_ROOMMATEPOSTCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMMATEPOSTCV)
+        collectionView.register(UINib(nibName: Constants.CELL_ROOMPOSTCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMPOSTCV)
         
         //Register delegate , datasource & cell tableview
         tableView.delegate = self
@@ -277,12 +270,12 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                             return
                         }
                         if newFilterArgModel {
-                            self.rooms.removeAll()
+                            self.rooms?.removeAll()
                         }
                         if values.count == 0, self.roomFilter.page! > 1{
                             self.roomFilter.page = self.roomFilter.page!-1
                         }
-                        self.rooms.append(contentsOf: values)
+                        self.rooms?.append(contentsOf: values)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
 //                            self.isLoadingData = false
@@ -321,8 +314,11 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                             //                        self.group.leave()
                             return
                         }
-                        if newFilterArgModel { self.roommates.removeAll()}
-                        self.roommates.append(contentsOf: values)
+                        if newFilterArgModel { self.roommates?.removeAll()}
+                        if values.count == 0, self.roommateFilter.page! > 1{
+                            self.roommateFilter.page = self.roommateFilter.page!-1
+                        }
+                        self.roommates?.append(contentsOf: values)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
 //                            self.isLoadingData = false
@@ -341,15 +337,15 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         if allVCType == .all{
             if notification.object is RoomPostResponseModel{
                 if let room = notification.object as? RoomPostResponseModel{
-                    if let index = rooms.index(of: room){
-                        rooms[index].isFavourite = room.isFavourite
+                    if let index = rooms?.index(of: room){
+                        rooms![index].isFavourite = room.isFavourite
                         self.collectionView.reloadData()
                     }
                 }
             }else{
                 if let roommate = notification.object as? RoommatePostResponseModel{
-                    if let index = roommates.index(of: roommate){
-                        roommates[index].isFavourite = roommate.isFavourite
+                    if let index = roommates?.index(of: roommate){
+                        roommates![index].isFavourite = roommate.isFavourite
                         self.collectionView.reloadData()
                     }
                 }
@@ -357,15 +353,15 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         }else if allVCType == .bookmark{
             if notification.object is RoomPostResponseModel{
                 if let room = notification.object as? RoomPostResponseModel{
-                    if let index = rooms.index(of: room){
-                        rooms.remove(at: index)
+                    if let index = rooms?.index(of: room){
+                        rooms?.remove(at: index)
                     }
                 }
                 self.collectionView.reloadData()
             }else{
                 if let roommate = notification.object as? RoommatePostResponseModel{
-                    if let index = roommates.index(of: roommate){
-                        roommates.remove(at: index)
+                    if let index = roommates?.index(of: roommate){
+                        roommates?.remove(at: index)
                     }
                 }
                 self.collectionView.reloadData()
@@ -376,17 +372,17 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         if allVCType == .all{
             if notification.object is RoomPostResponseModel{
                 if let room = notification.object as? RoomPostResponseModel{
-                    if let index = rooms.index(of: room){
-                        rooms[index].isFavourite = room.isFavourite
-                        rooms[index].favouriteId = room.favouriteId
+                    if let index = rooms?.index(of: room){
+                        rooms![index].isFavourite = room.isFavourite
+                        rooms![index].favouriteId = room.favouriteId
                         self.collectionView.reloadData()
                     }
                 }
             }else{
                 if let roommate = notification.object as? RoommatePostResponseModel{
-                    if let index = roommates.index(of: roommate){
-                        roommates[index].isFavourite = roommate.isFavourite
-                        roommates[index].favouriteId = roommate.favouriteId
+                    if let index = roommates?.index(of: roommate){
+                        roommates![index].isFavourite = roommate.isFavourite
+                        roommates![index].favouriteId = roommate.favouriteId
                         self.collectionView.reloadData()
                     }
                 }
@@ -394,15 +390,15 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         }else{
             if notification.object is RoomPostResponseModel{
                 if let room = notification.object as? RoomPostResponseModel{
-                    if rooms.index(of: room) == nil{
-                        rooms.append(room)
+                    if rooms?.index(of: room) == nil{
+                        rooms?.append(room)
                         self.collectionView.reloadData()
                     }
                 }
             }else{
                 if let roommate = notification.object as? RoommatePostResponseModel{
-                    if roommates.index(of: roommate) == nil{
-                        roommates.append(roommate)
+                    if roommates?.index(of: roommate) == nil{
+                        roommates?.append(roommate)
                         self.collectionView.reloadData()
                     }
                 }
@@ -413,27 +409,27 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     //MARK: UICollectionView DataSourse and Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if segmentControl.selectedSegmentIndex == 0{
-            return rooms.count
+            return rooms?.count ?? 0
         }else{
-            return roommates.count
+            return roommates?.count ?? 0
         }
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if segmentControl.selectedSegmentIndex == 0{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWROOMCV, for: indexPath) as! NewRoomCVCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMPOSTCV, for: indexPath) as! RoomPostCVCell
             cell.delegate = self
-            cell.room = rooms[indexPath.row]
+            cell.room = rooms?[indexPath.row]
             cell.indexPath = indexPath
 //            let tap = UITapGestureRecognizer(target: self, action: #selector(onClickImgvBookmark))
 //            
 //            cell.imgvBookMark.imgvBookMark.addGestureRecognizer(tap)
             return cell
         }else{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWROOMMATECV, for: indexPath) as! NewRoommateCVCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMMATEPOSTCV, for: indexPath) as! RoommatePostCVCell
             cell.delegate = self
-            cell.roommate = roommates[indexPath.row]
+            cell.roommate = roommates?[indexPath.row]
             cell.indexPath = indexPath
             return cell
         }
@@ -445,7 +441,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         if segmentControl.selectedSegmentIndex == 0{
             let vc = PostDetailVC()
             vc.viewType = ViewType.roomPostDetailForFinder
-            vc.room = rooms[indexPath.row]
+            vc.room = rooms![indexPath.row]
             let mainVC = UIViewController()
             let nv = UINavigationController(rootViewController: mainVC)
             present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
@@ -453,7 +449,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         }else{
             let vc = PostDetailVC()
             vc.viewType = ViewType.roommatePostDetailForFinder
-            vc.roommate = roommates[indexPath.row]
+            vc.roommate = roommates![indexPath.row]
             let mainVC = UIViewController()
             let nv = UINavigationController(rootViewController: mainVC)
             present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
@@ -462,9 +458,9 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if segmentControl.selectedSegmentIndex == 0{
-            return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_NEWROOMCV)
+            return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_ROOMPOSTCV)
         }else{
-            return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_NEWROOMMATECV)
+            return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_ROOMMATEPOSTCV)
         }
     }
     
@@ -500,10 +496,10 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
 //            isLoadingData = true
             print("Loading more data")
             if segmentControl.selectedSegmentIndex == 0{
-                roomFilter.page = rooms.count/15+2
+                roomFilter.page = rooms!.count/Constants.MAX_OFFSET+2
                 loadRoomData(withNewFilterArgModel: false)//for remove all  and reload data
             }else{
-                roommateFilter.page = roommates.count/15+2
+                roommateFilter.page = roommates!.count/Constants.MAX_OFFSET+2
                 loadRoommateData(withNewFilterArgModel: false)//for remove all  and reload data
             }
         }
@@ -555,13 +551,15 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     //For segmentControl selected index change
     @objc func segmentChanged() {
         if segmentControl.selectedSegmentIndex == 0{
-            if rooms.count == 0{
+            if rooms == nil{
+                rooms = []
                 loadRoomData(withNewFilterArgModel: true)
             }else{
                 self.collectionView.reloadData()
             }
         }else{
-            if roommates.count == 0{
+            if roommates == nil{
+                roommates = []
                 loadRoommateData(withNewFilterArgModel: true)
             }else{
                 self.collectionView.reloadData()
@@ -598,7 +596,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     
     
-    func newRoomCVCellDelegate(roomCVCell: NewRoomCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
+    func newRoomCVCellDelegate(roomCVCell: RoomPostCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
         guard let row = indexPath?.row else{
             return
         }
@@ -611,7 +609,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
 //            rooms.remove(at: row)
 //        }
 //        collectionView.reloadData()
-        processBookmark(view: self.collectionView, model: rooms[row], row: row){model in
+        processBookmark(view: self.collectionView, model: rooms![row], row: row){model in
             if self.allVCType == .all{
                 if model.isFavourite!{
                     NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_BOOKMARK, object: model)
@@ -620,7 +618,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                 }
             }else if self.allVCType == .bookmark{
 //                model.isFavourite =  false//for api
-                self.rooms.remove(at: row)
+                self.rooms?.remove(at: row)
                  NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
             }
             DispatchQueue.main.async {
@@ -638,11 +636,11 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
 
     //        collectionView.reloadData()
     //    }
-    func newRoommateCVCellDelegate(newRoommateCVCell cell: NewRoommateCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
+    func newRoommateCVCellDelegate(newRoommateCVCell cell: RoommatePostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
                 guard let row = indexPath?.row else{
                     return
                 }
-        processBookmark(view: self.collectionView, model: roommates[row], row: row){model in
+        processBookmark(view: self.collectionView, model: roommates![row], row: row){model in
             if self.allVCType == .all{
                 if model.isFavourite!{
                     NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_BOOKMARK, object: model)
@@ -651,7 +649,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                 }
             }else if self.allVCType == .bookmark{
                 model.isFavourite =  false//for api
-                self.roommates.remove(at: row)
+                self.roommates?.remove(at: row)
                 NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
             }
             DispatchQueue.main.async {
@@ -699,24 +697,6 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     //MARK: FilterVCDelegate
     
     func filterVCDelegate(filterVC: FilterVC, onCompletedWithFilter filter: FilterArgumentModel) {
-//        print(filter.page)
-//        print(filter.offset)
-//        print(filter.userId)
-//        print(filter.typeId)
-//        print("Districts")
-//        filter.searchRequestModel?.districts?.forEach({ (id) in
-//            print(id)
-//        })
-//        print("Utilities")
-//        filter.searchRequestModel?.utilities?.forEach({ (id) in
-//            print(id)
-//        })
-//        print("Price")
-//        filter.searchRequestModel?.price?.forEach({ (price) in
-//            print(price)
-//        })
-//        print("Gender")
-        print(filter.searchRequestModel?.gender)
         
         if segmentControl.selectedSegmentIndex == 0{
             self.roomFilter = filter
@@ -739,21 +719,16 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
             //for future order type
         }
     }
-    
-    override func resetFilter(filterType:FilterType) {
-        self.collectionView.reloadData()
-        selectedOrder = .newest
-        lblSelectTitle.text = orders[selectedOrder]?.localized
-        if filterType == .room{
-            roomFilter.searchRequestModel = nil
-            roomFilter.page = 1
-            roomFilter.orderBy = 1
-        }else{
-            roommateFilter.searchRequestModel = nil
-            roommateFilter.page = 1
-            roommateFilter.orderBy = 1
+    //Order button item event
+    @objc func updateUIWhenClickBtnOrder(){
+        
+        UIView.animate(withDuration: 0.1) {
+            if self.tableHeightLayoutConstraint?.constant == 0 {
+                self.tableHeightLayoutConstraint?.constant = 150
+            }else{
+                self.tableHeightLayoutConstraint?.constant = 0
+            }
+            //            self.view.layoutIfNeeded()
         }
     }
-    
-    
 }

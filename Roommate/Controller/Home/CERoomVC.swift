@@ -36,18 +36,18 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         lbl.text = "ROOM_INFOR_TITLE".localized
         return lbl
     }()
-    lazy var nameInputView:NewInputView = {
-        let iv:NewInputView = .fromNib()
+    lazy var nameInputView:InputView = {
+        let iv:InputView = .fromNib()
         iv.inputViewType = .name
         return iv
     }()
-    lazy var priceInputView:NewInputView = {
-        let iv:NewInputView = .fromNib()
+    lazy var priceInputView:InputView = {
+        let iv:InputView = .fromNib()
         iv.inputViewType = .price
         return iv
     }()
-    lazy var areaInputView:NewInputView = {
-        let iv:NewInputView = .fromNib()
+    lazy var areaInputView:InputView = {
+        let iv:InputView = .fromNib()
         iv.inputViewType = .area
         return iv
     }()
@@ -64,8 +64,8 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         return lv
     }()
     
-    lazy var addressInputView:NewInputView = {
-        let iv:NewInputView = .fromNib()
+    lazy var addressInputView:InputView = {
+        let iv:InputView = .fromNib()
         iv.inputViewType = .address
         return iv
     }()
@@ -145,19 +145,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     
     func setupUI(){
         view.backgroundColor = .white
-        navTitle = "CREATE_ROOM".localized
-        //        edgesForExtendedLayout = .all
-        //scrollview scroll content below navbar view
-        //        if #available(iOS 11.0, *) {
-        //            scrollView.contentInsetAdjustmentBehavior = .never
-        //        } else {
-        //            automaticallyAdjustsScrollViewInsets = false
-        //        }
-        //        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        //        navigationController?.navigationBar.shadowImage = UIImage()
-        //        navigationController?.navigationBar.backgroundColor = .clear
-        //Navigation Item
-        //        navigationController?.navigationBar.backgroundColor = .white
+        title = cERoomVCType == .create ? "CREATE_ROOM".localized : "ROOM_EDIT".localized
         
         let barButton = UIBarButtonItem(image: UIImage(named: "back"), style: .done, target:self, action: #selector(onClickBtnBack(btnBack:)))
         barButton.tintColor = .defaultBlue
@@ -215,7 +203,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         
         
         contentViewHeightConstraint = contentView.anchor(scrollView.topAnchor,scrollView.leftAnchor,scrollView.bottomAnchor,scrollView.rightAnchor,.zero,CGSize(width: 0, height: contentViewHeight))[4]
-        contentView.anchorWidth(equalTo:scrollView.widthAnchor)
+        _ = contentView.anchorWidth(equalTo:scrollView.widthAnchor)
         
         _ = lblRoomInfor.anchor(contentView.topAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_ROOM_INFOR_TITLE))
         _ = nameInputView.anchor(lblRoomInfor.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
@@ -245,8 +233,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     }
     //MARK:Delegate and data
     func setData(){
-        navTitle = "CREATE_ROOM".localized
-        btnSubmit.setTitle("ROOM_CREATE".localized, for: .normal)
+        btnSubmit.setTitle("SAVE".localized, for: .normal)
         tableView.register(UINib(nibName: Constants.CELL_ICONTITLETV, bundle: Bundle.main), forCellReuseIdentifier: Constants.CELL_ICONTITLETV)
         suggestAddress = []
         //Delegate
@@ -364,7 +351,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         }
         newRoomModel.maxGuest = maxMember
     }
-    func newInputViewDelegate(newInputView view: NewInputView, shouldChangeCharactersTo string: String) -> Bool{
+    func newInputViewDelegate(newInputView view: InputView, shouldChangeCharactersTo string: String) -> Bool{
         switch view {
         case nameInputView:
             newRoomModel.name = string
@@ -437,14 +424,10 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                     return
                 }
                 districtOfCity.forEach { (d) in
-                    print(d.name)
                     print(d.districtId)
                     print(d.cityId)
                 }
                 let district = Array(districtOfCity)[(indexs.first?.row)!]
-                print(districtOfCity.first?.name)
-                print(district.name)
-                print(districtOfCity[10].name)
                 addressInputView.isSelectedFromSuggest = false
                 newRoomModel.districtId = district.districtId
                 self.districtName = district.name!
@@ -685,9 +668,9 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         
     }
     func checkValidInformation()->Bool{
-        var message = NSMutableAttributedString(string: "")
+        let message = NSMutableAttributedString(string: "")
         
-        if newRoomModel.name == nil || !newRoomModel.name.isValidName(){
+        if !newRoomModel.name.isValidName(){
             message.append(NSAttributedString(string: "\("ROOM_NAME_TITLE".localized) :  \("ERROR_TYPE_NAME_MAX_CHAR_50".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         

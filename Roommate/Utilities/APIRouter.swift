@@ -29,6 +29,9 @@ enum APIRouter:URLRequestConvertible{
     case suggestBestMatch(model:FilterArgumentModel)
     case suggest(model:BaseSuggestRequestModel)
     case getRoomsByUserId(userId:Int,page:Int,size:Int)
+    case getHistoryRoom(userId:Int,page:Int,size:Int)
+    case getCurrentRoom(userId:Int)
+    case getUserPost(model:FilterArgumentModel)
     case findUserByUsername(username:String)
     case editMember(roomMemberRequestModel:RoomMemberRequestModel)
     case removeRoom(roomId:Int)
@@ -44,8 +47,7 @@ enum APIRouter:URLRequestConvertible{
     }
     
     var httpMethod:HTTPMethod{
-        switch self{
-        case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember:
+        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember,.getUserPost:
             return .post
         case .removeBookmark,.removeRoom:
             return .delete
@@ -97,6 +99,12 @@ enum APIRouter:URLRequestConvertible{
             return "room/deleteRoom/\(roomId)"
         case .updateRoom:
             return "room/update";
+        case .getCurrentRoom(let userId):
+            return "room/user/currentRoom/\(userId)";
+        case .getHistoryRoom(let userId,_,_):
+            return "room/user/history/\(userId)";
+        case .getUserPost:
+            return "post/userPost"
             
         }
     }
@@ -138,6 +146,8 @@ enum APIRouter:URLRequestConvertible{
         case .editMember(let model):
             return Mapper().toJSON(model)
         case .updateRoom(let model):
+            return Mapper().toJSON(model)
+        case .getUserPost(let model):
             return Mapper().toJSON(model)
         default:
             return [:]

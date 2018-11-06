@@ -8,8 +8,8 @@
 
 import UIKit
 protocol HorizontalRoomViewDelegate:class{
-    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell:NewRoomCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndexPath indexPath:IndexPath?)
-    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell:NewRoomCVCell,didSelectCellAt indexPath:IndexPath?)
+    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndexPath indexPath:IndexPath?)
+    func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell:RoomPostCVCell,didSelectCellAt indexPath:IndexPath?)
     func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,onClickButton button:UIButton)
 }
 class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,NewRoomCVCellDelegate,UICollectionViewDelegateFlowLayout{
@@ -35,7 +35,7 @@ class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataS
         btnViewAll.clipsToBounds = true
         
         
-        collectionView.register(UINib(nibName: Constants.CELL_NEWROOMCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_NEWROOMCV)
+        collectionView.register(UINib(nibName: Constants.CELL_ROOMPOSTCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMPOSTCV)
         collectionView.delegate = self
         collectionView.dataSource = self
         layoutSubviews()
@@ -47,7 +47,7 @@ class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataS
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWROOMCV, for: indexPath) as! NewRoomCVCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMPOSTCV, for: indexPath) as! RoomPostCVCell
         cell.delegate  = self
         cell.room = rooms[indexPath.row]
         cell.indexPath = indexPath
@@ -56,10 +56,10 @@ class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         print(frame.width/2)
-        return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_NEWROOMCV)
+        return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_ROOMPOSTCV)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! NewRoomCVCell
+        let cell = collectionView.cellForItem(at: indexPath) as! RoomPostCVCell
         delegate?.horizontalRoomViewDelegate(horizontalRoomView: self, collectionCell: cell, didSelectCellAt: indexPath)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -68,7 +68,7 @@ class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataS
     }
     
     //MARK: NewRoomCVCellDelegate
-    func newRoomCVCellDelegate(roomCVCell cell:NewRoomCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?){
+    func newRoomCVCellDelegate(roomCVCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?){
         delegate?.horizontalRoomViewDelegate(horizontalRoomView: self, collectionCell: cell, onClickUIImageView: imgvBookmark, atIndexPath: indexPath)
     }
     

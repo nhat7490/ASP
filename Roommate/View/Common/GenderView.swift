@@ -29,6 +29,7 @@ class GenderView: UIView {
             if  viewType == .detailForMember || viewType == .detailForOwner || viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
                 btnMale.isUserInteractionEnabled = false
                 btnFemale.isUserInteractionEnabled = false
+                lblDescription.isHidden = true
             }else{
                 btnMale.isUserInteractionEnabled = true
                 btnFemale.isUserInteractionEnabled = true

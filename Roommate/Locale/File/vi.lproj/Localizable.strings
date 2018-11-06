@@ -14,7 +14,10 @@
 "HOME_VC" = "Trang chủ";
 "NOTIFICATION_VC" = "Thông báo";
 "ACCOUNT_VC" = "Tài khoản";
-"EDIT_MEMBER_VC" = "Chỉnh sửa thành viên";
+"SUGGEST" = "Gợi ý";
+"ROOM_POST_ALL" = "Tất cả bài đăng tìm bạn";
+"ROOMMATE_POST_ALL" = "Tất cả bài đăng tìm phòng";
+"ROOM_ALL" = "Tất cả phòng";
 
 //MARK: AccountVC
 "TITLE_CREATED_ROOM" = "Phòng đã tạo";
@@ -116,6 +119,7 @@
 //MARK: Common
 "INFORMATION"="Thông báo";
 "NO_DATA"="Không có dữ liệu";
+"NO_MORE_DATA"="Không có thêm dữ liệu";
 "EDIT"="Sửa";
 
 "BASE_INFORMATION"="Thông tin cơ bản";
@@ -166,6 +170,7 @@
 
 //MARK: CERoomVC
 "ROOM_CREATE"="Tạo phòng";
+"ROOM_EDIT"="Sửa thông tin phòng";
 "ROOM_INFOR_TITLE"="Thông tin phòng";
 "ROOM_NAME_TITLE"="Tên Phòng";
 "ROOM_ADDRESS_TITLE"="Địa chỉ";

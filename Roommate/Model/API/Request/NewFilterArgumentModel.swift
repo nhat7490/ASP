@@ -39,7 +39,7 @@ class NewFilterArgumentModel : BaseModel{
         super.init()
         page.value = 1
         offset.value = Constants.MAX_OFFSET
-        typeId.value = 1
+        typeId.value = Constants.ROOM_POST
         orderBy.value = 1
         userId.value  = 0
         cityId.value = 0

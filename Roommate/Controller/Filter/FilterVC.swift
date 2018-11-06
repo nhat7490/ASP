@@ -209,7 +209,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         genderView.genderSelect = selectedGender
     }
     func setData(){
-        navTitle = "FILTER".localized
+        title = "FILTER".localized
         btnSave.setTitle("APPLY".localized, for: .normal)
         utilitiesView.utilities = utilities
         
@@ -217,6 +217,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         districtDropdownListView.delegate = self
         cityDropdownListView.delegate = self
         genderView.delegate = self
+        priceSliderView.delegate = self
 //        filterArgumentModel.searchRequestModel?.districts.first.
         
     }
@@ -292,11 +293,6 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
                 district.cityId == self.selectedCity?.cityId
             }) else{
                 return
-            }
-            districtOfCity.forEach { (d) in
-                print(d.name)
-                print(d.districtId)
-                print(d.cityId)
             }
             selectedDistricts?.removeAll()
             indexs.forEach { (index) in
