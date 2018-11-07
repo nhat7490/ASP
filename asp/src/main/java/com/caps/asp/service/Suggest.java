@@ -9,6 +9,7 @@ import com.caps.asp.service.filter.Filter;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -138,5 +139,46 @@ public class Suggest {
             return roommatePostResponseModel;
         });
         return roommatePostResponseModels;
+    }
+
+    public List<RoomPostResponseModel> mappingRoomPost(List<TbPost> postList, List<RoomPostResponseModel> roomPostResponseModels, int userId) {
+        for (TbPost tbPost : postList) {
+
+            RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
+
+            TbRoom room = roomService.findRoomById(tbPost.getRoomId());
+            List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
+            UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+            TbFavourite favourite = favouriteService
+                    .findByUserIdAndPostId(userId, tbPost.getPostId());
+
+            roomPostResponseModel.setName(tbPost.getName());
+            roomPostResponseModel.setPostId(tbPost.getPostId());
+            roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
+            roomPostResponseModel.setDate(tbPost.getDatePost());
+            roomPostResponseModel.setUserResponeModel(userResponeModel);
+            if (favourite != null) {
+                roomPostResponseModel.setFavourite(true);
+                roomPostResponseModel.setFavouriteId(favourite.getId());
+            } else {
+                roomPostResponseModel.setFavourite(false);
+            }
+            roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
+            roomPostResponseModel.setAddress(room.getAddress());
+            roomPostResponseModel.setArea(room.getArea());
+            roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
+            roomPostResponseModel.setDescription(tbPost.getDescription());
+            //missing
+            List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
+            roomPostResponseModel.setImageUrls(images
+                    .stream()
+                    .map(image -> image.getLinkUrl())
+                    .collect(Collectors.toList()));
+
+            roomPostResponseModel.setUtilities(roomHasUtilities);
+            roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
+            roomPostResponseModels.add(roomPostResponseModel);
+        }
+        return roomPostResponseModels;
     }
 }

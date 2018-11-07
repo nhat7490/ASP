@@ -427,44 +427,44 @@ public class PostController {
                     , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
 
             List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
-            for (TbPost tbPost : postList) {
-
-                RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
-
-                TbRoom room = roomService.findRoomById(tbPost.getRoomId());
-                List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
-                TbFavourite favourite = favouriteService
-                        .findByUserIdAndPostId(baseSuggestRequestModel.getUserId(), tbPost.getPostId());
-
-                roomPostResponseModel.setName(tbPost.getName());
-                roomPostResponseModel.setPostId(tbPost.getPostId());
-                roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
-                roomPostResponseModel.setDate(tbPost.getDatePost());
-                roomPostResponseModel.setUserResponeModel(userResponeModel);
-                if (favourite != null) {
-                    roomPostResponseModel.setFavourite(true);
-                    roomPostResponseModel.setFavouriteId(favourite.getId());
-                } else {
-                    roomPostResponseModel.setFavourite(false);
-                }
-                roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
-                roomPostResponseModel.setAddress(room.getAddress());
-                roomPostResponseModel.setArea(room.getArea());
-                roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
-                roomPostResponseModel.setDescription(tbPost.getDescription());
-                //missing
-                List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
-                roomPostResponseModel.setImageUrls(images
-                        .stream()
-                        .map(image -> image.getLinkUrl())
-                        .collect(Collectors.toList()));
-
-                roomPostResponseModel.setUtilities(roomHasUtilities);
-                roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
-                roomPostResponseModels.add(roomPostResponseModel);
-            }
-            return ResponseEntity.status(OK).body(roomPostResponseModels);
+//            for (TbPost tbPost : postList) {
+//
+//                RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
+//
+//                TbRoom room = roomService.findRoomById(tbPost.getRoomId());
+//                List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
+//                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+//                TbFavourite favourite = favouriteService
+//                        .findByUserIdAndPostId(baseSuggestRequestModel.getUserId(), tbPost.getPostId());
+//
+//                roomPostResponseModel.setName(tbPost.getName());
+//                roomPostResponseModel.setPostId(tbPost.getPostId());
+//                roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
+//                roomPostResponseModel.setDate(tbPost.getDatePost());
+//                roomPostResponseModel.setUserResponeModel(userResponeModel);
+//                if (favourite != null) {
+//                    roomPostResponseModel.setFavourite(true);
+//                    roomPostResponseModel.setFavouriteId(favourite.getId());
+//                } else {
+//                    roomPostResponseModel.setFavourite(false);
+//                }
+//                roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
+//                roomPostResponseModel.setAddress(room.getAddress());
+//                roomPostResponseModel.setArea(room.getArea());
+//                roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
+//                roomPostResponseModel.setDescription(tbPost.getDescription());
+//                //missing
+//                List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
+//                roomPostResponseModel.setImageUrls(images
+//                        .stream()
+//                        .map(image -> image.getLinkUrl())
+//                        .collect(Collectors.toList()));
+//
+//                roomPostResponseModel.setUtilities(roomHasUtilities);
+//                roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
+//                roomPostResponseModels.add(roomPostResponseModel);
+//            }
+            return ResponseEntity.status(OK).body(suggest.mappingRoomPost(postList,roomPostResponseModels,baseSuggestRequestModel.getUserId()));
 
         } else if (referenceService.getByUserId(baseSuggestRequestModel.getUserId()) != null) {//sugesst for room master
 
@@ -535,44 +535,44 @@ public class PostController {
                     , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
 
             List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
-            for (TbPost tbPost : postList) {
-
-                RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
-
-                TbRoom room = roomService.findRoomById(tbPost.getRoomId());
-                List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
-                TbFavourite favourite = favouriteService
-                        .findByUserIdAndPostId(baseSuggestRequestModel.getUserId(), tbPost.getPostId());
-
-                roomPostResponseModel.setName(tbPost.getName());
-                roomPostResponseModel.setPostId(tbPost.getPostId());
-                roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
-                roomPostResponseModel.setDate(tbPost.getDatePost());
-                roomPostResponseModel.setUserResponeModel(userResponeModel);
-                if (favourite != null) {
-                    roomPostResponseModel.setFavourite(true);
-                    roomPostResponseModel.setFavouriteId(favourite.getId());
-                } else {
-                    roomPostResponseModel.setFavourite(false);
-                }
-                roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
-                roomPostResponseModel.setAddress(room.getAddress());
-                roomPostResponseModel.setArea(room.getArea());
-                roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
-                roomPostResponseModel.setDescription(tbPost.getDescription());
-                //missing
-                List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
-                roomPostResponseModel.setImageUrls(images
-                        .stream()
-                        .map(image -> image.getLinkUrl())
-                        .collect(Collectors.toList()));
-
-                roomPostResponseModel.setUtilities(roomHasUtilities);
-                roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
-                roomPostResponseModels.add(roomPostResponseModel);
-            }
-            return ResponseEntity.status(OK).body(roomPostResponseModels);
+//            for (TbPost tbPost : postList) {
+//
+//                RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
+//
+//                TbRoom room = roomService.findRoomById(tbPost.getRoomId());
+//                List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
+//                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+//                TbFavourite favourite = favouriteService
+//                        .findByUserIdAndPostId(baseSuggestRequestModel.getUserId(), tbPost.getPostId());
+//
+//                roomPostResponseModel.setName(tbPost.getName());
+//                roomPostResponseModel.setPostId(tbPost.getPostId());
+//                roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
+//                roomPostResponseModel.setDate(tbPost.getDatePost());
+//                roomPostResponseModel.setUserResponeModel(userResponeModel);
+//                if (favourite != null) {
+//                    roomPostResponseModel.setFavourite(true);
+//                    roomPostResponseModel.setFavouriteId(favourite.getId());
+//                } else {
+//                    roomPostResponseModel.setFavourite(false);
+//                }
+//                roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
+//                roomPostResponseModel.setAddress(room.getAddress());
+//                roomPostResponseModel.setArea(room.getArea());
+//                roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
+//                roomPostResponseModel.setDescription(tbPost.getDescription());
+//                //missing
+//                List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
+//                roomPostResponseModel.setImageUrls(images
+//                        .stream()
+//                        .map(image -> image.getLinkUrl())
+//                        .collect(Collectors.toList()));
+//
+//                roomPostResponseModel.setUtilities(roomHasUtilities);
+//                roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
+//                roomPostResponseModels.add(roomPostResponseModel);
+//            }
+            return ResponseEntity.status(OK).body(suggest.mappingRoomPost(postList,roomPostResponseModels,baseSuggestRequestModel.getUserId()));
         }
     }
 
