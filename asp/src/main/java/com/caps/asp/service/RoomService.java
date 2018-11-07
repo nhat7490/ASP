@@ -27,20 +27,30 @@ public class RoomService {
         return roomRepository.findByRoomId(roomId);
     }
 
-    public void deleteRoom(int roomId){
+    public void deleteRoom(int roomId) {
         roomRepository.deleteById(roomId);
     }
 
-    public List<TbRoom> findAllRoom(){
+    public List<TbRoom> findAllRoom() {
         return roomRepository.findAll();
     }
-    public Page<TbRoom> findAllRoomByUserId(int userId, Pageable pageable){
-        return roomRepository.findAllByUserId(userId,pageable);
+
+    public Page<TbRoom> findAllRoomByUserId(int userId, Pageable pageable) {
+        return roomRepository.findAllByUserId(userId, pageable);
     }
 
-    public TbRoom findByUserIdAndRoomId(int userId, int roomId){
+    public TbRoom findByUserIdAndRoomId(int userId, int roomId) {
         return roomRepository.findByUserIdAndRoomId(userId, roomId);
     }
 
-    public List<TbRoom> findAllRoomByDistrictId(int districtId) {return roomRepository.findAllByDistrictId(districtId); }
+    public List<TbRoom> findAllRoomByDistrictId(int districtId) {
+        return roomRepository.findAllByDistrictId(districtId);
+    }
+
+    public Page<TbRoom> getAllByStatusId(int page, int items, int statusId) {
+        int actualPage = page - 1;
+        Pageable pageable = PageRequest.of(actualPage, items);
+
+        return roomRepository.findAllByStatusId(statusId, pageable);
+    }
 }

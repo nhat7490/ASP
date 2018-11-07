@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -51,7 +53,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="room.html">Admin</a>
+                <a class="navbar-brand" href="room.html">Trang Quản Lý</a>
             </div>
 
             <ul class="nav navbar-top-links navbar-right">
@@ -106,13 +108,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                <c:set var="roomList" value="${requestScope.ROOMS}"/>
+                                <c:forEach var="room" items="${roomList}">
+
                                     <tr >
-                                        <td>1</td>
-                                        <td>Phòng quận 3</td>
-                                        <td>150 m2</td>
-                                        <td class="center">30.000.000</td>
-                                        <td>1/1/2011</td>
-                                        <td class="center">85    Trần Hưng , Quận 5, TP. Hồ Chí Minh</td>
+                                        <td>${room.roomId}</td>
+                                        <td>${room.name}</td>
+                                        <td>${room.area}</td>
+                                        <td class="center">${room.price}</td>
+                                        <td>${room.dateCreated}</td>
+                                        <td class="center">${room.address}</td>
                                         <td><button type="button" class="btn btn-primary" style="width: 100px"data-toggle="modal" data-target="#myModal">Xem</button></td>
                                         <div class="modal fade" id="myModal" role="dialog">
                                             <div class="modal-dialog">
@@ -121,12 +126,12 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        <h4 class="modal-title">Modal Header</h4>
+                                                        <h4 class="modal-title">Hình Ảnh Phòng</h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" style = "width: 100%; margin-bottom:10px">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" style = "width: 100%; margin-bottom:10px">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" style = "width: 100%; margin-bottom:10px">
+                                                        <c:forEach var="image" items="${room.imageUrls}">
+                                                            <img src="${image}" style = "width: 100%; margin-bottom:10px">
+                                                        </c:forEach>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -136,73 +141,10 @@
                                             </div>
                                         </div>
 
-                                        <td><button type="button" class="btn btn-success">Approve</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger">Decline</button></td>
-                                    </tr>
-                                    <tr >
-                                        <td>1</td>
-                                        <td>Phòng quận 3</td>
-                                        <td>200 m2</td>
-                                        <td class="center">10.000.000</td>
-                                        <td>1/1/2018</td>
-                                        <td class="center">85    Trần Hưng , Quận 5, TP. Hồ Chí Minh</td>
-                                        <td><button type="button" class="btn btn-primary" style="width: 100px"data-toggle="modal" data-target="#myModal">Xem</button></td>
-                                        <div class="modal fade" id="myModal" role="dialog">
-                                            <div class="modal-dialog">
-
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        <h4 class="modal-title">Modal Header</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" style = "width: 100%; margin-bottom:10px">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" style = "width: 100%; margin-bottom:10px">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" style = "width: 100%; margin-bottom:10px">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <td><button type="button" class="btn btn-success">Approve</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger">Decline</button></td>
-                                    </tr>
-                                    <tr >
-                                        <td>1</td>
-                                        <td>Phòng quận 3</td>
-                                        <td>5 m2</td>
-                                        <td class="center">50.000.000</td>
-                                        <td>1/5/2011</td>
-                                        <td class="center">85    Trần Hưng , Quận 5, TP. Hồ Chí Minh</td>
-                                        <td><button type="button" class="btn btn-primary" style="width: 100px"data-toggle="modal" data-target="#myModal">Xem</button></td>
-                                        <div class="modal fade" id="myModal" role="dialog">
-                                            <div class="modal-dialog">
-
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        <h4 class="modal-title">Modal Header</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" style = "width: 100%; margin-bottom:10px">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" style = "width: 100%; margin-bottom:10px">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" style = "width: 100%; margin-bottom:10px">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <td><button type="button" class="btn btn-success">Approve</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger">Decline</button></td>
+                                        <td><button type="button" class="btn btn-success">Chứng Thực</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger">Từ Chối</button></td>
                                     </tr>
 
+                                </c:forEach>
                                 </tbody>
                             </table>
                         </div>
