@@ -30,4 +30,12 @@ public class GoogleAPI {
 
         return null;
     }
+
+    public String getDistrict(GeocodingResult gr) {
+        return gr.formattedAddress.split(",")[2].trim();
+    }
+
+    public String getCity(GeocodingResult gr) {
+        return gr.formattedAddress.split(",")[3].trim();
+    }
 }

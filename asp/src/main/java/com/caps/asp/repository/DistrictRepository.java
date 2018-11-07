@@ -11,4 +11,5 @@ public interface DistrictRepository extends JpaRepository<TbDistrict, Integer> {
 
     TbDistrict findByDistrictId(int districtId);
 
+    TbDistrict findByNameLikeAndCityId(String districtName, int cityId);
 }

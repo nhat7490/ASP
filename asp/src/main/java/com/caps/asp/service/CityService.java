@@ -19,4 +19,8 @@ public class CityService {
     public List<TbCity> findAll(){
         return cityRepository.findAll();
     }
+
+    public TbCity findByNameLike(String cityName) {
+        return cityRepository.findByNameLike(cityName);
+    }
 }

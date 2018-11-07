@@ -13,6 +13,8 @@ import com.caps.asp.service.*;
 import com.caps.asp.service.filter.BookmarkFilter;
 import com.caps.asp.service.filter.Filter;
 import com.caps.asp.service.Suggest;
+import com.caps.asp.util.GoogleAPI;
+import com.google.maps.model.GeocodingResult;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +40,9 @@ public class PostController {
     public final DistrictReferenceService districtReferenceService;
     public final ReferenceService referenceService;
     public final Suggest suggest;
+    public final CityService cityService;
 
-    public PostController(PostService postService, RoomService roomService, UserService userService, RoomHasUserService roomHasUserService, RoomHasUtilityService roomHasUtilityService, ImageService imageService, FavouriteService favouriteService, DistrictService districtService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService, ReferenceService referenceService, Suggest suggest) {
+    public PostController(PostService postService, RoomService roomService, UserService userService, RoomHasUserService roomHasUserService, RoomHasUtilityService roomHasUtilityService, ImageService imageService, FavouriteService favouriteService, DistrictService districtService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService, ReferenceService referenceService, Suggest suggest, CityService cityService) {
         this.postService = postService;
         this.roomService = roomService;
         this.userService = userService;
@@ -52,6 +55,7 @@ public class PostController {
         this.districtReferenceService = districtReferenceService;
         this.referenceService = referenceService;
         this.suggest = suggest;
+        this.cityService = cityService;
     }
 
     @PostMapping("/post/userPost")
@@ -415,7 +419,7 @@ public class PostController {
     @PostMapping("/post/suggest")
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
         TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
-        List<TbPost> checkPost = postService.findPostByUserIdAndTypeId(baseSuggestRequestModel.getUserId() ,MASTER_POST);
+        List<TbPost> checkPost = postService.findPostByUserIdAndTypeId(baseSuggestRequestModel.getUserId(), MASTER_POST);
 
         //sugesst for room master
         if (tbUser.getRoleId() == ROOM_MASTER && checkPost != null) {
@@ -518,8 +522,57 @@ public class PostController {
             Page<RoomPostResponseModel> roomPostResponseModels = suggest.partnerPostSuggestion(filter);
             return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
         } else { //access location, suggest nearby post
+            GoogleAPI googleAPI = new GoogleAPI();
+            GeocodingResult geocodingResult = googleAPI.getLocationName(baseSuggestRequestModel.getLatitude(), baseSuggestRequestModel.getLongitude());
+            String city = googleAPI.getCity(geocodingResult);
+            int cityId = cityService.findByNameLike(city).getCityId();
+            String district = googleAPI.getDistrict(geocodingResult);
+            int districtId = districtService.findByNameLikeAndDistrictId(district, cityId).getDistrictId();
 
-            return ResponseEntity.status(NOT_FOUND).build();
+            List<TbPost> postList = postService.getSuggestedListForMember(Float.parseFloat(baseSuggestRequestModel.getLatitude().toString())
+                    , Float.parseFloat(baseSuggestRequestModel.getLongitude().toString())
+                    , districtId
+                    , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
+
+            List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
+            for (TbPost tbPost : postList) {
+
+                RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
+
+                TbRoom room = roomService.findRoomById(tbPost.getRoomId());
+                List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
+                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                TbFavourite favourite = favouriteService
+                        .findByUserIdAndPostId(baseSuggestRequestModel.getUserId(), tbPost.getPostId());
+
+                roomPostResponseModel.setName(tbPost.getName());
+                roomPostResponseModel.setPostId(tbPost.getPostId());
+                roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
+                roomPostResponseModel.setDate(tbPost.getDatePost());
+                roomPostResponseModel.setUserResponeModel(userResponeModel);
+                if (favourite != null) {
+                    roomPostResponseModel.setFavourite(true);
+                    roomPostResponseModel.setFavouriteId(favourite.getId());
+                } else {
+                    roomPostResponseModel.setFavourite(false);
+                }
+                roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
+                roomPostResponseModel.setAddress(room.getAddress());
+                roomPostResponseModel.setArea(room.getArea());
+                roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
+                roomPostResponseModel.setDescription(tbPost.getDescription());
+                //missing
+                List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
+                roomPostResponseModel.setImageUrls(images
+                        .stream()
+                        .map(image -> image.getLinkUrl())
+                        .collect(Collectors.toList()));
+
+                roomPostResponseModel.setUtilities(roomHasUtilities);
+                roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
+                roomPostResponseModels.add(roomPostResponseModel);
+            }
+            return ResponseEntity.status(OK).body(roomPostResponseModels);
         }
     }
 

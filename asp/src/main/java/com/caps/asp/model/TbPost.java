@@ -14,6 +14,16 @@ import java.util.Objects;
                         @StoredProcedureParameter(mode = ParameterMode.IN, name = "userId", type = Integer.class),
                         @StoredProcedureParameter(mode = ParameterMode.IN, name = "pageOf", type = Integer.class),
                         @StoredProcedureParameter(mode = ParameterMode.IN, name = "size", type = Integer.class)
+                }),
+        @NamedStoredProcedureQuery(name = "getSuggestedListForMember",
+                procedureName = "CalculateDistanceForMember",
+                resultClasses = {TbPost.class},
+                parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "latitude", type = Float.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "longitude", type = Float.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "districtId", type = Integer.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "pageOf", type = Integer.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "size", type = Integer.class)
                 })
 })
 public class TbPost {

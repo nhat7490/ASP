@@ -112,6 +112,17 @@ public class PostService {
         return suggestedList;
     }
 
+    public List<TbPost> getSuggestedListForMember(float latitude, float longitude, int districtId, int pageOf, int size) {
+        StoredProcedureQuery sp = em.createNamedStoredProcedureQuery("getSuggestedListForMember")
+                .setParameter("latitude", latitude)
+                .setParameter("longitude", longitude)
+                .setParameter("districtId", districtId)
+                .setParameter("pageOf", pageOf)
+                .setParameter("size", size);
+        List<TbPost> suggestedList = sp.getResultList();
+        return suggestedList;
+    }
+
     public void removeByRoomId(int roomId) {
         postRepository.removeByRoomId(roomId);
     }

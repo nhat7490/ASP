@@ -28,4 +28,8 @@ public class DistrictService {
     public TbDistrict findByDistrictId(int districtId){
         return districtRepository.findByDistrictId(districtId);
     }
+
+    public TbDistrict findByNameLikeAndDistrictId(String districtName, int cityId){
+        return districtRepository.findByNameLikeAndCityId(districtName, cityId);
+    }
 }
