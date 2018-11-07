@@ -147,6 +147,32 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
+                            <ul class="pagination pagination-lg">
+                                <c:set var="totalPage" value="${requestScope.PAGE}"/>
+                                <c:set var="currentPage" value="${requestScope.CURRENTPAGE}"/>
+
+                                <%--<c:out value="${currentPage}"/>--%>
+                                <%--<c:out value="${totalPage}"/>--%>
+
+                                <%--current page less than 7--%>
+                                <c:if test="${currentPage lt 7}">
+                                    <li><a>Previous</a></li>
+                                    <c:forEach var="i" begin="1" end="7">
+                                        <li><a href="/room?page=${i}">${i}</a></li>
+                                    </c:forEach>
+                                    <li><a>Next</a></li>
+                                </c:if>
+
+                                <%--current page greater than or equal 7--%>
+                                <c:if test="${currentPage ge 7}">
+                                    <li><a href="/room?page=${currentPage-1}">Previous</a></li>
+                                    <c:forEach var="i" begin="${currentPage - 3}" end="${currentPage + 3}">
+                                        <li><a href="/room?page=${i}">${i}</a></li>
+                                    </c:forEach>
+                                    <li><a href="/room?page=${currentPage+1}">Next</a></li>
+                                </c:if>
+
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -155,6 +181,7 @@
         </div>
 
     </div>
+
     <!-- /#wrapper -->
 
     <!-- jQuery -->
