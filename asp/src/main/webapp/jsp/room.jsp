@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Admin Web Manage</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -35,19 +35,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <style>
-        .table-room-images {
-            overflow: scroll;
-            display: flex;
-        }
 
-        .table-room-images img {
-            width: 50%;
-            height: 100%;
-            object-fit: contain;
-            margin-right: 10px;
-        }
-    </style>
 </head>
 
 <body>
@@ -66,6 +54,12 @@
                 <a class="navbar-brand" href="room.html">Admin</a>
             </div>
 
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown open">                       
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                </li>
+            </ul>
 
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
@@ -87,7 +81,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Tables</h1>
+                    <h1 class="page-header">Quản lý phòng</h1>
                 </div>
             </div>
              <div class="row">
