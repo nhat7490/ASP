@@ -9,6 +9,11 @@ public class PageController {
 
     @GetMapping("/")
     public ModelAndView loginPage() {
-        return new ModelAndView("index");
+        return new ModelAndView("login");
+    }
+
+    @GetMapping("/room")
+    public ModelAndView roomPage() {
+        return new ModelAndView("room");
     }
 }

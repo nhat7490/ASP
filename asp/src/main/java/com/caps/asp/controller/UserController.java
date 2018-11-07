@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static com.caps.asp.constant.Constant.ADMIN;
 import static com.caps.asp.constant.Constant.MEMBER;
 import static org.springframework.http.HttpStatus.*;
 
@@ -45,6 +46,20 @@ public class UserController {
             return isRight
                     ? ResponseEntity.status(OK).body(user)
                     : ResponseEntity.status(FORBIDDEN).build();//need to encrypt here
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping(value = "/user/admin", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity adminLogin(@RequestBody UserLoginModel model) {
+        try {
+            TbUser user = userService.findByUsername(model.getUsername());
+            boolean isRight = this.passwordEncoder.matches(model.getPassword(), user.getPassword());
+            if(user.getRoleId() == ADMIN && isRight){
+                return ResponseEntity.status(OK).body(user);
+            }
+            return ResponseEntity.status(NOT_FOUND).build();
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }
