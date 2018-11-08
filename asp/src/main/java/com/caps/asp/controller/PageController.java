@@ -35,9 +35,10 @@ public class PageController {
     }
 
     @GetMapping("/room")
-    public ModelAndView roomPage(HttpServletRequest request, @RequestParam(defaultValue = "1") int page) {
+    public ModelAndView roomPage(HttpServletRequest request, @RequestParam(defaultValue = "1") int page,
+                                 @RequestParam(defaultValue = "10") int size) {
 
-        Page<TbRoom> rooms = roomService.getAllByStatusId(page, 10, UNAUTHENTICATE);
+        Page<TbRoom> rooms = roomService.getAllByStatusId(page, size, UNAUTHENTICATE);
         Page<RoomModel> roomModels = rooms.map(tbRoom -> {
            RoomModel roomModel = new RoomModel();
            roomModel.setName(tbRoom.getName());
@@ -56,6 +57,7 @@ public class PageController {
         });
         request.setAttribute("ROOMS", roomModels.getContent());
         request.setAttribute("PAGE", rooms.getTotalPages());
+        request.setAttribute("SIZE", size);
         request.setAttribute("CURRENTPAGE", page);
         return new ModelAndView("room");
     }
