@@ -10,6 +10,7 @@ public class TbUtilities {
     private String name;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "utility_id", nullable = false)
     public Integer getUtilityId() {
         return utilityId;

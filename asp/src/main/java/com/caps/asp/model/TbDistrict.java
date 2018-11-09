@@ -11,6 +11,7 @@ public class TbDistrict {
     private Integer cityId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "district_id", nullable = false)
     public Integer getDistrictId() {
         return districtId;

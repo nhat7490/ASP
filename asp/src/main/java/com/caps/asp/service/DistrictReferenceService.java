@@ -20,4 +20,12 @@ public class DistrictReferenceService {
     public List<TbDistrictReference> findAllByUserId(int userId){
         return districtReferenceRepository.findAllByUserId(userId);
     }
+
+    public void removeAllByUserId(int userid){
+        districtReferenceRepository.removeAllByUserId(userid);
+    }
+
+    public void save(TbDistrictReference tbDistrictReference){
+        districtReferenceRepository.save(tbDistrictReference);
+    }
 }

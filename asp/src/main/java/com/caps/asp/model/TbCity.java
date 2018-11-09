@@ -10,6 +10,7 @@ public class TbCity {
     private String name;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "city_id", nullable = false)
     public Integer getCityId() {
         return cityId;

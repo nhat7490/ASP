@@ -16,4 +16,12 @@ public class ReferenceService {
     public TbReference getByUserId(int userId) {
         return referenceRepository.findByUserId(userId);
     }
+
+    public void removeByUserId(int userId){
+        referenceRepository.removeByUserId(userId);
+    }
+
+    public void save(TbReference tbReference){
+        referenceRepository.save(tbReference);
+    }
 }

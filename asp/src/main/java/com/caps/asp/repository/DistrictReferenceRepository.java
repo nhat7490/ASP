@@ -8,4 +8,5 @@ import java.util.List;
 public interface DistrictReferenceRepository extends JpaRepository<TbDistrictReference,Integer> {
 
     List<TbDistrictReference> findAllByUserId(int userId);
+    void removeAllByUserId(int userId);
 }

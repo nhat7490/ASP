@@ -20,4 +20,12 @@ public class UtilityReferenceService {
     public List<TbUtilitiesReference> findAllByUserId(int userId){
         return utilityReferenceRepository.findAllByUserId(userId);
     }
+
+    public void removeAllByUserId(int userId){
+        utilityReferenceRepository.removeAllByUserId(userId);
+    }
+
+    public void save(TbUtilitiesReference utilitiesReference){
+        utilityReferenceRepository.save(utilitiesReference);
+    }
 }

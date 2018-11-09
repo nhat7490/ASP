@@ -17,6 +17,7 @@ import com.caps.asp.util.GoogleAPI;
 import com.google.maps.model.GeocodingResult;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -160,38 +161,62 @@ public class PostController {
         }
     }
 
-
+    @Transactional
     @PostMapping("/post/createRoommatePost")
     public ResponseEntity createRoommatePost(@RequestBody RoommatePostRequestModel roommatePostRequestModel) {
-        TbUser user = userService.findById(roommatePostRequestModel.getUserId());
-        TbPost post = new TbPost();
-        Date date = new Date(System.currentTimeMillis());
-        post.setDatePost(date);
-        post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
-        post.setTypeId(MEMBER_POST);
-        post.setUserId(user.getUserId());
-        post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
-        post.setMinPrice(roommatePostRequestModel.getMinPrice());
-        post.setUserId(roommatePostRequestModel.getUserId());
-        post.setPostId(0);
-        int postId = postService.savePost(post);
+        try {
+            TbUser user = userService.findById(roommatePostRequestModel.getUserId());
+            TbPost post = new TbPost();
+            Date date = new Date(System.currentTimeMillis());
+            post.setDatePost(date);
+            post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
+            post.setTypeId(MEMBER_POST);
+            post.setUserId(user.getUserId());
+            post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
+            post.setMinPrice(roommatePostRequestModel.getMinPrice());
+            post.setUserId(roommatePostRequestModel.getUserId());
+            post.setPostId(0);
+            int postId = postService.savePost(post);
 
-        for (Integer utilityId : roommatePostRequestModel.getUtilityIds()) {
-            TbPostHasUtility postHasUtility = new TbPostHasUtility();
-            postHasUtility.setId(0);
-            postHasUtility.setPostId(postId);
-            postHasUtility.setUtilityId(utilityId);
-            postHasUtilityService.save(postHasUtility);
-        }
+            TbReference reference = referenceService.getByUserId(user.getUserId());
+            reference.setMaxPrice(roommatePostRequestModel.getMaxPrice());
+            reference.setMinPrice(roommatePostRequestModel.getMinPrice());
+            referenceService.save(reference);
 
-        for (Integer districtId : roommatePostRequestModel.getDistrictIds()) {
-            TbPostHasTbDistrict postHasTbDistrict = new TbPostHasTbDistrict();
-            postHasTbDistrict.setId(0);
-            postHasTbDistrict.setPostId(postId);
-            postHasTbDistrict.setDistrictId(districtId);
-            postHasDistrictService.save(postHasTbDistrict);
+            utilityReferenceService.removeAllByUserId(user.getUserId());
+            for (Integer utilityId : roommatePostRequestModel.getUtilityIds()) {
+                TbPostHasUtility postHasUtility = new TbPostHasUtility();
+                postHasUtility.setId(0);
+                postHasUtility.setPostId(postId);
+                postHasUtility.setUtilityId(utilityId);
+                postHasUtilityService.save(postHasUtility);
+
+                TbUtilitiesReference utilitiesReference = new TbUtilitiesReference();
+                utilitiesReference.setId(0);
+                utilitiesReference.setUserId(user.getUserId());
+                utilitiesReference.setUtilityId(utilityId);
+                utilityReferenceService.save(utilitiesReference);
+            }
+
+            districtReferenceService.removeAllByUserId(user.getUserId());
+            for (Integer districtId : roommatePostRequestModel.getDistrictIds()) {
+                TbPostHasTbDistrict postHasTbDistrict = new TbPostHasTbDistrict();
+                postHasTbDistrict.setId(0);
+                postHasTbDistrict.setPostId(postId);
+                postHasTbDistrict.setDistrictId(districtId);
+                postHasDistrictService.save(postHasTbDistrict);
+
+                TbDistrictReference districtReference = new TbDistrictReference();
+                districtReference.setId(0);
+                districtReference.setUserId(user.getUserId());
+                districtReference.setDistrictId(districtId);
+                districtReferenceService.save(districtReference);
+            }
+            return ResponseEntity.status(CREATED).build();
+
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT).build();
         }
-        return ResponseEntity.status(CREATED).build();
 
     }
 
@@ -220,7 +245,7 @@ public class PostController {
             int postId = postService.savePost(post);
 
             List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(roomPostRequestModel.getRoomId());
-            for (TbRoomHasUtility tbRoomHasUtility: roomHasUtilities) {
+            for (TbRoomHasUtility tbRoomHasUtility : roomHasUtilities) {
                 TbPostHasUtility postHasUtility = new TbPostHasUtility();
                 postHasUtility.setId(0);
                 postHasUtility.setPostId(postId);
@@ -465,6 +490,13 @@ public class PostController {
             List<TbPost> postList = postService.getSuggestedList(baseSuggestRequestModel.getUserId()
                     , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
 
+            if (postList == null) {
+                return ResponseEntity
+                        .status(OK)
+                        .body(suggest.getNewPost(baseSuggestRequestModel)
+                                .getContent());
+            }
+
             List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
             return ResponseEntity.status(OK).body(suggest.mappingRoomPost(postList, roomPostResponseModels, baseSuggestRequestModel.getUserId()));
 
@@ -504,24 +536,18 @@ public class PostController {
 
             Filter filter = new Filter();
             filter.setFilterArgumentModel(filterArgumentModel);
-            if (filterArgumentModel.getTypeId() == MASTER_POST) {
-                Page<RoomPostResponseModel> roomPostResponseModels = suggest.partnerPostSuggestion(filter);
-                return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
-            } else {
-                Page<RoommatePostResponseModel> roommatePostResponseModels = suggest.roommatePostSuggestion(filter);
-                return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
+            Page<RoomPostResponseModel> roomPostResponseModels = suggest.partnerPostSuggestion(filter);
+            if (roomPostResponseModels == null) {
+                return ResponseEntity
+                        .status(OK)
+                        .body(suggest.getNewPost(baseSuggestRequestModel)
+                                .getContent());
             }
+            return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
+
         } else if (baseSuggestRequestModel.getLatitude() == null
                 && baseSuggestRequestModel.getLongitude() == null) { //not access location, suggest new post
-            FilterArgumentModel filterArgumentModel = new FilterArgumentModel();
-            filterArgumentModel.setOrderBy(NEWPOST);
-            filterArgumentModel.setPage(baseSuggestRequestModel.getPage());
-            filterArgumentModel.setOffset(baseSuggestRequestModel.getOffset());
-            filterArgumentModel.setTypeId(baseSuggestRequestModel.getTypeId());
-            filterArgumentModel.setCityId(baseSuggestRequestModel.getCityId());
-            Filter filter = new Filter();
-            filter.setFilterArgumentModel(filterArgumentModel);
-            Page<RoomPostResponseModel> roomPostResponseModels = suggest.partnerPostSuggestion(filter);
+            Page<RoomPostResponseModel> roomPostResponseModels = suggest.getNewPost(baseSuggestRequestModel);
             return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
         } else { //access location, suggest nearby post
             GoogleAPI googleAPI = new GoogleAPI();
@@ -536,8 +562,18 @@ public class PostController {
                     , districtId
                     , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
 
+            if (postList == null) {
+                return ResponseEntity
+                        .status(OK)
+                        .body(suggest.getNewPost(baseSuggestRequestModel)
+                                .getContent());
+            }
+
             List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
-            return ResponseEntity.status(OK).body(suggest.mappingRoomPost(postList, roomPostResponseModels, baseSuggestRequestModel.getUserId()));
+            return ResponseEntity
+                    .status(OK)
+                    .body(suggest.mappingRoomPost(postList, roomPostResponseModels
+                            , baseSuggestRequestModel.getUserId()));
         }
     }
 

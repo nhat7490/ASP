@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ReferenceRepository extends JpaRepository<TbReference, Integer> {
 
     TbReference findByUserId(int userId);
+    void removeByUserId(int userid);
 }

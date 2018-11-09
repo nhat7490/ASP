@@ -8,4 +8,6 @@ import java.util.List;
 public interface UtilityReferenceRepository extends JpaRepository<TbUtilitiesReference, Integer> {
 
     List<TbUtilitiesReference> findAllByUserId(int userId);
+
+    void removeAllByUserId(int userId);
 }
