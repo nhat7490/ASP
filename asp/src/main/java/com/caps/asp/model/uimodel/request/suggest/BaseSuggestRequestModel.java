@@ -8,7 +8,7 @@ public class BaseSuggestRequestModel {
     private int typeId;
     private Integer page;
     private Integer offset;
-    private Integer city;
+    private Integer cityId;
 
 
 //suggest (BASE)
@@ -29,21 +29,21 @@ public class BaseSuggestRequestModel {
     public BaseSuggestRequestModel() {
     }
 
-    public BaseSuggestRequestModel(int userId, Double longitude, Double latitude, int typeId, Integer offset, Integer city) {
+    public BaseSuggestRequestModel(int userId, Double longitude, Double latitude, int typeId, Integer offset, Integer cityId) {
         this.userId = userId;
         this.longitude = longitude;
         this.latitude = latitude;
         this.typeId = typeId;
         this.offset = offset;
-        this.city = city;
+        this.cityId = cityId;
     }
 
-    public Integer getCity() {
-        return city;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public void setCity(Integer city) {
-        this.city = city;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 
     public Integer getPage() {

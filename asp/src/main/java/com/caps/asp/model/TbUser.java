@@ -19,6 +19,7 @@ public class TbUser {
     private Integer roleId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     public Integer getUserId() {
         return userId;
