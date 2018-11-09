@@ -27,6 +27,7 @@
       <mapping class="com.caps.asp.model.TbDistrictReference"/>
       <mapping class="com.caps.asp.model.TbNotification"/>
       <mapping class="com.caps.asp.model.TbNotificationStatus"/>
+      <mapping class="com.caps.asp.model.TbPostHasUtility"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 

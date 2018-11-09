@@ -62,8 +62,8 @@ public class PostService {
         return postRepository.findByRoomId(roomId);
     }
 
-    public void savePost(TbPost post) {
-        postRepository.save(post);
+    public int savePost(TbPost post) {
+        return postRepository.save(post).getPostId();
     }
 
     public TbPost findByPostId(int postId) {
