@@ -62,6 +62,10 @@ public class PostService {
         return postRepository.findByRoomId(roomId);
     }
 
+    public TbPost findAllByUserIdAndRoomIdOrderByDatePostDesc(int userId, int roomId) {
+        return postRepository.findAllByUserIdAndRoomIdOrderByDatePostDesc(userId,roomId).get(0);
+    }
+
     public int savePost(TbPost post) {
         return postRepository.save(post).getPostId();
     }
@@ -134,6 +138,6 @@ public class PostService {
     public Page<TbPost> findByUserIdAndTypeId(int page, int items, int userId, int typeId) {
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
-        return postRepository.findAllByUserIdAndTypeIdOrderByDatePostDesc(userId,typeId,pageable);
+        return postRepository.findAllByUserIdAndTypeIdOrderByDatePostDesc(userId, typeId, pageable);
     }
 }

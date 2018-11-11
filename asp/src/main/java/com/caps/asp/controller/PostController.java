@@ -225,10 +225,9 @@ public class PostController {
         TbUser user = userService.findById(roomPostRequestModel.getUserId());
         TbRoom room = roomService.findRoomById(roomPostRequestModel.getRoomId());
         TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomId(user.getUserId(), room.getRoomId());
-        TbPost excistedPost = postService.findByRoomId(room.getRoomId());
+//        TbPost excistedPost = postService.findByRoomId(room.getRoomId());
         if (user.getRoleId() == ROOM_MASTER
-                && roomHasUser != null
-                && excistedPost == null) {
+                && roomHasUser != null) {
             TbPost post = new TbPost();
             post.setTypeId(MEMBER_POST);
             post.setLongtitude(room.getLongtitude());

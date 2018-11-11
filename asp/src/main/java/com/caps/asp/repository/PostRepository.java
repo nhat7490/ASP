@@ -30,4 +30,6 @@ public interface PostRepository extends JpaRepository<TbPost, Integer>, JpaSpeci
     List<TbPost> findAllByUserId(int userId);
 
     Page<TbPost> findAllByUserIdAndTypeIdOrderByDatePostDesc(int userId, int typeId, Pageable pageable);
+
+    List<TbPost> findAllByUserIdAndRoomIdOrderByDatePostDesc(int userId,int roomId);
 }

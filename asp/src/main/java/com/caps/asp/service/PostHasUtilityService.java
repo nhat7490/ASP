@@ -16,4 +16,8 @@ public class PostHasUtilityService {
     public void save(TbPostHasUtility tbPostHasUtility){
         postHasUtilityRepository.save(tbPostHasUtility);
     }
+
+    public void deleteAllPostHasUtilityByPostId(int postId){
+        postHasUtilityRepository.deleteAllByPostId(postId);
+    }
 }

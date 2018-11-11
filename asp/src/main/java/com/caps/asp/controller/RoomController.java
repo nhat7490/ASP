@@ -28,6 +28,7 @@ import static org.springframework.http.HttpStatus.*;
 public class RoomController {
     public final RoomService roomService;
     public final RoomHasUtilityService roomHasUtilityService;
+    public final PostHasUtilityService postHasUtilityService;
     public final ImageService imageService;
     public final UserService userService;
     public final RoomHasUserService roomHasUserService;
@@ -37,10 +38,10 @@ public class RoomController {
     public final AmazonService amazonService;
 
 
-
-    public RoomController(RoomService roomService, RoomHasUtilityService roomHasUtilityService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, AmazonService amazonService) {
+    public RoomController(RoomService roomService, RoomHasUtilityService roomHasUtilityService, PostHasUtilityService postHasUtilityService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, AmazonService amazonService) {
         this.roomService = roomService;
         this.roomHasUtilityService = roomHasUtilityService;
+        this.postHasUtilityService = postHasUtilityService;
         this.imageService = imageService;
         this.userService = userService;
         this.roomHasUserService = roomHasUserService;
@@ -112,7 +113,6 @@ public class RoomController {
             room.setName(roomRequestModel.getName());
             room.setPrice(roomRequestModel.getPrice());
             room.setArea(roomRequestModel.getArea());
-            room.setAddress(roomRequestModel.getAddress());
             room.setMaxGuest(roomRequestModel.getMaxGuest());
 //            room.setDate(new Date(System.currentTimeMillis()));//Edit with current time not in request
             room.setCurrentNumber(roomRequestModel.getCurrentMember());
@@ -148,6 +148,30 @@ public class RoomController {
             image.setLinkUrl(url);
             imageService.saveImage(image);
         }
+
+        List<TbRoomHasUser> roomHasUser = roomHasUserService.findByRoomIdAndDateOutIsNull(roomRequestModel.getRoomId());
+        roomHasUser.forEach(tbRoomHasUser -> {
+            TbUser tbUser = userService.findById(tbRoomHasUser.getUserId());
+            if (tbUser.getRoleId() == ROOM_MASTER) {
+                TbPost post = postService.findAllByUserIdAndRoomIdOrderByDatePostDesc(tbUser.getUserId()
+                        , roomRequestModel.getRoomId());
+                if (post!=null){
+                    post.setMinPrice(roomRequestModel.getPrice());
+                    postService.savePost(post);
+                    postHasUtilityService.deleteAllPostHasUtilityByPostId(roomRequestModel.getRoomId());
+                    for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
+                        TbPostHasUtility postHasUtility = new TbPostHasUtility();
+                        postHasUtility.setId(0);
+                        postHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
+                        postHasUtility.setPostId(post.getPostId());
+                        postHasUtility.setBrand(utilityRequestModel.getBrand());
+                        postHasUtility.setDescription(utilityRequestModel.getDescription());
+                        postHasUtility.setQuantity(utilityRequestModel.getQuantity());
+                        postHasUtilityService.save(postHasUtility);
+                    }
+                }
+            }
+        });
 
         return ResponseEntity.status(OK).build();
 
@@ -213,10 +237,10 @@ public class RoomController {
                 roomResponseModel.setMembers(roomHasUserService.findByRoomIdAndDateOutIsNull(tbRoom.getRoomId())
                         .stream()
                         .map(tbRoomHasUser -> {
-                    TbUser user = userService.findById(tbRoomHasUser.getUserId());
-                    return new MemberResponseModel(user.getUserId()
-                            , user.getRoleId(), user.getUsername(), user.getPhone());
-                }).collect(Collectors.toList()));
+                            TbUser user = userService.findById(tbRoomHasUser.getUserId());
+                            return new MemberResponseModel(user.getUserId()
+                                    , user.getRoleId(), user.getUsername(), user.getPhone());
+                        }).collect(Collectors.toList()));
                 return roomResponseModel;
             }).collect(Collectors.toList());
 
@@ -270,7 +294,7 @@ public class RoomController {
     public ResponseEntity getHistoryRoom(@PathVariable Integer userId, Pageable pageable) {
         Page<TbRoomHasUser> roomHasUsers = roomHasUserService.getHistoryRoom(pageable.getPageNumber(), pageable.getPageSize()
                 , userId);
-        if (!roomHasUsers.getContent().isEmpty()){
+        if (!roomHasUsers.getContent().isEmpty()) {
             Page<RoomResponseModel> roomResponseModels = roomHasUsers.map(tbRoomHasUser -> {
                 RoomResponseModel roomResponseModel = new RoomResponseModel();
                 TbRoom room = roomService.findRoomById(tbRoomHasUser.getRoomId());
@@ -317,10 +341,10 @@ public class RoomController {
 
         if (roomMemberModel.getMemberRequestModels() == null) {
 
-            TbPost post = postService.findByRoomId(roomMemberModel.getRoomId());
-            postHasDistrictService.removeAllByPostId(post.getPostId());
-            favouriteService.removeAllByPostId(post.getPostId());
-            postService.removeByRoomId(roomMemberModel.getRoomId());
+//            TbPost post = postService.findByRoomId(roomMemberModel.getRoomId());
+//            postHasDistrictService.removeAllByPostId(post.getPostId());
+//            favouriteService.removeAllByPostId(post.getPostId());
+//            postService.removeByRoomId(roomMemberModel.getRoomId());
 
             roomMembers.forEach(tbRoomHasUser -> {
                 TbUser user = userService.findById(tbRoomHasUser.getUserId());
