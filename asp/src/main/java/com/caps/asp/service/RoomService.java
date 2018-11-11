@@ -53,4 +53,8 @@ public class RoomService {
 
         return roomRepository.findAllByStatusId(statusId, pageable);
     }
+
+    public List<TbRoom> getAllByUserId(int userId){
+        return roomRepository.getAllByUserId(userId);
+    }
 }

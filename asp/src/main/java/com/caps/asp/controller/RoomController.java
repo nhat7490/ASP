@@ -181,20 +181,26 @@ public class RoomController {
     @DeleteMapping("room/deleteRoom/{roomId}")
     public ResponseEntity deleteRoom(@PathVariable int roomId) {
         roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomId);
-//        List<String> url = imageService.findAllByRoomId(roomId)
-//                .stream()
-//                .map(image -> image.getLinkUrl())
-//                .collect(Collectors.toList());
-//        url.forEach(s -> {
-//            amazonService.deleteFileFromS3Bucket(s);
-//        });
         imageService.deleteAllImageByRoomId(roomId);
+
+        List<TbRoomHasUser> roomHasUsers = roomHasUserService.getAllByRoomId(roomId);
+        roomHasUsers.forEach(tbRoomHasUser -> {
+            TbUser tbUser = userService.findById(tbRoomHasUser.getUserId());
+            if (tbUser.getRoleId() == ROOM_MASTER){
+                tbUser.setRoleId(MEMBER);
+                userService.saveUser(tbUser);
+            }
+        });
+
         roomHasUserService.removeAllByRoomId(roomId);
 
-        TbPost post = postService.findByRoomId(roomId);
-        favouriteService.removeAllByPostId(post.getPostId());
-        postHasDistrictService.removeAllByPostId(post.getPostId());
-        postService.removeByRoomId(roomId);
+        List<TbPost> posts = postService.findAllByRoomId(roomId);
+        posts.forEach(tbPost -> {
+            favouriteService.removeAllByPostId(tbPost.getPostId());
+            postHasDistrictService.removeAllByPostId(tbPost.getPostId());
+            postHasUtilityService.deleteAllPostHasUtilityByPostId(tbPost.getPostId());
+            postService.removeByRoomId(roomId);
+        });
         roomService.deleteRoom(roomId);
         return ResponseEntity.status(OK).build();
     }

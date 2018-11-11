@@ -63,7 +63,7 @@ public class PostService {
     }
 
     public TbPost findAllByUserIdAndRoomIdOrderByDatePostDesc(int userId, int roomId) {
-        return postRepository.findAllByUserIdAndRoomIdOrderByDatePostDesc(userId,roomId).get(0);
+        return postRepository.findAllByUserIdAndRoomIdOrderByDatePostDesc(userId, roomId).get(0);
     }
 
     public int savePost(TbPost post) {
@@ -139,5 +139,13 @@ public class PostService {
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
         return postRepository.findAllByUserIdAndTypeIdOrderByDatePostDesc(userId, typeId, pageable);
+    }
+
+    public List<TbPost> findAllByRoomId(int roomId) {
+        return postRepository.findAllByRoomId(roomId);
+    }
+
+    public void removeAllByUserId(int userId){
+        postRepository.removeAllByUserId(userId);
     }
 }

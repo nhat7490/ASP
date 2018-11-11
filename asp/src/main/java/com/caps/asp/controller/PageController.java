@@ -1,13 +1,10 @@
 package com.caps.asp.controller;
 
-import com.caps.asp.model.TbImage;
-import com.caps.asp.model.TbRoom;
-import com.caps.asp.model.TbUser;
+import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.room.RoomModel;
-import com.caps.asp.service.ImageService;
-import com.caps.asp.service.RoomService;
-import com.caps.asp.service.UserService;
+import com.caps.asp.service.*;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,12 +23,24 @@ public class PageController {
     private final RoomService roomService;
     private final ImageService imageService;
     private final UserService userService;
+    private final RoomHasUserService roomHasUserService;
+    private final PostService postService;
+    private final FavouriteService favouriteService;
+    private final PostHasDistrictService postHasDistrictService;
+    private final RoomHasUtilityService roomHasUtilityService;
+    private final PostHasUtilityService postHasUtilityService;
 
 
-    public PageController(RoomService roomService, ImageService imageService, UserService userService) {
+    public PageController(RoomService roomService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, RoomHasUtilityService roomHasUtilityService, PostHasUtilityService postHasUtilityService) {
         this.roomService = roomService;
         this.imageService = imageService;
         this.userService = userService;
+        this.roomHasUserService = roomHasUserService;
+        this.postService = postService;
+        this.favouriteService = favouriteService;
+        this.postHasDistrictService = postHasDistrictService;
+        this.roomHasUtilityService = roomHasUtilityService;
+        this.postHasUtilityService = postHasUtilityService;
     }
 
     @GetMapping("/")
@@ -96,10 +105,45 @@ public class PageController {
         return new ModelAndView("user");
     }
 
+    @Transactional
     @GetMapping("/users/remove/{userId}")
     public void deleteUser(HttpServletResponse response, @PathVariable int userId) throws IOException {
         TbUser user = userService.findById(userId);
         if (user.getRoleId() == HOUSE_OWNER){
+            List<TbRoom> rooms = roomService.getAllByUserId(userId);
+            rooms.forEach(tbRoom -> {
+
+                roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(tbRoom.getRoomId());
+                imageService.deleteAllImageByRoomId(tbRoom.getRoomId());
+
+                List<TbRoomHasUser> roomHasUsers = roomHasUserService.getAllByRoomId(tbRoom.getRoomId());
+                roomHasUsers.forEach(tbRoomHasUser -> {
+                    TbUser tbUser = userService.findById(tbRoomHasUser.getUserId());
+                    if (tbUser.getRoleId() == ROOM_MASTER){
+                        tbUser.setRoleId(MEMBER);
+                        userService.saveUser(tbUser);
+                    }
+                });
+
+                roomHasUserService.removeAllByRoomId(tbRoom.getRoomId());
+                List<TbPost> posts = postService.findAllByRoomId(tbRoom.getRoomId());
+                posts.forEach(tbPost -> {
+                    favouriteService.removeAllByPostId(tbPost.getPostId());
+                    postHasDistrictService.removeAllByPostId(tbPost.getPostId());
+                    postHasUtilityService.deleteAllPostHasUtilityByPostId(tbPost.getPostId());
+                    postService.removeByRoomId(tbRoom.getRoomId());
+                });
+                roomService.deleteRoom(tbRoom.getRoomId());
+
+            });
+
+        }else{
+            List<TbPost> posts = postService.findPostByUserId(userId);
+            posts.forEach(tbPost -> {
+                favouriteService.removeAllByPostId(tbPost.getPostId());
+                postHasDistrictService.removeAllByPostId(tbPost.getPostId());
+                postService.removeAllByUserId(userId);
+            });
         }
         userService.deleteUser(userId);
         response.sendRedirect("/users");
