@@ -68,7 +68,7 @@ public class RoomController {
             room.setDate(date);
             room.setCurrentNumber(0);
             room.setDescription(roomRequestModel.getDescription());
-            room.setStatusId(AUTHENTICATED);
+            room.setStatusId(DECLINED);
             room.setUserId(roomRequestModel.getUserId());
             room.setCityId(roomRequestModel.getCityId());
             room.setDistrictId(roomRequestModel.getDistrictId());

@@ -7,16 +7,21 @@ import com.caps.asp.service.ImageService;
 import com.caps.asp.service.RoomService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.caps.asp.constant.Constant.UNAUTHENTICATE;
+import static com.caps.asp.constant.Constant.DECLINED;
+import static com.caps.asp.constant.Constant.APPROVED;
+import static com.caps.asp.constant.Constant.PENDING;
 
 @RestController
 public class PageController {
@@ -38,7 +43,7 @@ public class PageController {
     public ModelAndView roomPage(HttpServletRequest request, @RequestParam(defaultValue = "1") int page,
                                  @RequestParam(defaultValue = "10") int size) {
 
-        Page<TbRoom> rooms = roomService.getAllByStatusId(page, size, UNAUTHENTICATE);
+        Page<TbRoom> rooms = roomService.getAllByStatusId(page, size, PENDING);
         Page<RoomModel> roomModels = rooms.map(tbRoom -> {
            RoomModel roomModel = new RoomModel();
            roomModel.setName(tbRoom.getName());
@@ -60,5 +65,20 @@ public class PageController {
         request.setAttribute("SIZE", size);
         request.setAttribute("CURRENTPAGE", page);
         return new ModelAndView("room");
+    }
+    //approve room
+    @GetMapping("/room/approve/{roomId}")
+    public void approveRoom(HttpServletResponse response, @PathVariable int roomId) throws IOException {
+        TbRoom room = roomService.findRoomById(roomId);
+        room.setStatusId(APPROVED);
+        roomService.saveRoom(room);
+        response.sendRedirect("/room");
+    }
+    @GetMapping("/room/decline/{roomId}")
+    public void declineRoom(HttpServletResponse response, @PathVariable int roomId) throws IOException {
+        TbRoom room = roomService.findRoomById(roomId);
+        room.setStatusId(DECLINED);
+        roomService.saveRoom(room);
+        response.sendRedirect("/room");
     }
 }

@@ -39,6 +39,12 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        sup {
+            vertical-align: middle;
+            font-size: x-small;
+        }
+    </style>
 
 </head>
 
@@ -98,7 +104,8 @@
                     <c:set var="sizes" value="${[10, 20, 50]}"/>
                     <div style="padding: 0px 15px; font-size: 2rem;">
                         Hiển thị
-                        <select onchange="handleOnChange(${requestScope.CURRENTPAGE}, event.target.value)" id="page-size">
+                        <select onchange="handleOnChange(${requestScope.CURRENTPAGE}, event.target.value)"
+                                id="page-size">
                             <c:forEach var="size" items="${sizes}">
                                 <c:if test="${requestScope.SIZE eq size}">
                                     <option selected value="${size}">${size}</option>
@@ -117,8 +124,8 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Tên Phòng</th>
-                                <th>Diện tích</th>
-                                <th>Giá</th>
+                                <th>Diện tích (m<sup>2</sup>)</th>
+                                <th>Giá (VND)</th>
                                 <th>Ngày đăng</th>
                                 <th>Địa chỉ</th>
                                 <th>Hình ảnh</th>
@@ -132,9 +139,11 @@
                                     <td>${room.roomId}</td>
                                     <td>${room.name}</td>
                                     <td>${room.area}</td>
-                                    <td class="center">${room.price}</td>
+                                    <td>
+                                        <fmt:formatNumber value="${room.price}" type="number"/>
+                                    </td>
                                     <td>${room.dateCreated}</td>
-                                    <td class="center">${room.address}</td>
+                                    <td>${room.address}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary" style="width: 100px"
                                                 data-toggle="modal"
@@ -166,12 +175,19 @@
                                         </div>
                                     </div>
 
+
                                     <td>
-                                        <button type="button" class="btn btn-success">Chứng Thực</button>&nbsp;&nbsp;&nbsp;<button
-                                            type="button"
-                                            class="btn btn-danger">
-                                        Từ Chối
-                                    </button>
+                                        <a href="/room/approve/${room.roomId}">
+                                            <button type="button" class="btn btn-success">
+                                                Chứng Thực
+                                            </button>&nbsp;&nbsp;&nbsp;
+                                        </a>
+                                        <a href="/room/decline/${room.roomId}">
+                                            <button type="button" class="btn btn-danger">
+                                                Từ Chối
+                                            </button>
+                                        </a>
+
                                     </td>
                                 </tr>
 
@@ -183,20 +199,20 @@
                             <c:set var="totalPage" value="${requestScope.PAGE}"/>
                             <c:set var="currentPage" value="${requestScope.CURRENTPAGE}"/>
 
-                            <c:if test="${currentPage eq 1}">
-                                <li><a>Previous</a></li>
-                                <c:forEach var="i" begin="1" end="${totalPage}">
-                                    <li onclick="changePage(${i})">
-                                        <a>
-                                                ${i}
-                                        </a>
-                                    </li>
-                                </c:forEach>
-                                <li><a href="/room?page=${currentPage+1}">Next</a></li>
-                            </c:if>
+                            <%--<c:if test="${currentPage eq 1}">--%>
+                            <%--<li><a>Previous</a></li>--%>
+                            <%--<c:forEach var="i" begin="1" end="${totalPage}">--%>
+                            <%--<li onclick="changePage(${i})">--%>
+                            <%--<a>--%>
+                            <%--${i}--%>
+                            <%--</a>--%>
+                            <%--</li>--%>
+                            <%--</c:forEach>--%>
+                            <%--<li onclick="changePage(${currentPage+1})"><a>Next</a></li>--%>
+                            <%--</c:if>--%>
 
-                            <c:if test="${currentPage eq totalPage }">
-                                <li><a href="/room?page=${currentPage-1}">Previous</a></li>
+                            <c:if test="${currentPage eq totalPage && totalPage ne 1}">
+                                <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
                                 <c:forEach var="i" begin="1" end="${totalPage}">
                                     <li onclick="changePage(${i})">
                                         <a>
@@ -208,7 +224,7 @@
                             </c:if>
 
                             <c:if test="${currentPage gt 1 && currentPage lt totalPage}">
-                                <li><a href="/room?page=${currentPage-1}">Previous</a></li>
+                                <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
                                 <c:forEach var="i" begin="1" end="${totalPage}">
                                     <li onclick="changePage(${i})">
                                         <a>
@@ -216,7 +232,29 @@
                                         </a>
                                     </li>
                                 </c:forEach>
-                                <li><a href="/room?page=${currentPage+1}">Next</a></li>
+                                <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
+                            </c:if>
+
+                            <c:if test="${currentPage eq totalPage && totalPage eq 1}">
+                                <li><a>Previous</a></li>
+                                <li onclick="changePage(${currentPage})">
+                                    <a>
+                                            ${currentPage}
+                                    </a>
+                                </li>
+                                <li><a>Next</a></li>
+                            </c:if>
+                            <c:if test="${currentPage eq 1 && totalPage gt 1}">
+                                <li><a>Previous</a></li>
+                                <c:forEach var="i" begin="1" end="${totalPage}">
+                                    <li onclick="changePage(${i})">
+                                        <a>
+                                                ${i}
+                                        </a>
+                                    </li>
+                                </c:forEach>
+
+                                <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
                             </c:if>
                         </ul>
                     </div>
@@ -255,8 +293,8 @@
         });
     });
 
-    function handleOnChange(page, size){
-        window.location = "/room?page="+page+"&size="+size;
+    function handleOnChange(page, size) {
+        window.location = "/room?page=" + page + "&size=" + size;
     }
 
     function changePage(page) {
