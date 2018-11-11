@@ -102,12 +102,12 @@ public class UserController {
         return ResponseEntity.status(OK).build();
     }
 
-    @PostMapping("/user/createUser")
+    @PostMapping("/user/admin/createUser")
     public ResponseEntity createUSer(@RequestBody TbUser user) {
-        TbUser tbUser = userService.findByUsername(user.getUsername());
-        if (tbUser != null) {
+        TbUser tbUserDb = userService.findByUsername(user.getUsername());
+        if (tbUserDb == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setRoleId(MEMBER);
+            user.setUserId(0);
             int id = userService.saveUser(user);
             return ResponseEntity.status(CREATED).body(id);
         }

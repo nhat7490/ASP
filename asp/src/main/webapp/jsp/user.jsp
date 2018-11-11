@@ -32,6 +32,7 @@
 
     <!-- Custom Fonts -->
     <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -43,6 +44,15 @@
         sup {
             vertical-align: middle;
             font-size: x-small;
+        }
+
+        #datepicker {
+            width: 180px;
+            margin: 0 20px 20px 20px;
+        }
+
+        #datepicker > span:hover {
+            cursor: pointer;
         }
     </style>
 
@@ -95,6 +105,80 @@
             </div>
         </div>
         <div class="row">
+            <div class="modal fade" id="adduser" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;
+                            </button>
+                            <h4 class="modal-title">Hình Ảnh Phòng</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input id="txtUsername" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input id="txtPassword" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input id="txtEmail" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Fullname</label>
+                                <input id="txtFullname" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>DOB</label>
+                                <div id="datepicker" class="input-group date" data-date-format="yyyy-mm-dd">
+                                    <input id="dob" class="form-control" readonly="" type="text"> <span
+                                        class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input id="txtPhone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <select id="gender" class="form-control">
+                                    <option value="1">Nam</option>
+                                    <option value="2">Nữ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select id="role" class="form-control">
+                                    <option value="2">chu nha</option>
+                                    <option value="3">chu phong</option>
+                                    <option value="4">thanh vien</option>
+                                    <option value="5">quan tri vien</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Hinh dai dien</label>
+                                <input id="txtImage" type="file">
+                            </div>
+                            <button id="btnAdd" type="submit" class="btn btn-default">Submit Button</button>
+                            <button type="reset" class="btn btn-default">Reset Button</button>
+                            <div class="form-group" style="display: none" id="error">
+                                <h3 style="color: red">Dữ liệu nhập không đúng</h3>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -118,8 +202,11 @@
                         </select> người dùng
                     </div>
                     <div style="padding: 6px 15px; font-size: 1.5rem;">
-                        <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button type="submit" class="btn btn-success" data-toggle="modal"
+                                data-target="#adduser"><span class="glyphicon glyphicon-plus"></span></button>
                     </div>
+
+
                     <div class="panel-body">
                         <table width="100%" class="table table-striped table-bordered table-hover"
                                id="dataTables-example">
@@ -243,12 +330,52 @@
 
 <!-- Custom Theme JavaScript -->
 <script src="../dist/js/sb-admin-2.js"></script>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
+    $(function () {
+        $("#datepicker").datepicker({
+            autoclose: true,
+            todayHighlight: true
+        }).datepicker('update', new Date());
+    });
     $(document).ready(function () {
-        $('#dataTables-example').DataTable({
-            responsive: true
+        // $('#dataTables-example').DataTable({
+        //     responsive: true
+        // });
+
+        $('#btnAdd').click(function (e) {
+
+            e.preventDefault();
+            var TbUser = {};
+            TbUser["username"] = $('#txtUsername').val();
+            TbUser["password"] = $('#txtPassword').val();
+            TbUser["email"] = $('#txtEmail').val();
+            TbUser["fullname"] = $('#txtFullname').val();
+            TbUser["imageProfile"] = $('#txtImage').val();
+            TbUser["phone"] = $('#txtPhone').val();
+            TbUser["gender"]=$('#gender').val();
+            TbUser["roleId"] = $('#role').val();
+            TbUser["dob"] = $('#dob').val();
+
+            $.ajax({
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(TbUser),
+                dataType: 'json',
+                url: "http://localhost:8080/user/admin/createUser",
+                timeout: 600000,
+                success: function (data) {
+                    window.location = "/users";
+                },
+                error: function (e) {
+                    document.getElementById("error").style.display = "block";
+                    //...
+                }
+            });
+
         });
     });
 
