@@ -61,7 +61,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="room.html">Trang Quản Lý</a>
+            <a class="navbar-brand" href="/room">Trang Quản Lý</a>
         </div>
 
         <ul class="nav navbar-top-links navbar-right">
@@ -91,18 +91,18 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Quản lý phòng</h1>
+                <h1 class="page-header">Quản lý người dùng</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Danh sách phòng
+                        Danh sách người dùng
                     </div>
                     <!-- /.panel-heading -->
                     <c:set var="sizes" value="${[10, 20, 50]}"/>
-                    <div style="padding: 0px 15px; font-size: 2rem;">
+                    <div style="padding: 4px 15px; font-size: 1.5rem;">
                         Hiển thị
                         <select onchange="handleOnChange(${requestScope.CURRENTPAGE}, event.target.value)"
                                 id="page-size">
@@ -115,7 +115,10 @@
                                 </c:if>
                                 <%--<option value="${size}">${size}</option>--%>
                             </c:forEach>
-                        </select> phòng
+                        </select> người dùng
+                    </div>
+                    <div style="padding: 6px 15px; font-size: 1.5rem;">
+                        <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
                     </div>
                     <div class="panel-body">
                         <table width="100%" class="table table-striped table-bordered table-hover"
@@ -123,71 +126,34 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tên Phòng</th>
-                                <th>Diện tích (m<sup>2</sup>)</th>
-                                <th>Giá (VND)</th>
-                                <th>Ngày đăng</th>
-                                <th>Địa chỉ</th>
-                                <th>Hình ảnh</th>
+                                <th>Tài khoản</th>
+                                <th>Họ tên</th>
+                                <th>Ngày sinh</th>
+                                <th>Email</th>
+                                <th>Giới tính</th>
+                                <th>Số điện thoại</th>
+                                <th>Vai trò</th>
                                 <th>Thao tác</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:set var="roomList" value="${requestScope.ROOMS}"/>
-                            <c:forEach var="room" items="${roomList}">
+                            <c:set var="userList" value="${requestScope.USERS}"/>
+                            <c:forEach var="user" items="${userList}">
                                 <tr>
-                                    <td>${room.roomId}</td>
-                                    <td>${room.name}</td>
-                                    <td>${room.area}</td>
+                                    <td>${user.userId}</td>
+                                    <td>${user.username}</td>
+                                    <td>${user.fullname}</td>
+                                    <td>${user.dob}</td>
+                                    <td>${user.email}</td>
+                                    <td>${user.gender}</td>
+                                    <td>${user.phone}</td>
+                                    <td>${user.roleId}</td>
                                     <td>
-                                        <fmt:formatNumber value="${room.price}" type="number"/>
-                                    </td>
-                                    <td>${room.dateCreated}</td>
-                                    <td>${room.address}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" style="width: 100px"
-                                                data-toggle="modal"
-                                                data-target="#myModal">Xem
-                                        </button>
-                                    </td>
-                                    <div class="modal fade" id="myModal" role="dialog">
-                                        <div class="modal-dialog">
-
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal">&times;
-                                                    </button>
-                                                    <h4 class="modal-title">Hình Ảnh Phòng</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <c:forEach var="image" items="${room.imageUrls}">
-                                                        <img src="${image}" style="width: 100%; margin-bottom:10px">
-                                                    </c:forEach>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                        Close
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <td>
-                                        <a href="/room/approve/${room.roomId}">
-                                            <button type="button" class="btn btn-success">
-                                                <span class="glyphicon glyphicon-ok"></span>
-                                            </button>&nbsp;&nbsp;&nbsp;
-                                        </a>
-                                        <a href="/room/decline/${room.roomId}">
+                                        <a href="/users/remove/${user.userId}">
                                             <button type="button" class="btn btn-danger">
-                                                <span class="glyphicon glyphicon-remove"></span>
+                                                <span class="glyphicon glyphicon-trash"></span>
                                             </button>
                                         </a>
-
                                     </td>
                                 </tr>
 
@@ -211,21 +177,9 @@
                             <%--<li onclick="changePage(${currentPage+1})"><a>Next</a></li>--%>
                             <%--</c:if>--%>
 
-                            <c:if test="${currentPage eq totalPage && totalPage ne 1}">
-                                <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
-                                <c:forEach var="i" begin="1" end="${totalPage}">
-                                    <li onclick="changePage(${i})">
-                                        <a>
-                                                ${i}
-                                        </a>
-                                    </li>
-                                </c:forEach>
-                                <li><a>Next</a></li>
-                            </c:if>
-
-                            <c:if test="${currentPage gt 1 && currentPage lt totalPage}">
-                                <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
-                                <c:forEach var="i" begin="1" end="${totalPage}">
+                            <c:if test="${currentPage eq 1 && totalPage ne 1 && totalPage ge 9}">
+                                <li><a>Previous</a></li>
+                                <c:forEach var="i" begin="1" end="9">
                                     <li onclick="changePage(${i})">
                                         <a>
                                                 ${i}
@@ -235,27 +189,32 @@
                                 <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
                             </c:if>
 
-                            <c:if test="${currentPage eq totalPage && totalPage eq 1}">
-                                <li><a>Previous</a></li>
-                                <li onclick="changePage(${currentPage})">
-                                    <a>
-                                            ${currentPage}
-                                    </a>
-                                </li>
-                                <li><a>Next</a></li>
-                            </c:if>
-                            <c:if test="${currentPage eq 1 && totalPage gt 1}">
-                                <li><a>Previous</a></li>
-                                <c:forEach var="i" begin="1" end="${totalPage}">
+                            <c:if test="${currentPage gt 1 && currentPage le 9}">
+                                <li onclick="changePage(${currentPage - 1})"><a>Previous</a></li>
+                                <c:forEach var="i" begin="1" end="9">
                                     <li onclick="changePage(${i})">
                                         <a>
                                                 ${i}
                                         </a>
                                     </li>
                                 </c:forEach>
+                                <li onclick="changePage(${currentPage + 1})"><a>Next</a></li>
+                            </c:if>
 
+                            <c:if test="${currentPage gt 9}">
+                                <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
+                                <c:forEach var="i" begin="${currentPage}" end="${currentPage + 8}">
+                                    <c:if test="${i le totalPage}">
+                                        <li onclick="changePage(${i})">
+                                            <a>
+                                                    ${i}
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                </c:forEach>
                                 <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
                             </c:if>
+
                         </ul>
                     </div>
                 </div>
@@ -294,12 +253,12 @@
     });
 
     function handleOnChange(page, size) {
-        window.location = "/room?page=" + page + "&size=" + size;
+        window.location = "/users?page=" + page + "&size=" + size;
     }
 
     function changePage(page) {
         var size = document.getElementById("page-size").value;
-        window.location = "/room?page=" + page + "&size=" + size;
+        window.location = "/users?page=" + page + "&size=" + size;
     }
 </script>
 

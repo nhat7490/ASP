@@ -9,4 +9,5 @@ public interface UserRepository extends JpaRepository<TbUser, Integer> {
     TbUser findByUserId(int id);
     TbUser findByUsernameAndPassword(String username, String password);
     TbUser findByEmail(String email);
+    Page<TbUser>findAll(Pageable pageable);
 }
