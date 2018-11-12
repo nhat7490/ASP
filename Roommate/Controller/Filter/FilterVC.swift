@@ -12,7 +12,7 @@ import RealmSwift
 protocol FilterVCDelegate:class{
     func filterVCDelegate(filterVC:FilterVC,onCompletedWithFilter filter:FilterArgumentModel)
 }
-class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderViewDelegate,AlertControllerDelegate,SliderViewDelegate{
+class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderViewDelegate,SliderViewDelegate{
     
     
     let scrollView:UIScrollView = {
@@ -110,7 +110,6 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     
     func setupUI(){
         
-        view.backgroundColor = .white
         edgesForExtendedLayout = .top// view above navigation bar
         let barButtonItem = UIBarButtonItem(title: "RESET".localized, style: .done, target: self, action: #selector(onClickBtnReset))
         barButtonItem.tintColor  = .defaultBlue
@@ -274,7 +273,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         selectedPrice?.append(selectedMax)
     }
     //MARK: UIAlertControllerDelegate
-    func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
+    override func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
         guard let indexs = indexs else {
             selectedDistricts =  []
             self.districtDropdownListView.dropdownListViewType = .district

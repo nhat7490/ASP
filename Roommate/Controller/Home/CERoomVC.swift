@@ -16,7 +16,7 @@ import RealmSwift
 import MBProgressHUD
 import AVFoundation
 import PhotosUI
-class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource,DropdownListViewDelegate,AlertControllerDelegate,UtilityInputVCDelegate,UploadImageViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource,DropdownListViewDelegate,UtilityInputVCDelegate,UploadImageViewDelegate{
     
     
     
@@ -38,7 +38,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     }()
     lazy var nameInputView:InputView = {
         let iv:InputView = .fromNib()
-        iv.inputViewType = .name
+        iv.inputViewType = .roomName
         return iv
     }()
     lazy var priceInputView:InputView = {
@@ -134,7 +134,8 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         loadLocalData()
         setupUI()
         setData()
-        setNotificationObserver()
+//        setNotificationObserver()
+        registerNotificationForKeyboard()
     }
     
     func loadLocalData(){
@@ -144,12 +145,9 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     }
     
     func setupUI(){
-        view.backgroundColor = .white
         title = cERoomVCType == .create ? "CREATE_ROOM".localized : "ROOM_EDIT".localized
         
-        let barButton = UIBarButtonItem(image: UIImage(named: "back"), style: .done, target:self, action: #selector(onClickBtnBack(btnBack:)))
-        barButton.tintColor = .defaultBlue
-        navigationItem.leftBarButtonItem = barButton
+        setBackButtonForNavigationBar()
         //Create tempview for bottom button
         let bottomView = UIView()
         
@@ -279,33 +277,48 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         uploadImageView.images = uploadImageModels
         
     }
-    
-    func setNotificationObserver(){
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    //MARK: Keyboard Notification handler
+    override func keyBoard(notification: Notification) {
+        super.keyBoard(notification: notification)
+        if notification.name == NSNotification.Name.UIKeyboardWillShow{
+            let userInfor = notification.userInfo!
+            let keyboardFrame:CGRect = (userInfor[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+            print(scrollView.contentInset)
+            print(scrollView.contentOffset)
+            scrollView.contentInset.bottom = keyboardFrame.size.height
+            scrollView.scrollIndicatorInsets = scrollView.contentInset
+            print(scrollView.contentInset)
+            print(scrollView.contentOffset)
+        }else if notification.name == NSNotification.Name.UIKeyboardWillHide{
+            scrollView.contentInset = .zero
+        }
     }
-    
-    deinit {
-        
-        //Not need from ios 9
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-    
-    //MARK: Handler for Keyboard
-    @objc func keyboardWillShow(notification:Notification){
-        let userInfor = notification.userInfo!
-        let keyboardFrame:CGRect = (userInfor[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        print(scrollView.contentInset)
-        print(scrollView.contentOffset)
-        scrollView.contentInset.bottom = keyboardFrame.size.height
-        scrollView.scrollIndicatorInsets = scrollView.contentInset
-        print(scrollView.contentInset)
-        print(scrollView.contentOffset)
-    }
-    @objc func keyboardWillHide(notification:Notification){
-        scrollView.contentInset = .zero
-    }
+//    func setNotificationObserver(){
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//    }
+//
+//    deinit {
+//
+//        //Not need from ios 9
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//    }
+//
+//    //MARK: Handler for Keyboard
+//    @objc func keyboardWillShow(notification:Notification){
+//        let userInfor = notification.userInfo!
+//        let keyboardFrame:CGRect = (userInfor[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+//        print(scrollView.contentInset)
+//        print(scrollView.contentOffset)
+//        scrollView.contentInset.bottom = keyboardFrame.size.height
+//        scrollView.scrollIndicatorInsets = scrollView.contentInset
+//        print(scrollView.contentInset)
+//        print(scrollView.contentOffset)
+//    }
+//    @objc func keyboardWillHide(notification:Notification){
+//        scrollView.contentInset = .zero
+//    }
     
     
     
@@ -369,11 +382,11 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             newRoomModel.area = int
         case addressInputView:
             if newRoomModel.districtId == 0{
-                addressInputView.setupUI(placeholder: "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT", title: "ROOM_ADDRESS_TITLE")
+                addressInputView.tfInput.setupUI(placeholder: "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT", title: "ROOM_ADDRESS_TITLE", delegate: addressInputView)
                 return false
             }else{
                 addressInputView.isSelectedFromSuggest = false
-                addressInputView.setupUI(placeholder: "ROOM_ADDRESS_TITLE", title: "ROOM_ADDRESS_TITLE")
+                addressInputView.tfInput.setupUI(placeholder: "ROOM_ADDRESS_TITLE", title: "ROOM_ADDRESS_TITLE", delegate: addressInputView)
                 search(text: string)
 //                newRoomModel.address = string
 //                view.layoutIfNeeded()
@@ -402,7 +415,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         self.addressInputView.text = ""
     }
     //MARK: UIAlertControllerDelegate
-    func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
+    override func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
         guard let indexs = indexs else {
             return
         }
@@ -437,7 +450,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         }
     }
     
-    func alertControllerDelegate(alertController: AlertController, onSelected selectedIndexs: [IndexPath]?) {
+    override func alertControllerDelegate(alertController: AlertController, onSelected selectedIndexs: [IndexPath]?) {
         
         guard let index = selectedIndexs?.first else {
             return
@@ -530,105 +543,19 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         self.uploadImageModels.remove(at: row)
         self.calculatorHeight()
     }
-    //MARK: Permission
-    
-    func checkPermission(type:UIImagePickerControllerSourceType){
-        if type == .camera{
-            if UIImagePickerController.isSourceTypeAvailable(.camera){
-                let status = AVCaptureDevice.authorizationStatus(for: .video)
-                switch status{
-                case .denied:
-                    showAlertToAllowAccessViaSetting(type: type)
-                case .authorized:
-                    showPickerController(type: .camera)
-                default:
-                    showRequiredPermissionAccess(type: type)
-                }
-            }else{
-                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "DEVICE_CAMERA_NOT_EXISTED".localized, inViewController: self, rhsButtonHandler: nil)
-            }
-        }else if type == .photoLibrary{
-            switch PHPhotoLibrary.authorizationStatus(){
-            case .denied:
-                showAlertToAllowAccessViaSetting(type: type)
-            case .authorized:
-                showPickerController(type: .photoLibrary)
-            default:
-                showRequiredPermissionAccess(type: type)
-            }
-        }
-    }
-    //MARK: Camera
-    func showAlertToAllowAccessViaSetting(type:UIImagePickerControllerSourceType){
-        if type == .camera{
-            AlertController.showAlertConfirm(withTitle: "INFORMATION".localized, andMessage: "ROOM_UPLOAD_OPEN_CAMERA_SETTING".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "ROOM_UPLOAD_SKIP".localized, rhsButtonTitle: "ROOM_UPLOAD_OPEN_SETTING".localized, lhsButtonHandler: nil) { (action) in
-                if let appSettingUrl = URL(string: UIApplicationOpenSettingsURLString){
-                    UIApplication.shared.open(appSettingUrl, options: [:], completionHandler: {(result) in
-                        
-                    })
-                }
-            }
-        }else if type == .photoLibrary{
-            AlertController.showAlertConfirm(withTitle: "INFORMATION".localized, andMessage: "ROOM_UPLOAD_OPEN_PHOTO_SETTING".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "ROOM_UPLOAD_SKIP".localized, rhsButtonTitle: "ROOM_UPLOAD_OPEN_SETTING".localized, lhsButtonHandler: nil) { (action) in
-                if let appSettingUrl = URL(string: UIApplicationOpenSettingsURLString){
-                    UIApplication.shared.open(appSettingUrl, options: [:], completionHandler: {(result) in
-                        
-                    })
-                }
-            }
-        }
-        
-    }
-    func showRequiredPermissionAccess(type:UIImagePickerControllerSourceType){
-        if type == .camera{
-            AlertController.showAlertConfirm(withTitle: "INFORMATION".localized, andMessage: "ROOM_UPLOAD_CAMERA_QUESTION".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "NO".localized, rhsButtonTitle: "YES".localized, lhsButtonHandler: nil) { (action) in
-                AVCaptureDevice.requestAccess(for: .video, completionHandler: { (result) in
-                    DispatchQueue.main.async {
-                        self.checkPermission(type: type)
-                    }
-                })
-                
-            }
-        }else if type == .photoLibrary{
-            AlertController.showAlertConfirm(withTitle: "INFORMATION".localized, andMessage: "ROOM_UPLOAD_PHOTO_QUESTION".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "NO".localized, rhsButtonTitle: "YES".localized, lhsButtonHandler: nil) { (action) in
-                PHPhotoLibrary.requestAuthorization({ (status) in
-                    DispatchQueue.main.async {
-                        self.checkPermission(type: type)
-                    }
-                })
-                
-            }
-        }
-        
-    }
-    func showPickerController(type:UIImagePickerControllerSourceType){
-        let picker = UIImagePickerController()
-        picker.sourceType = type
-        picker.delegate = self
-        picker.modalPresentationStyle = .currentContext
-        picker.allowsEditing = false
-        present(picker, animated: true, completion: nil)
-    }
-    
     //MARK: UIImagePickerControllerDelegate
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
+    override func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         dismiss(animated: true) {
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
                 self.uploadImageModels.append(UploadImageModel(name: self.generateImageName(), image: image))
                 self.calculatorHeight()
             }
-            
         }
     }
     
     //MARK: Handler for save button
     @objc  func onClickBtnSubmit(btnSubmit:UIButton){
         saveRoom()
-    }
-    
-    @objc  func onClickBtnBack(btnBack:UIButton){
-        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
     //MARK: Custom method
@@ -705,11 +632,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         }
         return false
     }
-    func generateImageName()->String{
-        let dateFormater = DateFormatter()
-        dateFormater.dateFormat = "HH_mm_ss_dd_MM_yyyy"
-        return "\(dateFormater.string(from: Date())).jpg"
-    }
+    
     func saveRoom(){
         newRoomModel.userId = DBManager.shared.getUser()!.userId
         if checkValidInformation(){

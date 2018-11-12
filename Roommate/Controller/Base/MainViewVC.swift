@@ -37,15 +37,24 @@ class MainViewVC: BaseVC {
         super.viewDidLoad()
 //        self.present(ceRoomVC, animated: true, completion: nil)
 //        Check Login
-        
-        
+        checkLogin()
+        registerNotification()
+    }
+    func checkLogin(){
         if let _ = DBManager.shared.getUser(){
             self.add(mainTabBarVC)
         }else{
             self.add(UINavigationController(rootViewController: firstLanchVC))
         }
     }
+    func registerNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(onSignOut), name: Constants.NOTIFICATION_SIGNOUT, object: nil)
+    }
 
+    @objc func onSignOut(){
+        mainTabBarVC.remove()
+        checkLogin()
+    }
 
 }
 

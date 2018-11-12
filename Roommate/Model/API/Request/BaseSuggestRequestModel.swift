@@ -26,8 +26,8 @@ class BaseSuggestRequestModel: Mappable {
         typeId <- map["typeId"]
         userId <- map["userId"]
         cityId <- map["cityId"]
-        userId <- map["longitude"]
-        cityId <- map["latitude"]
+        longitude <- map["longitude"]
+        latitude <- map["latitude"]
     }
     init() {
         page = 1

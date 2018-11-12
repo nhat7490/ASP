@@ -118,20 +118,17 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
         case .suggestRoom:
             title = "SUGGEST".localized
         case .roomPost:
-            title = "ROOM_POST_ALL".localized
+            title = "TITLE_MEMBER_CREATED_ROOM_POST".localized
         case .roommatePost:
-            title = "ROOMMATE_POST_ALL".localized
+            title = "TITLE_MEMBER_CREATED_ROOMMATE_POST".localized
         case .roomForOwner:
-            title = "ROOM_ALL".localized
+            title = "TITLE_CREATED_ROOM".localized
         case .roomForMember:
-            title = "ROOM_ALL".localized
+            title = "TITLE_HISTORY_MEMBER_ROOM".localized
         }
-        view.backgroundColor = .white
         automaticallyAdjustsScrollViewInsets = false
         navigationController?.navigationBar.backgroundColor = .white
-        let backImage = UIImage(named: "back")
-        navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(onClickBtnBack))
-        navigationItem.leftBarButtonItem?.tintColor = .defaultBlue
+        setBackButtonForNavigationBar()
         
         
         view.addSubview(bottomView)
@@ -266,7 +263,6 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
         }
     }
     
-    //Need rename to requestRoomPost
     func  requestRoomPost(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
@@ -313,7 +309,6 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
         }
     }
     
-    //Need rename to requestRoommatePost
     func  requestRoommatePost(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
@@ -357,7 +352,6 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
             })
         }
     }
-    //Need rename to requestRoomPost
     func  requestRoom(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
@@ -441,30 +435,34 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
             let vc = PostDetailVC()
             vc.viewType = ViewType.roomPostDetailForFinder
             vc.room = rooms[indexPath.row]
-            let mainVC = UIViewController()
-            let nv = UINavigationController(rootViewController: mainVC)
-            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+//            let mainVC = UIViewController()
+//            let nv = UINavigationController(rootViewController: mainVC)
+//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            presentInNewNavigationController(viewController: vc)
         case .roommatePost:
             let vc = PostDetailVC()
             vc.viewType = ViewType.roommatePostDetailForFinder
             vc.roommate = roommates[indexPath.row]
-            let mainVC = UIViewController()
-            let nv = UINavigationController(rootViewController: mainVC)
-            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+//            let mainVC = UIViewController()
+//            let nv = UINavigationController(rootViewController: mainVC)
+//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            presentInNewNavigationController(viewController: vc)
         case .roomForOwner:
             let vc = RoomDetailVC()
             vc.viewType = .detailForOwner
             vc.room = roomResponseModels[indexPath.row]
-            let mainVC = UIViewController()
-            let nv = UINavigationController(rootViewController: mainVC)
-            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+//            let mainVC = UIViewController()
+//            let nv = UINavigationController(rootViewController: mainVC)
+//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            presentInNewNavigationController(viewController: vc)
         case .roomForMember:
             let vc = RoomDetailVC()
             vc.viewType = .detailForMember
             vc.room = roomResponseModels[indexPath.row]
-            let mainVC = UIViewController()
-            let nv = UINavigationController(rootViewController: mainVC)
-            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+//            let mainVC = UIViewController()
+//            let nv = UINavigationController(rootViewController: mainVC)
+//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            presentInNewNavigationController(viewController: vc)
         }
     }
     
@@ -620,10 +618,8 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
             }
         }
     }
-    //MARK: Back button on navigation bar
-    @objc func onClickBtnBack(){
-        self.navigationController?.dismiss(animated: true, completion: nil)
-    }
+    
+    
     //MARK: Others custom method
     func setCellValueBaseOnIndexPath(cell:OrderTVCell,indexPath:IndexPath){
         if indexPath.row == OrderType.newest.rawValue{

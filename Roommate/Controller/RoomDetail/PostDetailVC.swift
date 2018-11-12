@@ -79,22 +79,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     
     
     func setupUI() {
-        view.backgroundColor = .white
-        //Back button
-        
-        let backImage = UIImage(named: "back")
-//
-//        self.navigationController?.navigationBar.backIndicatorImage = backImage
-//
-//        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = backImage
-//
-        /*** If needed Assign Title Here ***/
-        navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(onClickBtnBack))
-        navigationItem.leftBarButtonItem?.tintColor = .defaultBlue
-        
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.backgroundColor = .clear
+        setBackButtonForNavigationBar()
         if #available(iOS 11, *){
             scrollView.contentInsetAdjustmentBehavior = .never
         }else{
@@ -240,8 +225,5 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             customMessage.append(NSAttributedString(string: "Description: \(utility.utilityDescription)", attributes: [NSAttributedStringKey.font:UIFont.small]))
             AlertController.showAlertInfoWithAttributeString(withTitle: customTitle, forMessage: customMessage, inViewController: self)
         }
-    }
-    @objc func onClickBtnBack(){
-        self.navigationController?.dismiss(animated: true, completion: nil)
     }
 }

@@ -15,6 +15,7 @@ protocol AlertControllerDelegate {
 }
 extension AlertControllerDelegate{
     func alertControllerDelegate(alertController:AlertController,onSelected selectedIndexs:[IndexPath]?){}
+    func alertControllerDelegate(alertController:AlertController,withAlertType type:AlertType,onCompleted indexs:[IndexPath]?){}
 }
 class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelegate  {
     var delegate:AlertControllerDelegate?
@@ -152,6 +153,7 @@ class AlertController: UIAlertController,UITableViewDataSource,UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_POPUP_SELECT_LISTTV) as! PopupSelectListTVCell
         cell.lblTitle.text = self.listItem![indexPath.row]
+        cell.backgroundColor = .clear
         
 //        cell.isSelected = self.listSelectedItemIndex?.contains(indexPath.row) ?? false
         print(self.listItem![indexPath.row])

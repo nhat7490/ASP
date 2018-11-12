@@ -11,19 +11,28 @@
 "ALL_VC"="Tất cả";
 "BOOKMARK_VC"="Đánh dấu";
 "SIGN_IN_TITLE" = "Đăng nhập";
+"SIGN_UP_TITLE" = "Đăng ký";
 "HOME_VC" = "Trang chủ";
 "NOTIFICATION_VC" = "Thông báo";
 "ACCOUNT_VC" = "Tài khoản";
 "SUGGEST" = "Gợi ý";
-"ROOM_POST_ALL" = "Tất cả bài đăng tìm bạn";
-"ROOMMATE_POST_ALL" = "Tất cả bài đăng tìm phòng";
 "ROOM_ALL" = "Tất cả phòng";
-
+"SETTING" = "Cài đặt";
 //MARK: AccountVC
 "TITLE_CREATED_ROOM" = "Phòng đã tạo";
+"TITLE_CURRENT_MEMBER_ROOM" = "Phòng bạn đang ở";
+"TITLE_HISTORY_MEMBER_ROOM" = "Phòng bạn đã ở";
+"TITLE_MEMBER_CREATED_ROOM_POST" = "Bài viết tìm bạn đã tạo";
+"TITLE_MEMBER_CREATED_ROOMMATE_POST" = "Bài viết tìm phòng đã tạo";
 "CURRENT_NUMBER_OF_PERSON" = "Số người hiện tại:%d/%d";
 "NO_OWNER_ROOM"="Bạn chưa tạo phòng nào";
 "NO_MEMBER_ROOM"="Phòng chưa thêm thành viên nào";
+"TITLE_USER_DETAIL"="Thông tin của bạn";
+"TITLE_MEMBER_NO_CURRENT_ROOM" = "Bạn không có phòng hiện tại";
+
+//MARK: SettingVC
+"TITLE_SIGN_OUT" = "Đăng xuất";
+
 
 //MARK: Roommate cell
 "ROMMATE_RIGHT_PRICE"="Mức giá";
@@ -118,10 +127,11 @@
 
 //MARK: Common
 "INFORMATION"="Thông báo";
+"SELECT_IMAGE"="Chọn ảnh";
 "NO_DATA"="Không có dữ liệu";
 "NO_MORE_DATA"="Không có thêm dữ liệu";
 "EDIT"="Sửa";
-
+"BACK"="Quay lại";
 "BASE_INFORMATION"="Thông tin cơ bản";
 "UTILITY_TITLE"="Tiện ích";
 "UTILITY_INFOR_TITLE"="Thông tin tiện ích";
@@ -139,6 +149,7 @@
 "OK" = "Chọn";
 "DONE" = "Xong";
 "NEXT" = "Tiếp";
+"NEXT_STEP" = "Tiếp tục";
 "SAVE" = "Lưu";
 "APPLY" = "Áp dụng";
 "SELECT" = "Lựa chọn";
@@ -154,6 +165,8 @@
 //MARK: Validator
 "ERROR_TYPE_USERNAME"="Tên đăng nhập từ 6 - 50 ký tự";
 "ERROR_TYPE_PASSWORD"="Mật khẩu từ 6 - 50 ký tự";
+"ERROR_TYPE_PASSWORD_NOT_REPEAT"="Mật khẩu không trùng";
+"ERROR_TYPE_REQUIRED_IMAGE"="Yêu cầu chọn ảnh";
 "ERROR_TYPE_NAME_MAX_CHAR_50"="Tên Từ 6 đến 50 ký tự";
 "ERROR_TYPE_QUANTITY"="Số lượng Từ 1 đến 20";
 "ERROR_TYPE_BRAND"="Nhãn Từ 2 đến 50 ký tự";
@@ -167,6 +180,15 @@
 "ERROR_TYPE_INPUT"="Vui lòng nhập thông tin hợp lệ";
 "ERROR_TYPE_DESCRIPTION"="Mô tả từ 5 đến 250 ký tự";
 "ERROR_TYPE_UTILITY"="chọn tối thiểu 5 tiện ích";
+"ERROR_TYPE_EMAIL"="Địa chỉ email không đúng";
+"PLACE_HOLDER_AVATAR_IMAGE"="Ảnh đại diện";
+"PLACE_HOLDER_FULL_NAME"="Tên đầy đủ của bạn";
+"PLACE_HOLDER_DOB"="Ngày sinh";
+"PLACE_HOLDER_PHONE_NUMBER"="Số điện thoại";
+"PLACE_HOLDER_EMAIL"="Địa chỉ email";
+"PLACE_HOLDER_USERNAME"="Tên đăng nhập";
+"PLACE_HOLDER_PASSWORD"="Mật khẩu";
+"PLACE_HOLDER_REPEAT_PASSWORD"="Nhập lại mật khẩu";
 
 //MARK: CERoomVC
 "ROOM_CREATE"="Tạo phòng";
@@ -190,8 +212,8 @@
 "ROOM_UPLOAD_OPEN_PHOTO_SETTING"="Roommate chưa có quyền truy cập \"Thư viện\". Bật quyền truy cập thư viện giúp bạn tải ảnh lên từ Thư viện";
 "ROOM_UPLOAD_SKIP"="Bỏ qua";
 "ROOM_UPLOAD_OPEN_SETTING"="Mở cài đặt";
-"ROOM_UPLOAD_CAMERA_QUESTION"="Bạn có muổn tải ảnh lên từ Máy ảnh không";
-"ROOM_UPLOAD_PHOTO_QUESTION"="Bạn có muổn tải ảnh lên từ thư viện không";
+"ROOM_UPLOAD_CAMERA_QUESTION"="Bạn có muốn tải ảnh lên từ Máy ảnh không";
+"ROOM_UPLOAD_PHOTO_QUESTION"="Bạn có muốn tải ảnh lên từ thư viện không";
 "YES"="Có";
 "NO"="Không";
 "ROOM_UPLOAD_SELECT"="Tải ảnh lên";
@@ -216,11 +238,6 @@
 
 
 
-
-
-//MARK: Validation
-
-
 //MARK: Network
 "NETWORK_STATUS_TITLE"="Thông báo";
 "NETWORK_STATUS_CONNECTED_ERROR_MESSAGE"="Không thể kết nối mạng, vui lòng kiểm tra lại";
@@ -231,20 +248,20 @@
 //MARK: Alert
 "ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
 "ALERT_NON_EXIST_USERNAME"="Tên người dùng không tồn tại";
+"EXISTED_USER"="Tên người dùng đã tồn tại";
 "ALERT_ADD_MEMBER_SUCCESS"="Thêm thành viên thành công";
 "ALERT_INVALID_USERNAME_PASSWORD"="Mật khẩu không đúng";
 "ALERT_INVALID_MEMBER"="Thành viên này đang ở 1 phòng khác";
 "ALERT_EXISTED_ROOM_MEMBER"="Thành viên đã tồn tại trong phòng";
-
-
-//MARK: SignInVC
 "PLACE_HOLDER_USERNAME"="Tên đăng nhập";
 "PLACE_HOLDER_PASSWORD"="Mật khẩu";
 
 
-//MARK: Progresshub title
-"MB_SIGN_IN_TITLE" = "Đăng nhập...";
+
+//MARK: Progress hub title
+"MB_SIGN_IN_TITLE" = "Đăng nhập";
 "MB_LOAD_DATA_TITLE" = "Đang tải dữ liệu";
 "MB_LOAD_UPLOAD_IMAGE" = "Đang tải ảnh lên";
 "MB_LOAD_CREATE_ROOM" = "Đang tạo phòng";
+"MB_LOAD_CREATE_USER" ="Đăng ký";
 "MB_LOAD_EDIT_ROOM" = "Đang cập nhập thông tin phòng";

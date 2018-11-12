@@ -32,10 +32,12 @@ enum APIRouter:URLRequestConvertible{
     case getHistoryRoom(userId:Int,page:Int,size:Int)
     case getCurrentRoom(userId:Int)
     case getUserPost(model:FilterArgumentModel)
-    case findUserByUsername(username:String)
+    case findExitedUserInRoom(username:String)
     case editMember(roomMemberRequestModel:RoomMemberRequestModel)
     case removeRoom(roomId:Int)
     case updateRoom(model:RoomResponseModel)
+    case findExistedUser(username:String)
+    case createUser(model:UserModel)
     
     var httpHeaders:HTTPHeaders{
         switch self{
@@ -47,7 +49,7 @@ enum APIRouter:URLRequestConvertible{
     }
     
     var httpMethod:HTTPMethod{
-        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember,.getUserPost:
+        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember,.getUserPost,.createUser:
             return .post
         case .removeBookmark,.removeRoom:
             return .delete
@@ -91,8 +93,8 @@ enum APIRouter:URLRequestConvertible{
             return "post/suggest"
         case .getRoomsByUserId(let userId,_,_):
             return "room/user/\(userId)"
-        case .findUserByUsername(let username):
-            return "user/findByUsername/\(username)"
+        case .findExitedUserInRoom(let username):
+            return "user/findExitedUserInRoom/\(username)"
         case .editMember:
             return "room/editMember"
         case .removeRoom(let roomId):
@@ -105,7 +107,10 @@ enum APIRouter:URLRequestConvertible{
             return "room/user/history/\(userId)";
         case .getUserPost:
             return "post/userPost"
-            
+        case .findExistedUser(let username):
+            return "user/findExistedUser/\(username)"
+        case .createUser:
+            return "user/createUser";
         }
     }
     
@@ -148,6 +153,12 @@ enum APIRouter:URLRequestConvertible{
         case .updateRoom(let model):
             return Mapper().toJSON(model)
         case .getUserPost(let model):
+            return Mapper().toJSON(model)
+        case .getHistoryRoom(_,let page,let size):
+            return ["page":page,
+                    "size":size]
+        case .createUser(let model):
+            print(Mapper().toJSON(model))
             return Mapper().toJSON(model)
         default:
             return [:]

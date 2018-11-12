@@ -18,13 +18,10 @@ class ResetPasswordVC: BaseVC {
         //Add btn to main view
         tabBarItem = UITabBarItem(title: "Reset Password", image: UIImage(named: "icons8-home-page-51")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "icons8-home-page-50"))
         
-        //scrollviewkeyboard
-        NotificationCenter.default.addObserver(self, selector: #selector(keyBoard), name: Notification.Name.UIKeyboardWillHide, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyBoard), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
+        registerNotificationForKeyboard()
     }
     
-    @objc func keyBoard(notification: Notification){
+    @objc override func keyBoard(notification: Notification){
         let userInfo = notification.userInfo!
         let keyboardScreenEndFrame =  (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame,from: view.window)

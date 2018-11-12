@@ -26,23 +26,23 @@ class InputView: UIView,UITextFieldDelegate {
     var inputViewType:InputViewType?{
         didSet{
             switch self.inputViewType! {
-            case .name:
-                setupUI(placeholder: "ROOM_NAME_TITLE", title: "ROOM_NAME_TITLE")
+            case .roomName:
+                tfInput.setupUI(placeholder: "ROOM_NAME_TITLE", title: "ROOM_NAME_TITLE", delegate: self)
 //                initData(title: "ROOM_NAME_TITLE", placeHolder: "MAX_CHAR_50")
             case .price:
                 tfInput.addToobarButton()
-                setupUI(placeholder: "PRICE", title: "PRICE", keyboardType: .numberPad)
+                tfInput.setupUI(placeholder: "PRICE", title: "PRICE", keyboardType: .numberPad, delegate: self)
 //                initData(title: "PRICE", placeHolder: "PLACE_HOLDER_PRICE")
             case .area:
                 tfInput.addToobarButton()
-                setupUI(placeholder: "ROOM_AREA_TITLE", title: "ROOM_AREA_TITLE", keyboardType: .numberPad)
+                tfInput.setupUI(placeholder: "ROOM_AREA_TITLE", title: "ROOM_AREA_TITLE", keyboardType: .numberPad, delegate: self)
 //                initData(title: "ROOM_AREA_TITLE", placeHolder: "PLACE_HOLDER_AREA")
             case .address:
-                setupUI(placeholder: "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT", title: "ROOM_ADDRESS_TITLE")
+                tfInput.setupUI(placeholder: "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT", title: "ROOM_ADDRESS_TITLE", delegate: self)
 //                initData(title: "ROOM_ADDRESS_TITLE", placeHolder: "PLACE_HOLDER_ADDRESS")
             case .phone:
                 tfInput.addToobarButton()
-                setupUI(placeholder: "ROOM_PHONE_TITLE", title: "ROOM_PHONE_TITLE", keyboardType: .numberPad)
+                tfInput.setupUI(placeholder: "ROOM_PHONE_TITLE", title: "ROOM_PHONE_TITLE", keyboardType: .numberPad, delegate: self)
 //                initData(title: "ROOM_PHONE_TITLE", placeHolder: "PLACE_HOLDER_PHONE")
             }
         }
@@ -58,20 +58,6 @@ class InputView: UIView,UITextFieldDelegate {
         tfInput.attributedPlaceholder = NSAttributedString(string: placeHolder.localized, attributes: [NSAttributedStringKey.foregroundColor:UIColor.lightSubTitle])
     }
     
-    
-    func setupUI(placeholder:String,title:String,keyboardType:UIKeyboardType? = .default,returnKeyType:UIReturnKeyType? = .done){
-//        tfInput.isSecureTextEntry = true
-        tfInput.returnKeyType = returnKeyType!
-        tfInput.placeholder = placeholder.localized
-        tfInput.placeholderColor = .lightGray
-        tfInput.titleColor = .defaultBlue
-        tfInput.keyboardType = keyboardType!
-        tfInput.title = title.localized
-        tfInput.errorColor = .red
-        tfInput.selectedLineColor = .defaultBlue
-        tfInput.selectedTitleColor = .defaultBlue//Title color
-        tfInput.delegate = self
-    }
     //MARK:UITextfieldDelegate
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         print(string)
@@ -81,7 +67,7 @@ class InputView: UIView,UITextFieldDelegate {
         print(updatedString)
         switch self.inputViewType! {
             
-        case .name:
+        case .roomName:
             if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
                 return false
             }
@@ -92,18 +78,12 @@ class InputView: UIView,UITextFieldDelegate {
                 tfInput.errorMessage = "ERROR_TYPE_NAME_MAX_CHAR_50".localized
             }
         case .price:
-//            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-//                return false
-//            }
             if updatedString.isValidPrice(){
                 tfInput.errorMessage = ""
             }else{
                 tfInput.errorMessage = "ERROR_TYPE_PRICE".localized
             }
         case .area:
-//            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-//                return false
-//            }
             if updatedString.isValidArea(){
                 tfInput.errorMessage = ""
             }else{
@@ -116,18 +96,15 @@ class InputView: UIView,UITextFieldDelegate {
                     isSelectedFromSuggest = false
                 }
             }
-            if updatedString.count > Constants.MAX_LENGHT_ADDRESS{
-                return false
-            }
+//            if updatedString.count > Constants.MAX_LENGHT_ADDRESS{
+//                return false
+//            }
             if updatedString.isValidAddress(){
                 tfInput.errorMessage = ""
             }else{
                 tfInput.errorMessage = "ERROR_TYPE_ADDRESS".localized
             }
         case .phone:
-//            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-//                return false
-//            }
             if updatedString.isValidPhoneNumber(){
                 tfInput.errorMessage = ""
             }else{
@@ -138,10 +115,6 @@ class InputView: UIView,UITextFieldDelegate {
         
     }
     
-//    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-//        delegate?.newInputViewDelegate(newInputView: self, textFieldShouldClear: tfInput.text!)
-//        return true
-//    }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         resignFirstResponderTextField()
         return true

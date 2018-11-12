@@ -40,6 +40,7 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
         notification.tabBarItem = UITabBarItem(title: "NOTIFICATION_VC".localized, image: UIImage(named: "notification")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "notification"))
         
         let account = AccountVC()
+        account.accountVCType =  DBManager.shared.getUser()?.roleId == Constants.ROOMOWNER ? AccountVCType.roomOwner : AccountVCType.member
         account.tabBarItem = UITabBarItem(title: "ACCOUNT_VC".localized, image: UIImage(named: "account")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "manage-account"))
         vcs.append(home)
         vcs.append(all)

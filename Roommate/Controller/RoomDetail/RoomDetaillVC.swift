@@ -90,10 +90,8 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     
     func setupUI() {
         //Navigation bar
-        view.backgroundColor = .white
         let backImage = UIImage(named: "back")
-        navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(onClickBtnBack))
-        navigationItem.leftBarButtonItem?.tintColor = .defaultBlue
+        setBackButtonForNavigationBar()
         
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -247,10 +245,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         }
         
     }
-    //MARK: Back button on navigation bar
-    @objc func onClickBtnBack(){
-        self.navigationController?.dismiss(animated: true, completion: nil)
-    }
+    
     //MARK: API Connection
     func  requestRemove(){
         //        roomFilter.searchRequestModel = nil

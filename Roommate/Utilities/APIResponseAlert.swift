@@ -36,6 +36,8 @@ class APIResponseAlert {
             message = "ALERT_INVALID_MEMBER"
         case .nonExistedUsername:
             message = "ALERT_NON_EXIST_USERNAME"
+        case .exitedUser:
+            message = "EXISTED_USER"
         case .existedRoomMember:
             message = "ALERT_EXISTED_ROOM_MEMBER"
         case .addMemberSuccess:

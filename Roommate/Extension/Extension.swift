@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import RealmSwift
+import SkyFloatingLabelTextField
 
 //MARK: Extension UIView
 extension UIView{
@@ -469,7 +470,7 @@ extension Double{
     }
 }
 
-extension UITextField{
+extension SkyFloatingLabelTextField{
     func addToobarButton(){
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50.0))
         let button = UIBarButtonItem(title: "DONE".localized, style: .done, target: self, action: #selector(onClickKeyboardToolbarButton))
@@ -477,6 +478,19 @@ extension UITextField{
         toolbar.items = [flexible,button]
         toolbar.sizeToFit()
         self.inputAccessoryView = toolbar
+    }
+    func setupUI(placeholder:String,title:String,keyboardType:UIKeyboardType? = .default,returnKeyType:UIReturnKeyType? = .done,isSecureTextEntry:Bool? = false ,delegate:UITextFieldDelegate){
+        self.isSecureTextEntry = isSecureTextEntry ?? false
+        self.returnKeyType = returnKeyType ?? .done
+        self.placeholder = placeholder.localized
+        self.placeholderColor = UIColor.lightGray
+        self.titleColor = .defaultBlue
+        self.keyboardType = keyboardType ?? .default
+        self.title = title.localized
+        self.errorColor = .red
+        self.selectedLineColor = .defaultBlue
+        self.selectedTitleColor = .defaultBlue//Title color
+        self.delegate = delegate
     }
     
     @objc func onClickKeyboardToolbarButton(){
@@ -506,6 +520,11 @@ extension String{
     func isValidPassword() -> Bool{
         let format = "^[\\w\\s]{6,50}"
         let predicate = NSPredicate(format:"SELF MATCHES %@", format)
+        return predicate.evaluate(with: self)
+    }
+    func isValidEmail()->Bool{
+        let format = "[A-Z0-9a-z.-_]{2,}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,3}"
+        let predicate = NSPredicate(format:"SELF MATCHES[c] %@", format)
         return predicate.evaluate(with: self)
     }
     func isValidName() -> Bool{
@@ -542,7 +561,7 @@ extension String{
     }
     
     func isValidPhoneNumber() -> Bool{
-        let format = "^[a-zA-Z]{10,11}"
+        let format = "^[0-9]{10,11}"
         let predicate = NSPredicate(format:"SELF MATCHES %@", format)
         return predicate.evaluate(with: self)
     }
@@ -597,5 +616,11 @@ extension UIViewController {
         } else {
             return self
         }
+    }
+}
+extension UINavigationController{
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
     }
 }

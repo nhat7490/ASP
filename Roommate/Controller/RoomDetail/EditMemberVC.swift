@@ -8,7 +8,7 @@
 
 import UIKit
 import MBProgressHUD
-class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownListViewDelegate,AlertControllerDelegate {
+class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownListViewDelegate {
     
     var scrollView:UIScrollView = {
         let sv = UIScrollView()
@@ -78,11 +78,11 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
         super.viewDidLoad()
         setupUI()
         setupDelagateAndDataSource()
+        registerNotificationForKeyboard()
     }
     
     
     func setupUI(){
-        view.backgroundColor = .white
         
         //Title
         navigationItem.title = "EDIT_MEMBER_VC".localized
@@ -199,7 +199,7 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
         
     }
     //MARK: AlertControllerDelegate
-    func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
+    override func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
         guard let indexs = indexs, let row = indexs.first?.row else {
             return
         }
@@ -209,10 +209,7 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
         membersView.members = copyRoom.members
         roomMasterDropdownListView.text = roomMaster?.username
     }
-    //MARK: Back button on navigation bar
-    @objc func onClickBtnBack(){
-        self.navigationController?.dismiss(animated: true, completion: nil)
-    }
+    
     @objc func onClickBtnSave(){
         if roomMaster != nil{
             requestEdit()
@@ -229,7 +226,7 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
         hub.bezelView.backgroundColor = .white
         hub.contentColor = .defaultBlue
         DispatchQueue.global(qos: .background).async {
-            APIConnection.requestObject(apiRouter: APIRouter.findUserByUsername(username: text), errorNetworkConnectedHander: {
+            APIConnection.requestObject(apiRouter: APIRouter.findExitedUserInRoom(username: text), errorNetworkConnectedHander: {
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.view, animated: true)
                     APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)

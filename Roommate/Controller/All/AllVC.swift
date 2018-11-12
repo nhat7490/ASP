@@ -121,7 +121,6 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     //MARK: Setup UI
     func setupUI(){
-        view.backgroundColor = .white
         automaticallyAdjustsScrollViewInsets = false
         navigationController?.navigationBar.backgroundColor = .white
         
@@ -442,17 +441,19 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
             let vc = PostDetailVC()
             vc.viewType = ViewType.roomPostDetailForFinder
             vc.room = rooms![indexPath.row]
-            let mainVC = UIViewController()
-            let nv = UINavigationController(rootViewController: mainVC)
-            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+//            let mainVC = UIViewController()
+//            let nv = UINavigationController(rootViewController: mainVC)
+//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
             //            present(vc, animated: true, completion: nil)
+            presentInNewNavigationController(viewController: vc)
         }else{
             let vc = PostDetailVC()
             vc.viewType = ViewType.roommatePostDetailForFinder
             vc.roommate = roommates![indexPath.row]
-            let mainVC = UIViewController()
-            let nv = UINavigationController(rootViewController: mainVC)
-            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+//            let mainVC = UIViewController()
+//            let nv = UINavigationController(rootViewController: mainVC)
+//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            presentInNewNavigationController(viewController: vc)
         }
     }
     
@@ -700,9 +701,11 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
         
         if segmentControl.selectedSegmentIndex == 0{
             self.roomFilter = filter
+            rooms?.removeAll()
             loadRoomData(withNewFilterArgModel: true)
         }else{
             self.roommateFilter = filter
+            roommates?.removeAll()
             loadRoommateData(withNewFilterArgModel: true)
         }
     }

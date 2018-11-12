@@ -33,7 +33,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
 //    }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setBackButtonForNavigationBar(isEmbedInNewNavigationController:  false)
         imgvIcon.layer.cornerRadius = 15
         imgvIcon.clipsToBounds = true
         
@@ -55,13 +55,9 @@ class SignInVC: BaseVC,UITextFieldDelegate {
         tfPassword.selectedTitleColor = .defaultBlue
         tfPassword.delegate = self
         
+        registerNotificationForKeyboard()
         
-//        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTapView)))
         
-        //scrollviewkeyboard
-        NotificationCenter.default.addObserver(self, selector: #selector(keyBoard), name: Notification.Name.UIKeyboardWillShow, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyBoard), name: Notification.Name.UIKeyboardWillHide, object: nil)
         
     }
     
@@ -154,7 +150,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
     }
     
     
-    @objc func keyBoard(notification: Notification){
+    @objc override func keyBoard(notification: Notification){
         let userInfo = notification.userInfo!
         let keyboardScreenEndFrame =  (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame,from: view.window)

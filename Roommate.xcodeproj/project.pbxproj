@@ -72,7 +72,7 @@
 		6943D9962153F452002CFEBB /* NotificationDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9952153F452002CFEBB /* NotificationDetailVC.swift */; };
 		6943D9982153F462002CFEBB /* SuggestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9972153F462002CFEBB /* SuggestVC.swift */; };
 		6943D99A2153F46E002CFEBB /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9992153F46E002CFEBB /* ProfileVC.swift */; };
-		6943D99C2153F484002CFEBB /* LanguageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D99B2153F484002CFEBB /* LanguageVC.swift */; };
+		6943D99C2153F484002CFEBB /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D99B2153F484002CFEBB /* SettingVC.swift */; };
 		6943D99E2153F4CE002CFEBB /* SearchResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D99D2153F4CE002CFEBB /* SearchResultVC.swift */; };
 		6943D9A02153F55F002CFEBB /* PolicyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D99F2153F55F002CFEBB /* PolicyVC.swift */; };
 		6943D9A22153F572002CFEBB /* IntroduceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A12153F572002CFEBB /* IntroduceVC.swift */; };
@@ -104,8 +104,9 @@
 		69834F5E2153977D00845AB8 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69834F5D2153977D00845AB8 /* Utilities.swift */; };
 		69834F612153989900845AB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69834F602153989900845AB8 /* Main.storyboard */; };
 		69834F6321539AD800845AB8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69834F6221539AD800845AB8 /* Constants.swift */; };
-		69859C77217EC5F80022AB3B /* VerticalPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69859C76217EC5F80022AB3B /* VerticalPostView.swift */; };
-		69859C79217EC61A0022AB3B /* VerticalPostView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69859C78217EC61A0022AB3B /* VerticalPostView.xib */; };
+		69859C77217EC5F80022AB3B /* VerticalCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69859C76217EC5F80022AB3B /* VerticalCollectionView.swift */; };
+		69859C79217EC61A0022AB3B /* VerticalCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69859C78217EC61A0022AB3B /* VerticalCollectionView.xib */; };
+		698AAC2A2198346400A61E68 /* DateFormatTranform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698AAC292198346400A61E68 /* DateFormatTranform.swift */; };
 		698B0A542178D750005221F9 /* ErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 698B0A532178D750005221F9 /* ErrorView.xib */; };
 		698B0A562178D85D005221F9 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698B0A552178D85D005221F9 /* ErrorView.swift */; };
 		6993A728217CBB8200E8112C /* RoommatePostCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6993A727217CBB8200E8112C /* RoommatePostCVCell.xib */; };
@@ -146,6 +147,10 @@
 		69CAE6BF21855A90003D3399 /* UploadImageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69CAE6BE21855A90003D3399 /* UploadImageView.xib */; };
 		69CB782F216083E7003FA0F9 /* NavigationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CB782D216083E7003FA0F9 /* NavigationCVCell.swift */; };
 		69CB7830216083E7003FA0F9 /* NavigationCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69CB782E216083E7003FA0F9 /* NavigationCVCell.xib */; };
+		69CC883C21934E5F00ADC0FA /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CC883B21934E5F00ADC0FA /* UserView.swift */; };
+		69CC883E21934E6D00ADC0FA /* UserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69CC883D21934E6D00ADC0FA /* UserView.xib */; };
+		69CC88472193672400ADC0FA /* ActionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CC88452193672400ADC0FA /* ActionTVCell.swift */; };
+		69CC88482193672400ADC0FA /* ActionTVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69CC88462193672400ADC0FA /* ActionTVCell.xib */; };
 		69D00EC7216099A400FF034E /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00EC6216099A400FF034E /* ImageModel.swift */; };
 		69D00EC921609A8200FF034E /* CityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00EC821609A8200FF034E /* CityModel.swift */; };
 		69D00ECB21609AF000FF034E /* DistrictModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00ECA21609AF000FF034E /* DistrictModel.swift */; };
@@ -244,7 +249,7 @@
 		6943D9952153F452002CFEBB /* NotificationDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailVC.swift; sourceTree = "<group>"; };
 		6943D9972153F462002CFEBB /* SuggestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestVC.swift; sourceTree = "<group>"; };
 		6943D9992153F46E002CFEBB /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
-		6943D99B2153F484002CFEBB /* LanguageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageVC.swift; sourceTree = "<group>"; };
+		6943D99B2153F484002CFEBB /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6943D99D2153F4CE002CFEBB /* SearchResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultVC.swift; sourceTree = "<group>"; };
 		6943D99F2153F55F002CFEBB /* PolicyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyVC.swift; sourceTree = "<group>"; };
 		6943D9A12153F572002CFEBB /* IntroduceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceVC.swift; sourceTree = "<group>"; };
@@ -279,8 +284,9 @@
 		69834F5D2153977D00845AB8 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		69834F602153989900845AB8 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		69834F6221539AD800845AB8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		69859C76217EC5F80022AB3B /* VerticalPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalPostView.swift; sourceTree = "<group>"; };
-		69859C78217EC61A0022AB3B /* VerticalPostView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VerticalPostView.xib; sourceTree = "<group>"; };
+		69859C76217EC5F80022AB3B /* VerticalCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalCollectionView.swift; sourceTree = "<group>"; };
+		69859C78217EC61A0022AB3B /* VerticalCollectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VerticalCollectionView.xib; sourceTree = "<group>"; };
+		698AAC292198346400A61E68 /* DateFormatTranform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatTranform.swift; sourceTree = "<group>"; };
 		698B0A532178D750005221F9 /* ErrorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ErrorView.xib; sourceTree = "<group>"; };
 		698B0A552178D85D005221F9 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		6993A727217CBB8200E8112C /* RoommatePostCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoommatePostCVCell.xib; sourceTree = "<group>"; };
@@ -326,6 +332,10 @@
 		69CB782D216083E7003FA0F9 /* NavigationCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCVCell.swift; sourceTree = "<group>"; };
 		69CB782E216083E7003FA0F9 /* NavigationCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavigationCVCell.xib; sourceTree = "<group>"; };
 		69CB7838216091ED003FA0F9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		69CC883B21934E5F00ADC0FA /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		69CC883D21934E6D00ADC0FA /* UserView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserView.xib; sourceTree = "<group>"; };
+		69CC88452193672400ADC0FA /* ActionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionTVCell.swift; sourceTree = "<group>"; };
+		69CC88462193672400ADC0FA /* ActionTVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActionTVCell.xib; sourceTree = "<group>"; };
 		69D00EC6216099A400FF034E /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		69D00EC821609A8200FF034E /* CityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityModel.swift; sourceTree = "<group>"; };
 		69D00ECA21609AF000FF034E /* DistrictModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictModel.swift; sourceTree = "<group>"; };
@@ -452,7 +462,7 @@
 				6943D96D2153F07C002CFEBB /* AccountVC.swift */,
 				6943D9972153F462002CFEBB /* SuggestVC.swift */,
 				6943D9992153F46E002CFEBB /* ProfileVC.swift */,
-				6943D99B2153F484002CFEBB /* LanguageVC.swift */,
+				6943D99B2153F484002CFEBB /* SettingVC.swift */,
 				6943D99F2153F55F002CFEBB /* PolicyVC.swift */,
 				6943D9A12153F572002CFEBB /* IntroduceVC.swift */,
 				6943D9A32153F5B8002CFEBB /* FeedbackVC.swift */,
@@ -623,12 +633,16 @@
 				69ECD513217DD78600976B33 /* LocationSearchView.xib */,
 				69ECD517217DEC9600976B33 /* HorizontalRoomView.swift */,
 				69ECD515217DEC5200976B33 /* HorizontalRoomView.xib */,
-				69859C76217EC5F80022AB3B /* VerticalPostView.swift */,
-				69859C78217EC61A0022AB3B /* VerticalPostView.xib */,
+				69859C76217EC5F80022AB3B /* VerticalCollectionView.swift */,
+				69859C78217EC61A0022AB3B /* VerticalCollectionView.xib */,
 				69CAE6BC21855A83003D3399 /* UploadImageView.swift */,
 				69CAE6BE21855A90003D3399 /* UploadImageView.xib */,
 				697F05B4218AD8AB0010C681 /* NoDataView.swift */,
 				697F05B6218AD8B60010C681 /* NoDataView.xib */,
+				69CC883B21934E5F00ADC0FA /* UserView.swift */,
+				69CC883D21934E6D00ADC0FA /* UserView.xib */,
+				69CC88452193672400ADC0FA /* ActionTVCell.swift */,
+				69CC88462193672400ADC0FA /* ActionTVCell.xib */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -764,6 +778,7 @@
 				69A67F0D216CEC5D0020F09F /* APIConnection.swift */,
 				69A67F0F216D25C80020F09F /* APIResponseAlert.swift */,
 				6913339E21922BB800AE8A69 /* Toast.swift */,
+				698AAC292198346400A61E68 /* DateFormatTranform.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -904,6 +919,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69678D6F21779DCA001F4352 /* RoomPostCVCell.xib in Resources */,
+				69CC88482193672400ADC0FA /* ActionTVCell.xib in Resources */,
 				69F4EDFB216F629A006998A7 /* InputView.xib in Resources */,
 				6977C7F6216229A6003C58F4 /* Room.storyboard in Resources */,
 				698B0A542178D750005221F9 /* ErrorView.xib in Resources */,
@@ -914,6 +930,7 @@
 				69CAE6BF21855A90003D3399 /* UploadImageView.xib in Resources */,
 				692E8FAC21638F1B00AF5927 /* HorizontalImagesView.xib in Resources */,
 				697F05B7218AD8B60010C681 /* NoDataView.xib in Resources */,
+				69CC883E21934E6D00ADC0FA /* UserView.xib in Resources */,
 				6943D9642153EBDF002CFEBB /* Home.storyboard in Resources */,
 				69CB7830216083E7003FA0F9 /* NavigationCVCell.xib in Resources */,
 				69A02FBC21538C950087897F /* Assets.xcassets in Resources */,
@@ -940,7 +957,7 @@
 				692E8FA021634EF700AF5927 /* MemberTVCell.xib in Resources */,
 				69ECD516217DEC5200976B33 /* HorizontalRoomView.xib in Resources */,
 				692E8FA82163822400AF5927 /* MaxMemberSelectView.xib in Resources */,
-				69859C79217EC61A0022AB3B /* VerticalPostView.xib in Resources */,
+				69859C79217EC61A0022AB3B /* VerticalCollectionView.xib in Resources */,
 				69232A2521614C5E00C782F9 /* ImageCVCell.xib in Resources */,
 				69834F612153989900845AB8 /* Main.storyboard in Resources */,
 				69BA0D7D2167D32E006AEEDC /* UtilityInputView.xib in Resources */,
@@ -1060,6 +1077,7 @@
 				6943D97C2153F0EC002CFEBB /* RoommateDetailVC.swift in Sources */,
 				6943D9982153F462002CFEBB /* SuggestVC.swift in Sources */,
 				69BF69F021607917002B5B49 /* BaseVerticalCollectionViewFlowLayout.swift in Sources */,
+				69CC88472193672400ADC0FA /* ActionTVCell.swift in Sources */,
 				699EF0BA217453DF00788E17 /* NewSearchRequestModel.swift in Sources */,
 				696219022163FDED00044EB4 /* FilterVC.swift in Sources */,
 				692E8F9F21634EF700AF5927 /* MemberTVCell.swift in Sources */,
@@ -1081,7 +1099,7 @@
 				69AFA9D921837C3D004244C6 /* GPAutocompletePrediction.swift in Sources */,
 				69D9DA182169B68B00B38D35 /* ViewController.swift in Sources */,
 				69D00EC921609A8200FF034E /* CityModel.swift in Sources */,
-				6943D99C2153F484002CFEBB /* LanguageVC.swift in Sources */,
+				6943D99C2153F484002CFEBB /* SettingVC.swift in Sources */,
 				69D00ED32160B0D700FF034E /* AlertController.swift in Sources */,
 				04D77E432158A3060045C45C /* RoundButotn.swift in Sources */,
 				69225641215B27100040213A /* OrderTVCell.swift in Sources */,
@@ -1107,7 +1125,7 @@
 				69D00ED52160B6A400FF034E /* Generic.swift in Sources */,
 				690BA6DE218F8FE3003C38F2 /* RoomMemberRequestModel.swift in Sources */,
 				691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */,
-				69859C77217EC5F80022AB3B /* VerticalPostView.swift in Sources */,
+				69859C77217EC5F80022AB3B /* VerticalCollectionView.swift in Sources */,
 				6943D9A22153F572002CFEBB /* IntroduceVC.swift in Sources */,
 				6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */,
 				690660582180886900E446F9 /* FilterArgumentModel.swift in Sources */,
@@ -1116,6 +1134,7 @@
 				69082C512170459B00E77E24 /* IconTitleTVCell.swift in Sources */,
 				04D77E41215760610045C45C /* TestViewController.swift in Sources */,
 				690A61E221766E9C00BA9564 /* RoomPostResponseModel.swift in Sources */,
+				698AAC2A2198346400A61E68 /* DateFormatTranform.swift in Sources */,
 				69D00ECF21609F2400FF034E /* UtilityModel.swift in Sources */,
 				69F6BECC216B759500DFD3B3 /* UserModel.swift in Sources */,
 				69D886DA2167A1A300A83D1C /* RoomPostRequestModel.swift in Sources */,
@@ -1135,6 +1154,7 @@
 				6925AA942164B03200232311 /* RoomDetaillVC.swift in Sources */,
 				6943D9A82153F5F3002CFEBB /* ListRoommateVC.swift in Sources */,
 				692C24F721671E5E008C16A7 /* APIRouter.swift in Sources */,
+				69CC883C21934E5F00ADC0FA /* UserView.swift in Sources */,
 				69355ED2218CC09D003339E2 /* EditMemberVC.swift in Sources */,
 				6993A72A217CBBBC00E8112C /* RoommatePostCVCell.swift in Sources */,
 				69ECD510217DB8EC00976B33 /* BookmarkRequestModel.swift in Sources */,

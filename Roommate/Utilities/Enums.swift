@@ -63,11 +63,15 @@ enum ShowAllVCType{
     case suggestRoom,roomForOwner,roomForMember,roomPost,roommatePost
 }
 
+enum AccountVCType{
+    case member,roomOwner
+}
+
 enum FilterVCType{
     case room,roommate
 }
 enum InputViewType{
-    case name,price,area,address,phone
+    case roomName,price,area,address,phone
 }
 
 enum HTTPStatusCode: Int {
@@ -139,14 +143,15 @@ enum HTTPStatusCode: Int {
     case NetworkAuthenticationRequired
 }
 enum APIResponseAlertType{
-    case invalidPassword,invalidUsername,internalServerError,invalidMember,nonExistedUsername,addMemberSuccess,existedRoomMember,requiredRoomMaster,invalidMaxGuest
+    case invalidPassword,invalidUsername,internalServerError,invalidMember,nonExistedUsername,addMemberSuccess,existedRoomMember,requiredRoomMaster,invalidMaxGuest,exitedUser
 }
 enum AlertType{
     case normal,city,district,roomMaster
 }
 
-enum VerticalPostViewType{
-    case room,roommate,roomOwner
+enum VerticalCollectionViewType{
+    case newRoomPost,newRoommatePost,createdRoomOfOwner
+    //,currentRoomOfMember,historyRoomOfMember,createdRoomPostOfMember,createdRoommatePostOfMember
 }
 enum FilterType{
     case room,roommmate

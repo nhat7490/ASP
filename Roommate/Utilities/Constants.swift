@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://192.168.1.43:8080/"
+    static let BASE_URL_API = "http://192.168.100.143:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
@@ -55,7 +55,8 @@ class Constants{
     
     //MARK: Constant for UITableViewCell
     static let CELL_POPUP_SELECT_LISTTV = "PopupSelectListTVCell"
-    static let CELL_MEMBERTVL = "MemberTVCell"
+    static let CELL_MEMBERTV = "MemberTVCell"
+    static let CELL_ACTIONTV = "ActionTVCell"
     
     //MARK: Constant for DateFormatter
     static let DD_MM_YY_HH_MM_A = "dd-MM-yyyy HH:mm a"
@@ -94,6 +95,8 @@ class Constants{
     static let HEIGHT_CELL_ROOMFOROWNERCV:CGFloat = 120
     static let HEIGHT_VIEW_UPLOAD_IMAGE_BASE:CGFloat = 140.0
     static let HEIGHT_CELL_MEMBERTVL:CGFloat = 40.0
+    static let HEIGHT_CELL_ACTIONTV:CGFloat = 50.0
+    static let HEIGHT_VIEW_USER:CGFloat = 70.0
     
     
     //MARK: HomeVC
@@ -151,6 +154,8 @@ class Constants{
     static let NOTIFICATION_REMOVE_BOOKMARK:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_BOOKMARK")
     static let NOTIFICATION_REMOVE_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_ROOM")
     static let NOTIFICATION_EDIT_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_EDIT_ROOM")
+    
+    static let NOTIFICATION_SIGNOUT:NSNotification.Name = NSNotification.Name("NOTIFICATION_SIGNOUT")
     
     
 }

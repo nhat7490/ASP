@@ -10,7 +10,8 @@ import UIKit
 import Foundation
 class FirstLaunchVC:BaseVC{
     @IBOutlet weak var btnSignIn: RoundButton!
-    @IBOutlet weak var btnSignUp: RoundButton!
+    @IBOutlet weak var btnSignUpAsRoomOwner: RoundButton!
+    @IBOutlet weak var btnSignUpAsGuest: RoundButton!
     @IBOutlet weak var imgvIcon: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +20,7 @@ class FirstLaunchVC:BaseVC{
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.backItem?.title = "BACK".localized
         navigationController?.setNavigationBarHidden(true, animated: true)
         edgesForExtendedLayout = .all
         automaticallyAdjustsScrollViewInsets = false
@@ -27,11 +29,20 @@ class FirstLaunchVC:BaseVC{
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    @IBAction func onClickBtnSignUp(_ sender: Any) {
+    @IBAction func onClickBtnSignUpAsRoomOwner(_ sender: Any) {
+        let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN) as! SignUpVC
+        vc.user.roleId == Constants.MEMBER
+        navigationController?.pushViewController(vc, animated: true)
     }
     @IBAction func onClickBtnSignIn(_ sender: Any) {
+
         let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_IN, sbName: Constants.STORYBOARD_MAIN)
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    @IBAction func onClickBtnSignUpAsGuest(_ sender: Any) {
+        let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN) as! SignUpVC
+        vc.user.roleId == Constants.ROOMOWNER
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }

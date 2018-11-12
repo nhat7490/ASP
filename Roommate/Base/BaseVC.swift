@@ -10,30 +10,34 @@ import Foundation
 import UIKit
 import ObjectMapper
 import MBProgressHUD
+import AVFoundation
+import PhotosUI
 import CoreLocation
-class BaseVC:UIViewController{
-//    var navTitle:String?{
-//        didSet{
-////            navigationController?.navigationBar.topItem?.title = navTitle
-//            title = navTitle
-//            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.defaultBlue]
-//        }
-//    }
+class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,AlertControllerDelegate{
     let locationManager = CLLocationManager()
     let group = DispatchGroup()
-//    
-//    lazy var errorView:ErrorView = {
-//        let ev:ErrorView = .fromNib()
-//        return ev
-//    }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.defaultBlue]
         UINavigationBar.appearance().tintColor = .defaultBlue
         let tap = UITapGestureRecognizer(target: self, action: #selector(endEditting))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+        
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    func registerNotificationForKeyboard(){
+        //notification center
+        NotificationCenter.default.addObserver(self, selector: #selector(keyBoard), name: Notification.Name.UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyBoard), name: Notification.Name.UIKeyboardWillHide, object: nil)
+    }
+    @objc func keyBoard(notification: Notification){}
+    
     @objc func endEditting(){
         view.endEditing(true)
     }
@@ -202,5 +206,133 @@ class BaseVC:UIViewController{
                 }
             }
         }
+        
+    }
+    
+    
+    func setBackButtonForNavigationBar(isEmbedInNewNavigationController:Bool? = true){
+        //Back button
+        
+        let backImage = UIImage(named: "back")
+        if isEmbedInNewNavigationController!{
+            navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(dimissEntireNavigationController))
+        }else{
+            navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "BACK".localized, style: .plain, target: self, action:#selector(popSelfInNavigationController))
+        }
+        
+        navigationItem.leftBarButtonItem?.tintColor = .defaultBlue
+        
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.backgroundColor = .clear
+    }
+    func translateNavigationBar(){
+        
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.backgroundColor = .clear
+    }
+    func presentInNewNavigationController(viewController:UIViewController){
+        let mainVC = UIViewController()
+        let nv = UINavigationController(rootViewController: mainVC)
+        nv.pushViewController(viewController, animated: true)
+        present(nv, animated: false)
+    }
+    //MARK: alertControllerDelegate
+    func alertControllerDelegate(alertController: AlertController, onSelected selectedIndexs: [IndexPath]?) {
+    }
+    func alertControllerDelegate(alertController: AlertController, withAlertType type: AlertType, onCompleted indexs: [IndexPath]?) {
+        
+    }
+    //MARK: Permission
+    func checkPermission(type:UIImagePickerControllerSourceType){
+        if type == .camera{
+            if UIImagePickerController.isSourceTypeAvailable(.camera){
+                let status = AVCaptureDevice.authorizationStatus(for: .video)
+                switch status{
+                case .denied:
+                    showAlertToAllowAccessViaSetting(type: type)
+                case .authorized:
+                    showPickerController(type: .camera)
+                default:
+                    showRequiredPermissionAccess(type: type)
+                }
+            }else{
+                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "DEVICE_CAMERA_NOT_EXISTED".localized, inViewController: self, rhsButtonHandler: nil)
+            }
+        }else if type == .photoLibrary{
+            switch PHPhotoLibrary.authorizationStatus(){
+            case .denied:
+                showAlertToAllowAccessViaSetting(type: type)
+            case .authorized:
+                showPickerController(type: .photoLibrary)
+            default:
+                showRequiredPermissionAccess(type: type)
+            }
+        }
+    }
+    //MARK: Show Alert for permission
+    func showAlertToAllowAccessViaSetting(type:UIImagePickerControllerSourceType){
+        if type == .camera{
+            AlertController.showAlertConfirm(withTitle: "INFORMATION".localized, andMessage: "ROOM_UPLOAD_OPEN_CAMERA_SETTING".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "ROOM_UPLOAD_SKIP".localized, rhsButtonTitle: "ROOM_UPLOAD_OPEN_SETTING".localized, lhsButtonHandler: nil) { (action) in
+                if let appSettingUrl = URL(string: UIApplicationOpenSettingsURLString){
+                    UIApplication.shared.open(appSettingUrl, options: [:], completionHandler: {(result) in
+                        
+                    })
+                }
+            }
+        }else if type == .photoLibrary{
+            AlertController.showAlertConfirm(withTitle: "INFORMATION".localized, andMessage: "ROOM_UPLOAD_OPEN_PHOTO_SETTING".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "ROOM_UPLOAD_SKIP".localized, rhsButtonTitle: "ROOM_UPLOAD_OPEN_SETTING".localized, lhsButtonHandler: nil) { (action) in
+                if let appSettingUrl = URL(string: UIApplicationOpenSettingsURLString){
+                    UIApplication.shared.open(appSettingUrl, options: [:], completionHandler: {(result) in
+                        
+                    })
+                }
+            }
+        }
+        
+    }
+    func showRequiredPermissionAccess(type:UIImagePickerControllerSourceType){
+        if type == .camera{
+            AlertController.showAlertConfirm(withTitle: "INFORMATION".localized, andMessage: "ROOM_UPLOAD_CAMERA_QUESTION".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "NO".localized, rhsButtonTitle: "YES".localized, lhsButtonHandler: nil) { (action) in
+                AVCaptureDevice.requestAccess(for: .video, completionHandler: { (result) in
+                    DispatchQueue.main.async {
+                        self.checkPermission(type: type)
+                    }
+                })
+                
+            }
+        }else if type == .photoLibrary{
+            AlertController.showAlertConfirm(withTitle: "INFORMATION".localized, andMessage: "ROOM_UPLOAD_PHOTO_QUESTION".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "NO".localized, rhsButtonTitle: "YES".localized, lhsButtonHandler: nil) { (action) in
+                PHPhotoLibrary.requestAuthorization({ (status) in
+                    DispatchQueue.main.async {
+                        self.checkPermission(type: type)
+                    }
+                })
+                
+            }
+        }
+        
+    }
+    func showPickerController(type:UIImagePickerControllerSourceType){
+        let picker = UIImagePickerController()
+        picker.sourceType = type
+        picker.delegate = self
+        picker.modalPresentationStyle = .currentContext
+        picker.allowsEditing = false
+        present(picker, animated: true, completion: nil)
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+    }
+    func generateImageName()->String{
+        return "\(Date().string("HH_mm_ss_dd_MM_yyyy")).jpg"
+    }
+    //MARK: Back button on navigation bar
+    @objc func dimissEntireNavigationController(){
+        self.navigationController?.dismiss(animated: true, completion: nil)
+    }
+    @objc func popSelfInNavigationController(){
+        self.navigationController?.popViewController(animated: true)
     }
 }

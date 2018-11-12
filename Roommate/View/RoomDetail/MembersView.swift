@@ -77,7 +77,7 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
         btnRight.setTitle("EDIT".localized, for: .normal)
         btnRight.tintColor = .white
         
-        tableView.register(UINib(nibName: Constants.CELL_MEMBERTVL, bundle: Bundle.main), forCellReuseIdentifier: Constants.CELL_MEMBERTVL)
+        tableView.register(UINib(nibName: Constants.CELL_MEMBERTV, bundle: Bundle.main), forCellReuseIdentifier: Constants.CELL_MEMBERTV)
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.delegate = self
@@ -91,7 +91,7 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_MEMBERTVL, for: indexPath) as! MemberTVCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_MEMBERTV, for: indexPath) as! MemberTVCell
         cell.indexPath = indexPath
         let member = members![indexPath.row]
         if member.roleId == Constants.ROOMMASTER{
