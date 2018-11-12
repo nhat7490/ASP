@@ -24,14 +24,18 @@ public class CityController {
 
     @GetMapping("/city")
     public ResponseEntity<List<TbCity>> getAllDistrict() {
-        List<TbCity> cities = cityService.findAll();
-        Collections.sort(cities, new Comparator<TbCity>() {
-            @Override
-            public int compare(TbCity c1, TbCity c2) {
-                return c1.getName().compareTo(c2.getName());
-            }
-        });
-        return ResponseEntity.status(OK).body(cities);
-
+        try {
+            List<TbCity> cities = cityService.findAll();
+            Collections.sort(cities, new Comparator<TbCity>() {
+                @Override
+                public int compare(TbCity c1, TbCity c2) {
+                    return c1.getName().compareTo(c2.getName());
+                }
+            });
+            return ResponseEntity.status(OK).body(cities);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 }

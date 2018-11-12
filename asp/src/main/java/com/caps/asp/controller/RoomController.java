@@ -155,7 +155,7 @@ public class RoomController {
             if (tbUser.getRoleId() == ROOM_MASTER) {
                 TbPost post = postService.findAllByUserIdAndRoomIdOrderByDatePostDesc(tbUser.getUserId()
                         , roomRequestModel.getRoomId());
-                if (post!=null){
+                if (post!=null && post.getDatePost().getTime() > tbRoomHasUser.getDateIn().getTime()){
                     post.setMinPrice(roomRequestModel.getPrice());
                     postService.savePost(post);
                     postHasUtilityService.deleteAllPostHasUtilityByPostId(roomRequestModel.getRoomId());

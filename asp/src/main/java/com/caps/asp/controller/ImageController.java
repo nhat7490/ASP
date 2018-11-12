@@ -13,15 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageController {
     private final AmazonService amazonService;
 
-    public ImageController( AmazonService amazonService) {
+    public ImageController(AmazonService amazonService) {
         this.amazonService = amazonService;
     }
 
     @PostMapping("/image/upload")
-    public ResponseEntity uploadRoomImage(@RequestParam(value = "image") MultipartFile image){
+    public ResponseEntity uploadRoomImage(@RequestParam(value = "image") MultipartFile image) {
         try {
-            return ResponseEntity.ok(new UploadImageResponseModel(image.getOriginalFilename(),amazonService.uploadFile(image)));
-        }catch (Exception e){
+            return ResponseEntity.ok(new UploadImageResponseModel(image.getOriginalFilename(), amazonService.uploadFile(image)));
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
