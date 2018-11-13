@@ -6,11 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 public class UtilityController {
-
     public final UtilityService utilityService;
 
     public UtilityController(UtilityService utilityService) {
@@ -19,6 +19,10 @@ public class UtilityController {
 
     @GetMapping("/utilities/getAll")
     public ResponseEntity getAllUtilities() {
-        return ResponseEntity.status(OK).body(utilityService.getAll());
+        try {
+            return ResponseEntity.status(OK).body(utilityService.getAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 }

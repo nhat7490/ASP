@@ -21,7 +21,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 public class ReferenceController {
-
     public final UtilityReferenceService utilityReferenceService;
     public final DistrictReferenceService districtReferenceService;
     public final ReferenceService referenceService;
@@ -37,6 +36,7 @@ public class ReferenceController {
     public ResponseEntity createReference(@RequestBody FilterArgumentModel filterArgumentModel) {
         try {
             List<Double> prices = filterArgumentModel.getSearchRequestModel().getPrice();
+
             TbReference reference = new TbReference();
             reference.setMinPrice(prices.get(0));
             reference.setMaxPrice(prices.get(1));
@@ -58,7 +58,6 @@ public class ReferenceController {
                 tbDistrictReference.setDistrictId(districtId);
                 districtReferenceService.save(tbDistrictReference);
             }
-
             return ResponseEntity.status(CREATED).build();
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();

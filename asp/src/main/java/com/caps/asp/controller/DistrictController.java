@@ -36,7 +36,6 @@ public class DistrictController {
             );
             return ResponseEntity.status(OK).body(districts);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(NOT_FOUND).build();
         }
     }
@@ -46,7 +45,6 @@ public class DistrictController {
         try {
             return ResponseEntity.status(OK).body(districtService.findAll());
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(NOT_FOUND).build();
         }
     }

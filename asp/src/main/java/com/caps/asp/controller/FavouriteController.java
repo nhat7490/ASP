@@ -28,7 +28,6 @@ public class FavouriteController {
             }
             return ResponseEntity.status(CONFLICT).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(CONFLICT).build();
         }
     }
@@ -41,7 +40,6 @@ public class FavouriteController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(favourites.getContent());
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(NOT_FOUND).build();
         }
     }
@@ -52,8 +50,7 @@ public class FavouriteController {
             favouriteService.remove(id);
             return ResponseEntity.status(OK).build();
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(NOT_MODIFIED).build();
+            return ResponseEntity.status(CONFLICT).build();
         }
 
     }
@@ -64,8 +61,7 @@ public class FavouriteController {
             favouriteService.remove(favourite.getUserId(), favourite.getPostId());
             return ResponseEntity.status(OK).build();
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(NOT_MODIFIED).build();
+            return ResponseEntity.status(CONFLICT).build();
         }
     }
 }
