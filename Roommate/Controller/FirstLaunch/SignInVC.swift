@@ -137,7 +137,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
                     
                     //                        self.group.notify(queue: DispatchQueue.main, execute: {
                     _ = DBManager.shared.addUser(user: user!)
-                    _ = DBManager.shared.addSetting(setting: SettingModel())
+                    _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object: SettingModel())
                     let appdelegate = UIApplication.shared.delegate as! AppDelegate
                     appdelegate.window!.rootViewController = self.mainTabBarVC
                     

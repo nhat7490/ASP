@@ -21,13 +21,13 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     var rooms:[RoomPostResponseModel]?
     var roomFilter:FilterArgumentModel = {
         let filter = FilterArgumentModel()
-        filter.cityId = DBManager.shared.getSetting()?.cityId
+        filter.cityId = DBManager.shared.getSingletonModel(ofType: SettingModel.self)?.cityId
         return filter
     }()
     var roommateFilter:FilterArgumentModel = {
         let filter = FilterArgumentModel()
         filter.typeId = Constants.ROOMMATE_POST
-        filter.cityId = DBManager.shared.getSetting()?.cityId
+        filter.cityId = DBManager.shared.getSingletonModel(ofType: SettingModel.self)?.cityId
         return filter
     }()
     let orders = [
@@ -249,7 +249,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
             //            MBProgressHUD.showAdded(to: self.bottomView, animated: true)
         }
         DispatchQueue.global(qos: .background).async {
-            self.requestArray(apiRouter:apiRouter, returnType: RoomPostResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            APIConnection.requestArray(apiRouter:apiRouter, returnType: RoomPostResponseModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
@@ -281,7 +281,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                         }
                     }
                 }
-            })
+            }
         }
     }
     func  requestRoommate(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
@@ -294,7 +294,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
             //            MBProgressHUD.showAdded(to: self.bottomView, animated: true)
         }
         DispatchQueue.global(qos: .background).async {
-            self.requestArray(apiRouter:apiRouter, returnType: RoommatePostResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            APIConnection.requestArray(apiRouter:apiRouter, returnType: RoommatePostResponseModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
@@ -324,7 +324,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
                         }
                     }
                 }
-            })
+            }
         }
     }
     //MARK: Notification

@@ -71,34 +71,21 @@ class DBManager {
         }
     }
     
-    //For Setting
-    func getSetting() -> SettingModel?{
+    //For SingletonMOdel
+    func getSingletonModel<T:BaseModel>(ofType:T.Type)->T?{
         let realm = try! Realm()
-        return  realm.objects(SettingModel.self).first
+        return realm.objects(T.self).first
         
     }
-    func addSetting(setting:SettingModel)->Bool{
+    func addSingletonModel<T:BaseModel>(ofType:T.Type,object:T)->Bool{
         let realm = try! Realm()
         do{
             try realm.write {
-                realm.add(setting, update: true)
+                realm.add(object, update: true)
             }
-            return false
+            return true
         }catch{
             return false
-        }
-    }
-    func deleteAllSetting(){
-        let realm = try! Realm()
-        do {
-            guard let setting = getSetting() else{
-                return
-            }
-            try realm.write {
-                realm.delete(setting)
-            }
-        } catch  {
-            print("Cannot delete all user")
         }
     }
     

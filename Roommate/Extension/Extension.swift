@@ -439,9 +439,6 @@ extension Int{
     var toString:String{
         return "\(self)"
     }
-    var toIntObject:IntObject{
-        return IntObject(value: self)
-    }
     var formatString:String{
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -453,9 +450,6 @@ extension Int{
 }
 
 extension Float{
-    var toIntObject:IntObject{
-        return IntObject(value: Int(self))
-    }
     var toString:String{
         return "\(self)"
     }

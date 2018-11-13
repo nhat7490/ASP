@@ -28,7 +28,7 @@ class BasePostResponseModel:Mappable,Equatable,Hashable{
         postId <- map["postId"]
         phoneContact <- map["phoneContact"]
         date <- (map["date"],DateTransform())
-        userResponseModel <- map["userResponeModel"]
+        userResponseModel <- map["userResponseModel"]
         isFavourite <- map["favourite"]
         favouriteId <- map["favouriteId"]
         minPrice <- map["minPrice"]

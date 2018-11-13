@@ -58,11 +58,6 @@ class RoomResponseModel: Mappable,NSCopying,Equatable,Hashable {
     var hashValue: Int{
         return roomId.hashValue
     }
-
-
-
-
-    
     
     init() {
         
@@ -82,6 +77,7 @@ class RoomResponseModel: Mappable,NSCopying,Equatable,Hashable {
         userId <- map["userId"]
         cityId <- map["cityId"]
         districtId <- map["districtId"]
+        date <- map["dateCreated"]
         statusId <- map["statusId"]
         roomDescription <- map["description"]
         phoneNumber <- map["phoneNumber"]

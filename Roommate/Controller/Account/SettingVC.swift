@@ -8,13 +8,20 @@
 
 import UIKit
 class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
-    var settingActions = [
+    var settingActionsForRoommeberAndMember = [
+        "SUGGEST_SETTING",
+        "TITLE_SIGN_OUT"
+    ]
+    var settingActionsForRoomOwner = [
         "TITLE_SIGN_OUT"
     ]
     lazy var settingActionTableView:UITableView = {
         let tv = UITableView()
         return tv
     }()
+    
+    let user = DBManager.shared.getUser()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -27,7 +34,6 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
         
         view.addSubview(settingActionTableView)
         _ = settingActionTableView.anchor(view: view)
-        
         
     }
     
@@ -47,21 +53,40 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return settingActions.count
+        return user?.roleId == Constants.ROOMOWNER ? settingActionsForRoomOwner.count : settingActionsForRoommeberAndMember.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_ACTIONTV, for: indexPath) as! ActionTVCell
-        cell.title = settingActions[indexPath.row].localized
+        cell.title = user?.roleId == Constants.ROOMOWNER ?   settingActionsForRoomOwner[indexPath.row].localized : settingActionsForRoommeberAndMember[indexPath.row].localized
         cell.selectionStyle = .none
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        DBManager.shared.deleteAllUsers()
-        NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        if user?.roleId == Constants.ROOMOWNER{
+            switch indexPath.row{
+            case 0:
+                DBManager.shared.deleteAllUsers()
+                NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
+                self.navigationController?.dismiss(animated: true, completion: nil)
+            default:
+                break
+            }
+        }else{
+            switch indexPath.row{
+            case 0:
+                break
+            case 1:
+                DBManager.shared.deleteAllUsers()
+                NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
+                self.navigationController?.dismiss(animated: true, completion: nil)
+            default:
+                break
+            }
+        }
+        
         
         
         

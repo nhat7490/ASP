@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import MBProgressHUD
 import CoreLocation
-class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HorizontalRoomViewDelegate,VerticalCollectionViewDelegate,LocationSearchViewDelegate,AlertControllerDelegate,CLLocationManagerDelegate{
+class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HorizontalRoomViewDelegate,VerticalCollectionViewDelegate,LocationSearchViewDelegate,CLLocationManagerDelegate{
     
     var scrollView:UIScrollView = {
         let sv = UIScrollView()
@@ -19,6 +19,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         sv.showsHorizontalScrollIndicator = false
         return sv
     }()
+    
     
     var contentView:UIView = {
         let v = UIView()
@@ -70,7 +71,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     var filterForRoomPost = FilterArgumentModel()
     var filterForRoommatePost = FilterArgumentModel()
     var baseSuggestRequestModel = BaseSuggestRequestModel()
-    
+    var setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self)
     var actionsForMember:[[String]] = [
         ["Tìm phòng","find-room"],
         ["Tìm bạn","find-roommate"],
@@ -173,10 +174,10 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         
         filterForRoomPost.searchRequestModel = nil
         filterForRoommatePost.typeId = Constants.ROOM_POST
-        filterForRoomPost.cityId = DBManager.shared.getSetting()?.cityId
+        filterForRoomPost.cityId = setting?.cityId
         
         filterForRoommatePost.searchRequestModel = nil
-        filterForRoommatePost.cityId = DBManager.shared.getSetting()?.cityId
+        filterForRoommatePost.cityId = setting?.cityId
         filterForRoommatePost.typeId = Constants.ROOMMATE_POST
     }
     
@@ -239,10 +240,10 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomContainerView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.bottomContainerView) { () -> (Void) in
-                    self.locationSearchView.location = DBManager.shared.getRecord(id: (DBManager.shared.getSetting()?.cityId)!, ofType: CityModel.self)?.name ?? "LIST_CITY_TITLE".localized
+                self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+                    self.locationSearchView.location = DBManager.shared.getRecord(id: (self.setting?.cityId)!, ofType: CityModel.self)?.name ?? "LIST_CITY_TITLE".localized
                     self.cities = DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self)
-                    if self.user?.roleId != 2{
+                    if self.user?.roleId != Constants.ROOMOWNER{
                         self.requestRoom(view: self.suggestRoomPostView.collectionView, apiRouter:
                             APIRouter.suggest(model: self.baseSuggestRequestModel), offset:Constants.MAX_ROOM_ROW)
                     }
@@ -251,10 +252,10 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                 }
             }
         }else{
-            self.checkAndLoadInitData(inView: self.bottomContainerView) { () -> (Void) in
-                self.locationSearchView.location = DBManager.shared.getRecord(id: (DBManager.shared.getSetting()?.cityId)!, ofType: CityModel.self)?.name ?? "LIST_CITY_TITLE".localized
+            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+                self.locationSearchView.location = DBManager.shared.getRecord(id: (self.setting?.cityId)!, ofType: CityModel.self)?.name ?? "LIST_CITY_TITLE".localized
                 self.cities = DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self)
-                if self.user?.roleId != 2{
+                if self.user?.roleId != Constants.ROOMOWNER{
                     self.requestRoom(view: self.suggestRoomPostView.collectionView, apiRouter:
                         APIRouter.suggest(model: self.baseSuggestRequestModel), offset:Constants.MAX_ROOM_ROW)
                 }
@@ -273,7 +274,10 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     func  requestRoom(view:UICollectionView,apiRouter:APIRouter,offset:Int){
         //        roomFilter.searchRequestModel = nil
         if view == self.suggestRoomPostView.collectionView{
+            let setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self)
             baseSuggestRequestModel.offset = offset
+            baseSuggestRequestModel.latitude = setting?.latitude.value
+            baseSuggestRequestModel.longitude = setting?.longitude.value
         }else if view == self.newRoomPostView.collectionView{
             filterForRoomPost.offset = offset
         }
@@ -286,7 +290,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             //            MBProgressHUD.showAdded(to: self.bottomView, animated: true)
         }
         DispatchQueue.global(qos: .background).async {
-            self.requestArray(apiRouter:apiRouter, returnType:RoomPostResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            APIConnection.requestArray(apiRouter:apiRouter, returnType:RoomPostResponseModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: view, animated: true)
                 }
@@ -328,7 +332,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                         }
                     }
                 }
-            })
+            }
         }
     }
     
@@ -344,7 +348,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             //            MBProgressHUD.showAdded(to: self.bottomView, animated: true)
         }
         DispatchQueue.global(qos: .background).async {
-            self.requestArray(apiRouter:apiRouter, returnType:RoommatePostResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            APIConnection.requestArray(apiRouter:apiRouter, returnType:RoommatePostResponseModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: view, animated: true)
                 }
@@ -379,7 +383,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                         }
                     }
                 }
-            })
+            }
         }
     }
     //MARK: UICollectionView Delegate and DataSource for TopNavigation
@@ -445,7 +449,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         alert.delegate = self
     }
     //MARK: UIAlertControllerDelegate
-    func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
+    override func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {
         guard let indexs = indexs else {
             return
         }
@@ -453,16 +457,18 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             guard let city = cities?[(indexs.first?.row)!]  else{
                 return
             }
-            guard let setting = DBManager.shared.getSetting() else{
+            
+            guard let setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self) else{
                 return
             }
+            
             locationSearchView.location = city.name
             let newSetting = SettingModel()
             newSetting.id = setting.id
             newSetting.cityId = city.cityId
             newSetting.latitude = setting.latitude
             newSetting.longitude = setting.longitude
-            _ = DBManager.shared.addSetting(setting: newSetting)
+            _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object: newSetting)
         }
     }
     //MARK: HorizontalRoomViewDelegate
@@ -596,7 +602,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         }
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let setting = DBManager.shared.getSetting() else{
+        guard let setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self) else{
             return
         }
         guard let location = locations.last else {
@@ -610,7 +616,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         newSetting.cityId = setting.cityId
         newSetting.latitude.value = location.coordinate.latitude
         newSetting.longitude.value = location.coordinate.longitude
-        _ = DBManager.shared.addSetting(setting: newSetting)
+        _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object:newSetting)
     }
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {

@@ -174,7 +174,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         selectedPrice?.append(400_000)
         selectedPrice?.append(40_000_000)
         selectedGender = .none
-        if let setting = DBManager.shared.getSetting(), let city = DBManager.shared.getRecord(id: setting.cityId, ofType: CityModel.self){
+        if let setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self), let city = DBManager.shared.getRecord(id: setting.cityId, ofType: CityModel.self){
             selectedCity = city
             cityDropdownListView.text = selectedCity?.name
         }

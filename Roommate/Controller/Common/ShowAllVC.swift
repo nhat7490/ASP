@@ -273,7 +273,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
             //            MBProgressHUD.showAdded(to: self.bottomView, animated: true)
         }
         DispatchQueue.global(qos: .background).async {
-            self.requestArray(apiRouter:apiRouter, returnType: RoomPostResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            APIConnection.requestArray(apiRouter:apiRouter, returnType: RoomPostResponseModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
@@ -305,7 +305,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
                         }
                     }
                 }
-            })
+            }
         }
     }
     
@@ -319,7 +319,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
             //            MBProgressHUD.showAdded(to: self.bottomView, animated: true)
         }
         DispatchQueue.global(qos: .background).async {
-            self.requestArray(apiRouter:apiRouter, returnType: RoommatePostResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            APIConnection.requestArray(apiRouter:apiRouter, returnType: RoommatePostResponseModel.self) { (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
@@ -349,7 +349,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
                         }
                     }
                 }
-            })
+            }
         }
     }
     func  requestRoom(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
@@ -360,7 +360,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
             hub.contentColor = .defaultBlue
         }
         DispatchQueue.global(qos: .background).async {
-            self.requestArray(apiRouter:apiRouter, returnType: RoomResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            APIConnection.requestArray(apiRouter:apiRouter, returnType: RoomResponseModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
@@ -390,7 +390,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
                         }
                     }
                 }
-            })
+            }
         }
     }
     

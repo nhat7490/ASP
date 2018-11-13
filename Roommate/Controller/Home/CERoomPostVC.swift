@@ -1,5 +1,5 @@
 //
-//  CreateRoomVC.swift
+//  CreateRoommateVC.swift
 //  Roommate
 //
 //  Created by TrinhHC on 9/20/18.
@@ -16,7 +16,7 @@ import RealmSwift
 import MBProgressHUD
 import AVFoundation
 import PhotosUI
-class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource,DropdownListViewDelegate,UtilityInputVCDelegate,UploadImageViewDelegate{
+class CERoomPostVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource,DropdownListViewDelegate,UtilityInputVCDelegate,UploadImageViewDelegate{
     
     
     
@@ -134,7 +134,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         loadLocalData()
         setupUI()
         setData()
-//        setNotificationObserver()
+        //        setNotificationObserver()
         registerNotificationForKeyboard()
     }
     
@@ -293,32 +293,32 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             scrollView.contentInset = .zero
         }
     }
-//    func setNotificationObserver(){
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-//    }
-//
-//    deinit {
-//
-//        //Not need from ios 9
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-//    }
-//
-//    //MARK: Handler for Keyboard
-//    @objc func keyboardWillShow(notification:Notification){
-//        let userInfor = notification.userInfo!
-//        let keyboardFrame:CGRect = (userInfor[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-//        print(scrollView.contentInset)
-//        print(scrollView.contentOffset)
-//        scrollView.contentInset.bottom = keyboardFrame.size.height
-//        scrollView.scrollIndicatorInsets = scrollView.contentInset
-//        print(scrollView.contentInset)
-//        print(scrollView.contentOffset)
-//    }
-//    @objc func keyboardWillHide(notification:Notification){
-//        scrollView.contentInset = .zero
-//    }
+    //    func setNotificationObserver(){
+    //        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+    //        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    //    }
+    //
+    //    deinit {
+    //
+    //        //Not need from ios 9
+    //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+    //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    //    }
+    //
+    //    //MARK: Handler for Keyboard
+    //    @objc func keyboardWillShow(notification:Notification){
+    //        let userInfor = notification.userInfo!
+    //        let keyboardFrame:CGRect = (userInfor[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+    //        print(scrollView.contentInset)
+    //        print(scrollView.contentOffset)
+    //        scrollView.contentInset.bottom = keyboardFrame.size.height
+    //        scrollView.scrollIndicatorInsets = scrollView.contentInset
+    //        print(scrollView.contentInset)
+    //        print(scrollView.contentOffset)
+    //    }
+    //    @objc func keyboardWillHide(notification:Notification){
+    //        scrollView.contentInset = .zero
+    //    }
     
     
     
@@ -388,8 +388,8 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                 addressInputView.isSelectedFromSuggest = false
                 addressInputView.tfInput.setupUI(placeholder: "ROOM_ADDRESS_TITLE", title: "ROOM_ADDRESS_TITLE", delegate: addressInputView)
                 search(text: string)
-//                newRoomModel.address = string
-//                view.layoutIfNeeded()
+                //                newRoomModel.address = string
+                //                view.layoutIfNeeded()
             }
         default:
             break
@@ -537,9 +537,9 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         guard let row = indexPath?.row else {
             return
         }
-//        images.remove(at: row)
-//        uploadImageView.images = uploadImageFiles
-//        self.uploadImageFiles.remove(at:row)
+        //        images.remove(at: row)
+        //        uploadImageView.images = uploadImageFiles
+        //        self.uploadImageFiles.remove(at:row)
         self.uploadImageModels.remove(at: row)
         self.calculatorHeight()
     }

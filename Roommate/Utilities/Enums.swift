@@ -52,9 +52,10 @@ enum DropdownListViewType{
 enum UtilityCVCellType{
     case detail,interact
 }
-enum CERoomVCType{
+enum CEVCType{
     case create,edit
 }
+
 enum AllVCType{
     case all,bookmark,search
 }

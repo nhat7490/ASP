@@ -139,7 +139,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         guard let tfInput = textField as? SkyFloatingLabelTextField, let updatedString = (tfInput.text as NSString?)?.replacingCharacters(in: range, with: string) else {
             return false
         }
-        print(updatedString)
+//        print(updatedString)
         switch tfInput {
         case tfFullName:
             user.fullname = updatedString
@@ -267,9 +267,13 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
                         MBProgressHUD.hide(for: self.view, animated: true)
                     }
                     if error == .SERVER_NOT_RESPONSE{
+                        DispatchQueue.main.async {
                         APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+                        }
                     }else if error == .SERVER_NOT_RESPONSE{
+                        DispatchQueue.main.async {
                        APIResponseAlert.apiResponseError(controller: self, type: .exitedUser)
+                        }
                     }else{
                         //200
                         if statusCode ==
@@ -279,11 +283,15 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
                             }
                             self.user.userId = id
                             _ = DBManager.shared.addUser(user: self.user)
-                            _ = DBManager.shared.addSetting(setting: SettingModel())
-                            let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                            appdelegate.window!.rootViewController = self.mainTabBarVC
+                            _ = DBManager.shared.addSingletonModel(ofType:SettingModel.self, object:SettingModel())
+                            DispatchQueue.main.async {
+                                let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                                appdelegate.window!.rootViewController = self.mainTabBarVC
+                            }
                         }else if statusCode == .Conflict {
-                            APIResponseAlert.apiResponseError(controller: self, type: .exitedUser)
+                            DispatchQueue.main.async {
+                                APIResponseAlert.apiResponseError(controller: self, type: .exitedUser)
+                            }
                         }
                     }
                 }

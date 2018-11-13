@@ -23,7 +23,7 @@ class RoommatePostCVCell: UICollectionViewCell {
     var delegate:NewRoommateCVCellDelegate?
     var roommate:RoommatePostResponseModel?{
         didSet{
-            self.imgvLeftAvatar.sd_setImage(with: URL(string: (roommate?.userResponseModel?.imageProfile)!), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
+            self.imgvLeftAvatar.sd_setImage(with: URL(string: roommate?.userResponseModel?.imageProfile ?? ""), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
                 guard let image = image else{
                     return
                 }

@@ -213,7 +213,7 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
             hub.contentColor = .defaultBlue
         }
         DispatchQueue.global(qos: .background).async {
-            self.requestArray(apiRouter:apiRouter,
+            APIConnection.requestArray(apiRouter:apiRouter,
                               errorNetworkConnectedHander: {
                                 DispatchQueue.main.async {
                                     MBProgressHUD.hide(for: view, animated: true)

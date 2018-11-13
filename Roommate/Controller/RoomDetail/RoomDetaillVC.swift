@@ -197,9 +197,14 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     }
     //MARK: MembersViewDelegate
     func membersViewDelegate(membersView view: MembersView, onClickBtnEdit button:UIButton) {
-        let vc = EditMemberVC()
-        vc.room = room
-        self.navigationController?.pushViewController(vc, animated: true)
+        if room.statusId == Constants.AUTHORIZED{
+            let vc = EditMemberVC()
+            vc.room = room
+            self.navigationController?.pushViewController(vc, animated: true)
+        }else{
+            AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "INVALID_ROOM_STATUS".localized, inViewController: self)
+        }
+        
 //        let mainVC = UIViewController()
 //        let nv = UINavigationController(rootViewController: mainVC)
 //        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}

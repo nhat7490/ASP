@@ -128,6 +128,7 @@
 //MARK: Common
 "INFORMATION"="Thông báo";
 "SELECT_IMAGE"="Chọn ảnh";
+"SUGGEST_SETTING"="Cài đặt gợi ý"; 
 "NO_DATA"="Không có dữ liệu";
 "NO_MORE_DATA"="Không có thêm dữ liệu";
 "EDIT"="Sửa";
@@ -160,7 +161,7 @@
 "MAX_NUMBER_OF_PERSON" = "Số người tối đa";
 "ALERT_TITLE" = "Thông báo";
 "INVALID_INFOR"="Vui lòng nhập đầy đủ thông tin hợp lệ";
-
+"INVALID_ROOM_STATUS"="Phòng chưa được xác thực nên hiện tại bạn không thể sửa thông tin thành viên";
 
 //MARK: Validator
 "ERROR_TYPE_USERNAME"="Tên đăng nhập từ 6 - 50 ký tự";
@@ -259,9 +260,9 @@
 
 
 //MARK: Progress hub title
-"MB_SIGN_IN_TITLE" = "Đăng nhập";
+"MB_SIGN_IN_TITLE" = "Đang đăng nhập";
 "MB_LOAD_DATA_TITLE" = "Đang tải dữ liệu";
 "MB_LOAD_UPLOAD_IMAGE" = "Đang tải ảnh lên";
 "MB_LOAD_CREATE_ROOM" = "Đang tạo phòng";
-"MB_LOAD_CREATE_USER" ="Đăng ký";
+"MB_LOAD_CREATE_USER" ="Đang Đăng ký";
 "MB_LOAD_EDIT_ROOM" = "Đang cập nhập thông tin phòng";

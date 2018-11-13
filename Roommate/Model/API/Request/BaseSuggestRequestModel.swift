@@ -34,6 +34,6 @@ class BaseSuggestRequestModel: Mappable {
         offset = Constants.MAX_OFFSET
         typeId = Constants.ROOM_POST
         userId = DBManager.shared.getUser()?.userId
-        cityId = DBManager.shared.getSetting()?.cityId
+        cityId = DBManager.shared.getSingletonModel(ofType: SettingModel.self)?.cityId
     }
 }

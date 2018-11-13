@@ -159,7 +159,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             optionView.tvPrice.text =  String(format: "PRICE_OF_ROOM".localized, room.minPrice!.formatString,"MONTH".localized)
         }else{
             //Data for horizontalImagesView
-            horizontalImagesView.images = [roommate.userResponseModel!.imageProfile!]
+            horizontalImagesView.images = [(roommate.userResponseModel?.imageProfile ?? "")]
             
             //Data for baseInformationView
             baseInformationView.lblMainTitle.text = roommate.userResponseModel?.fullname

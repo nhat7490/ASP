@@ -1,28 +1,30 @@
 //
-//  UserModel.swift
+//  MemberModel.swift
 //  Roommate
 //
-//  Created by TrinhHC on 10/8/18.
+//  Created by TrinhHC on 11/13/18.
 //  Copyright © 2018 TrinhHC. All rights reserved.
 //
 
+import UIKit
 import Foundation
 import ObjectMapper
 import RealmSwift
 import ObjectMapper_Realm
 import Realm
-class UserModel:BaseModel{
-    
+class MemberModel: BaseModel {
+//    let userId = RealmOptional<Int>()
+//    let roleId = RealmOptional<Int>()
     @objc dynamic var userId = 0
-    @objc dynamic var username:String?
-    @objc dynamic var password:String?
-    @objc dynamic var email:String?
-    @objc dynamic var fullname:String?
-    @objc dynamic var imageProfile:String?
-    @objc dynamic var dob:Date?
-    @objc dynamic var phone:String?
-    @objc dynamic var gender = 1
-    @objc dynamic var roleId = 4
+    @objc dynamic var roleId = 0
+    @objc dynamic var username = ""
+    
+    public convenience init(userId: Int?, roleId: Int?, username: String!) {
+        self.init()
+        self.userId = userId!
+        self.roleId = roleId!
+        self.username = username
+    }
     
     //MARK: ObjectMapper
     required convenience init?(map: Map) {
@@ -32,18 +34,9 @@ class UserModel:BaseModel{
     override func mapping(map: Map){
         super.mapping(map: map)
         userId <- map["userId"]
-        username <- map["username"]
-        password <- map["password"]
-        email <- map["email"]
-        fullname <- map["fullname"]
-        imageProfile <- map["imageProfile"]
-        dob <- (map["dob"],CustomDateFormatTransform(formatString: "yyyy-MM-dd"))
-        phone <- map["phone"]
-        gender <- map["gender"]
         roleId <- map["roleId"]
-
+        username <- map["username"]
     }
-
     
     
     //MARK: Object
@@ -62,6 +55,4 @@ class UserModel:BaseModel{
     override class func primaryKey() -> String? {
         return "userId"
     }
-    
-
 }

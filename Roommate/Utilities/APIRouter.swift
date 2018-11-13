@@ -176,7 +176,7 @@ enum APIRouter:URLRequestConvertible{
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.allHTTPHeaderFields = httpHeaders
         urlRequest.httpMethod = httpMethod.rawValue
-        urlRequest.timeoutInterval  = 10
+        urlRequest.timeoutInterval  = 40
         
         do{
             switch self.httpMethod {

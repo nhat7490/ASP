@@ -99,6 +99,10 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestArray(apiRouter: APIRouter.utility(), returnType:UtilityModel.self)}
             if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
             if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
+            if !DBManager.shared.isExisted(ofType: DistrictModel.self){
+                self.requestCurrentRoom()
+            }
+            
             
             DispatchQueue.main.async {
                 MBProgressHUD.hide(for: view, animated: true)
@@ -117,38 +121,77 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         }
     }
     
-    func requestArray<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander:(()->Void)? =  nil,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
-        //        self.group.enter()
-        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: errorNetworkConnectedHander, returnType: T.self) { (values, error, statusCode) -> (Void) in
+//    func requestArray<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander:(()->Void)? =  nil,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
+//        //        self.group.enter()
+//        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: errorNetworkConnectedHander, returnType: T.self) { (values, error, statusCode) -> (Void) in
+//            if error == nil{
+//                //200
+//                if statusCode == .OK{
+//                    guard let values = values else{
+//                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+//                        //                        self.group.leave()
+//                        return
+//                    }
+//                    completion(values,error,statusCode)
+//                }else{
+//                    completion(nil,nil,statusCode)
+//                }
+//                //
+//            }else{
+//                completion(nil,error,statusCode)
+//            }
+//            //            self.group.leave()
+//        }
+//        //        self.group.wait()
+//        
+//    }
+//    func request(apiRouter:APIRouter,errorNetworkConnectedHander:@escaping ()->Void,completion:@escaping (_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
+//        APIConnection.request(apiRouter: apiRouter, errorNetworkConnectedHander: nil) { (error, statusCode) -> (Void) in
+//            if error == ApiResponseErrorType.SERVER_NOT_RESPONSE{
+//                completion(error,statusCode)
+//            }else{
+//                completion(nil,statusCode)
+//            }
+//        }
+//    }
+    
+//    func requestObject<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){
+//        self.group.enter()
+//        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: DBManager.shared.getUser()!.userId), returnType: T.self){ (value,error, statusCode) -> (Void) in
+//
+//            if error == nil{
+//                //200
+//                if statusCode == .OK{
+//                    guard let value = value else{
+//                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+//                        self.group.leave()
+//                        return
+//                    }
+//                    print(DBManager.shared.addSingletonModel(ofType: T.self, object: value))
+//                }
+//            }
+//            self.group.leave()
+//        }
+//        self.group.wait()
+//    }
+    func requestCurrentRoom(){
+        self.group.enter()
+        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: DBManager.shared.getUser()!.userId), returnType: RoomResponseModel.self){ (value,error, statusCode) -> (Void) in
+            
             if error == nil{
                 //200
                 if statusCode == .OK{
-                    guard let values = values else{
+                    guard let value = value else{
                         //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
-                        //                        self.group.leave()
+                        self.group.leave()
                         return
                     }
-                    completion(values,error,statusCode)
-                }else{
-                    completion(nil,nil,statusCode)
+                    print(DBManager.shared.addSingletonModel(ofType: RoomModel.self, object: RoomModel(roomResponseModel: value)))
                 }
-                //
-            }else{
-                completion(nil,error,statusCode)
             }
-            //            self.group.leave()
+            self.group.leave()
         }
-        //        self.group.wait()
-        
-    }
-    func request(apiRouter:APIRouter,errorNetworkConnectedHander:@escaping ()->Void,completion:@escaping (_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
-        APIConnection.request(apiRouter: apiRouter, errorNetworkConnectedHander: nil) { (error, statusCode) -> (Void) in
-            if error == ApiResponseErrorType.SERVER_NOT_RESPONSE{
-                completion(error,statusCode)
-            }else{
-                completion(nil,statusCode)
-            }
-        }
+        self.group.wait()
     }
     func requestArray<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){
         self.group.enter()
@@ -209,35 +252,6 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         
     }
     
-    
-    func setBackButtonForNavigationBar(isEmbedInNewNavigationController:Bool? = true){
-        //Back button
-        
-        let backImage = UIImage(named: "back")
-        if isEmbedInNewNavigationController!{
-            navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(dimissEntireNavigationController))
-        }else{
-            navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "BACK".localized, style: .plain, target: self, action:#selector(popSelfInNavigationController))
-        }
-        
-        navigationItem.leftBarButtonItem?.tintColor = .defaultBlue
-        
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.backgroundColor = .clear
-    }
-    func translateNavigationBar(){
-        
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.backgroundColor = .clear
-    }
-    func presentInNewNavigationController(viewController:UIViewController){
-        let mainVC = UIViewController()
-        let nv = UINavigationController(rootViewController: mainVC)
-        nv.pushViewController(viewController, animated: true)
-        present(nv, animated: false)
-    }
     //MARK: alertControllerDelegate
     func alertControllerDelegate(alertController: AlertController, onSelected selectedIndexs: [IndexPath]?) {
     }
@@ -329,6 +343,36 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         return "\(Date().string("HH_mm_ss_dd_MM_yyyy")).jpg"
     }
     //MARK: Back button on navigation bar
+    
+    
+    func setBackButtonForNavigationBar(isEmbedInNewNavigationController:Bool? = true){
+        //Back button
+        if isEmbedInNewNavigationController!{
+            let backImage = UIImage(named: "back")
+            navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(dimissEntireNavigationController))
+        }else{
+            navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "BACK".localized, style: .plain, target: self, action:#selector(popSelfInNavigationController))
+        }
+        
+        navigationItem.leftBarButtonItem?.tintColor = .defaultBlue
+        
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.backgroundColor = .clear
+    }
+    func translateNavigationBar(){
+        
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.backgroundColor = .clear
+    }
+    func presentInNewNavigationController(viewController:UIViewController){
+        let mainVC = UIViewController()
+        let nv = UINavigationController(rootViewController: mainVC)
+        present(nv, animated: false) {
+            nv.pushViewController(viewController, animated: true)
+        }
+    }
     @objc func dimissEntireNavigationController(){
         self.navigationController?.dismiss(animated: true, completion: nil)
     }

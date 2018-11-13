@@ -14,11 +14,11 @@ class APIConnection: NSObject {
     static func isConnectedInternet()->Bool{
         return NetworkReachabilityManager()!.isReachable
     }
-    static func requestArray<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander handler:(()->Void)?,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
+    static func requestArray<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander:(()->Void)? = nil,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
         //Network handler
         if !isConnectedInternet(){
-            if let handler = handler{
-                handler()
+            if let errorNetworkConnectedHander = errorNetworkConnectedHander{
+                errorNetworkConnectedHander()
                 return
             }
         }
@@ -48,7 +48,7 @@ class APIConnection: NSObject {
             }
         }
     }
-    static func requestObject<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander handler:(()->Void)?,returnType:T.Type,completion:@escaping (_ result:T?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
+    static func requestObject<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander handler:(()->Void)? = nil,returnType:T.Type,completion:@escaping (_ result:T?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
         //Network handler
         if !isConnectedInternet(){
             if let handler = handler{
@@ -73,8 +73,8 @@ class APIConnection: NSObject {
                     return
                 }
                 //Default success code 200
-                if httpStatusCode == .OK{
-                    completion(response.result.value,nil,.OK)
+                if httpStatusCode == .OK || httpStatusCode == .Created{
+                    completion(response.result.value,nil,httpStatusCode)
                 }else{
                     completion(nil,nil,httpStatusCode)
                 }
@@ -83,7 +83,7 @@ class APIConnection: NSObject {
         }
         
     }
-    static func request(apiRouter:APIRouter,errorNetworkConnectedHander handler:(()->Void)?,completion:@escaping (_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
+    static func request(apiRouter:APIRouter,errorNetworkConnectedHander handler:(()->Void)?=nil,completion:@escaping (_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
         //Network handler
         if !isConnectedInternet(){
             if let handler = handler{
