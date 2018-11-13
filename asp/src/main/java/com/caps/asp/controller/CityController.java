@@ -34,7 +34,6 @@ public class CityController {
             });
             return ResponseEntity.status(OK).body(cities);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(NOT_FOUND).build();
         }
     }
