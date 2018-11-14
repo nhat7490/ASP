@@ -1,5 +1,7 @@
 package com.caps.asp.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
@@ -13,6 +15,7 @@ public class TbUser {
     private String email;
     private String fullname;
     private String imageProfile;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
     private String phone;
     private Integer gender;

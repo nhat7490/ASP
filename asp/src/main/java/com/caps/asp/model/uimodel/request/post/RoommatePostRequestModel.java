@@ -3,6 +3,7 @@ package com.caps.asp.model.uimodel.request.post;
 import java.util.List;
 
 public class RoommatePostRequestModel extends BasePostRequestModel {
+
     private double maxPrice;
     private List<Integer> districtIds;
     private List<Integer> utilityIds;

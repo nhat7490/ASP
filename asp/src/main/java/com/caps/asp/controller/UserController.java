@@ -2,6 +2,7 @@ package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.UserLoginModel;
+import com.caps.asp.model.uimodel.response.common.CreateResponseModel;
 import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.RoomHasUserService;
@@ -66,8 +67,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/findByUsername/{username}")
-    public ResponseEntity<TbUser> findByUsername(@PathVariable String username) {
+    @GetMapping("/user/findExitedUserInRoom/{username}")
+    public ResponseEntity<TbUser> findExitedUserInRoom(@PathVariable String username) {
         try {
             TbUser user = userService.findByUsername(username);
 
@@ -88,6 +89,11 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }
+    }
+    @GetMapping("/user/findByUsername/{username}")
+    public ResponseEntity<TbUser> findByUsername(@PathVariable String username) {
+        TbUser user = userService.findByUsername(username);
+        return ResponseEntity.status(user!=null ? OK : NOT_FOUND).build();
     }
 
     @GetMapping("/user/listUser")
@@ -118,36 +124,31 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/admin/createUser")
-    public ResponseEntity createUSer(@RequestBody TbUser user) {
-        try {
+    @PostMapping("/user/createUser")
+    public ResponseEntity createUser(@RequestBody TbUser user) {
             TbUser tbUserDb = userService.findByUsername(user.getUsername());
-
             if (tbUserDb == null) {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setUserId(0);
                 int id = userService.saveUser(user);
-                return ResponseEntity.status(CREATED).body(id);
+                return ResponseEntity.status(CREATED).body(new CreateResponseModel(id));
             }
             return ResponseEntity.status(CONFLICT).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(CONFLICT).build();
-        }
     }
 
-    @GetMapping("/user/memberPermission/{userId}")
-    public ResponseEntity checkMemberPermission(@PathVariable int userId) {
-        try {
-            TbUser user = userService.findById(userId);
-
-            if (user.getRoleId() == MEMBER) {
-                return ResponseEntity.status(OK).build();
-            }
-            return ResponseEntity.status(FORBIDDEN).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(FORBIDDEN).build();
+    @PostMapping("/user/admin/createUser")
+    public ResponseEntity createUserForAdmin(@RequestBody TbUser user) {
+        TbUser tbUserDb = userService.findByUsername(user.getUsername());
+        if (tbUserDb == null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setUserId(0);
+            user.setRoleId(5);
+            int id = userService.saveUser(user);
+            return ResponseEntity.status(CREATED).body(id);
         }
+        return ResponseEntity.status(CONFLICT).build();
     }
+
 
     @GetMapping("/user/resetPassword/{email}")
     public ResponseEntity resetPassword(@PathVariable String email) {

@@ -1,7 +1,7 @@
 package com.caps.asp.model.uimodel.response.post;
 
 import com.caps.asp.model.TbRoomHasUtility;
-import com.caps.asp.model.uimodel.response.UserResponeModel;
+import com.caps.asp.model.uimodel.response.UserResponseModel;
 
 import java.sql.Date;
 import java.util.List;
@@ -28,7 +28,7 @@ public class RoomPostResponseModel extends BasePostResponeModel {
     public RoomPostResponseModel() {
     }
 
-    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner, String description) {
+    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponseModel userResponseModel, boolean isFavourite, double minPrice, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner, String description) {
         this.name = name;
         this.area = area;
         this.address = address;

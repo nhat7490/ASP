@@ -6,7 +6,7 @@ import com.caps.asp.model.uimodel.request.SearchRequestModel;
 import com.caps.asp.model.uimodel.request.post.RoomPostRequestModel;
 import com.caps.asp.model.uimodel.request.post.RoommatePostRequestModel;
 import com.caps.asp.model.uimodel.request.suggest.BaseSuggestRequestModel;
-import com.caps.asp.model.uimodel.response.UserResponeModel;
+import com.caps.asp.model.uimodel.response.UserResponseModel;
 import com.caps.asp.model.uimodel.response.post.RoomPostResponseModel;
 import com.caps.asp.model.uimodel.response.post.RoommatePostResponseModel;
 import com.caps.asp.service.*;
@@ -76,7 +76,7 @@ public class PostController {
 
                 Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> {
                     RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
-                    UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
                     TbFavourite favourite = favouriteService
                             .findByUserIdAndPostId(filterArgumentModel.getUserId(), tbPost.getPostId());
                     List<TbUtilitiesReference> utilitiesReferences = utilityReferenceService.findAllByUserId(tbPost.getUserId());
@@ -102,7 +102,7 @@ public class PostController {
                     roommatePostResponseModel.setPostId(tbPost.getPostId());
                     roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                     roommatePostResponseModel.setDate(tbPost.getDatePost());
-                    roommatePostResponseModel.setUserResponeModel(userResponeModel);
+                    roommatePostResponseModel.setUserResponseModel(userResponseModel);
 
                     if (favourite != null) {
                         roommatePostResponseModel.setFavourite(true);
@@ -123,14 +123,14 @@ public class PostController {
                     RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
                     TbRoom room = roomService.findRoomById(tbPost.getRoomId());
                     List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-                    UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
                     TbFavourite favourite = favouriteService
                             .findByUserIdAndPostId(filterArgumentModel.getUserId(), tbPost.getPostId());
                     roomPostResponseModel.setName(tbPost.getName());
                     roomPostResponseModel.setPostId(tbPost.getPostId());
                     roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                     roomPostResponseModel.setDate(tbPost.getDatePost());
-                    roomPostResponseModel.setUserResponeModel(userResponeModel);
+                    roomPostResponseModel.setUserResponseModel(userResponseModel);
 
                     if (favourite != null) {
                         roomPostResponseModel.setFavourite(true);
@@ -308,7 +308,7 @@ public class PostController {
                         , filterArgumentModel.getOffset(), filter);
                 Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> {
                     RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
-                    UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
                     TbFavourite favourite = favouriteService
                             .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
                     List<TbUtilitiesReference> utilitiesReferences = utilityReferenceService.findAllByUserId(tbPost.getUserId());
@@ -334,7 +334,7 @@ public class PostController {
                     roommatePostResponseModel.setPostId(tbPost.getPostId());
                     roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                     roommatePostResponseModel.setDate(tbPost.getDatePost());
-                    roommatePostResponseModel.setUserResponeModel(userResponeModel);
+                    roommatePostResponseModel.setUserResponseModel(userResponseModel);
 
                     if (favourite != null) {
                         roommatePostResponseModel.setFavourite(true);
@@ -356,7 +356,7 @@ public class PostController {
 
                     TbRoom room = roomService.findRoomById(tbPost.getRoomId());
                     List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-                    UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
                     TbFavourite favourite = favouriteService
                             .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
 
@@ -364,7 +364,7 @@ public class PostController {
                     roomPostResponseModel.setPostId(tbPost.getPostId());
                     roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                     roomPostResponseModel.setDate(tbPost.getDatePost());
-                    roomPostResponseModel.setUserResponeModel(userResponeModel);
+                    roomPostResponseModel.setUserResponseModel(userResponseModel);
 
                     if (favourite != null) {
                         roomPostResponseModel.setFavourite(true);
@@ -430,12 +430,12 @@ public class PostController {
                                 .collect(Collectors.toList()));
                     }
 
-                    UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
 
                     roommatePostResponseModel.setPostId(tbPost.getPostId());
                     roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                     roommatePostResponseModel.setDate(tbPost.getDatePost());
-                    roommatePostResponseModel.setUserResponeModel(userResponeModel);
+                    roommatePostResponseModel.setUserResponseModel(userResponseModel);
                     roommatePostResponseModel.setFavourite(true);
                     roommatePostResponseModel.setFavouriteId(favourite.getId());
                     roommatePostResponseModel.setMinPrice(tbPost.getMinPrice());
@@ -450,7 +450,7 @@ public class PostController {
                     RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
                     TbRoom room = roomService.findRoomById(tbPost.getRoomId());
                     List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-                    UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
                     TbFavourite favourite = favouriteService
                             .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
 
@@ -458,7 +458,7 @@ public class PostController {
                     roomPostResponseModel.setPostId(tbPost.getPostId());
                     roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                     roomPostResponseModel.setDate(tbPost.getDatePost());
-                    roomPostResponseModel.setUserResponeModel(userResponeModel);
+                    roomPostResponseModel.setUserResponseModel(userResponseModel);
                     roomPostResponseModel.setFavourite(true);
                     roomPostResponseModel.setFavouriteId(favourite.getId());
                     roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
@@ -623,7 +623,7 @@ public class PostController {
 
                 TbRoom room = roomService.findRoomById(tbPost.getRoomId());
                 List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
                 TbFavourite favourite = favouriteService
                         .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
 
@@ -631,7 +631,7 @@ public class PostController {
                 roomPostResponseModel.setPostId(tbPost.getPostId());
                 roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                 roomPostResponseModel.setDate(tbPost.getDatePost());
-                roomPostResponseModel.setUserResponeModel(userResponeModel);
+                roomPostResponseModel.setUserResponseModel(userResponseModel);
 
                 if (favourite != null) {
                     roomPostResponseModel.setFavouriteId(favourite.getId());
@@ -692,11 +692,11 @@ public class PostController {
                             .collect(Collectors.toList()));
                 }
 
-                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
                 roommatePostResponseModel.setPostId(tbPost.getPostId());
                 roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                 roommatePostResponseModel.setDate(tbPost.getDatePost());
-                roommatePostResponseModel.setUserResponeModel(userResponeModel);
+                roommatePostResponseModel.setUserResponseModel(userResponseModel);
 
                 if (favourite != null) {
                     roommatePostResponseModel.setFavouriteId(favourite.getId());

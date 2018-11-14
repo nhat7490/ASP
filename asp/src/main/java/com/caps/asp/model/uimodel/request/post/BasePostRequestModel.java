@@ -2,7 +2,7 @@ package com.caps.asp.model.uimodel.request.post;
 
 public class BasePostRequestModel {
     private Integer userId;
-    //default min minPrice in room post
+    //minPrice is price of roompost and min price in roommate post
     private double minPrice;
     private String phoneContact;
 

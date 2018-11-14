@@ -116,6 +116,7 @@ public class Filter implements Specification<TbPost> {
                 );
             } else {
                 Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
+                Root<TbPostHasTbDistrict> postHasTbDistrictRoot = criteriaQuery.from(TbPostHasTbDistrict.class);
                 if (filterArgumentModel.getOrderBy() == NEWPOST) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("datePost")));
                 } else if (filterArgumentModel.getOrderBy() == PRICEDESC) {
@@ -124,6 +125,8 @@ public class Filter implements Specification<TbPost> {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("minPrice")));
                 }
                 return cb.and(
+                        cb.equal(postRoot.get("postId"),postHasTbDistrictRoot.get("postId")),
+                        cb.equal(postHasTbDistrictRoot.get("districtId"), districtRoot.get("districtId")),
                         cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()),
                         cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId())
                 );
@@ -220,6 +223,7 @@ public class Filter implements Specification<TbPost> {
                 );
             } else {
                 Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
+                Root<TbPostHasTbDistrict> postHasTbDistrictRoot = criteriaQuery.from(TbPostHasTbDistrict.class);
                 if (filterArgumentModel.getOrderBy() == NEWPOST) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("datePost")));
                 } else if (filterArgumentModel.getOrderBy() == PRICEDESC) {
@@ -227,8 +231,9 @@ public class Filter implements Specification<TbPost> {
                 } else if (filterArgumentModel.getOrderBy() == PRICEASC) {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("minPrice")));
                 }
-
                 return cb.and(
+                        cb.equal(postRoot.get("postId"),postHasTbDistrictRoot.get("postId")),
+                        cb.equal(postHasTbDistrictRoot.get("districtId"), districtRoot.get("districtId")),
                         cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()),
                         cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId())
                 );

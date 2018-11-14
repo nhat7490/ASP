@@ -1,6 +1,6 @@
 package com.caps.asp.model.uimodel.response.post;
 
-import com.caps.asp.model.uimodel.response.UserResponeModel;
+import com.caps.asp.model.uimodel.response.UserResponseModel;
 
 import java.sql.Date;
 
@@ -8,16 +8,16 @@ public class BasePostResponeModel {
     private Integer postId;
     private String phoneContact;
     private Date date;
-    private UserResponeModel userResponeModel;
+    private UserResponseModel userResponseModel;
     private boolean isFavourite;
     private double minPrice;
     private Integer favouriteId;
 
-    public BasePostResponeModel(Integer postId, String phoneContact, Date date, UserResponeModel userResponeModel, boolean isFavourite, double minPrice, Integer favouriteId) {
+    public BasePostResponeModel(Integer postId, String phoneContact, Date date, UserResponseModel userResponseModel, boolean isFavourite, double minPrice, Integer favouriteId) {
         this.postId = postId;
         this.phoneContact = phoneContact;
         this.date = date;
-        this.userResponeModel = userResponeModel;
+        this.userResponseModel = userResponseModel;
         this.isFavourite = isFavourite;
         this.minPrice = minPrice;
         this.favouriteId = favouriteId;
@@ -50,12 +50,12 @@ public class BasePostResponeModel {
         this.date = date;
     }
 
-    public UserResponeModel getUserResponeModel() {
-        return userResponeModel;
+    public UserResponseModel getUserResponseModel() {
+        return userResponseModel;
     }
 
-    public void setUserResponeModel(UserResponeModel userResponeModel) {
-        this.userResponeModel = userResponeModel;
+    public void setUserResponseModel(UserResponseModel userResponseModel) {
+        this.userResponseModel = userResponseModel;
     }
 
     public boolean isFavourite() {

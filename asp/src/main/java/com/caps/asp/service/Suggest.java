@@ -3,20 +3,17 @@ package com.caps.asp.service;
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.FilterArgumentModel;
 import com.caps.asp.model.uimodel.request.suggest.BaseSuggestRequestModel;
-import com.caps.asp.model.uimodel.response.UserResponeModel;
+import com.caps.asp.model.uimodel.response.UserResponseModel;
 import com.caps.asp.model.uimodel.response.post.RoomPostResponseModel;
 import com.caps.asp.model.uimodel.response.post.RoommatePostResponseModel;
 import com.caps.asp.service.filter.Filter;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.caps.asp.constant.Constant.NEWPOST;
-import static org.springframework.http.HttpStatus.OK;
 
 @Service
 public class Suggest {
@@ -56,7 +53,7 @@ public class Suggest {
 
                 TbRoom room = roomService.findRoomById(tbPost.getRoomId());
                 List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-                UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+                UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
                 TbFavourite favourite = favouriteService
                         .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
 
@@ -64,7 +61,7 @@ public class Suggest {
                 roomPostResponseModel.setPostId(tbPost.getPostId());
                 roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
                 roomPostResponseModel.setDate(tbPost.getDatePost());
-                roomPostResponseModel.setUserResponeModel(userResponeModel);
+                roomPostResponseModel.setUserResponseModel(userResponseModel);
 
                 if (favourite != null) {
                     roomPostResponseModel.setFavouriteId(favourite.getId());
@@ -129,11 +126,11 @@ public class Suggest {
                         .collect(Collectors.toList()));
             }
 
-            UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+            UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
             roommatePostResponseModel.setPostId(tbPost.getPostId());
             roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
             roommatePostResponseModel.setDate(tbPost.getDatePost());
-            roommatePostResponseModel.setUserResponeModel(userResponeModel);
+            roommatePostResponseModel.setUserResponseModel(userResponseModel);
 
             if (favourite != null) {
                 roommatePostResponseModel.setFavouriteId(favourite.getId());
@@ -170,7 +167,7 @@ public class Suggest {
 
             TbRoom room = roomService.findRoomById(tbPost.getRoomId());
             List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-            UserResponeModel userResponeModel = new UserResponeModel(userService.findById(tbPost.getUserId()));
+            UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
             TbFavourite favourite = favouriteService
                     .findByUserIdAndPostId(userId, tbPost.getPostId());
 
@@ -178,7 +175,7 @@ public class Suggest {
             roomPostResponseModel.setPostId(tbPost.getPostId());
             roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
             roomPostResponseModel.setDate(tbPost.getDatePost());
-            roomPostResponseModel.setUserResponeModel(userResponeModel);
+            roomPostResponseModel.setUserResponseModel(userResponseModel);
             if (favourite != null) {
                 roomPostResponseModel.setFavourite(true);
                 roomPostResponseModel.setFavouriteId(favourite.getId());
