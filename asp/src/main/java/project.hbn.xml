@@ -28,6 +28,8 @@
       <mapping class="com.caps.asp.model.TbNotification"/>
       <mapping class="com.caps.asp.model.TbNotificationStatus"/>
       <mapping class="com.caps.asp.model.TbPostHasUtility"/>
+      <mapping class="com.caps.asp.model.TbRoomRate"/>
+      <mapping class="com.caps.asp.model.TbUserRate"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
