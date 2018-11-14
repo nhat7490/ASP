@@ -100,7 +100,7 @@
                                         <color key="backgroundColor" red="0.0" green="0.6588235294" blue="0.70980392160000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" title="Sign in as Guest"/>
+                                        <state key="normal" title="Sign up as Guest"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                 <real key="value" value="12"/>
@@ -119,7 +119,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ccm-Xe-4qf" customClass="RoundButton" customModule="Roommate" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="60" width="240" height="50"/>
                                         <color key="backgroundColor" red="0.0" green="0.6588235294" blue="0.70980392160000005" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="Sign in as Room Owner">
+                                        <state key="normal" title="Sign up as Room Owner">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>

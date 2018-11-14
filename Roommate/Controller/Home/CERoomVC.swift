@@ -419,34 +419,32 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         guard let indexs = indexs else {
             return
         }
-        if cERoomVCType == CEVCType.create{
-            if type == AlertType.city{
-                guard let city = cities?[(indexs.first?.row)!]  else{
-                    return
-                }
-                newRoomModel.cityId = city.cityId
-                cityName = city.name!
-                newRoomModel.districtId = 0
-                addressInputView.isSelectedFromSuggest = false
-                self.cityDropdownListView.text = self.cityName
-                self.districtDropdownListView.dropdownListViewType = .district
-            }else if type == AlertType.district{
-                guard let districtOfCity = districts?.filter({ (district) -> Bool in
-                    district.cityId == self.newRoomModel.cityId
-                }) else{
-                    return
-                }
-                districtOfCity.forEach { (d) in
-                    print(d.districtId)
-                    print(d.cityId)
-                }
-                let district = Array(districtOfCity)[(indexs.first?.row)!]
-                addressInputView.isSelectedFromSuggest = false
-                newRoomModel.districtId = district.districtId
-                self.districtName = district.name!
-                self.cityDropdownListView.text = self.cityName
-                self.districtDropdownListView.text = self.districtName
+        if type == AlertType.city{
+            guard let city = cities?[(indexs.first?.row)!]  else{
+                return
             }
+            newRoomModel.cityId = city.cityId
+            cityName = city.name!
+            newRoomModel.districtId = 0
+            addressInputView.isSelectedFromSuggest = false
+            self.cityDropdownListView.text = self.cityName
+            self.districtDropdownListView.dropdownListViewType = .district
+        }else if type == AlertType.district{
+            guard let districtOfCity = districts?.filter({ (district) -> Bool in
+                district.cityId == self.newRoomModel.cityId
+            }) else{
+                return
+            }
+            districtOfCity.forEach { (d) in
+                print(d.districtId)
+                print(d.cityId)
+            }
+            let district = Array(districtOfCity)[(indexs.first?.row)!]
+            addressInputView.isSelectedFromSuggest = false
+            newRoomModel.districtId = district.districtId
+            self.districtName = district.name!
+            self.cityDropdownListView.text = self.cityName
+            self.districtDropdownListView.text = self.districtName
         }
     }
     
@@ -525,7 +523,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     
     //MARK: UploadImageViewDelegate
     func uploadImageViewDelegate(uploadImageView view: UploadImageView, onClickBtnSelectImage button: UIButton) {
-        if uploadImageModels.count<=12{
+        if uploadImageModels.count < 12{
             alertController = AlertController.showAlertList(withTitle: "ROOM_UPLOAD_SELECT".localized, andMessage: nil, alertStyle: .alert, forViewController: self, data: ["CAMERA".localized,"PHOTO".localized], rhsButtonTitle: nil)
             alertController?.delegate = self
         }else{
@@ -552,6 +550,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             }
         }
     }
+    
     
     //MARK: Handler for save button
     @objc  func onClickBtnSubmit(btnSubmit:UIButton){
@@ -668,10 +667,15 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                                 APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
                             }
                         }else{
-                            if statusCode == .OK{
+                            if statusCode == .Created || statusCode == .OK{
                                 DispatchQueue.main.async {
                                     MBProgressHUD.hide(for: self.view, animated: true)
-                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_ROOM, object: self.newRoomModel)
+                                    if self.cERoomVCType == .edit {
+                                        self.newRoomModel.statusId = Constants.PENDING
+                                        NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_ROOM, object: self.newRoomModel)
+                                    }else if self.cERoomVCType == .create{
+                                        NotificationCenter.default.post(name: Constants.NOTIFICATION_CREATE_ROOM, object: self.newRoomModel)
+                                    }
                                     AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage:  self.cERoomVCType == .create ? "ROOM_CREATE_SUCCESS".localized : "EDIT_ROOM_SUCCESS".localized, inViewController: self,rhsButtonHandler: {
                                         (action) in
                                         self.navigationController?.dismiss(animated: true, completion:nil)

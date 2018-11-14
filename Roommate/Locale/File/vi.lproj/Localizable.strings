@@ -11,7 +11,8 @@
 "ALL_VC"="Tất cả";
 "BOOKMARK_VC"="Đánh dấu";
 "SIGN_IN_TITLE" = "Đăng nhập";
-"SIGN_UP_TITLE" = "Đăng ký";
+"SIGN_UP_AS_ROOMOWNER_TITLE" = "Đăng ký làm chủ nhà";
+"SIGN_UP_AS_MEMBER_TITLE" = "Đăng ký thành viên";
 "HOME_VC" = "Trang chủ";
 "NOTIFICATION_VC" = "Thông báo";
 "ACCOUNT_VC" = "Tài khoản";
@@ -85,8 +86,9 @@
 
 //MARK: RoomDetailVC
 "ROOM_DETAIL_MEMBER_TITLE"="Thông tin thành viên trong phòng";
-"ROOM_DETAIL_STATUS_CERTIFICATED"="Đã xác thực";
-"ROOM_DETAIL_STATUS_NORMAL"="Chưa xác thực";
+"ROOM_DETAIL_STATUS_AUTHORIZED"="Đã xác thực";
+"ROOM_DETAIL_STATUS_DECLINED"="Đã từ chối";
+"ROOM_DETAIL_STATUS_PENDING"="Đang xem xét";
 "ROOM_DETAIL_MAX_NUMBER_OF_MEMBER"="Tối đa : %d";
 "ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER"="Hiện tại : %d";
 "ROOM_DETAIL_ADDED_NUMBER_OF_MEMBER"="Đã thêm : %d";
@@ -99,10 +101,6 @@
 "CONFIRM_TITLE_EDIT_ROOM" = "Bạn muốn sửa phòng";
 "CONFIRM_TITLE_EDIT_ROOM_OK" = "Sửa ngay";
 "CONFIRM_MESSAGE_CALL_ALERT" = "Bạn muốn gọi điện cho chủ nhà";
-
-//MARK: EditRoomVC
-
-
 "REMOVE_SUCCESS"="Xoá phòng thành công";
 "CONFIRM_MESSAGE_SMS_ALERT" = "Bạn muốn nhắn tin cho chủ nhà";
 "CONFIRM_MESSAGE_POST_CALL_ALERT" = "Bạn muốn gọi điện cho người đăng tin";
@@ -190,6 +188,11 @@
 "PLACE_HOLDER_USERNAME"="Tên đăng nhập";
 "PLACE_HOLDER_PASSWORD"="Mật khẩu";
 "PLACE_HOLDER_REPEAT_PASSWORD"="Nhập lại mật khẩu";
+
+//MARK: CERoomPostVC
+"ROOM_POST_INFOR_TITLE"="Thông tin bài đăng";
+
+
 
 //MARK: CERoomVC
 "ROOM_CREATE"="Tạo phòng";

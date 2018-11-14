@@ -239,6 +239,10 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
                     DispatchQueue.main.async {
                         APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
                     }
+                }else if error == .PARSE_RESPONSE_FAIL {
+                    DispatchQueue.main.async {
+                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+                    }
                 }else{
                     //200
                     if statusCode == .OK{

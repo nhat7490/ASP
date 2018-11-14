@@ -77,9 +77,6 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let updatedString = (textField.text as NSString?)?.replacingCharacters(in: range, with: string){
             if textField == tfBrand{
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    return false
-                }
                 if updatedString.isValidBrand(){
                     tfBrand.errorMessage = ""
                     utilityModel.brand = updatedString
@@ -87,9 +84,6 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
                     tfBrand.errorMessage = "ERROR_TYPE_BRAND".localized
                 }
             }else{
-                if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
-                    return false
-                }
                 if updatedString.isValidQuantity(){
                     tfQuantity.errorMessage = ""
                     utilityModel.quantity = updatedString.toInt()!
@@ -109,15 +103,6 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
             utilityModel.utilityDescription = updatedString
         }
         return true
-//        let currentText = textView.text ?? ""
-//        guard let stringRange = Range(range, in: currentText) else { return false }
-//
-//        let changedText = currentText.replacingCharacters(in: stringRange, with: text)
-//        if changedText.count > Constants.MAX_LENGHT_DESCRIPTION{
-//            return false
-//        }
-//        utilityModel.utilityDescription = changedText
-//        return true
     }
     
     @IBAction func onclickBtnLeft(_ sender: Any) {
@@ -126,7 +111,29 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     }
     
     @IBAction func onclickBtnRight(_ sender: Any) {
-        self.delegate?.utilityInputVCDelegate(onCompletedInputUtility: utilityModel,atIndexPath:indexPath)
-        self.dismiss(animated: true, completion: nil)
+        if checkValidInformation(){
+            self.delegate?.utilityInputVCDelegate(onCompletedInputUtility: utilityModel,atIndexPath:indexPath)
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+    }
+    func checkValidInformation()->Bool{
+        let message = NSMutableAttributedString(string: "")
+        
+        if !utilityModel.brand.isValidBrand(){
+            message.append(NSAttributedString(string: "\("BRAND_PLACE_HOLDER".localized) :  \("ERROR_TYPE_BRAND".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+        }
+        
+        if !utilityModel.quantity.toString.isValidQuantity(){
+            message.append(NSAttributedString(string: "\("QUANTITY_PLACE_HOLDER".localized) :  \("ERROR_TYPE_QUANTITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+        }
+        
+        if message.string.isEmpty{
+            return true
+        }else{
+            let title = NSAttributedString(string: "INFORMATION".localized, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
+            AlertController.showAlertInfoWithAttributeString(withTitle: title, forMessage: message, inViewController: self)
+        }
+        return false
     }
 }

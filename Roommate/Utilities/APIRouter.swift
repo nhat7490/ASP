@@ -36,7 +36,7 @@ enum APIRouter:URLRequestConvertible{
     case editMember(roomMemberRequestModel:RoomMemberRequestModel)
     case removeRoom(roomId:Int)
     case updateRoom(model:RoomResponseModel)
-    case findExistedUser(username:String)
+    case findByUsername(username:String)
     case createUser(model:UserModel)
     
     var httpHeaders:HTTPHeaders{
@@ -107,8 +107,8 @@ enum APIRouter:URLRequestConvertible{
             return "room/user/history/\(userId)";
         case .getUserPost:
             return "post/userPost"
-        case .findExistedUser(let username):
-            return "user/findExistedUser/\(username)"
+        case .findByUsername(let username):
+            return "user/findByUsername/\(username)"
         case .createUser:
             return "user/createUser";
         }

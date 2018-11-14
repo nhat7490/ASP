@@ -72,11 +72,16 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     var filterForRoommatePost = FilterArgumentModel()
     var baseSuggestRequestModel = BaseSuggestRequestModel()
     var setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self)
-    var actionsForMember:[[String]] = [
+    var actionsForRoomMaster:[[String]] = [
         ["Tìm phòng","find-room"],
         ["Tìm bạn","find-roommate"],
         ["Đăng tìm phòng","add-roommate"],
         ["Đăng tìm bạn","add-room"]
+    ]
+    var actionsForMember:[[String]] = [
+        ["Tìm phòng","find-room"],
+        ["Tìm bạn","find-roommate"],
+        ["Đăng tìm phòng","add-roommate"]
     ]
     var actionsForOnwer:[[String]] = [
         ["Đăng phòng","add-room"],
@@ -388,14 +393,14 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     }
     //MARK: UICollectionView Delegate and DataSource for TopNavigation
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return user?.roleId != 2 ? actionsForMember.count : actionsForOnwer.count
+        return user?.roleId == Constants.MEMBER ? actionsForMember.count : user?.roleId == Constants.ROOMMASTER ? actionsForRoomMaster.count : actionsForOnwer.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 //        if collectionView ==  topNavigation{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NAVIGATIONCV, for: indexPath) as! NavigationCVCell
         
-        cell.data = user?.roleId != 2 ? actionsForMember[indexPath.row] : actionsForOnwer[indexPath.row]
+            cell.data = user?.roleId == Constants.MEMBER ? actionsForMember[indexPath.row] : user?.roleId == Constants.ROOMMASTER ? actionsForRoomMaster[indexPath.row] : actionsForOnwer[indexPath.row]
             cell.indexPath = indexPath
             return cell
 //        }
@@ -403,11 +408,8 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            if user?.roleId == 2{
+            if user?.roleId == Constants.ROOMOWNER{
                 let vc = CERoomVC()
-//                let mainVC = UIViewController()
-//                let nv = UINavigationController(rootViewController: mainVC)
-//                present(nv, animated: false) {nv.pushViewController(vc, animated: true)}
                 presentInNewNavigationController(viewController: vc)
             }else{
                 let vc = (self.tabBarController?.viewControllers![1] as! UINavigationController)
@@ -415,14 +417,12 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                 let allVC = vc.viewControllers.first as! AllVC
                 allVC.segmentControl.selectedSegmentIndex = 0
                 allVC.resetFilter(filterType: .room)
+                allVC.rooms = []
                 allVC.loadRoomData(withNewFilterArgModel: true)
             }
         case 1:
-            if user?.roleId == 2{
+            if  user?.roleId == Constants.ROOMOWNER{
                 let vc = CERoomVC()
-//                let mainVC = UIViewController()
-//                let nv = UINavigationController(rootViewController: mainVC)
-//                present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
                 presentInNewNavigationController(viewController: vc)
             }else{
                 let vc = (self.tabBarController?.viewControllers![1] as! UINavigationController)
@@ -430,8 +430,17 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                 let allVC = vc.viewControllers.first as! AllVC
                 allVC.segmentControl.selectedSegmentIndex = 1
                 allVC.resetFilter(filterType: .roommmate)
+                allVC.roommates = []
                 allVC.loadRoommateData(withNewFilterArgModel: true)
             }
+        case 2:
+            guard let currentRoom = DBManager.shared.getSingletonModel(ofType: RoomModel.self) else{
+//                AlertController.showAlertInfor(withTitle: "", forMessage: <#T##String?#>, inViewController: <#T##UIViewController#>)
+                break
+            }
+            
+        case 3:
+            break
         default:
             break
         }
@@ -608,15 +617,14 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         guard let location = locations.last else {
             return
         }
-//        print("Update Location")
-//        print("Latitude-\(location.coordinate.latitude)")
-//        print("Longitude-\(location.coordinate.longitude)")
+        
         let newSetting = SettingModel()
         newSetting.id = setting.id
         newSetting.cityId = setting.cityId
         newSetting.latitude.value = location.coordinate.latitude
         newSetting.longitude.value = location.coordinate.longitude
         _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object:newSetting)
+        
     }
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {

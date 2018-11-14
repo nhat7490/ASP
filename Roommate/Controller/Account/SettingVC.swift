@@ -69,6 +69,8 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
             switch indexPath.row{
             case 0:
                 DBManager.shared.deleteAllUsers()
+                let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) )
                 NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
                 self.navigationController?.dismiss(animated: true, completion: nil)
             default:
@@ -80,6 +82,8 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
                 break
             case 1:
                 DBManager.shared.deleteAllUsers()
+                let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) ) 
                 NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
                 self.navigationController?.dismiss(animated: true, completion: nil)
             default:

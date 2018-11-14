@@ -102,6 +102,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     }
     func setupUIAndData(){
         self.utilities = (DBManager.shared.getRecords(ofType: UtilityModel.self)?.toArray(type: UtilityModel.self))!
+        self.utilities?.forEach{print($0.name)}
         self.cities = (DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self))!
         self.districts = (DBManager.shared.getRecords(ofType: DistrictModel.self)?.toArray(type: DistrictModel.self))!
         setupUI()

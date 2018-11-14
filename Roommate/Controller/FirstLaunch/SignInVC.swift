@@ -129,7 +129,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
                 APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
             }else if error == .PARSE_RESPONSE_FAIL{
                 //404
-                APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidUsername)
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
             }else{
                 //200
                 if statusCode == .OK{
@@ -144,6 +144,8 @@ class SignInVC: BaseVC,UITextFieldDelegate {
                     //403
                 }else if statusCode == .Forbidden {
                     APIResponseAlert.apiResponseError(controller: self, type: .invalidPassword)
+                }else if statusCode == .NotFound{
+                    APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidUsername)
                 }
             }
         }

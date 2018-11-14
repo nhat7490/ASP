@@ -110,6 +110,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
         super.viewDidLoad()
         setupUI()
         setupDataAndDelegate()
+        registerNotification()
     }
     
     //MARK: Setup UI
@@ -365,7 +366,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
                 //404, cant parse
-                if error != nil{
+                if error != nil && statusCode != .NotFound{
                     DispatchQueue.main.async {
                         self.showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
                             self.requestRoom(apiRouter: apiRouter,withNewFilterArgModel: newFilterArgModel)
@@ -384,10 +385,13 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
                             self.roomForOwnerAndMemberPage = self.roomForOwnerAndMemberPage-1
                         }
                         self.roomResponseModels.append(contentsOf: values)
-                        DispatchQueue.main.async {
-                            self.collectionView.reloadData()
-                            //                            self.isLoadingData = false
-                        }
+                        
+                    }else if statusCode == .NotFound{
+                        self.roomResponseModels.removeAll()
+                    }
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                        //                            self.isLoadingData = false
                     }
                 }
             }
@@ -428,7 +432,40 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
         }
         
     }
+    //MARK: Notification
+    func registerNotification(){
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
+    }
     
+    @objc func didReceiveRemoveRoomNotification(_ notification:Notification){
+        
+        switch showAllVCType{
+        case .roomForOwner:
+            rooms.removeAll()
+            loadRoomForOwnerOrMemberData(withNewFilterArgModel: true)
+        default:
+            break
+        }
+    }
+    
+    @objc func didReceiveEditRoomNotification(_ notification:Notification){
+        switch showAllVCType{
+        case .roomForOwner:
+            if notification.object is RoomResponseModel{
+                guard let room = notification.object as? RoomResponseModel,let index = roomResponseModels.index(of: room) else{
+                    return
+                }
+                roomResponseModels[index] = room
+                collectionView.reloadData()
+            }
+        default:
+            break
+        }
+        
+    }
+    
+    //MARK: UICollectionView Delegate & Datasource
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch showAllVCType{
         case .suggestRoom,.roomPost:

@@ -270,10 +270,9 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
                         DispatchQueue.main.async {
                         APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
                         }
-                    }else if error == .SERVER_NOT_RESPONSE{
-                        DispatchQueue.main.async {
-                       APIResponseAlert.apiResponseError(controller: self, type: .exitedUser)
-                        }
+                    }else if error == .PARSE_RESPONSE_FAIL{
+                        //404
+                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
                     }else{
                         //200
                         if statusCode ==
@@ -310,7 +309,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         hub.contentColor = .defaultBlue
         
         DispatchQueue.global(qos: .background).async {
-            APIConnection.request(apiRouter: APIRouter.findExistedUser(username: self.user.username!), errorNetworkConnectedHander: {
+            APIConnection.request(apiRouter: APIRouter.findByUsername(username: self.user.username!), errorNetworkConnectedHander: {
                 DispatchQueue.main.async {
                     hub.hide(animated: true)
                 }
@@ -337,8 +336,8 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
     
     func uploadImage(_ uploadImageModel:UploadImageModel){
         var urlRequest = try! URLRequest(url: URL(string: "\(Constants.BASE_URL_API)image/upload")!, method: .post, headers:nil)
-        urlRequest.timeoutInterval = 30
-        let data:Data = UIImageJPEGRepresentation(uploadImageModel.image!, 0.1)!
+        urlRequest.timeoutInterval = 40
+        let data:Data = UIImageJPEGRepresentation(uploadImageModel.image!, 0.01)!
         Alamofire.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(data, withName: "image", fileName: uploadImageModel.name!, mimeType: "image/jpg")
         }, with: urlRequest) { (result) in

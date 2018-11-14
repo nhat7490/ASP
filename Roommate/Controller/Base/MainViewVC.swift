@@ -37,8 +37,9 @@ class MainViewVC: BaseVC {
         super.viewDidLoad()
 //        self.present(ceRoomVC, animated: true, completion: nil)
 //        Check Login
-        checkLogin()
+        
         registerNotification()
+        checkLogin()
     }
     func checkLogin(){
         if let _ = DBManager.shared.getUser(){
@@ -52,8 +53,8 @@ class MainViewVC: BaseVC {
     }
 
     @objc func onSignOut(){
-        mainTabBarVC.remove()
-        checkLogin()
+//        mainTabBarVC.remove()
+//        checkLogin()
     }
 
 }

@@ -97,6 +97,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         }
         DispatchQueue.global(qos: .background).async {
             if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestArray(apiRouter: APIRouter.utility(), returnType:UtilityModel.self)}
+            DBManager.shared.getRecords(ofType: UtilityModel.self)?.forEach{print("\($0.name)-\($0.utilityId)")}
             if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
             if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
             if !DBManager.shared.isExisted(ofType: DistrictModel.self){
@@ -205,7 +206,11 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
                         self.group.leave()
                         return
                     }
-                    print(DBManager.shared.addRecords(ofType: T.self, objects: values))
+                    DispatchQueue.main.async {
+                        DBManager.shared.addRecords(ofType: T.self, objects: values)
+                        
+                    }
+                    
                 }
             }
             self.group.leave()
@@ -236,6 +241,8 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             }
             if error == .SERVER_NOT_RESPONSE{
                 APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+            }else if error == .PARSE_RESPONSE_FAIL{
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
             }else{
                 if statusCode == .OK{
                     if let value = value{
@@ -244,7 +251,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
                     model.isFavourite = (model.isFavourite == true ? false : true)
                     completed(model)
                     
-                }else{
+                }else  if statusCode == .Conflict{
                     APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
                 }
             }

@@ -170,10 +170,10 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     func registerNotification(){
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAddRoomNotification(_:)), name: Constants.NOTIFICATION_CREATE_ROOM, object: nil)
     }
     //MARK: Notification
     @objc func didReceiveRemoveRoomNotification(_ notification:Notification){
-        rooms.removeAll()
         loadRemoteDataForRoomOwner()
     }
     
@@ -186,12 +186,15 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
             roomForOwnerView.roomsOwner  = rooms
         }
     }
+    @objc func didReceiveAddRoomNotification(_ notification:Notification){
+        loadRemoteDataForRoomOwner()
+    }
+    
     
     //MARK: Load Remote Data for room owner
     
     func loadRemoteDataForRoomOwner(){
-        
-        
+        rooms.removeAll()
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomContainerView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
                 self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
@@ -294,6 +297,8 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
             }
             if error == .SERVER_NOT_RESPONSE{
                 APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+            }else if error == .PARSE_RESPONSE_FAIL{
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
             }else{
                 if statusCode == .OK{
                     if let value = value{

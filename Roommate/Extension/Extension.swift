@@ -507,12 +507,12 @@ extension UITextView{
 }
 extension String{
     func isValidUsername() -> Bool{
-        let format = "^[\\w\\s]{6,50}"
+        let format = "^[A-Z0-9a-z_]{6,50}"
         let predicate = NSPredicate(format:"SELF MATCHES %@", format)
         return predicate.evaluate(with: self)
     }
     func isValidPassword() -> Bool{
-        let format = "^[\\w\\s]{6,50}"
+        let format = "^[A-Z0-9a-z]{6,50}"
         let predicate = NSPredicate(format:"SELF MATCHES %@", format)
         return predicate.evaluate(with: self)
     }

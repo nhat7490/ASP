@@ -17,6 +17,8 @@ class FirstLaunchVC:BaseVC{
         super.viewDidLoad()
         imgvIcon.layer.cornerRadius = 15
         imgvIcon.clipsToBounds = true
+        btnSignUpAsGuest.setTitle("SIGN_UP_AS_MEMBER_TITLE".localized, for: .normal)
+        btnSignUpAsRoomOwner.setTitle("SIGN_UP_AS_ROOMOWNER_TITLE".localized, for: .normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {

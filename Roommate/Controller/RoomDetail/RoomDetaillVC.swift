@@ -78,6 +78,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setDelegateAndDataSource()
+        registerNotification()
     }
     
     override func viewDidLayoutSubviews() {
@@ -154,7 +155,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     
     func setDelegateAndDataSource() {
         //Delegate , Datasource and other
-        let status = NSAttributedString(string: "ROOM_DETAIL_STATUS_CERTIFICATED".localized, attributes: [NSAttributedStringKey.font : UIFont.boldMedium,
+        let status =  NSAttributedString(string: room.statusId == Constants.AUTHORIZED ?  "ROOM_DETAIL_STATUS_AUTHORIZED".localized : room.statusId == Constants.PENDING ? "ROOM_DETAIL_STATUS_PENDING".localized : "ROOM_DETAIL_STATUS_DECLINED".localized, attributes: [NSAttributedStringKey.font : UIFont.boldMedium,
                                                                                                           NSAttributedStringKey.backgroundColor: UIColor.defaultBlue,
                                                                                                           NSAttributedStringKey.foregroundColor:UIColor.white])
         //Data for baseInformationView
@@ -194,6 +195,21 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         optionView.delegate = self
         optionView.tvPrice.attributedText = NSAttributedString(string: String(format: "PRICE_OF_ROOM".localized, room.price.formatString,"MONTH".localized), attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
 //        optionView.lblBottom.attributedText = NSAttributedString(string: String(format: "TIME".localized, room.price,"MONTH".localized), attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
+    }
+    //MARK: Notification
+    func registerNotification(){
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
+    }
+    
+    
+    @objc func didReceiveEditRoomNotification(_ notification:Notification){
+        if notification.object is RoomResponseModel{
+            
+            guard let room = notification.object as? RoomResponseModel else{
+                return
+            }
+            self.room = room
+        }
     }
     //MARK: MembersViewDelegate
     func membersViewDelegate(membersView view: MembersView, onClickBtnEdit button:UIButton) {
@@ -239,7 +255,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
                 self.requestRemove()
             })
         case .detailForMember:
-            AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_SMS_ALERT".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_CALL".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
+            AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_CALL_ALERT".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_CALL".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
                 
                 Utilities.openSystemApp(type: .phone, forController: self, withContent: self.room.phoneNumber, completionHander: nil)
             })
