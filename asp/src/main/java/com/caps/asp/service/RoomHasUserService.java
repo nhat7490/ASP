@@ -65,4 +65,7 @@ public class RoomHasUserService {
         return roomHasUserRepository.findByRoomIdAndDateOutIsNull(roomId);
     }
 
+    public TbRoomHasUser findByUserIdAndRoomIdAndDateOutIsNull(int userId, int roomId) {
+        return roomHasUserRepository.findByUserIdAndRoomIdAndDateOutIsNull(userId, roomId);
+    }
 }

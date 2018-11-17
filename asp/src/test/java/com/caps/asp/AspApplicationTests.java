@@ -1,7 +1,7 @@
 package com.caps.asp;
 
 import com.caps.asp.model.TbPost;
-import com.caps.asp.model.uimodel.request.SearchRequestModel;
+import com.caps.asp.model.uimodel.request.FilterRequestModel;
 import com.caps.asp.service.PostService;
 import com.caps.asp.service.filter.Filter;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class AspApplicationTests {
 		roleList.add(10);
 		roleList.add(14);
 
-		SearchRequestModel search=new SearchRequestModel();
+		FilterRequestModel search=new FilterRequestModel();
 		search.setDistricts(usernameList);
 		search.setUtilities(roleList);
 //		search.setGender(2);

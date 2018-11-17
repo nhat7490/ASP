@@ -2,11 +2,13 @@ package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.FilterArgumentModel;
+import com.caps.asp.model.uimodel.request.FilterRequestModel;
 import com.caps.asp.model.uimodel.request.SearchRequestModel;
 import com.caps.asp.model.uimodel.request.post.RoomPostRequestModel;
 import com.caps.asp.model.uimodel.request.post.RoommatePostRequestModel;
 import com.caps.asp.model.uimodel.request.suggest.BaseSuggestRequestModel;
 import com.caps.asp.model.uimodel.response.UserResponseModel;
+import com.caps.asp.model.uimodel.response.common.SearchResponseModel;
 import com.caps.asp.model.uimodel.response.post.RoomPostResponseModel;
 import com.caps.asp.model.uimodel.response.post.RoommatePostResponseModel;
 import com.caps.asp.service.*;
@@ -490,10 +492,17 @@ public class PostController {
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
         try {
             TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
-            List<TbPost> checkPost = postService.findPostByUserIdAndTypeId(baseSuggestRequestModel.getUserId(), MASTER_POST);
+            TbPost checkPost = postService.findAllByUserIdAndTypeIdOrderByDatePostDesc(baseSuggestRequestModel.getUserId(), MASTER_POST);
+            boolean checkDate = false;
+            if (checkPost != null) {
+                TbRoomHasUser roomHasUser = roomHasUserService
+                        .findByUserIdAndRoomIdAndDateOutIsNull(baseSuggestRequestModel.getUserId(), checkPost.getRoomId());
+                checkDate = checkPost.getDatePost().getTime() > roomHasUser.getDateIn().getTime();
+            }
 
             //sugesst for room master
-            if (tbUser.getRoleId() == ROOM_MASTER && checkPost != null) {
+            if (tbUser.getRoleId() == ROOM_MASTER
+                    && checkDate) {
                 List<TbPost> postList = postService.getSuggestedList(baseSuggestRequestModel.getUserId()
                         , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
 
@@ -507,14 +516,14 @@ public class PostController {
                 List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
                 return ResponseEntity.status(OK).body(suggest.mappingRoomPost(postList, roomPostResponseModels, baseSuggestRequestModel.getUserId()));
             } else if (referenceService.getByUserId(baseSuggestRequestModel.getUserId()) != null) {//sugesst for room master
-                SearchRequestModel searchRequestModel = new SearchRequestModel();
+                FilterRequestModel filterRequestModel = new FilterRequestModel();
                 List<TbUtilitiesReference> utilitiesReference = utilityReferenceService
                         .findAllByUserId(baseSuggestRequestModel.getUserId());
                 List<Integer> utilityIds = utilitiesReference
                         .stream()
                         .map(tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
                         .collect(Collectors.toList());
-                searchRequestModel.setUtilities(utilityIds);
+                filterRequestModel.setUtilities(utilityIds);
 
                 List<TbDistrictReference> districtReferences = districtReferenceService
                         .findAllByUserId(baseSuggestRequestModel.getUserId());
@@ -522,13 +531,13 @@ public class PostController {
                         .stream()
                         .map(tbDistrictReference -> tbDistrictReference.getDistrictId())
                         .collect(Collectors.toList());
-                searchRequestModel.setDistricts(districtIds);
+                filterRequestModel.setDistricts(districtIds);
 
                 TbReference reference = referenceService.getByUserId(baseSuggestRequestModel.getUserId());
                 List<Double> price = new ArrayList<>();
                 price.add(reference.getMinPrice());
                 price.add(reference.getMaxPrice());
-                searchRequestModel.setPrice(price);
+                filterRequestModel.setPrice(price);
 
                 FilterArgumentModel filterArgumentModel = new FilterArgumentModel();
                 filterArgumentModel.setTypeId(baseSuggestRequestModel.getTypeId());
@@ -537,7 +546,7 @@ public class PostController {
                 filterArgumentModel.setOrderBy(NEWPOST);
                 filterArgumentModel.setUserId(baseSuggestRequestModel.getUserId());
                 filterArgumentModel.setCityId(baseSuggestRequestModel.getCityId());
-                filterArgumentModel.setSearchRequestModel(searchRequestModel);
+                filterArgumentModel.setFilterRequestModel(filterRequestModel);
 
                 Filter filter = new Filter();
                 filter.setFilterArgumentModel(filterArgumentModel);
@@ -558,13 +567,13 @@ public class PostController {
                 GeocodingResult geocodingResult = googleAPI.getLocationName(baseSuggestRequestModel.getLatitude(), baseSuggestRequestModel.getLongitude());
 
                 String city = googleAPI.getCity(geocodingResult);
+                System.out.println(city);
                 int cityId = cityService.findByNameLike(city).getCityId();
-                String district = googleAPI.getDistrict(geocodingResult);
-                int districtId = districtService.findByNameLikeAndDistrictId(district, cityId).getDistrictId();
+
 
                 List<TbPost> postList = postService.getSuggestedListForMember(Float.parseFloat(baseSuggestRequestModel.getLatitude().toString())
                         , Float.parseFloat(baseSuggestRequestModel.getLongitude().toString())
-                        , districtId
+                        , cityId
                         , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
 
                 if (postList == null) {
@@ -585,16 +594,47 @@ public class PostController {
         }
     }
 
+    @PostMapping("post/search")
+    public ResponseEntity search(@RequestBody SearchRequestModel searchRequestModel) {
+//        try {
+            List<TbRoom> roomList = roomService.findByLikeAddress(searchRequestModel.getAddress());
+            SearchResponseModel searchResponseModel = new SearchResponseModel();
+            roomList.forEach(tbRoom -> {
+                int roomId = tbRoom.getRoomId();
+                List<TbRoomHasUser> roomHasUser = roomHasUserService.getAllByRoomId(roomId);
+                List<TbPost> postList = new ArrayList<>();
+                roomHasUser.forEach(tbRoomHasUser -> {
+                    TbUser user = userService.findById(tbRoomHasUser.getUserId());
+                    if(user.getRoleId() == ROOM_MASTER){
+                        TbPost post = postService
+                                .findAllByUserIdAndRoomIdOrderByDatePostDesc(user.getUserId(), roomId);
+                        if (post!=null){
+                            postList.add(post);
+                        }
+                    }
+                });
+                List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
+                roomPostResponseModels = suggest.mappingRoomPost(postList,roomPostResponseModels,searchRequestModel.getUserId());
+                System.out.println(roomPostResponseModels.get(0).getPostId());
+                searchResponseModel.setRoomPostResponseModel(roomPostResponseModels);
+                System.out.println(searchResponseModel.getRoomPostResponseModel().get(0).getPostId());
+            });
+            return ResponseEntity.status(OK).body(searchResponseModel);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(NOT_FOUND).build();
+//        }
+    }
+
     @PostMapping("post/suggestBestMatch")
     public ResponseEntity suggestBestMatch(@RequestBody FilterArgumentModel filterArgumentModel) {
-        SearchRequestModel searchRequestModel = new SearchRequestModel();
+        FilterRequestModel filterRequestModel = new FilterRequestModel();
         List<TbUtilitiesReference> utilitiesReference = utilityReferenceService
                 .findAllByUserId(filterArgumentModel.getUserId());
         List<Integer> utilityIds = utilitiesReference
                 .stream()
                 .map(tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
                 .collect(Collectors.toList());
-        searchRequestModel.setUtilities(utilityIds);
+        filterRequestModel.setUtilities(utilityIds);
 
         List<TbDistrictReference> districtReferences = districtReferenceService
                 .findAllByUserId(filterArgumentModel.getUserId());
@@ -602,15 +642,15 @@ public class PostController {
                 .stream()
                 .map(tbDistrictReference -> tbDistrictReference.getDistrictId())
                 .collect(Collectors.toList());
-        searchRequestModel.setDistricts(districtIds);
+        filterRequestModel.setDistricts(districtIds);
 
         TbReference reference = referenceService.getByUserId(filterArgumentModel.getUserId());
         List<Double> price = new ArrayList<>();
         price.add(reference.getMinPrice());
         price.add(reference.getMaxPrice());
-        searchRequestModel.setPrice(price);
+        filterRequestModel.setPrice(price);
 
-        filterArgumentModel.setSearchRequestModel(searchRequestModel);
+        filterArgumentModel.setFilterRequestModel(filterRequestModel);
 
         Filter filter = new Filter();
         filter.setFilterArgumentModel(filterArgumentModel);

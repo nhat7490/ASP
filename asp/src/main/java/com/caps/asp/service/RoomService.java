@@ -57,4 +57,8 @@ public class RoomService {
     public List<TbRoom> getAllByUserId(int userId){
         return roomRepository.getAllByUserId(userId);
     }
+
+    public List<TbRoom> findByLikeAddress(String address) {
+        return roomRepository.findAllByAddressLike(address);
+    }
 }

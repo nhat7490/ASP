@@ -36,6 +36,6 @@ public class GoogleAPI {
     }
 
     public String getCity(GeocodingResult gr) {
-        return gr.formattedAddress.split(",")[3].trim();
+        return gr.formattedAddress.split(",")[3].trim().replaceAll("([0-9])","").trim();
     }
 }

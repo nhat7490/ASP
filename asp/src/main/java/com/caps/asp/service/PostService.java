@@ -63,7 +63,11 @@ public class PostService {
     }
 
     public TbPost findAllByUserIdAndRoomIdOrderByDatePostDesc(int userId, int roomId) {
-        return postRepository.findAllByUserIdAndRoomIdOrderByDatePostDesc(userId, roomId).get(0);
+        List<TbPost> postList = postRepository.findAllByUserIdAndRoomIdOrderByDatePostDesc(userId, roomId);
+        if (postList.size()!=0){
+            return postList.get(0);
+        }
+        return null;
     }
 
     public int savePost(TbPost post) {
@@ -116,11 +120,11 @@ public class PostService {
         return suggestedList;
     }
 
-    public List<TbPost> getSuggestedListForMember(float latitude, float longitude, int districtId, int pageOf, int size) {
+    public List<TbPost> getSuggestedListForMember(float latitude, float longitude, int cityId, int pageOf, int size) {
         StoredProcedureQuery sp = em.createNamedStoredProcedureQuery("getSuggestedListForMember")
                 .setParameter("latitude", latitude)
                 .setParameter("longitude", longitude)
-                .setParameter("districtId", districtId)
+                .setParameter("cityId", cityId)
                 .setParameter("pageOf", pageOf)
                 .setParameter("size", size);
         List<TbPost> suggestedList = sp.getResultList();
@@ -145,7 +149,15 @@ public class PostService {
         return postRepository.findAllByRoomId(roomId);
     }
 
-    public void removeAllByUserId(int userId){
+    public void removeAllByUserId(int userId) {
         postRepository.removeAllByUserId(userId);
+    }
+
+    public TbPost findAllByUserIdAndTypeIdOrderByDatePostDesc(int userId, int typeId) {
+        List<TbPost> postList = postRepository.findAllByUserIdAndTypeIdOrderByDatePostDesc(userId, typeId);
+        if (postList.size()!=0){
+            return postList.get(0);
+        }
+        return null;
     }
 }

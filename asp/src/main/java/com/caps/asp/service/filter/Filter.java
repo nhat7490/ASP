@@ -1,9 +1,7 @@
 package com.caps.asp.service.filter;
 
-import com.caps.asp.constant.Constant;
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.FilterArgumentModel;
-import com.caps.asp.model.uimodel.request.SearchRequestModel;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -29,13 +27,13 @@ public class Filter implements Specification<TbPost> {
 
     @Override
     public Predicate toPredicate(Root<TbPost> postRoot, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
-        if (filterArgumentModel.getSearchRequestModel() == null && filterArgumentModel.getTypeId() == null)
+        if (filterArgumentModel.getFilterRequestModel() == null && filterArgumentModel.getTypeId() == null)
             return cb.conjunction();
         criteriaQuery.distinct(true);
 
         if (filterArgumentModel.getTypeId() == MASTER_POST) {
 
-            if (filterArgumentModel.getSearchRequestModel() != null) {
+            if (filterArgumentModel.getFilterRequestModel() != null) {
                 Root<TbRoom> roomRoot = criteriaQuery.from(TbRoom.class);
                 Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
                 Root<TbRoomHasUtility> roomHasUtilityRoot = criteriaQuery.from(TbRoomHasUtility.class);
@@ -55,36 +53,36 @@ public class Filter implements Specification<TbPost> {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("minPrice")));
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getDistricts() != null) {
-                    for (Integer districtId : filterArgumentModel.getSearchRequestModel().getDistricts()) {
+                if (filterArgumentModel.getFilterRequestModel().getDistricts() != null) {
+                    for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
                         districtList.add(cb.equal(districtRoot.get("districtId"), districtId));
                     }
                 } else {
                     districtList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getUtilities() != null) {
-                    for (Integer utilityId : filterArgumentModel.getSearchRequestModel().getUtilities()) {
+                if (filterArgumentModel.getFilterRequestModel().getUtilities() != null) {
+                    for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
                         utilityList.add(cb.equal(utilitiesRoot.get("utilityId"), utilityId));
                     }
                 } else {
                     utilityList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getGender() != null
-                        && (filterArgumentModel.getSearchRequestModel().getGender() == FEMALE
-                        || filterArgumentModel.getSearchRequestModel().getGender() == MALE)) {
+                if (filterArgumentModel.getFilterRequestModel().getGender() != null
+                        && (filterArgumentModel.getFilterRequestModel().getGender() == FEMALE
+                        || filterArgumentModel.getFilterRequestModel().getGender() == MALE)) {
 
-                    genderList.add(cb.equal(postRoot.get("genderPartner"), filterArgumentModel.getSearchRequestModel().getGender()));
+                    genderList.add(cb.equal(postRoot.get("genderPartner"), filterArgumentModel.getFilterRequestModel().getGender()));
                 } else {
                     genderList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getPrice() != null
-                        && filterArgumentModel.getSearchRequestModel().getPrice().size() == 2) {
+                if (filterArgumentModel.getFilterRequestModel().getPrice() != null
+                        && filterArgumentModel.getFilterRequestModel().getPrice().size() == 2) {
                     priceList.add(cb.and(
-                            cb.ge(postRoot.get("minPrice"), filterArgumentModel.getSearchRequestModel().getPrice().get(0)),
-                            cb.le(postRoot.get("minPrice"), filterArgumentModel.getSearchRequestModel().getPrice().get(1))));
+                            cb.ge(postRoot.get("minPrice"), filterArgumentModel.getFilterRequestModel().getPrice().get(0)),
+                            cb.le(postRoot.get("minPrice"), filterArgumentModel.getFilterRequestModel().getPrice().get(1))));
                 } else {
                     priceList.add(cb.conjunction());
                 }
@@ -132,7 +130,7 @@ public class Filter implements Specification<TbPost> {
                 );
             }
         } else {
-            if (filterArgumentModel.getSearchRequestModel() != null) {
+            if (filterArgumentModel.getFilterRequestModel() != null) {
 
                 List<Predicate> districtList = new ArrayList<>();
                 List<Predicate> utilityList = new ArrayList<>();
@@ -156,37 +154,37 @@ public class Filter implements Specification<TbPost> {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("minPrice")));
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getDistricts() != null) {
-                    for (Integer districtId : filterArgumentModel.getSearchRequestModel().getDistricts()) {
+                if (filterArgumentModel.getFilterRequestModel().getDistricts() != null) {
+                    for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
                         districtList.add(cb.equal(districtRoot.get("districtId"), districtId));
                     }
                 } else {
                     districtList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getUtilities() != null) {
-                    for (Integer utilityId : filterArgumentModel.getSearchRequestModel().getUtilities()) {
+                if (filterArgumentModel.getFilterRequestModel().getUtilities() != null) {
+                    for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
                         utilityList.add(cb.equal(utilitiesRoot.get("utilityId"), utilityId));
                     }
                 } else {
                     utilityList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getGender() != null
-                        &&(filterArgumentModel.getSearchRequestModel().getGender() == 1
-                        || filterArgumentModel.getSearchRequestModel().getGender() == 2)) {
+                if (filterArgumentModel.getFilterRequestModel().getGender() != null
+                        &&(filterArgumentModel.getFilterRequestModel().getGender() == 1
+                        || filterArgumentModel.getFilterRequestModel().getGender() == 2)) {
 
-                    genderList.add(cb.equal(postRoot.get("genderPartner"), filterArgumentModel.getSearchRequestModel().getGender()));
+                    genderList.add(cb.equal(postRoot.get("genderPartner"), filterArgumentModel.getFilterRequestModel().getGender()));
                 } else {
                     genderList.add(cb.conjunction());
                 }
 
-                if (filterArgumentModel.getSearchRequestModel().getPrice() != null
-                        && filterArgumentModel.getSearchRequestModel().getPrice().size() == 2) {
+                if (filterArgumentModel.getFilterRequestModel().getPrice() != null
+                        && filterArgumentModel.getFilterRequestModel().getPrice().size() == 2) {
                     priceList.add(cb.and(
                             cb.between(postRoot.get("minPrice")
-                                    , filterArgumentModel.getSearchRequestModel().getPrice().get(0)
-                                    , filterArgumentModel.getSearchRequestModel().getPrice().get(1))));
+                                    , filterArgumentModel.getFilterRequestModel().getPrice().get(0)
+                                    , filterArgumentModel.getFilterRequestModel().getPrice().get(1))));
                 }
 
                 if (filterArgumentModel.getTypeId() != null) {

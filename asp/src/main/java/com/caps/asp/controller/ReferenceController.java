@@ -7,7 +7,6 @@ import com.caps.asp.model.uimodel.request.FilterArgumentModel;
 import com.caps.asp.service.DistrictReferenceService;
 import com.caps.asp.service.ReferenceService;
 import com.caps.asp.service.UtilityReferenceService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +34,7 @@ public class ReferenceController {
     @PostMapping("/reference/create")
     public ResponseEntity createReference(@RequestBody FilterArgumentModel filterArgumentModel) {
         try {
-            List<Double> prices = filterArgumentModel.getSearchRequestModel().getPrice();
+            List<Double> prices = filterArgumentModel.getFilterRequestModel().getPrice();
 
             TbReference reference = new TbReference();
             reference.setMinPrice(prices.get(0));
@@ -43,7 +42,7 @@ public class ReferenceController {
             reference.setUserId(filterArgumentModel.getUserId());
             referenceService.save(reference);
 
-            for (Integer utilityId : filterArgumentModel.getSearchRequestModel().getUtilities()) {
+            for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
                 TbUtilitiesReference tbUtilitiesReference = new TbUtilitiesReference();
                 tbUtilitiesReference.setId(0);
                 tbUtilitiesReference.setUserId(filterArgumentModel.getUserId());
@@ -51,7 +50,7 @@ public class ReferenceController {
                 utilityReferenceService.save(tbUtilitiesReference);
             }
 
-            for (Integer districtId : filterArgumentModel.getSearchRequestModel().getDistricts()) {
+            for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
                 TbDistrictReference tbDistrictReference = new TbDistrictReference();
                 tbDistrictReference.setId(0);
                 tbDistrictReference.setUserId(filterArgumentModel.getUserId());

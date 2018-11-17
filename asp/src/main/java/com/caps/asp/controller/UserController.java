@@ -142,7 +142,6 @@ public class UserController {
         if (tbUserDb == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setUserId(0);
-            user.setRoleId(5);
             int id = userService.saveUser(user);
             return ResponseEntity.status(CREATED).body(id);
         }

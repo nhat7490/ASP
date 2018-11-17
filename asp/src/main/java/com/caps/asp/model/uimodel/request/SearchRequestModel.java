@@ -1,52 +1,50 @@
 package com.caps.asp.model.uimodel.request;
 
-import java.util.List;
-
 public class SearchRequestModel {
-    private List<Integer> utilities;
-    private List<Integer> districts;
-    private List<Double> price;
-    private Integer gender;
+    String address;
+    double latitude;
+    double longitude;
+    int userId;
+
+    public SearchRequestModel(String address, double latitude, double longitude, int userId) {
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.userId = userId;
+    }
 
     public SearchRequestModel() {
     }
 
-    public SearchRequestModel(List<Integer> utilities, List<Integer> districts, List<Double> price, Integer gender) {
-        this.utilities = utilities;
-        this.districts = districts;
-        this.price = price;
-        this.gender = gender;
+    public int getUserId() {
+        return userId;
     }
 
-    public List<Integer> getUtilities() {
-        return utilities;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public void setUtilities(List<Integer> utilities) {
-        this.utilities = utilities;
+    public String getAddress() {
+        return address;
     }
 
-    public List<Integer> getDistricts() {
-        return districts;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public void setDistricts(List<Integer> districts) {
-        this.districts = districts;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public List<Double> getPrice() {
-        return price;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public void setPrice(List<Double> price) {
-        this.price = price;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public Integer getGender() {
-        return gender;
-    }
-
-    public void setGender(Integer gender) {
-        this.gender = gender;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

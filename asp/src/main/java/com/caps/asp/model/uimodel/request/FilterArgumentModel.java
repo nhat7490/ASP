@@ -1,7 +1,7 @@
 package com.caps.asp.model.uimodel.request;
 
 public class FilterArgumentModel {
-    private SearchRequestModel searchRequestModel;
+    private FilterRequestModel filterRequestModel;
     private Integer page;
     private Integer offset;
     private Integer typeId;
@@ -13,8 +13,8 @@ public class FilterArgumentModel {
     public FilterArgumentModel() {
     }
 
-    public FilterArgumentModel(SearchRequestModel searchRequestModel, Integer page, Integer offset, Integer typeId, Integer orderBy, Integer userId, Integer cityId) {
-        this.searchRequestModel = searchRequestModel;
+    public FilterArgumentModel(FilterRequestModel filterRequestModel, Integer page, Integer offset, Integer typeId, Integer orderBy, Integer userId, Integer cityId) {
+        this.filterRequestModel = filterRequestModel;
         this.page = page;
         this.offset = offset;
         this.typeId = typeId;
@@ -31,12 +31,12 @@ public class FilterArgumentModel {
         this.cityId = cityId;
     }
 
-    public SearchRequestModel getSearchRequestModel() {
-        return searchRequestModel;
+    public FilterRequestModel getFilterRequestModel() {
+        return filterRequestModel;
     }
 
-    public void setSearchRequestModel(SearchRequestModel searchRequestModel) {
-        this.searchRequestModel = searchRequestModel;
+    public void setFilterRequestModel(FilterRequestModel filterRequestModel) {
+        this.filterRequestModel = filterRequestModel;
     }
 
     public Integer getPage() {

@@ -21,7 +21,7 @@ import java.util.Objects;
                 parameters = {
                         @StoredProcedureParameter(mode = ParameterMode.IN, name = "latitude", type = Float.class),
                         @StoredProcedureParameter(mode = ParameterMode.IN, name = "longitude", type = Float.class),
-                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "districtId", type = Integer.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "cityId", type = Integer.class),
                         @StoredProcedureParameter(mode = ParameterMode.IN, name = "pageOf", type = Integer.class),
                         @StoredProcedureParameter(mode = ParameterMode.IN, name = "size", type = Integer.class)
                 })
