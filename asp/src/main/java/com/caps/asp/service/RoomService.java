@@ -59,6 +59,6 @@ public class RoomService {
     }
 
     public List<TbRoom> findByLikeAddress(String address) {
-        return roomRepository.findAllByAddressLike(address);
+        return roomRepository.findAllByAddressLike("%"+address+"%");
     }
 }

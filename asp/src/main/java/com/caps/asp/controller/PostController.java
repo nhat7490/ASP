@@ -567,9 +567,7 @@ public class PostController {
                 GeocodingResult geocodingResult = googleAPI.getLocationName(baseSuggestRequestModel.getLatitude(), baseSuggestRequestModel.getLongitude());
 
                 String city = googleAPI.getCity(geocodingResult);
-                System.out.println(city);
                 int cityId = cityService.findByNameLike(city).getCityId();
-
 
                 List<TbPost> postList = postService.getSuggestedListForMember(Float.parseFloat(baseSuggestRequestModel.getLatitude().toString())
                         , Float.parseFloat(baseSuggestRequestModel.getLongitude().toString())
@@ -596,33 +594,54 @@ public class PostController {
 
     @PostMapping("post/search")
     public ResponseEntity search(@RequestBody SearchRequestModel searchRequestModel) {
-//        try {
+        try {
             List<TbRoom> roomList = roomService.findByLikeAddress(searchRequestModel.getAddress());
+            List<TbPost> postList = new ArrayList<>();
             SearchResponseModel searchResponseModel = new SearchResponseModel();
             roomList.forEach(tbRoom -> {
                 int roomId = tbRoom.getRoomId();
                 List<TbRoomHasUser> roomHasUser = roomHasUserService.getAllByRoomId(roomId);
-                List<TbPost> postList = new ArrayList<>();
                 roomHasUser.forEach(tbRoomHasUser -> {
                     TbUser user = userService.findById(tbRoomHasUser.getUserId());
-                    if(user.getRoleId() == ROOM_MASTER){
+                    if (user.getRoleId() == ROOM_MASTER) {
                         TbPost post = postService
                                 .findAllByUserIdAndRoomIdOrderByDatePostDesc(user.getUserId(), roomId);
-                        if (post!=null){
+                        if (post != null) {
                             postList.add(post);
                         }
                     }
                 });
-                List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
-                roomPostResponseModels = suggest.mappingRoomPost(postList,roomPostResponseModels,searchRequestModel.getUserId());
-                System.out.println(roomPostResponseModels.get(0).getPostId());
-                searchResponseModel.setRoomPostResponseModel(roomPostResponseModels);
-                System.out.println(searchResponseModel.getRoomPostResponseModel().get(0).getPostId());
             });
+            List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
+            roomPostResponseModels = suggest.mappingRoomPost(postList, roomPostResponseModels, searchRequestModel.getUserId());
+            searchResponseModel.setRoomPostResponseModel(roomPostResponseModels);
+
+            GoogleAPI googleAPI = new GoogleAPI();
+            GeocodingResult geocodingResult = googleAPI.getLocationName(searchRequestModel.getLatitude(), searchRequestModel.getLongitude());
+
+            String city = googleAPI.getCity(geocodingResult);
+            int cityId = cityService.findByNameLike(city).getCityId();
+
+            List<TbPost> nearByPostList = postService.getSuggestedListForMember(Float.parseFloat(searchRequestModel.getLatitude() + "")
+                    , Float.parseFloat(searchRequestModel.getLongitude() + "")
+                    , cityId
+                    , 1, 50);
+
+            if (nearByPostList == null) {
+//
+//            return ResponseEntity
+//                    .status(OK)
+//                    .body(suggest.getNewPost(baseSuggestRequestModel)
+//                            .getContent());
+            }
+
+            List<RoomPostResponseModel> nearByRoomPostResponseModels = new ArrayList<>();
+            nearByRoomPostResponseModels = suggest.mappingRoomPost(nearByPostList, nearByRoomPostResponseModels, searchRequestModel.getUserId());
+            searchResponseModel.setNearByRoomPostResponseModels(nearByRoomPostResponseModels);
             return ResponseEntity.status(OK).body(searchResponseModel);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(NOT_FOUND).build();
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @PostMapping("post/suggestBestMatch")
