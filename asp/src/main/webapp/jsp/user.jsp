@@ -13,7 +13,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin Web Manage</title>
+    <title>Trang Quản Lý</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -76,7 +76,7 @@
 
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown open">
-            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Đăng Xuất</a>
             </li>
             </li>
         </ul>
@@ -117,54 +117,54 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Username</label>
-                                <input id="txtUsername" class="form-control">
+                                <label>Tên đăng nhập</label>
+                                <input id="txtUsername" class="form-control" maxlength="15">
                             </div>
                             <div class="form-group">
-                                <label>Password</label>
-                                <input id="txtPassword" class="form-control">
+                                <label>Mật khẩu</label>
+                                <input id="txtPassword" class="form-control" type="password">
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
-                                <input id="txtEmail" class="form-control">
+                                <input id="txtEmail" class="form-control" type="email">
                             </div>
                             <div class="form-group">
-                                <label>Fullname</label>
-                                <input id="txtFullname" class="form-control">
+                                <label>Họ và Tên</label>
+                                <input id="txtFullname" class="form-control" maxlength="50">
                             </div>
                             <div class="form-group">
-                                <label>DOB</label>
+                                <label>Ngày sinh</label>
                                 <div id="datepicker" class="input-group date" data-date-format="yyyy-mm-dd">
                                     <input id="dob" class="form-control" readonly="" type="text"> <span
                                         class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Phone</label>
-                                <input id="txtPhone" class="form-control">
+                                <label>Số điện thoại</label>
+                                <input id="txtPhone" class="form-control" type="number">
                             </div>
                             <div class="form-group">
-                                <label>Gender</label>
+                                <label>Giới tính</label>
                                 <select id="gender" class="form-control">
                                     <option value="1">Nam</option>
                                     <option value="2">Nữ</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Role</label>
+                                <label>Vai trò</label>
                                 <select id="role" class="form-control">
-                                    <option value="2">chu nha</option>
-                                    <option value="3">chu phong</option>
-                                    <option value="4">thanh vien</option>
-                                    <option value="5">quan tri vien</option>
+                                    <option value="2">Chủ nhà</option>
+                                    <option value="3">Chủ phòng</option>
+                                    <option value="4">Thành viên</option>
+                                    <option value="5">Quản trị viên</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Hinh dai dien</label>
+                                <label>Ảnh đại diện</label>
                                 <input id="txtImage" type="file">
                             </div>
-                            <button id="btnAdd" type="submit" class="btn btn-default">Submit Button</button>
-                            <button type="reset" class="btn btn-default">Reset Button</button>
+                            <button id="btnAdd" type="submit" class="btn btn-default">Tạo</button>
+                            <button type="reset" class="btn btn-default">Xóa dữ liệu</button>
                             <div class="form-group" style="display: none" id="error">
                                 <h3 style="color: red">Dữ liệu nhập không đúng</h3>
                             </div>
@@ -213,7 +213,7 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tài khoản</th>
+                                <th>Tên đăng nhập</th>
                                 <th>Họ tên</th>
                                 <th>Ngày sinh</th>
                                 <th>Email</th>
@@ -248,7 +248,7 @@
                             </tbody>
                         </table>
 
-                        <ul class="pagination pagination-lg">
+                        <ul class="pagination pagination-lg" style="cursor: pointer">
                             <c:set var="totalPage" value="${requestScope.PAGE}"/>
                             <c:set var="currentPage" value="${requestScope.CURRENTPAGE}"/>
 

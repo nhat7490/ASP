@@ -61,12 +61,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="room.html">Trang Quản Lý</a>
+            <a class="navbar-brand" href="/room">Trang Quản Lý</a>
         </div>
 
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown open">
-            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Đăng Xuất</a>
             </li>
             </li>
         </ul>
@@ -102,7 +102,7 @@
                     </div>
                     <!-- /.panel-heading -->
                     <c:set var="sizes" value="${[10, 20, 50]}"/>
-                    <div style="padding: 0px 15px; font-size: 2rem;">
+                    <div style="padding: 0px 15px; font-size: 1.5rem;margin-top: 10px" >
                         Hiển thị
                         <select onchange="handleOnChange(${requestScope.CURRENTPAGE}, event.target.value)"
                                 id="page-size">
@@ -195,7 +195,7 @@
                             </tbody>
                         </table>
 
-                        <ul class="pagination pagination-lg">
+                        <ul class="pagination pagination-lg" style="cursor: pointer">
                             <c:set var="totalPage" value="${requestScope.PAGE}"/>
                             <c:set var="currentPage" value="${requestScope.CURRENTPAGE}"/>
 
