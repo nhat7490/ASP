@@ -1,13 +1,16 @@
 package com.caps.asp.repository;
 
+import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbRoom;
+import com.caps.asp.service.filter.Search;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface RoomRepository extends JpaRepository<TbRoom, Integer> {
+public interface RoomRepository extends JpaRepository<TbRoom, Integer>, JpaSpecificationExecutor<TbRoom> {
 
     TbRoom findByRoomId(int roomId);
     List<TbRoom> findAll();

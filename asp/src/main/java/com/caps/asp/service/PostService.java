@@ -5,6 +5,7 @@ import com.caps.asp.model.TbRoom;
 import com.caps.asp.repository.PostRepository;
 import com.caps.asp.service.filter.BookmarkFilter;
 import com.caps.asp.service.filter.Filter;
+import com.caps.asp.service.filter.Search;
 import com.caps.asp.util.CalculateDistance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

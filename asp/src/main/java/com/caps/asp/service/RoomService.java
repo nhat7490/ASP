@@ -2,6 +2,7 @@ package com.caps.asp.service;
 
 import com.caps.asp.model.TbRoom;
 import com.caps.asp.repository.RoomRepository;
+import com.caps.asp.service.filter.Search;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -58,7 +59,9 @@ public class RoomService {
         return roomRepository.getAllByUserId(userId);
     }
 
-    public List<TbRoom> findByLikeAddress(String address) {
-        return roomRepository.findAllByAddressLike("%"+address+"%");
+    public List<TbRoom> findByLikeAddress(Search search) {
+        return roomRepository.findAll(search);
     }
+
+
 }

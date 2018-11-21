@@ -16,6 +16,7 @@ import com.caps.asp.service.*;
 import com.caps.asp.service.filter.BookmarkFilter;
 import com.caps.asp.service.filter.Filter;
 import com.caps.asp.service.Suggest;
+import com.caps.asp.service.filter.Search;
 import com.caps.asp.util.GoogleAPI;
 import com.google.maps.model.GeocodingResult;
 import org.springframework.data.domain.*;
@@ -745,8 +746,11 @@ public class PostController {
 
     @PostMapping("post/search")
     public ResponseEntity search(@RequestBody SearchRequestModel searchRequestModel) {
-        try {
-            List<TbRoom> roomList = roomService.findByLikeAddress(searchRequestModel.getAddress());
+//        try {
+            Search search = new Search();
+            search.setSearch(searchRequestModel.getAddress().trim().split(","));
+
+            List<TbRoom> roomList = roomService.findByLikeAddress(search);
             List<TbPost> postList = new ArrayList<>();
             SearchResponseModel searchResponseModel = new SearchResponseModel();
             roomList.forEach(tbRoom -> {
@@ -791,9 +795,9 @@ public class PostController {
             nearByRoomPostResponseModels = suggest.mappingRoomPost(nearByPostList, nearByRoomPostResponseModels, searchRequestModel.getUserId());
             searchResponseModel.setNearByRoomPostResponseModels(nearByRoomPostResponseModels);
             return ResponseEntity.status(OK).body(searchResponseModel);
-        } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(NOT_FOUND).build();
+//        }
     }
 
     @PostMapping("post/suggestBestMatch")

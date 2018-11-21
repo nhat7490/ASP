@@ -38,4 +38,5 @@ public interface PostRepository extends JpaRepository<TbPost, Integer>, JpaSpeci
     void removeAllByUserId(int userId);
 
     List<TbPost> findAllByUserIdAndTypeIdOrderByDatePostDesc(int userId, int typeId);
+
 }
