@@ -2,6 +2,7 @@ package com.caps.asp.model.uimodel.response.post;
 
 import com.caps.asp.model.TbRoomHasUtility;
 import com.caps.asp.model.uimodel.response.UserResponseModel;
+import com.caps.asp.model.uimodel.response.common.RoomRateResponseModel;
 
 import java.sql.Date;
 import java.util.List;
@@ -16,6 +17,15 @@ public class RoomPostResponseModel extends BasePostResponeModel {
     private Integer numberPartner;
     private Integer genderPartner;
     private String description;
+    private List<RoomRateResponseModel> roomRateResponseModels;
+
+    public List<RoomRateResponseModel> getRoomRateResponseModels() {
+        return roomRateResponseModels;
+    }
+
+    public void setRoomRateResponseModels(List<RoomRateResponseModel> roomRateResponseModels) {
+        this.roomRateResponseModels = roomRateResponseModels;
+    }
 
     public String getDescription() {
         return description;
@@ -28,7 +38,8 @@ public class RoomPostResponseModel extends BasePostResponeModel {
     public RoomPostResponseModel() {
     }
 
-    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponseModel userResponseModel, boolean isFavourite, double minPrice, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner, String description) {
+    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponseModel userResponseModel, boolean isFavourite, double minPrice, Integer favouriteId, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner, String description, List<RoomRateResponseModel> roomRateResponseModels) {
+        super(postId, phoneContact, date, userResponseModel, isFavourite, minPrice, favouriteId);
         this.name = name;
         this.area = area;
         this.address = address;
@@ -37,6 +48,7 @@ public class RoomPostResponseModel extends BasePostResponeModel {
         this.numberPartner = numberPartner;
         this.genderPartner = genderPartner;
         this.description = description;
+        this.roomRateResponseModels = roomRateResponseModels;
     }
 
     public String getName() {

@@ -1,8 +1,10 @@
 package com.caps.asp.model.uimodel.response;
 
 import com.caps.asp.model.TbUser;
+import com.caps.asp.model.TbUserRate;
 
 import java.sql.Date;
+import java.util.List;
 
 public class UserResponseModel {
     private Integer userId;
@@ -11,6 +13,7 @@ public class UserResponseModel {
     private Date dob;
     private String phone;
     private int gender;
+    private List<TbUserRate> userRateList;
 
     public UserResponseModel() {
     }
@@ -22,13 +25,23 @@ public class UserResponseModel {
         this.phone = user.getPhone();
         this.gender = user.getGender();
     }
-    public UserResponseModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender) {
+
+    public UserResponseModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender, List<TbUserRate> userRateList) {
         this.userId = userId;
         this.fullname = fullname;
         this.imageProfile = imageProfile;
         this.dob = dob;
         this.phone = phone;
         this.gender = gender;
+        this.userRateList = userRateList;
+    }
+
+    public List<TbUserRate> getUserRateList() {
+        return userRateList;
+    }
+
+    public void setUserRateList(List<TbUserRate> userRateList) {
+        this.userRateList = userRateList;
     }
 
     public Integer getUserId() {

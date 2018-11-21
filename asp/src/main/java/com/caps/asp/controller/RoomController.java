@@ -2,7 +2,9 @@ package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.request.MemberRequestModel;
+import com.caps.asp.model.uimodel.response.UserResponseModel;
 import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
+import com.caps.asp.model.uimodel.response.common.RoomRateResponseModel;
 import com.caps.asp.model.uimodel.response.common.RoomResponseModel;
 import com.caps.asp.model.uimodel.room.RoomMemberRequestModel;
 import com.caps.asp.model.uimodel.room.RoomRequestModel;
@@ -36,8 +38,11 @@ public class RoomController {
     public final FavouriteService favouriteService;
     public final PostHasDistrictService postHasDistrictService;
     public final AmazonService amazonService;
+    public final RoomRateService roomRateService;
+    public final UserRateService userRateService;
 
-    public RoomController(RoomService roomService, RoomHasUtilityService roomHasUtilityService, PostHasUtilityService postHasUtilityService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, AmazonService amazonService) {
+
+    public RoomController(RoomService roomService, RoomHasUtilityService roomHasUtilityService, PostHasUtilityService postHasUtilityService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, AmazonService amazonService, RoomRateService roomRateService, UserRateService userRateService) {
         this.roomService = roomService;
         this.roomHasUtilityService = roomHasUtilityService;
         this.postHasUtilityService = postHasUtilityService;
@@ -48,6 +53,8 @@ public class RoomController {
         this.favouriteService = favouriteService;
         this.postHasDistrictService = postHasDistrictService;
         this.amazonService = amazonService;
+        this.roomRateService = roomRateService;
+        this.userRateService = userRateService;
     }
 
     @Transactional
@@ -213,6 +220,7 @@ public class RoomController {
                 postHasUtilityService.deleteAllPostHasUtilityByPostId(tbPost.getPostId());
                 postService.removeByRoomId(roomId);
             });
+            roomRateService.removeByRoomId(roomId);
             roomService.deleteRoom(roomId);
             return ResponseEntity.status(OK).build();
         } catch (Exception e) {
@@ -267,6 +275,32 @@ public class RoomController {
                                 return new MemberResponseModel(user.getUserId()
                                         , user.getRoleId(), user.getUsername(), user.getPhone());
                             }).collect(Collectors.toList()));
+
+                    List<TbRoomRate> roomRateList = roomRateService.findAllByRoomId(tbRoom.getRoomId());
+                    List<RoomRateResponseModel> roomRateResponseModels = new ArrayList<>();
+                    if (roomRateList != null) {
+                        roomRateList.forEach(tbRoomRate -> {
+                            RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
+                            roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
+                            roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
+                            roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
+                            UserResponseModel user = new UserResponseModel();
+                            TbUser tbUser = userService.findById(tbRoomRate.getUserId());
+                            user.setUserId(tbUser.getUserId());
+                            user.setFullname(tbUser.getFullname());
+                            user.setImageProfile(tbUser.getImageProfile());
+                            List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
+                            user.setUserRateList(tbUserRates);
+                            roomRateResponseModel.setUserResponseModel(user);
+                            roomRateResponseModel.setComment(tbRoomRate.getComment());
+                            roomRateResponseModel.setDate(tbRoomRate.getDate());
+
+                            roomRateResponseModels.add(roomRateResponseModel);
+                        });
+                        roomResponseModel.setRoomRateResponseModels(roomRateResponseModels);
+                    }
+
+
                     return roomResponseModel;
                 }).collect(Collectors.toList());
                 return ResponseEntity.status(OK).body(roomResponseModels);
@@ -315,6 +349,30 @@ public class RoomController {
                             return new MemberResponseModel(user.getUserId(), user.getRoleId()
                                     , user.getUsername(), user.getPhone());
                         }).collect(Collectors.toList()));
+
+                List<TbRoomRate> roomRateList = roomRateService.findAllByRoomId(room.getRoomId());
+                List<RoomRateResponseModel> roomRateResponseModels = new ArrayList<>();
+                if (roomRateList != null) {
+                    roomRateList.forEach(tbRoomRate -> {
+                        RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
+                        roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
+                        roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
+                        roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
+                        UserResponseModel user = new UserResponseModel();
+                        TbUser tbUser = userService.findById(tbRoomRate.getUserId());
+                        user.setUserId(tbUser.getUserId());
+                        user.setFullname(tbUser.getFullname());
+                        user.setImageProfile(tbUser.getImageProfile());
+                        List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
+                        user.setUserRateList(tbUserRates);
+                        roomRateResponseModel.setUserResponseModel(user);
+                        roomRateResponseModel.setComment(tbRoomRate.getComment());
+                        roomRateResponseModel.setDate(tbRoomRate.getDate());
+
+                        roomRateResponseModels.add(roomRateResponseModel);
+                    });
+                    roomResponseModel.setRoomRateResponseModels(roomRateResponseModels);
+                }
                 return ResponseEntity.status(OK).body(roomResponseModel);
             }
             return ResponseEntity.status(NOT_FOUND).build();
@@ -361,6 +419,30 @@ public class RoomController {
                                 return new MemberResponseModel(user.getUserId(), user.getRoleId()
                                         , user.getUsername(), user.getPhone());
                             }).collect(Collectors.toList()));
+
+                    List<TbRoomRate> roomRateList = roomRateService.findAllByRoomId(room.getRoomId());
+                    List<RoomRateResponseModel> roomRateResponseModels = new ArrayList<>();
+                    if (roomRateList != null) {
+                        roomRateList.forEach(tbRoomRate -> {
+                            RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
+                            roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
+                            roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
+                            roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
+                            UserResponseModel user = new UserResponseModel();
+                            TbUser tbUser = userService.findById(tbRoomRate.getUserId());
+                            user.setUserId(tbUser.getUserId());
+                            user.setFullname(tbUser.getFullname());
+                            user.setImageProfile(tbUser.getImageProfile());
+                            List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
+                            user.setUserRateList(tbUserRates);
+                            roomRateResponseModel.setUserResponseModel(user);
+                            roomRateResponseModel.setComment(tbRoomRate.getComment());
+                            roomRateResponseModel.setDate(tbRoomRate.getDate());
+
+                            roomRateResponseModels.add(roomRateResponseModel);
+                        });
+                        roomResponseModel.setRoomRateResponseModels(roomRateResponseModels);
+                    }
                     return roomResponseModel;
                 });
                 return ResponseEntity.status(OK).body(roomResponseModels.getContent());
