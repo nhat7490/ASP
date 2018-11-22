@@ -748,7 +748,10 @@ public class PostController {
     public ResponseEntity search(@RequestBody SearchRequestModel searchRequestModel) {
 //        try {
             Search search = new Search();
-            search.setSearch(searchRequestModel.getAddress().trim().split(","));
+            search.setSearch(searchRequestModel.getAddress()
+                    .trim()
+                    .replaceAll("Việt Nam","")
+                    .split(","));
 
             List<TbRoom> roomList = roomService.findByLikeAddress(search);
             List<TbPost> postList = new ArrayList<>();
