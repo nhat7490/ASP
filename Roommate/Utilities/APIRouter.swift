@@ -38,7 +38,7 @@ enum APIRouter:URLRequestConvertible{
     case updateRoom(model:RoomResponseModel)
     case findByUsername(username:String)
     case createUser(model:UserModel)
-    
+    case searchPostByAddress(model:SearchRequestModel)
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -49,7 +49,7 @@ enum APIRouter:URLRequestConvertible{
     }
     
     var httpMethod:HTTPMethod{
-        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember,.getUserPost,.createUser:
+        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember,.getUserPost,.createUser,.searchPostByAddress:
             return .post
         case .removeBookmark,.removeRoom:
             return .delete
@@ -111,6 +111,8 @@ enum APIRouter:URLRequestConvertible{
             return "user/findByUsername/\(username)"
         case .createUser:
             return "user/createUser";
+        case .searchPostByAddress:
+            return "post/search";
         }
     }
     
@@ -158,7 +160,8 @@ enum APIRouter:URLRequestConvertible{
             return ["page":page,
                     "size":size]
         case .createUser(let model):
-            print(Mapper().toJSON(model))
+            return Mapper().toJSON(model)
+        case .searchPostByAddress(let model):
             return Mapper().toJSON(model)
         default:
             return [:]
@@ -176,7 +179,7 @@ enum APIRouter:URLRequestConvertible{
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.allHTTPHeaderFields = httpHeaders
         urlRequest.httpMethod = httpMethod.rawValue
-        urlRequest.timeoutInterval  = 40
+        urlRequest.timeoutInterval  = 60
         
         do{
             switch self.httpMethod {

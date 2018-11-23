@@ -12,7 +12,7 @@ protocol HorizontalRoomViewDelegate:class{
     func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell:RoomPostCVCell,didSelectCellAt indexPath:IndexPath?)
     func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,onClickButton button:UIButton)
 }
-class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,NewRoomCVCellDelegate,UICollectionViewDelegateFlowLayout{
+class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,RoomCVCellDelegate,UICollectionViewDelegateFlowLayout{
     
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var btnViewAll: UIButton!
@@ -68,7 +68,7 @@ class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataS
     }
     
     //MARK: NewRoomCVCellDelegate
-    func newRoomCVCellDelegate(roomCVCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?){
+    func roomCVCellDelegate(roomCVCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?){
         delegate?.horizontalRoomViewDelegate(horizontalRoomView: self, collectionCell: cell, onClickUIImageView: imgvBookmark, atIndexPath: indexPath)
     }
     

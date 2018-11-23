@@ -12,7 +12,7 @@ import MBProgressHUD
 class AllVC:BaseVC,UICollectionViewDataSource,
     UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,
     UITableViewDataSource,UITableViewDelegate,
-NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
+RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
     
     
     
@@ -597,7 +597,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
     
     
     
-    func newRoomCVCellDelegate(roomCVCell: RoomPostCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
+    func roomCVCellDelegate(roomCVCell: RoomPostCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
         guard let row = indexPath?.row else{
             return
         }
@@ -637,7 +637,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate,FilterVCDelegate{
 
     //        collectionView.reloadData()
     //    }
-    func newRoommateCVCellDelegate(newRoommateCVCell cell: RoommatePostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
+    func roommateCVCellDelegate(roommateCVCell cell: RoommatePostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
                 guard let row = indexPath?.row else{
                     return
                 }

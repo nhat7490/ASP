@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://172.20.10.11:8080/"
+    static let BASE_URL_API = "http://172.20.10.6:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
@@ -52,6 +52,8 @@ class Constants{
     static let CELL_NAVIGATIONCV = "NavigationCVCell"
     static let CELL_IMAGECV = "ImageCVCell"
     static let CELL_ICONTITLETV = "IconTitleTVCell"
+    static let CELL_ICONTITLECV = "IconTitleCVCell"
+    static let CELL_DEFAULT = "DefaultCell"
     
     //MARK: Constant for UITableViewCell
     static let CELL_POPUP_SELECT_LISTTV = "PopupSelectListTVCell"
@@ -101,7 +103,7 @@ class Constants{
     
     //MARK: HomeVC
     static let HEIGHT_LOCATION_SEARCH_VIEW:CGFloat = 40
-    static let HEIGHT_TOP_CONTAINER_VIEW:CGFloat = 160
+    static let HEIGHT_TOP_CONTAINER_VIEW:CGFloat = 80.0
     static let HEIGHT_HORIZONTAL_ROOM_VIEW:CGFloat = 280
     static let MAX_ROOM_ROW:Int = 3//Two room in a line
     static let MAX_POST:Int = 6

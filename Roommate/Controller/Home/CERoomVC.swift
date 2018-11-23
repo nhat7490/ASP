@@ -559,23 +559,27 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     
     //MARK: Custom method
     func search(text:String) {
+        DispatchQueue.global(qos: .userInteractive).async {
         APIConnection.requestObject(apiRouter: APIRouter.search(input:text), errorNetworkConnectedHander: nil, returnType: GPAutocompletePrediction.self) { (predictions, error, statusCode) -> (Void) in
             if predictions?.status == "OK",let predictions = predictions?.predictions,predictions.count>0{
                 self.suggestAddress?.removeAll()
                 predictions.forEach({ (prediction) in
-                    if prediction.address.lowercased().contains(self.districtName.lowercased()),
-                        prediction.address.lowercased().contains(self.cityName.lowercased()){
+                    if prediction.address.lowercased().containsIgnoringCase(find: self.districtName),
+                        prediction.address.containsIgnoringCase(find: self.cityName){
                         print("Add :\(prediction.address)")
                         APIConnection.requestObject(apiRouter: APIRouter.placeDetail(id:prediction.place_id), errorNetworkConnectedHander: nil, returnType: GPPlaceResult.self) { (place, error, statusCode) -> (Void) in
                             if place?.status == "OK",let place = place{
-                                self.suggestAddress?.append([prediction:place])
-                                self.reloadTableViewUI()
+                                DispatchQueue.main.async {
+                                    self.suggestAddress?.append([prediction:place])
+                                    self.reloadTableViewUI()
+                                }
                             }
                         }
                     }
                 })
             }
             
+        }
         }
     }
     
@@ -642,63 +646,67 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             hub.contentColor = .defaultBlue
             hub.label.text = "MB_LOAD_UPLOAD_IMAGE".localized
             DispatchQueue.global(qos: .userInteractive).async {
-                
                 self.uploadImageModels.filter{$0.linkUrl==nil}.forEach({ (model) in
                     self.group.enter()
                     self.uploadImage(model)
-                    self.group.wait()
                 })
-                DispatchQueue.main.async {
-                    hub.label.text = self.cERoomVCType == .create ?  "MB_LOAD_CREATE_ROOM".localized : "MB_LOAD_EDIT_ROOM".localized
-                }
-                if (self.uploadImageModels.filter{$0.linkUrl==nil}).count == 0{
-                    self.newRoomModel.imageUrls = self.uploadImageModels.compactMap{$0.linkUrl}
-                    APIConnection.request(apiRouter: self.cERoomVCType == .create ? APIRouter.createRoom(model: self.newRoomModel) : APIRouter.updateRoom(model: self.newRoomModel),  errorNetworkConnectedHander: {
-                        DispatchQueue.main.async {
-                            MBProgressHUD.hide(for: self.view, animated: true)
-                            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-                        }
-                    }, completion: { (error, statusCode) -> (Void) in
-                        DispatchQueue.main.async {
-                            MBProgressHUD.hide(for: self.view, animated: true)
-                        }
-                        if error != nil{
-                            DispatchQueue.main.async {
-                                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
-                            }
-                        }else{
-                            if statusCode == .Created || statusCode == .OK{
-                                DispatchQueue.main.async {
-                                    MBProgressHUD.hide(for: self.view, animated: true)
-                                    if self.cERoomVCType == .edit {
-                                        self.newRoomModel.statusId = Constants.PENDING
-                                        NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_ROOM, object: self.newRoomModel)
-                                    }else if self.cERoomVCType == .create{
-                                        NotificationCenter.default.post(name: Constants.NOTIFICATION_CREATE_ROOM, object: self.newRoomModel)
-                                    }
-                                    AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage:  self.cERoomVCType == .create ? "ROOM_CREATE_SUCCESS".localized : "EDIT_ROOM_SUCCESS".localized, inViewController: self,rhsButtonHandler: {
-                                        (action) in
-                                        self.navigationController?.dismiss(animated: true, completion:nil)
-                                    })
-                                    
-                                    
-                                }
-                            }else{
-                                DispatchQueue.main.async {
-                                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
-                                }
-                            }
-                        }
-                    })
-                }else{
+                
+                self.group.notify(queue: DispatchQueue.global(qos: .userInteractive), execute: {
                     DispatchQueue.main.async {
-                        MBProgressHUD.hide(for: self.view, animated: true)
+                        hub.label.text = self.cERoomVCType == .create ?  "MB_LOAD_CREATE_ROOM".localized : "MB_LOAD_EDIT_ROOM".localized
                     }
-                    
-                    AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_UPLOAD_ERROR".localized, inViewController: self)
-                }
+                    if (self.uploadImageModels.filter{$0.linkUrl==nil}).count == 0{
+                        self.newRoomModel.imageUrls = self.uploadImageModels.compactMap{$0.linkUrl}
+                        self.ceRoom()
+                    }else{
+                        DispatchQueue.main.async {
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                        }
+                        
+                        AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_UPLOAD_ERROR".localized, inViewController: self)
+                    }
+                })
             }
         }
+    }
+    func ceRoom(){
+        APIConnection.request(apiRouter: self.cERoomVCType == .create ? APIRouter.createRoom(model: self.newRoomModel) : APIRouter.updateRoom(model: self.newRoomModel),  errorNetworkConnectedHander: {
+            DispatchQueue.main.async {
+                MBProgressHUD.hide(for: self.view, animated: true)
+                APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+            }
+        }, completion: { (error, statusCode) -> (Void) in
+            DispatchQueue.main.async {
+                MBProgressHUD.hide(for: self.view, animated: true)
+            }
+            if error != nil{
+                DispatchQueue.main.async {
+                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+                }
+            }else{
+                if statusCode == .Created || statusCode == .OK{
+                    DispatchQueue.main.async {
+                        MBProgressHUD.hide(for: self.view, animated: true)
+                        if self.cERoomVCType == .edit {
+                            self.newRoomModel.statusId = Constants.PENDING
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_ROOM, object: self.newRoomModel)
+                        }else if self.cERoomVCType == .create{
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_CREATE_ROOM, object: self.newRoomModel)
+                        }
+                        AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage:  self.cERoomVCType == .create ? "ROOM_CREATE_SUCCESS".localized : "EDIT_ROOM_SUCCESS".localized, inViewController: self,rhsButtonHandler: {
+                            (action) in
+                            self.navigationController?.dismiss(animated: true, completion:nil)
+                        })
+                        
+                        
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+                    }
+                }
+            }
+        })
     }
     func uploadImage(_ uploadImageModel:UploadImageModel){
         var urlRequest = try! URLRequest(url: URL(string: "\(Constants.BASE_URL_API)image/upload")!, method: .post, headers:nil)

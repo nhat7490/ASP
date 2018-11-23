@@ -11,7 +11,7 @@ import MBProgressHUD
 class ShowAllVC: BaseVC,UICollectionViewDataSource,
     UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,
     UITableViewDataSource,UITableViewDelegate,
-NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
+RoomCVCellDelegate,RoommateCVCellDelegate{
     
     
     
@@ -398,6 +398,39 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
         }
     }
     
+    
+    //MARK: Notification
+    func registerNotification(){
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
+    }
+    
+    @objc func didReceiveRemoveRoomNotification(_ notification:Notification){
+        
+        switch showAllVCType{
+        case .roomForOwner:
+            rooms.removeAll()
+            loadRoomForOwnerOrMemberData(withNewFilterArgModel: true)
+        default:
+            break
+        }
+    }
+    
+    @objc func didReceiveEditRoomNotification(_ notification:Notification){
+        switch showAllVCType{
+        case .roomForOwner:
+            if notification.object is RoomResponseModel{
+                guard let room = notification.object as? RoomResponseModel,let index = roomResponseModels.index(of: room) else{
+                    return
+                }
+                roomResponseModels[index] = room
+                collectionView.reloadData()
+            }
+        default:
+            break
+        }
+        
+    }
     //MARK: UICollectionView DataSourse and Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -432,40 +465,6 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
         }
         
     }
-    //MARK: Notification
-    func registerNotification(){
-        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
-    }
-    
-    @objc func didReceiveRemoveRoomNotification(_ notification:Notification){
-        
-        switch showAllVCType{
-        case .roomForOwner:
-            rooms.removeAll()
-            loadRoomForOwnerOrMemberData(withNewFilterArgModel: true)
-        default:
-            break
-        }
-    }
-    
-    @objc func didReceiveEditRoomNotification(_ notification:Notification){
-        switch showAllVCType{
-        case .roomForOwner:
-            if notification.object is RoomResponseModel{
-                guard let room = notification.object as? RoomResponseModel,let index = roomResponseModels.index(of: room) else{
-                    return
-                }
-                roomResponseModels[index] = room
-                collectionView.reloadData()
-            }
-        default:
-            break
-        }
-        
-    }
-    
-    //MARK: UICollectionView Delegate & Datasource
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch showAllVCType{
         case .suggestRoom,.roomPost:
@@ -624,7 +623,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
     
     
     
-    func newRoomCVCellDelegate(roomCVCell: RoomPostCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
+    func roomCVCellDelegate(roomCVCell: RoomPostCVCell, onClickUIImageView imageView: UIImageView,atIndextPath indexPath:IndexPath?) {
         guard let row = indexPath?.row else{
             return
         }
@@ -640,7 +639,7 @@ NewRoomCVCellDelegate,NewRoommateCVCellDelegate{
         }
     }
     
-    func newRoommateCVCellDelegate(newRoommateCVCell cell: RoommatePostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
+    func roommateCVCellDelegate(roommateCVCell cell: RoommatePostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
         guard let row = indexPath?.row else{
             return
         }

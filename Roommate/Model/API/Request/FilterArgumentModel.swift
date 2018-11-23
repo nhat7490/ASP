@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 class FilterArgumentModel : Mappable{
-    var searchRequestModel:SearchRequestModel?
+    var filterRequestModel:FilterRequestModel?
     var page:Int?
     var offset:Int?
     var typeId:Int?
@@ -22,8 +22,7 @@ class FilterArgumentModel : Mappable{
     }
     
     func mapping(map: Map) {
-        print("Call mapping(map: Map) for SearchRequestModel")
-        searchRequestModel <- map["searchRequestModel"]
+        filterRequestModel <- map["filterRequestModel"]
         page <- map["page"]
         offset <- map["offset"]
         typeId <- map["typeId"]

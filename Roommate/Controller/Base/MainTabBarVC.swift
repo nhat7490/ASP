@@ -48,7 +48,7 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
         vcs.append(notification)
         vcs.append(account)
         viewControllers = vcs.map({
-            if $0 is HomeVC || $0 is AccountVC{
+            if $0 is AccountVC{
                 return $0
             }else{
                 return UINavigationController(rootViewController: $0)

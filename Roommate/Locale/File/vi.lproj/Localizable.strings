@@ -63,6 +63,8 @@
 "TITLE_NEW_ROOM" = "Bài đăng tìm người ở ghép mới";
 "TITLE_NEW_ROOMMATE" = "Bài đăng tìm phòng mới";
 "TITLE_VIEW_ALL" = "Xem tất cả";
+"TITLE_SUGGEST" = "Gợi ý";
+"TITLE_HISTORY" = "Lịch sử tìm kiếm";
 
 //MARK: Utilies
 "FEMALE"="Nữ";
@@ -125,7 +127,11 @@
 
 //MARK: Common
 "INFORMATION"="Thông báo";
+"RESULT"="Kết quả";
+"SEARCH"="Tìm kiếm";
 "SELECT_IMAGE"="Chọn ảnh";
+"SEARCH_RESULT"="Kết quả tìm kiếm";
+"SEARCH_NEARBY"="Địa điểm gần đó";
 "SUGGEST_SETTING"="Cài đặt gợi ý"; 
 "NO_DATA"="Không có dữ liệu";
 "NO_MORE_DATA"="Không có thêm dữ liệu";

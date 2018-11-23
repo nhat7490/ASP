@@ -7,8 +7,8 @@
 //
 
 import UIKit
-protocol NewRoommateCVCellDelegate:class{
-    func newRoommateCVCellDelegate(newRoommateCVCell cell:RoommatePostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?);
+protocol RoommateCVCellDelegate:class{
+    func roommateCVCellDelegate(roommateCVCell cell:RoommatePostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?);
 }
 class RoommatePostCVCell: UICollectionViewCell {
     @IBOutlet weak var imgvLeftAvatar: UIImageView!
@@ -20,7 +20,7 @@ class RoommatePostCVCell: UICollectionViewCell {
     @IBOutlet weak var tvRightDistrictsValue: UITextView!
     @IBOutlet weak var lblRightCity: UILabel!
     @IBOutlet weak var tvRightCityValue: UITextView!
-    var delegate:NewRoommateCVCellDelegate?
+    var delegate:RoommateCVCellDelegate?
     var roommate:RoommatePostResponseModel?{
         didSet{
             self.imgvLeftAvatar.sd_setImage(with: URL(string: roommate?.userResponseModel?.imageProfile ?? ""), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
@@ -107,7 +107,7 @@ class RoommatePostCVCell: UICollectionViewCell {
     }
     
     @objc func onClickImgvBookmark(geture:UITapGestureRecognizer) {
-        delegate?.newRoommateCVCellDelegate(newRoommateCVCell: self, onClickUIImageView: imgvLeftBookmark, atIndextPath: indexPath)
+        delegate?.roommateCVCellDelegate(roommateCVCell: self, onClickUIImageView: imgvLeftBookmark, atIndextPath: indexPath)
         
     }
 }

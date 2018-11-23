@@ -595,7 +595,6 @@ extension Array {
         }
     }
 }
-
 extension UIViewController {
     /// The visible view controller from a given view controller
     var visibleViewController: UIViewController? {
@@ -616,5 +615,13 @@ extension UINavigationController{
     open override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+    }
+}
+extension String {
+    func contains(find: String) -> Bool{
+        return self.range(of: find) != nil
+    }
+    func containsIgnoringCase(find: String) -> Bool{
+        return self.range(of: find, options: .caseInsensitive) != nil
     }
 }

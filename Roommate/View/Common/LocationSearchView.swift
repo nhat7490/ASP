@@ -13,7 +13,6 @@ protocol LocationSearchViewDelegate:class{
 class LocationSearchView: UIView {
 
     @IBOutlet weak var btnLocation: UIButton!
-    @IBOutlet weak var tfSearch: UITextField!
     weak var delegate:LocationSearchViewDelegate?
     var lblTitle = UILabel()
     var location:String?{
@@ -30,15 +29,6 @@ class LocationSearchView: UIView {
         layer.cornerRadius = 10
         clipsToBounds = true
         btnLocation.backgroundColor = .clear
-        tfSearch.backgroundColor = .clear
-        tfSearch.borderStyle = .none
-        tfSearch.textAlignment  = .left
-        let paraStyle = NSMutableParagraphStyle()
-        paraStyle.alignment = .center
-        tfSearch.attributedPlaceholder = NSAttributedString(string: "PLACE_HOLDER_SEARCH".localized, attributes: [NSAttributedStringKey.paragraphStyle:paraStyle])
-        
-        
-        
         lblTitle.font = .smallTitle
         lblTitle.textColor = .defaultBlue
         lblTitle.textAlignment = .center

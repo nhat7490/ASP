@@ -180,7 +180,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
             cityDropdownListView.text = selectedCity?.name
         }
         
-        if let searchRequestModel = filterArgumentModel.searchRequestModel{
+        if let searchRequestModel = filterArgumentModel.filterRequestModel{
             if let cityId = filterArgumentModel.cityId{
                 selectedCity = DBManager.shared.getRecord(id: cityId, ofType: CityModel.self)
                 if let districts = searchRequestModel.districts,districts.count != 0{
@@ -265,7 +265,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     
     //MARK: Handler genderViewDelegate
     func genderViewDelegate(genderView view: GenderView, onChangeGenderSelect genderSelect: GenderSelect?) {
-        filterArgumentModel.searchRequestModel?.gender = genderView.genderSelect?.rawValue
+        filterArgumentModel.filterRequestModel?.gender = genderView.genderSelect?.rawValue
     }
     //MARK: Handler sliderView
     func sliderView(view sliderView: SliderView, didChangeSelectedMinValue selectedMin: Float, andMaxValue selectedMax: Float) {
@@ -308,23 +308,23 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     @objc  func onClickBtnSave(){
         //handler for save filter
         filterArgumentModel.page = 1
-        filterArgumentModel.searchRequestModel = SearchRequestModel()
-        filterArgumentModel.searchRequestModel?.price = selectedPrice!
-        filterArgumentModel.searchRequestModel?.gender = genderView.genderSelect?.rawValue
+        filterArgumentModel.filterRequestModel = FilterRequestModel()
+        filterArgumentModel.filterRequestModel?.price = selectedPrice!
+        filterArgumentModel.filterRequestModel?.gender = genderView.genderSelect?.rawValue
         filterArgumentModel.cityId = selectedCity?.cityId
-        filterArgumentModel.searchRequestModel?.districts = selectedDistricts?.compactMap{$0.districtId}
+        filterArgumentModel.filterRequestModel?.districts = selectedDistricts?.compactMap{$0.districtId}
         var utilities:[Int] = []
         selectedUtilities?.forEach({ (utilityId) in
             utilities.append(utilityId)
         })
-        filterArgumentModel.searchRequestModel?.utilities = utilities
+        filterArgumentModel.filterRequestModel?.utilities = utilities
         
         self.delegate?.filterVCDelegate(filterVC: self, onCompletedWithFilter: filterArgumentModel)
         self.navigationController?.popViewController(animated: true)
     }
     //MARK: Handler for reset button
     @objc  func onClickBtnReset(){
-        filterArgumentModel.searchRequestModel = nil
+        filterArgumentModel.filterRequestModel = nil
         updateUI()
         utilitiesView.resetView()
     }

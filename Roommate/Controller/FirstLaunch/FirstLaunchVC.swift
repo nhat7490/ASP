@@ -33,7 +33,7 @@ class FirstLaunchVC:BaseVC{
     
     @IBAction func onClickBtnSignUpAsRoomOwner(_ sender: Any) {
         let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN) as! SignUpVC
-        vc.user.roleId = Constants.MEMBER
+        vc.user.roleId = Constants.ROOMOWNER
         navigationController?.pushViewController(vc, animated: true)
     }
     @IBAction func onClickBtnSignIn(_ sender: Any) {
@@ -44,7 +44,7 @@ class FirstLaunchVC:BaseVC{
     
     @IBAction func onClickBtnSignUpAsGuest(_ sender: Any) {
         let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_SIGN_UP, sbName: Constants.STORYBOARD_MAIN) as! SignUpVC
-        vc.user.roleId = Constants.ROOMOWNER
+        vc.user.roleId = Constants.MEMBER
         navigationController?.pushViewController(vc, animated: true)
     }
 }

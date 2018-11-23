@@ -17,38 +17,25 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bLu-Jr-Zo5">
-                    <rect key="frame" x="0.0" y="0.0" width="100" height="40"/>
+                    <rect key="frame" x="0.0" y="0.0" width="470" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="92c-Pt-xVS"/>
-                        <constraint firstAttribute="width" constant="100" id="ecV-3l-ZuH"/>
                     </constraints>
                     <connections>
                         <action selector="onClickBtnLocation:" destination="iN0-l3-epB" eventType="touchUpInside" id="pQS-tv-M2n"/>
                     </connections>
                 </button>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p56-VN-E4R">
-                    <rect key="frame" x="100" y="0.0" width="370" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="40" id="ncK-0b-fnh"/>
-                    </constraints>
-                    <nil key="textColor"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits"/>
-                </textField>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="p56-VN-E4R" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="FBc-oa-AKj"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bLu-Jr-Zo5" secondAttribute="trailing" id="56v-IR-SN1"/>
                 <constraint firstItem="bLu-Jr-Zo5" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Or4-MI-Vwb"/>
                 <constraint firstItem="bLu-Jr-Zo5" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Q8y-ou-ahl"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="p56-VN-E4R" secondAttribute="trailing" id="XGV-2o-xN1"/>
-                <constraint firstItem="p56-VN-E4R" firstAttribute="leading" secondItem="bLu-Jr-Zo5" secondAttribute="trailing" id="YwZ-vA-cE6"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="btnLocation" destination="bLu-Jr-Zo5" id="J7s-ZN-CqW"/>
-                <outlet property="tfSearch" destination="p56-VN-E4R" id="cbM-o5-PIi"/>
             </connections>
             <point key="canvasLocation" x="3" y="-167"/>
         </view>

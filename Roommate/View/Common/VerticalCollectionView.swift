@@ -15,7 +15,7 @@ protocol VerticalCollectionViewDelegate:class {
 extension VerticalCollectionViewDelegate{
     func verticalCollectionViewDelegate(verticalPostView view:VerticalCollectionView,collectionCell cell: UICollectionViewCell, onClickUIImageView: UIImageView, atIndexPath indexPath: IndexPath?){}
 }
-class VerticalCollectionView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,NewRoomCVCellDelegate,UICollectionViewDelegateFlowLayout,NewRoommateCVCellDelegate{
+class VerticalCollectionView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,RoomCVCellDelegate,UICollectionViewDelegateFlowLayout,RoommateCVCellDelegate{
     
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var btnViewAll: UIButton!
@@ -150,11 +150,11 @@ class VerticalCollectionView: UIView ,UICollectionViewDelegate,UICollectionViewD
     }
     
     //MARK: NewRoomCVCellDelegate
-    func newRoomCVCellDelegate(roomCVCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?){
+    func roomCVCellDelegate(roomCVCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?){
         delegate?.verticalCollectionViewDelegate(verticalPostView:self,collectionCell: cell, onClickUIImageView: imgvBookmark, atIndexPath: indexPath)
     }
     //MARK: NewRoommateCVCellDelegate
-    func newRoommateCVCellDelegate(newRoommateCVCell cell: RoommatePostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
+    func roommateCVCellDelegate(roommateCVCell cell: RoommatePostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
         delegate?.verticalCollectionViewDelegate(verticalPostView:self,collectionCell: cell, onClickUIImageView: imgvBookmark, atIndexPath: indexPath)
     }
     @IBAction func onClickBtnViewAll(_ sender: UIButton) {

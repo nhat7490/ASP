@@ -65,7 +65,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         tfPassword.textContentType = UITextContentType("")
         tfRepeatPassword.setupUI(placeholder: "PLACE_HOLDER_REPEAT_PASSWORD", title: "PLACE_HOLDER_REPEAT_PASSWORD",isSecureTextEntry:true, delegate: self)
         tfRepeatPassword.textContentType = UITextContentType("")
-        btnNextStep.setTitle("SIGN_UP_TITLE".localized, for: .normal)
+        btnNextStep.setTitle(user.roleId == Constants.ROOMOWNER ? "SIGN_UP_AS_ROOMOWNER_TITLE".localized : "SIGN_UP_AS_MEMBER_TITLE".localized, for: .normal)
         btnNextStep.layer.cornerRadius = 15.0
         btnNextStep.clipsToBounds = true
         sgGender.setTitle("MALE".localized, forSegmentAt: 0)

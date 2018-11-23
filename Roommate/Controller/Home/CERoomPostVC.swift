@@ -17,10 +17,7 @@ import MBProgressHUD
 import AVFoundation
 import PhotosUI
 class CERoomPostVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource,DropdownListViewDelegate,UtilityInputVCDelegate,UploadImageViewDelegate{
-    
-    
-    
-    
+
     let scrollView:UIScrollView = {
         let sv = UIScrollView()
         sv.bounces = false

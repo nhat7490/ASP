@@ -65,8 +65,9 @@ class APIConnection: NSObject {
                     //Error to convert json to object
                 }else{
                     //Default code 404 when return from server
-                    if HTTPStatusCode(rawValue: (response.response?.statusCode)!) == HTTPStatusCode.NotFound{
-                        completion(nil,nil,HTTPStatusCode.NotFound)
+                    let statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode)!)
+                    if statusCode == HTTPStatusCode.NotFound || statusCode == HTTPStatusCode.OK {
+                        completion(nil,nil,statusCode)
                     }else{
                         //PARSE_RESPONSE_FAIL
                         completion(nil,ApiResponseErrorType.PARSE_RESPONSE_FAIL,nil)

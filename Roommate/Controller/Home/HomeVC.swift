@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 import MBProgressHUD
 import CoreLocation
-class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HorizontalRoomViewDelegate,VerticalCollectionViewDelegate,LocationSearchViewDelegate,CLLocationManagerDelegate{
+class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HorizontalRoomViewDelegate,VerticalCollectionViewDelegate,LocationSearchViewDelegate,CLLocationManagerDelegate,UISearchControllerDelegate,UISearchBarDelegate{
     
-    var scrollView:UIScrollView = {
+    lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
         sv.bounces = false
         sv.showsVerticalScrollIndicator = false
@@ -21,44 +21,65 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     }()
     
     
-    var contentView:UIView = {
+    
+    lazy var contentView:UIView = {
         let v = UIView()
         //        v.backgroundColor = .red
         return v
     }()
+    lazy var searchController:UISearchController = {
+        let sc = UISearchController(searchResultsController: nil)
+        sc.delegate  = self
+//        sc.searchResultsUpdater = searchResultVC //Show this vc for result
+//        sc.dimsBackgroundDuringPresentation = true //Làm mờ khi show result vc
+//        definesPresentationContext = true //Modal type - show result vc over parent vc
+//        
+        sc.searchBar.delegate = self
+        // searchBar represent for searchcontroller in parent vc
+        sc.hidesNavigationBarDuringPresentation = false
+        sc.searchBar.searchBarStyle = .prominent
+        sc.searchBar.placeholder = "Search Place"
+        sc.searchBar.sizeToFit()
+        sc.searchBar.barTintColor = .red
+        sc.searchBar.tintColor = .defaultBlue
+        return sc
+    }()
     
-    var topContainerView:UIView = {
+    lazy var searchResultVC = SearchVC()
+    
+    lazy  var topContainerView:UIView = {
         let v = UIView()
         //        v.backgroundColor = .blue
         return v
     }()
-    var bottomContainerView:UIView = {
+    
+    lazy var bottomContainerView:UIView = {
         let v = UIView()
         //        v.backgroundColor = .blue
         return v
     }()
     
-    var locationSearchView:LocationSearchView = {
+    lazy var locationSearchView:LocationSearchView = {
         let lv:LocationSearchView = .fromNib()
         return lv
     }()
     
-    var topNavigation:BaseHorizontalCollectionView = {
+    lazy var topNavigation:BaseHorizontalCollectionView = {
         let bv = BaseHorizontalCollectionView()
         return bv
     }()
     
-    var suggestRoomPostView:HorizontalRoomView = {
+    lazy var suggestRoomPostView:HorizontalRoomView = {
         let hv:HorizontalRoomView  = .fromNib()
         return hv
     }()
     
-    var newRoomPostView:VerticalCollectionView = {
+    lazy var newRoomPostView:VerticalCollectionView = {
         let vv:VerticalCollectionView = .fromNib()
         vv.verticalCollectionViewType = .newRoomPost
         return vv
     }()
-    var newRoommatePostView:VerticalCollectionView = {
+    lazy var newRoommatePostView:VerticalCollectionView = {
         let vv:VerticalCollectionView = .fromNib()
         vv.verticalCollectionViewType = .newRoommatePost
         return vv
@@ -71,7 +92,11 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     var filterForRoomPost = FilterArgumentModel()
     var filterForRoommatePost = FilterArgumentModel()
     var baseSuggestRequestModel = BaseSuggestRequestModel()
-    var setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self)
+    var setting:SettingModel?{
+        get{
+            return DBManager.shared.getSingletonModel(ofType: SettingModel.self)
+        }
+    }
     var actionsForRoomMaster:[[String]] = [
         ["Tìm phòng","find-room"],
         ["Tìm bạn","find-roommate"],
@@ -103,22 +128,52 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         loadRemoteData()
         registerNotification()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if #available(iOS 11.0, *) {
+            navigationItem.hidesSearchBarWhenScrolling = false
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if #available(iOS 11.0, *) {
+            navigationItem.hidesSearchBarWhenScrolling = true
+        }
+    }
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        for view in (self.navigationController?.navigationBar.subviews)! {
+            view.layoutMargins = UIEdgeInsets.zero
+        }
+    }
     //MARK: Setup UI and Delegate
     func setupUI(){
-        
+//        extendedLayoutIncludesOpaqueBars = true
         let suggestRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
         let newRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
 //            80 + Constants.HEIGHT_CELL_NEWROOMCV * CGFloat(Constants.MAX_ROOM_ROW) + Constants.HEIGHT_MEDIUM_SPACE
         let newRoommmateViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
 //            80 + Constants.HEIGHT_CELL_NEWROOMMATECV * CGFloat(Constants.MAX_POST) + Constants.HEIGHT_MEDIUM_SPACE
         let totalContentViewHeight:CGFloat
-        
+        navigationItem.titleView = searchController.searchBar
+        let leftItem = UIBarButtonItem(customView: locationSearchView)
+        _ = leftItem.customView?.anchorHeight(equalToConstrant: navigationItem.titleView!.frame.height)
+        _ = leftItem.customView?.anchorWidth(equalToConstrant: 100.0)
+        navigationItem.leftBarButtonItem = leftItem
+
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(topContainerView)
         contentView.addSubview(bottomContainerView)
-        topContainerView.addSubview(locationSearchView)
         topContainerView.addSubview(topNavigation)
+        
+        //Navigation bar subviews constraints
+//        _ = locationSearchView.anchor(tempView.topAnchor, tempView.leftAnchor, tempView.bottomAnchor, nil,.zero,CGSize(width: 100.0, height: 0))
+//        _ = searchController.searchBar.anchor(tempView.topAnchor, locationSearchView.rightAnchor, tempView.bottomAnchor, tempView.rightAnchor,.zero)
+        
+        
+        
         if user?.roleId != 2{
             totalContentViewHeight = newRoomViewHeight + newRoommmateViewHeight + Constants.HEIGHT_TOP_CONTAINER_VIEW + suggestRoomViewHeight
             bottomContainerView.addSubview(suggestRoomPostView)
@@ -139,10 +194,10 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         contentViewHeightConstraint = contentView.anchorHeight(equalToConstrant: totalContentViewHeight)
         
         _ = topContainerView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero, CGSize(width: 0, height: Constants.HEIGHT_TOP_CONTAINER_VIEW))
-        _ = locationSearchView.anchor(topContainerView.topAnchor, topContainerView.leftAnchor, nil, topContainerView.rightAnchor, UIEdgeInsets(top: Constants.MARGIN_10, left: Constants.MARGIN_20, bottom: 0, right: -Constants.MARGIN_20), CGSize(width: 0, height: Constants.HEIGHT_LOCATION_SEARCH_VIEW))
+//        _ = locationSearchView.anchor(topContainerView.topAnchor, topContainerView.leftAnchor, nil, topContainerView.rightAnchor, UIEdgeInsets(top: Constants.MARGIN_10, left: Constants.MARGIN_20, bottom: 0, right: -Constants.MARGIN_20), CGSize(width: 0, height: Constants.HEIGHT_LOCATION_SEARCH_VIEW))
         
         
-        _ = topNavigation.anchor(locationSearchView.bottomAnchor, topContainerView.leftAnchor, topContainerView.bottomAnchor, topContainerView.rightAnchor,UIEdgeInsets(top: Constants.MARGIN_10, left: 0, bottom: 0, right: 0))
+        _ = topNavigation.anchor(topContainerView.topAnchor, topContainerView.leftAnchor, topContainerView.bottomAnchor, topContainerView.rightAnchor)
         
         topNavigation.backgroundColor = UIColor(hexString: "f7f7f7")
         topContainerView.layer.borderWidth  = 1
@@ -177,11 +232,11 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         if user?.roleId != 2{suggestRoomPostView.delegate = self}
         
         
-        filterForRoomPost.searchRequestModel = nil
+        filterForRoomPost.filterRequestModel = nil
         filterForRoommatePost.typeId = Constants.ROOM_POST
         filterForRoomPost.cityId = setting?.cityId
         
-        filterForRoommatePost.searchRequestModel = nil
+        filterForRoommatePost.filterRequestModel = nil
         filterForRoommatePost.cityId = setting?.cityId
         filterForRoommatePost.typeId = Constants.ROOMMATE_POST
     }
@@ -239,6 +294,12 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                 }
             }
         }
+    }
+    //MARK: Setup UI and Delegate
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        let vc = SearchResultsVC()
+        presentInNewNavigationController(viewController: vc)
+        return false
     }
     //MARK: Remote Data
     func loadRemoteData(){
@@ -660,4 +721,5 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         }
         
     }
+    
 }

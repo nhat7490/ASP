@@ -12,7 +12,7 @@ import ObjectMapper_Realm
 import Realm
 class CityModel:BaseModel {
     
-    @objc dynamic var cityId = 0
+    @objc dynamic var cityId = 45
     @objc dynamic var name:String?
     
     //MARK: ObjectMapper

@@ -8,8 +8,8 @@
 
 import UIKit
 import SDWebImage
-protocol NewRoomCVCellDelegate:class {
-    func newRoomCVCellDelegate(roomCVCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?)
+protocol RoomCVCellDelegate:class {
+    func roomCVCellDelegate(roomCVCell cell:RoomPostCVCell,onClickUIImageView imgvBookmark:UIImageView,atIndextPath indexPath:IndexPath?)
 }
 class RoomPostCVCell: UICollectionViewCell {
     @IBOutlet weak var imgvBookMark: UIImageView!
@@ -18,7 +18,7 @@ class RoomPostCVCell: UICollectionViewCell {
     @IBOutlet weak var tvName: UITextView!
     @IBOutlet weak var tvPrice: UITextView!
     @IBOutlet weak var tvAddress: UITextView!
-    var delegate:NewRoomCVCellDelegate?
+    var delegate:RoomCVCellDelegate?
     var room:RoomPostResponseModel?{
         didSet{
             imgvAvatar.sd_setImage(with: URL(string: room?.imageUrls?.first ?? ""), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
@@ -102,7 +102,7 @@ class RoomPostCVCell: UICollectionViewCell {
     }
     //MARK: Event for UI
     @objc func onClickImgvBookmark() {
-        delegate?.newRoomCVCellDelegate(roomCVCell: self, onClickUIImageView: imgvBookMark,atIndextPath: indexPath)
+        delegate?.roomCVCellDelegate(roomCVCell: self, onClickUIImageView: imgvBookMark,atIndextPath: indexPath)
         
     }
     
