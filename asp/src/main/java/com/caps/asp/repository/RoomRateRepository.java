@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface RoomRateRepository extends JpaRepository<TbRoomRate, Integer> {
    TbRoomRate findByRoomIdAndUserId(int roomId, int userId);
-
+   List<TbRoomRate> findAllByRoomId(int roomId);
+   void removeAllByRoomId(int roomId);
 
 
 }

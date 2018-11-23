@@ -4,6 +4,8 @@ import com.caps.asp.model.TbUserRate;
 import com.caps.asp.repository.UserRateRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserRateService {
     public UserRateRepository userRateRepository;
@@ -17,5 +19,11 @@ public class UserRateService {
     }
     public void saveUserRate(TbUserRate userRate){
         userRateRepository.saveAndFlush(userRate);
+    }
+
+
+
+    public List<TbUserRate> findAllByUserId(int userId) {
+        return userRateRepository.findAllByUserId(userId);
     }
 }

@@ -6,6 +6,7 @@ import com.caps.asp.model.TbRoomRate;
 import com.caps.asp.repository.RoomRateRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 @Service
@@ -25,4 +26,11 @@ public class RoomRateService {
     }
 
 
+    public List<TbRoomRate> findAllByRoomId (int roomId) {
+        return roomRateRepository.findAllByRoomId(roomId);
+    }
+
+    public void removeByRoomId(int roomId){
+        roomRateRepository.removeAllByRoomId(roomId);
+    }
 }
