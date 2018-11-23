@@ -2,6 +2,7 @@ package com.caps.asp.model.uimodel.response.common;
 
 import com.caps.asp.model.TbUser;
 import com.caps.asp.model.TbUserRate;
+import com.caps.asp.model.uimodel.common.UserSuggestSettingModel;
 
 import java.sql.Date;
 import java.util.List;
@@ -13,7 +14,11 @@ public class UserResponseModel {
     private Date dob;
     private String phone;
     private int gender;
+    private int roleId;
+    private String email;
+    private String username;
     private List<TbUserRate> userRateList;
+    private UserSuggestSettingModel userSuggestSettingModel;
 
     public UserResponseModel() {
     }
@@ -24,16 +29,55 @@ public class UserResponseModel {
         this.dob = user.getDob();
         this.phone = user.getPhone();
         this.gender = user.getGender();
+        this.email = user.getEmail();
+        this.roleId = user.getRoleId();
+        this.username = user.getUsername();
     }
 
-    public UserResponseModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender, List<TbUserRate> userRateList) {
+    public UserResponseModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender, int roleId, String email, String username, List<TbUserRate> userRateList, UserSuggestSettingModel userSuggestSettingModel) {
         this.userId = userId;
         this.fullname = fullname;
         this.imageProfile = imageProfile;
         this.dob = dob;
         this.phone = phone;
         this.gender = gender;
+        this.roleId = roleId;
+        this.email = email;
+        this.username = username;
         this.userRateList = userRateList;
+        this.userSuggestSettingModel = userSuggestSettingModel;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public UserSuggestSettingModel getUserSuggestSettingModel() {
+        return userSuggestSettingModel;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUserSuggestSettingModel(UserSuggestSettingModel userSuggestSettingModel) {
+        this.userSuggestSettingModel = userSuggestSettingModel;
     }
 
     public List<TbUserRate> getUserRateList() {

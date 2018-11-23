@@ -1,13 +1,12 @@
 package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
+import com.caps.asp.model.uimodel.common.UserSuggestSettingModel;
 import com.caps.asp.model.uimodel.request.UserLoginModel;
 import com.caps.asp.model.uimodel.response.common.CreateResponseModel;
 import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
-import com.caps.asp.service.PostService;
-import com.caps.asp.service.RoomHasUserService;
-import com.caps.asp.service.RoomService;
-import com.caps.asp.service.UserService;
+import com.caps.asp.model.uimodel.response.common.UserResponseModel;
+import com.caps.asp.service.*;
 //import com.caps.asp.util.ResetPassword;
 //import com.caps.asp.util.ResetPassword;
 import com.caps.asp.util.ResetPassword;
@@ -17,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.caps.asp.constant.Constant.ADMIN;
 import static com.caps.asp.constant.Constant.MEMBER;
@@ -29,13 +29,19 @@ public class UserController {
     public final RoomService roomService;
     public final BCryptPasswordEncoder passwordEncoder;
     public final RoomHasUserService roomHasUserService;
+    public final ReferenceService referenceService;
+    public final UtilityReferenceService utilityReferenceService;
+    public final DistrictReferenceService districtReferenceService;
 
-    public UserController(UserService userService, PostService postService, RoomService roomService, RoomHasUserService roomHasUserService, BCryptPasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PostService postService, RoomService roomService, RoomHasUserService roomHasUserService, BCryptPasswordEncoder passwordEncoder, ReferenceService referenceService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService) {
         this.userService = userService;
         this.postService = postService;
         this.roomService = roomService;
         this.passwordEncoder = passwordEncoder;
         this.roomHasUserService = roomHasUserService;
+        this.referenceService = referenceService;
+        this.utilityReferenceService = utilityReferenceService;
+        this.districtReferenceService = districtReferenceService;
     }
 
     @PostMapping(value = "/user/login", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -43,10 +49,30 @@ public class UserController {
         try {
             TbUser user = userService.findByUsername(model.getUsername());
             boolean isRight = this.passwordEncoder.matches(model.getPassword(), user.getPassword());
-            System.out.println(isRight);
-            return isRight
-                    ? ResponseEntity.status(OK).body(user)
-                    : ResponseEntity.status(FORBIDDEN).build();//need to encrypt here
+            if (isRight){
+                UserResponseModel userResponseModel = new UserResponseModel(user);
+                UserSuggestSettingModel userSuggestSettingModel = new UserSuggestSettingModel();
+
+
+                TbReference  reference = referenceService.getByUserId(user.getUserId());
+                userSuggestSettingModel.setPrice(Arrays.asList(reference.getMinPrice(),reference.getMaxPrice()));
+
+                List<TbUtilitiesReference> utilitiesReference = utilityReferenceService.findAllByUserId(user.getUserId());
+                userSuggestSettingModel.setUtilities(utilitiesReference.stream().map(
+                        tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
+                        .collect(Collectors.toList()));
+
+                List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(user.getUserId());
+                userSuggestSettingModel.setDistricts(districtReferences.stream().map(
+                        tbDistrictReference -> tbDistrictReference.getDistrictId())
+                        .collect(Collectors.toList()));
+
+                userResponseModel.setUserSuggestSettingModel(userSuggestSettingModel);
+
+                return ResponseEntity.status(OK).body(userResponseModel);
+            }else {
+                return ResponseEntity.status(CONFLICT).build();
+            }
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }
