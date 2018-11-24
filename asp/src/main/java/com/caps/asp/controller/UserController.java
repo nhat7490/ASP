@@ -71,7 +71,7 @@ public class UserController {
 
                 return ResponseEntity.status(OK).body(userResponseModel);
             }else {
-                return ResponseEntity.status(CONFLICT).build();
+                return ResponseEntity.status(FORBIDDEN).build();
             }
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
