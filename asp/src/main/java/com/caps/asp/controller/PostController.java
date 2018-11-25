@@ -783,7 +783,7 @@ public class PostController {
             List<TbPost> nearByPostList = postService.getSuggestedListForMember(Float.parseFloat(searchRequestModel.getLatitude() + "")
                     , Float.parseFloat(searchRequestModel.getLongitude() + "")
                     , cityId
-                    , 1, 50);
+                    , 1, 20);
 
             if (nearByPostList == null) {
 //
