@@ -4,6 +4,8 @@ import com.caps.asp.model.TbPostHasTbDistrict;
 import com.caps.asp.repository.PostHasDistrictRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostHasDistrictService {
 
@@ -19,5 +21,9 @@ public class PostHasDistrictService {
 
     public void save(TbPostHasTbDistrict tbPostHasTbDistrict){
         postHasDistrictRepository.save(tbPostHasTbDistrict);
+    }
+
+    public List<TbPostHasTbDistrict> findAllByPostId(int postId) {
+        return postHasDistrictRepository.findAllByPostId(postId);
     }
 }

@@ -87,8 +87,8 @@ public class PostController {
 //                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
                     TbFavourite favourite = favouriteService
                             .findByUserIdAndPostId(filterArgumentModel.getUserId(), tbPost.getPostId());
-                    List<TbUtilitiesReference> utilitiesReferences = utilityReferenceService.findAllByUserId(tbPost.getUserId());
-                    List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(tbPost.getUserId());
+                    List<TbPostHasUtility> utilitiesReferences = postHasUtilityService.findAllByPostId(tbPost.getPostId());
+                    List<TbPostHasTbDistrict> districtReferences = postHasDistrictService.findAllByPostId(tbPost.getPostId());
                     TbDistrict district = new TbDistrict();
 
                     if (districtReferences != null && districtReferences.size() != 0) {

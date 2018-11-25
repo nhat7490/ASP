@@ -4,6 +4,8 @@ import com.caps.asp.model.TbPostHasUtility;
 import com.caps.asp.repository.PostHasUtilityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostHasUtilityService {
 
@@ -19,5 +21,9 @@ public class PostHasUtilityService {
 
     public void deleteAllPostHasUtilityByPostId(int postId){
         postHasUtilityRepository.deleteAllByPostId(postId);
+    }
+
+    public List<TbPostHasUtility> findAllByPostId(int postId) {
+        return postHasUtilityRepository.findAllByPostId(postId);
     }
 }
