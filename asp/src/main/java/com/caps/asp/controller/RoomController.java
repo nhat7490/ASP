@@ -128,7 +128,7 @@ public class RoomController {
                 room.setMaxGuest(roomRequestModel.getMaxGuest());
                 room.setCurrentNumber(roomRequestModel.getCurrentMember());
                 room.setDescription(roomRequestModel.getDescription());
-                room.setStatusId(roomRequestModel.getStatusId());
+                room.setStatusId(PENDING);
                 room.setUserId(roomRequestModel.getUserId());
                 room.setCityId(roomRequestModel.getCityId());
                 room.setDistrictId(roomRequestModel.getDistrictId());
