@@ -118,14 +118,14 @@ public class RoomController {
             //update room info
             TbRoom room = roomService.findRoomById(roomRequestModel.getRoomId());
             TbUser user = userService.findById(roomRequestModel.getUserId());
+            List<TbRoomHasUser> roomHasUsers = roomHasUserService.findByRoomIdAndDateOutIsNull(roomRequestModel.getRoomId());
 
-            if (room != null) {
+            if (room != null && roomHasUsers.size() < roomRequestModel.getCurrentMember()) {
                 room.setRoomId(roomRequestModel.getRoomId());
                 room.setName(roomRequestModel.getName());
                 room.setPrice(roomRequestModel.getPrice());
                 room.setArea(roomRequestModel.getArea());
                 room.setMaxGuest(roomRequestModel.getMaxGuest());
-//            room.setDate(new Date(System.currentTimeMillis()));//Edit with current time not in request
                 room.setCurrentNumber(roomRequestModel.getCurrentMember());
                 room.setDescription(roomRequestModel.getDescription());
                 room.setStatusId(roomRequestModel.getStatusId());
