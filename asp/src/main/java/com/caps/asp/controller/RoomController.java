@@ -76,7 +76,7 @@ public class RoomController {
                 room.setDate(date);
                 room.setCurrentNumber(0);
                 room.setDescription(roomRequestModel.getDescription());
-                room.setStatusId(DECLINED);
+                room.setStatusId(PENDING);
                 room.setUserId(roomRequestModel.getUserId());
                 room.setCityId(roomRequestModel.getCityId());
                 room.setDistrictId(roomRequestModel.getDistrictId());
