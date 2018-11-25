@@ -785,14 +785,6 @@ public class PostController {
                     , cityId
                     , 1, 20);
 
-            if (nearByPostList == null) {
-//
-//            return ResponseEntity
-//                    .status(OK)
-//                    .body(common.getNewPost(baseSuggestRequestModel)
-//                            .getContent());
-            }
-
             nearByPostList.removeAll(postList);
             List<RoomPostResponseModel> nearByRoomPostResponseModels = new ArrayList<>();
             nearByRoomPostResponseModels = suggest.mappingRoomPost(nearByPostList, nearByRoomPostResponseModels, searchRequestModel.getUserId());
