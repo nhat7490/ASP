@@ -289,7 +289,7 @@ public class PostController {
 
             if (user.getRoleId() == ROOM_MASTER && roomHasUser != null) {
                 TbPost post = new TbPost();
-                post.setTypeId(MEMBER_POST);
+                post.setTypeId(MASTER_POST);
                 post.setLongtitude(room.getLongtitude());
                 post.setLattitude(room.getLattitude());
                 Date date = new Date(System.currentTimeMillis());

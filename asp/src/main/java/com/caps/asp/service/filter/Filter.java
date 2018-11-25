@@ -29,11 +29,13 @@ public class Filter implements Specification<TbPost> {
     public Predicate toPredicate(Root<TbPost> postRoot, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
         if (filterArgumentModel.getFilterRequestModel() == null && filterArgumentModel.getTypeId() == null)
             return cb.conjunction();
+
         criteriaQuery.distinct(true);
 
         if (filterArgumentModel.getTypeId() == MASTER_POST) {
 
             if (filterArgumentModel.getFilterRequestModel() != null) {
+
                 Root<TbRoom> roomRoot = criteriaQuery.from(TbRoom.class);
                 Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
                 Root<TbRoomHasUtility> roomHasUtilityRoot = criteriaQuery.from(TbRoomHasUtility.class);
@@ -97,6 +99,7 @@ public class Filter implements Specification<TbPost> {
                 if (utilityList.size() == 0) utilityList.add(cb.conjunction());
                 if (genderList.size() == 0) genderList.add(cb.conjunction());
                 if (priceList.size() == 0) priceList.add(cb.conjunction());
+
                 return cb.and(
                         cb.equal(postRoot.get("roomId"), roomRoot.get("roomId")),
                         cb.equal(roomRoot.get("districtId"), districtRoot.get("districtId")),
