@@ -17,13 +17,13 @@ class BaseRoomRequestModel :Mappable{
     var description:String?
     
     var imageUrls:[String]!
-    var utilities:[UtilityModel]!
+    var utilities:[UtilityMappableModel]!
     var requiredGender:Int!
     var userId:Int?
     var districtId:Int?
     var cityId:Int?
 
-    public init(roomId: Int?, name: String!, price: Float!, area: Int!, address: String!, phone: String!, maxGuest: Int!, description: String?, imageUrls: [String]!, utilities: [UtilityModel]!, requiredGender: Int!, userId: Int, districtId: Int, cityId: Int) {
+    public init(roomId: Int?, name: String!, price: Float!, area: Int!, address: String!, phone: String!, maxGuest: Int!, description: String?, imageUrls: [String]!, utilities: [UtilityMappableModel]!, requiredGender: Int!, userId: Int, districtId: Int, cityId: Int) {
         self.roomId = roomId
         self.name = name
         self.price = price

@@ -13,30 +13,7 @@ class AllVC:BaseVC,UICollectionViewDataSource,
     UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,
     UITableViewDataSource,UITableViewDelegate,
 RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
-    
-    
-    
-    //MARK: Data for UICollectionView And UITableView
-    var roommates:[RoommatePostResponseModel]?
-    var rooms:[RoomPostResponseModel]?
-    var roomFilter:FilterArgumentModel = {
-        let filter = FilterArgumentModel()
-        filter.cityId = DBManager.shared.getSingletonModel(ofType: SettingModel.self)?.cityId
-        return filter
-    }()
-    var roommateFilter:FilterArgumentModel = {
-        let filter = FilterArgumentModel()
-        filter.typeId = Constants.ROOMMATE_POST
-        filter.cityId = DBManager.shared.getSingletonModel(ofType: SettingModel.self)?.cityId
-        return filter
-    }()
-    let orders = [
-        OrderType.newest:"NEWEST",
-        OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
-        OrderType.hightToLowPrice:"HIGH_TO_LOW_PRICE"
-    ]
-    var allVCType:AllVCType = .all
-    var apiRouter:APIRouter!
+
     //MARK: Components for Nav
     lazy var segmentControl:UISegmentedControl={
         let sg = UISegmentedControl(items: ["SEGMENTED_CONTROL_ROOM".localized,"SEGMENTED_CONTROL_ROOMMATE".localized])
@@ -108,7 +85,29 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         let v = UIView()
         return v
     }()
-    
+
+
+    //MARK: Data
+    var roommates:[RoommatePostResponseModel]?
+    var rooms:[RoomPostResponseModel]?
+    var roomFilter:FilterArgumentModel = {
+        let filter = FilterArgumentModel()
+        filter.cityId = DBManager.shared.getSingletonModel(ofType: SettingModel.self)?.cityId
+        return filter
+    }()
+    var roommateFilter:FilterArgumentModel = {
+        let filter = FilterArgumentModel()
+        filter.typeId = Constants.ROOMMATE_POST
+        filter.cityId = DBManager.shared.getSingletonModel(ofType: SettingModel.self)?.cityId
+        return filter
+    }()
+    let orders = [
+        OrderType.newest:"NEWEST",
+        OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
+        OrderType.hightToLowPrice:"HIGH_TO_LOW_PRICE"
+    ]
+    var allVCType:AllVCType = .all
+    var apiRouter:APIRouter!
     //MARK: Viewcontroller
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,9 +165,9 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         _ = orderByView.anchor(view.topAnchor, view.leftAnchor, nil, nil, UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0), CGSize(width: orderByViewWidth, height: orderByViewHeight))
         _ =  btnOrderBy.anchorTopRight(orderByView.topAnchor, orderByView.rightAnchor, 150.0, orderByViewHeight)
         _ = lblOrderBy.anchorTopRight(orderByView.topAnchor, btnOrderBy.leftAnchor, orderByViewWidth-150.0, orderByViewHeight)
-        _ = imageView.anchor(btnOrderBy.topAnchor,nil,btnOrderBy.bottomAnchor,btnOrderBy.rightAnchor,UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
-        _ = imageView.anchorWidth(equalTo: btnOrderBy.heightAnchor, constant: -10)
-        _ = lblSelectTitle.anchor(btnOrderBy.topAnchor,btnOrderBy.leftAnchor,btnOrderBy.bottomAnchor,imageView.leftAnchor,UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
+        _ = imageView.anchor(btnOrderBy.topAnchor,nil,btnOrderBy.bottomAnchor,btnOrderBy.rightAnchor,UIEdgeInsets(top: Constants.MARGIN_10, left: 0, bottom: Constants.MARGIN_10, right: -Constants.MARGIN_10))
+        _ = imageView.anchorWidth(equalTo: btnOrderBy.heightAnchor, constant: -Constants.MARGIN_10)
+        _ = lblSelectTitle.anchor(btnOrderBy.topAnchor,btnOrderBy.leftAnchor,btnOrderBy.bottomAnchor,imageView.leftAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: 0))
         
         //        bottomView.backgroundColor = .red
         //        collectionView.backgroundColor = .blue
@@ -256,7 +255,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
                 //404, cant parse
                 if error != nil{
                     DispatchQueue.main.async {
-                        self.showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                        self.showErrorView(inView: self.bottomView, withTitle:error == .SERVER_NOT_RESPONSE ?  "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE".localized : "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
                             self.requestRoom(apiRouter:apiRouter,withNewFilterArgModel: newFilterArgModel)
                         })
                     }
@@ -275,10 +274,14 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
                             self.roomFilter.page = self.roomFilter.page!-1
                         }
                         self.rooms?.append(contentsOf: values)
-                        DispatchQueue.main.async {
-                            self.collectionView.reloadData()
+
+                    }else if statusCode == .NotFound{
+                        self.rooms?.removeAll()
+                        self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
+                    }
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
 //                            self.isLoadingData = false
-                        }
                     }
                 }
             }
@@ -318,10 +321,13 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
                             self.roommateFilter.page = self.roommateFilter.page!-1
                         }
                         self.roommates?.append(contentsOf: values)
-                        DispatchQueue.main.async {
-                            self.collectionView.reloadData()
-//                            self.isLoadingData = false
-                        }
+
+                    }else if statusCode == .NotFound{
+                        self.roommates?.removeAll()
+                        self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
+                    }
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
                     }
                 }
             }

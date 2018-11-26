@@ -27,7 +27,7 @@ class RoomRequestModel{
     private List<UtilityRequestModel> utilities;
     private List<String> imageUrls;
 
-    public init(roomId: Int = 0, name: String, price: Float, area: Int, address: String, maxGuest: Int, date_create: Date, current_member: Int, description: String?, status: StatusModel, city: CityModel, district: DistrictModel, image: [ImageModel], utilities: [UtilityModel], users: [User]?, requiredGender: Int) {
+    public init(roomId: Int = 0, name: String, price: Float, area: Int, address: String, maxGuest: Int, date_create: Date, current_member: Int, description: String?, status: StatusModel, city: CityModel, district: DistrictModel, image: [ImageModel], utilities: [UtilityMappableModel], users: [User]?, requiredGender: Int) {
         self.roomId = roomId
         self.name = name
         self.price = price

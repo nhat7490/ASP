@@ -10,13 +10,14 @@ import Foundation
 import UIKit
 import MBProgressHUD
 import CoreLocation
-class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HorizontalRoomViewDelegate,VerticalCollectionViewDelegate,LocationSearchViewDelegate,CLLocationManagerDelegate,UISearchControllerDelegate,UISearchBarDelegate{
+class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HorizontalRoomViewDelegate,VerticalCollectionViewDelegate,LocationSearchViewDelegate,CLLocationManagerDelegate,UISearchControllerDelegate,UISearchBarDelegate{
     
     lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
         sv.bounces = false
         sv.showsVerticalScrollIndicator = false
         sv.showsHorizontalScrollIndicator = false
+        sv.delegate =  self
         return sv
     }()
     
@@ -92,9 +93,9 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     var filterForRoomPost = FilterArgumentModel()
     var filterForRoommatePost = FilterArgumentModel()
     var baseSuggestRequestModel = BaseSuggestRequestModel()
-    var setting:SettingModel?{
+    var setting:SettingMappableModel?{
         get{
-            return DBManager.shared.getSingletonModel(ofType: SettingModel.self)
+            return SettingMappableModel(settingModel: DBManager.shared.getSingletonModel(ofType: SettingModel.self)!)
         }
     }
     var actionsForRoomMaster:[[String]] = [
@@ -149,6 +150,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     }
     //MARK: Setup UI and Delegate
     func setupUI(){
+        translateNavigationBarBottomBorder()
 //        extendedLayoutIncludesOpaqueBars = true
         let suggestRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
         let newRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
@@ -159,7 +161,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         navigationItem.titleView = searchController.searchBar
         let leftItem = UIBarButtonItem(customView: locationSearchView)
         _ = leftItem.customView?.anchorHeight(equalToConstrant: navigationItem.titleView!.frame.height)
-        _ = leftItem.customView?.anchorWidth(equalToConstrant: 100.0)
+        _ = leftItem.customView?.anchorWidth(equalToConstrant: Constants.WIDTH_LOCATION_VIEW)
         navigationItem.leftBarButtonItem = leftItem
 
         view.addSubview(scrollView)
@@ -167,7 +169,8 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         contentView.addSubview(topContainerView)
         contentView.addSubview(bottomContainerView)
         topContainerView.addSubview(topNavigation)
-        
+        bottomContainerView.addSubview(newRoomPostView)
+        bottomContainerView.addSubview(newRoommatePostView)
         //Navigation bar subviews constraints
 //        _ = locationSearchView.anchor(tempView.topAnchor, tempView.leftAnchor, tempView.bottomAnchor, nil,.zero,CGSize(width: 100.0, height: 0))
 //        _ = searchController.searchBar.anchor(tempView.topAnchor, locationSearchView.rightAnchor, tempView.bottomAnchor, tempView.rightAnchor,.zero)
@@ -180,8 +183,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         }else{
             totalContentViewHeight = newRoomViewHeight + newRoommmateViewHeight + Constants.HEIGHT_TOP_CONTAINER_VIEW
         }
-        bottomContainerView.addSubview(newRoomPostView)
-        bottomContainerView.addSubview(newRoommatePostView)
+
         
         if #available(iOS 11.0, *) {
             _ = scrollView.anchor(view.safeAreaLayoutGuide.topAnchor, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
@@ -209,7 +211,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         
         if user?.roleId != 2{
         suggestRoomViewHeightConstraint = suggestRoomPostView.anchor(bottomContainerView.topAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height:
-            Constants.HEIGHT_HORIZONTAL_ROOM_VIEW))[3]
+            suggestRoomViewHeight))[3]
             newRoomViewHeightConstraint = newRoomPostView.anchor(suggestRoomPostView.bottomAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: newRoomViewHeight))[3]
         }else{
             newRoomViewHeightConstraint = newRoomPostView.anchor(bottomContainerView.topAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: newRoomViewHeight))[3]
@@ -305,17 +307,8 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     func loadRemoteData(){
         
         if !APIConnection.isConnectedInternet(){
-            showErrorView(inView: self.bottomContainerView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
-                    self.locationSearchView.location = DBManager.shared.getRecord(id: (self.setting?.cityId)!, ofType: CityModel.self)?.name ?? "LIST_CITY_TITLE".localized
-                    self.cities = DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self)
-                    if self.user?.roleId != Constants.ROOMOWNER{
-                        self.requestRoom(view: self.suggestRoomPostView.collectionView, apiRouter:
-                            APIRouter.suggest(model: self.baseSuggestRequestModel), offset:Constants.MAX_ROOM_ROW)
-                    }
-                    self.requestRoom(view: self.newRoomPostView.collectionView,  apiRouter: APIRouter.postForAll(model: self.filterForRoomPost), offset:Constants.MAX_POST)
-                    self.requestRoommate(view: self.newRoommatePostView.collectionView, apiRouter: APIRouter.postForAll(model: self.filterForRoommatePost), offset:Constants.MAX_POST)
-                }
+            showErrorView(inView: self.view, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+                self.loadRemoteData()
             }
         }else{
             self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
@@ -323,7 +316,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                 self.cities = DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self)
                 if self.user?.roleId != Constants.ROOMOWNER{
                     self.requestRoom(view: self.suggestRoomPostView.collectionView, apiRouter:
-                        APIRouter.suggest(model: self.baseSuggestRequestModel), offset:Constants.MAX_ROOM_ROW)
+                        APIRouter.suggest(model: self.baseSuggestRequestModel), offset:Constants.MAX_POST)
                 }
                 self.requestRoom(view: self.newRoomPostView.collectionView,  apiRouter: APIRouter.postForAll(model: self.filterForRoomPost), offset:Constants.MAX_POST)
                 self.requestRoommate(view: self.newRoommatePostView.collectionView, apiRouter: APIRouter.postForAll(model: self.filterForRoommatePost), offset:Constants.MAX_POST)
@@ -363,7 +356,7 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                 //404, cant parse
                 if error != nil{
                     DispatchQueue.main.async {
-                        self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                        self.showErrorView(inView: view, withTitle:error == .SERVER_NOT_RESPONSE ?  "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE".localized : "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
                             self.requestRoom(view: view, apiRouter: apiRouter, offset:offset)
                         })
                     }
@@ -483,8 +476,17 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             }
         case 1:
             if  user?.roleId == Constants.ROOMOWNER{
-                let vc = CERoomVC()
-                presentInNewNavigationController(viewController: vc)
+//                let vc = (self.tabBarController?.viewControllers![1] as! UINavigationController)
+//                self.tabBarController?.selectedViewController = vc
+//                let allVC = vc.viewControllers.first as! AllVC
+//                allVC.segmentControl.selectedSegmentIndex = 1
+//                allVC.resetFilter(filterType: .roommmate)
+//                allVC.roommates = []
+//                allVC.loadRoommateData(withNewFilterArgModel: true)\
+//                tabBarController?.selectedIndex = 4
+                let vc = self.tabBarController?.viewControllers![4]
+                self.tabBarController?.selectedViewController = vc
+                
             }else{
                 let vc = (self.tabBarController?.viewControllers![1] as! UINavigationController)
                 self.tabBarController?.selectedViewController = vc
@@ -495,12 +497,17 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                 allVC.loadRoommateData(withNewFilterArgModel: true)
             }
         case 2:
-            guard let currentRoom = DBManager.shared.getSingletonModel(ofType: RoomModel.self) else{
-//                AlertController.showAlertInfor(withTitle: "", forMessage: <#T##String?#>, inViewController: <#T##UIViewController#>)
-                break
-            }
-            
+//            guard let currentRoom = DBManager.shared.getSingletonModel(ofType: RoomModel.self) else{
+////                AlertController.showAlertInfor(withTitle: "", forMessage: <#T##String?#>, inViewController: <#T##UIViewController#>)
+//                break
+//            }
+            let vc = CERoommatePostVC()
+            presentInNewNavigationController(viewController: vc)
         case 3:
+//            if user.roleId == Constants.ROOMMASTER{
+////
+////            }
+////
             break
         default:
             break
@@ -528,19 +535,47 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                 return
             }
             
-            guard let setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self) else{
+            guard let setting = setting else{
                 return
             }
             
             locationSearchView.location = city.name
-            let newSetting = SettingModel()
-            newSetting.id = setting.id
-            newSetting.cityId = city.cityId
-            newSetting.latitude = setting.latitude
-            newSetting.longitude = setting.longitude
-            _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object: newSetting)
+            setting.cityId = city.cityId
+            _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object: SettingModel(settingMappableModel: setting))
         }
     }
+    //MARK: UIScrollviewDelegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offset = scrollView.contentOffset.y
+         let contentHeight = scrollView.contentSize.height
+        print("OFFSET:\(scrollView.contentOffset.y)")
+        print("ContentframeHeight:\(scrollView.frame.height)")
+        print("ContentContentHeight:\(scrollView.contentSize.height)")
+
+        if offset  > 50.0{
+            UIView.animate(withDuration: 1.5, delay: 0, options: UIViewAnimationOptions(), animations: {
+                self.navigationController?.setNavigationBarHidden(true, animated: true)
+                print("Hide")
+            }, completion: nil)
+        }else{
+
+            UIView.animate(withDuration: 1.5, delay: 0, options: UIViewAnimationOptions(), animations: {
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    print("Unhide")
+                }, completion: nil)
+        }
+    }
+
+//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//
+//        let contentHeight = scrollView.contentSize.height
+//        print("OFFSET:\(scrollView.contentOffset.y)")
+//        print("ContentframeHeight:\(scrollView.frame.height)")
+//        print("ContentContentHeight:\(scrollView.contentSize.height)")
+//        print("show Data:\(offset)")
+//        print("hide more data:\(offset - contentHeight + scrollView.frame.height)")
+//
+//    }
     //MARK: HorizontalRoomViewDelegate
     func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,collectionCell cell: RoomPostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndexPath indexPath: IndexPath?) {
         guard let row = indexPath?.row else{
@@ -672,19 +707,16 @@ class HomeVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         }
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self) else{
+        guard let setting = setting else{
             return
         }
         guard let location = locations.last else {
             return
         }
-        
-        let newSetting = SettingModel()
-        newSetting.id = setting.id
-        newSetting.cityId = setting.cityId
-        newSetting.latitude.value = location.coordinate.latitude
-        newSetting.longitude.value = location.coordinate.longitude
-        _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object:newSetting)
+
+        setting.latitude = location.coordinate.latitude
+        setting.longitude = location.coordinate.longitude
+        _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object:SettingModel(settingMappableModel: setting))
         
     }
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {

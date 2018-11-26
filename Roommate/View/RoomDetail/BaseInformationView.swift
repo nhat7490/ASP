@@ -12,17 +12,22 @@ class BaseInformationView: UIView {
     
 
     @IBOutlet weak var lblMainTitle: UILabel!
-    @IBOutlet weak var lblStatus: UILabel!
+    @IBOutlet weak var lblTitleDescription: UILabel!
     @IBOutlet weak var lblSubTitle: UILabel!
     @IBOutlet weak var imgvtop: UIImageView!
     @IBOutlet weak var tvInfoTop: UITextView!
     @IBOutlet weak var imgvBottom: UIImageView!
     @IBOutlet weak var lblInfoBottom: UILabel!
-    @IBOutlet weak var lblStatusHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var lblTitleDescriptionHeightConstraint: NSLayoutConstraint!
     var viewType:ViewType?{
         didSet{
-            if viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
-                _ = lblStatus.anchorHeight(equalToConstrant: 0)
+//            if viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
+//                _ = lblStatus.anchorHeight(equalToConstrant: 0)
+//            }
+            if viewType == .roommatePostDetailForFinder{
+                _ = lblTitleDescription.anchorHeight(equalToConstrant: 0)
+            }else{
+                lblTitleDescription.textColor = .lightGray
             }
         }
     }
@@ -34,7 +39,7 @@ class BaseInformationView: UIView {
         super.awakeFromNib()
         lblMainTitle.font = .boldMedium
         lblMainTitle.textColor = .red
-        lblStatus.font = .smallTitle
+        lblTitleDescription.font = .smallTitle
         lblMainTitle.lineBreakMode = .byWordWrapping
         
         lblMainTitle.numberOfLines = 2

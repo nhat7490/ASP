@@ -11,20 +11,22 @@ import ObjectMapper
 import RealmSwift
 import ObjectMapper_Realm
 import Realm
-class SettingModel: BaseModel {
+class SettingModel: Object {
     @objc dynamic var id = 1
     @objc dynamic var cityId = 45
     var longitude = RealmOptional<Double>()
     var latitude = RealmOptional<Double>()
+
+    convenience init(settingMappableModel:SettingMappableModel){
+        self.init()
+        self.cityId = settingMappableModel.cityId
+        self.longitude.value = settingMappableModel.longitude
+        self.latitude.value = settingMappableModel.latitude
+    }
+
+    //MARK: Object
     override class func primaryKey() -> String? {
         return "id"
-    }
-    required convenience init?(map: Map) {
-        self.init()
-    }
-    
-    override func mapping(map: Map) {
-        super.mapping(map: map)
     }
     
     required init() {

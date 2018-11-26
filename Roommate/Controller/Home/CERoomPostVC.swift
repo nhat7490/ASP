@@ -110,12 +110,12 @@ class CERoomPostVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Util
     var keyboardHeight:CGFloat?
     var tableViewHeightConstaint:NSLayoutConstraint?
     let address:[String] = []
-    var utilities:Results<UtilityModel>?
+    var utilities:[UtilityMappableModel]?
     var cities:Results<CityModel>?
     var districts:Results<DistrictModel>?
     
     var cERoomVCType:CEVCType = .create
-    var newRoomModel:RoomResponseModel = RoomResponseModel()
+    var newRoomModel: RoomMappableModel = RoomMappableModel()
     var cityName:String = ""
     var districtName:String = ""
     var selectedCity:CityModel?
@@ -136,7 +136,9 @@ class CERoomPostVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Util
     }
     
     func loadLocalData(){
-        utilities = DBManager.shared.getRecords(ofType: UtilityModel.self)
+        utilities = DBManager.shared.getRecords(ofType: UtilityModel.self)?.compactMap({ (utility) -> UtilityMappableModel? in
+            UtilityMappableModel(utilityModel: utility)
+        })
         cities = DBManager.shared.getRecords(ofType: CityModel.self)
         districts = DBManager.shared.getRecords(ofType: DistrictModel.self)
     }
@@ -155,8 +157,8 @@ class CERoomPostVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Util
         let uploadImageViewHeight:CGFloat = CGFloat(numberOfImageRow) * imageWith  + Constants.HEIGHT_VIEW_UPLOAD_IMAGE_BASE+Constants.HEIGHT_LARGE_SPACE
         let defaultPadding = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
         let numberOfRow =  (utilities?.count)!%2==0 ? (utilities?.count)!/2 : (utilities?.count)!/2+1
-        let utilitiesViewHeight:CGFloat =  CGFloat(Constants.HEIGHT_CELL_NEW_UTILITYCV * CGFloat(numberOfRow) + 70.0)
-        let part1 = Constants.HEIGHT_ROOM_INFOR_TITLE+Constants.HEIGHT_NEW_INPUT_VIEW*4
+        let utilitiesViewHeight:CGFloat =  CGFloat(Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 70.0)
+        let part1 = Constants.HEIGHT_ROOM_INFOR_TITLE+Constants.HEIGHT_INPUT_VIEW*4
         let part2 = Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2
         let part3 = utilitiesViewHeight + Constants.HEIGHT_VIEW_DESCRIPTION + Constants.HEIGHT_LARGE_SPACE
         fixSizeHeight = part1 + part2 + part3
@@ -201,13 +203,13 @@ class CERoomPostVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Util
         _ = contentView.anchorWidth(equalTo:scrollView.widthAnchor)
         
         _ = lblRoomInfor.anchor(contentView.topAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_ROOM_INFOR_TITLE))
-        _ = nameInputView.anchor(lblRoomInfor.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
-        _ = priceInputView.anchor(nameInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
-        _ = areaInputView.anchor(priceInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
+        _ = nameInputView.anchor(lblRoomInfor.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
+        _ = priceInputView.anchor(nameInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
+        _ = areaInputView.anchor(priceInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
         _ = cityDropdownListView.anchor(areaInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_DROPDOWN_LIST))
         _ = districtDropdownListView.anchor(cityDropdownListView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_DROPDOWN_LIST))
         
-        _ = addressInputView.anchor(districtDropdownListView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_NEW_INPUT_VIEW))
+        _ = addressInputView.anchor(districtDropdownListView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
         
         //START For suggest address
         tableViewHeightConstaint = tableView.anchor(addressInputView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero, CGSize(width: 0, height: 0.5))[3]
@@ -332,7 +334,7 @@ class CERoomPostVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Util
     func utilitiesViewDelegate(utilitiesView view: UtilitiesView, didSelectUtilityAt indexPath: IndexPath) {
         
         let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_UTILITY_INPUT, sbName: Constants.STORYBOARD_MAIN) as! UtilityInputVC
-        vc.utilityModel = utilities![indexPath.row].copy(with: nil) as! UtilityModel
+        vc.utilityModel = utilities![indexPath.row].copy(with: nil) as! UtilityMappableModel
         vc.indexPath = indexPath
         vc.view.frame.size = CGSize(width: 242,
                                     height:  200)
@@ -462,11 +464,11 @@ class CERoomPostVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Util
         }
     }
     //MARK: UtilityInputVCDelegate
-    func utilityInputVCDelegate(onCompletedInputUtility utility:UtilityModel,atIndexPath indexPath:IndexPath?) {
+    func utilityInputVCDelegate(onCompletedInputUtility utility: UtilityMappableModel, atIndexPath indexPath:IndexPath?) {
         newRoomModel.utilities.append(utility)
         utilitiesView.setState(isSelected: true, atIndexPath: indexPath!)
     }
-    func utilityInputVCDelegate(onDeletedInputUtility utility:UtilityModel,atIndexPath indexPath:IndexPath?){
+    func utilityInputVCDelegate(onDeletedInputUtility utility: UtilityMappableModel, atIndexPath indexPath:IndexPath?){
         guard let index = newRoomModel.utilities.index(where: { (record) -> Bool in
             utility.utilityId == record.utilityId
         }) else {

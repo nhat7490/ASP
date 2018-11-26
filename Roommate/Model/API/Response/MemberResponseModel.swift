@@ -12,7 +12,6 @@ class MemberResponseModel: Mappable,Hashable,Equatable,NSCopying {
     var userId:Int?
     var roleId:Int?
     var username:String!
-
     
     var hashValue: Int{
         return username.hashValue
@@ -20,6 +19,11 @@ class MemberResponseModel: Mappable,Hashable,Equatable,NSCopying {
     
     public init(username:String) {
         self.username = username
+    }
+    init(memberModel:MemberModel) {
+        self.userId = memberModel.userId
+        self.roleId = memberModel.roleId
+        self.username = memberModel.username
     }
     public init(userId: Int?, roleId: Int?, username: String!) {
         self.userId = userId

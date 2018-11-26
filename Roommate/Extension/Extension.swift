@@ -594,6 +594,11 @@ extension Array {
             return copiable.copy() as! Element
         }
     }
+    func toRealmList<T>(ofType:T.Type)-> List<T>{
+        var list = List<T>()
+        self.forEach{list.append($0 as! T)}
+        return list
+    }
 }
 extension UIViewController {
     /// The visible view controller from a given view controller
@@ -610,6 +615,7 @@ extension UIViewController {
             return self
         }
     }
+    
 }
 extension UINavigationController{
     open override func viewDidLoad() {

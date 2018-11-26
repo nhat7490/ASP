@@ -16,7 +16,7 @@ class BaseRoomRequestModel{
     var status:StatusModel
     var district:DistrictModel
     var image:[ImageModel]
-    var utilities:[UtilityModel]
+    var utilities:[UtilityMappableModel]
     var users:[User]?
     var requiredGender:Int
 
@@ -37,7 +37,7 @@ class BaseRoomRequestModel{
         self.requiredGender = requiredGender
     }
     
-    public init(room_id: Int = 0, name: String, price: Float, area: Int, address: String, max_guest: Int, date_create: Date, current_member: Int, description: String?, status: StatusModel, district: DistrictModel, image: [ImageModel], utilities: [UtilityModel], users: [User]?, requiredGender: Int) {
+    public init(room_id: Int = 0, name: String, price: Float, area: Int, address: String, max_guest: Int, date_create: Date, current_member: Int, description: String?, status: StatusModel, district: DistrictModel, image: [ImageModel], utilities: [UtilityMappableModel], users: [User]?, requiredGender: Int) {
         self.room_id = room_id
         self.name = name
         self.price = price

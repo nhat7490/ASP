@@ -44,6 +44,7 @@ class AddMemberView: UIView ,UITextFieldDelegate{
         guard let updatedString = (tfUsername.text as NSString?)?.replacingCharacters(in: range, with: string) else {
             return false
         }
+        tfUsername.errorMessage = updatedString.isValidUsername() ?  "" :  "ERROR_TYPE_USERNAME".localized
         return delegate?.addMemberViewDelegate(addMemberView: self, shouldChangeCharactersTo: updatedString) ?? false
     }
     //MARK: Button event

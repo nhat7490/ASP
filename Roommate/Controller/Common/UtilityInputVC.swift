@@ -9,8 +9,8 @@
 import UIKit
 import SkyFloatingLabelTextField
 protocol UtilityInputVCDelegate:class{
-    func utilityInputVCDelegate(onCompletedInputUtility utility:UtilityModel,atIndexPath indexPath:IndexPath?)
-    func utilityInputVCDelegate(onDeletedInputUtility utility:UtilityModel,atIndexPath indexPath:IndexPath?)
+    func utilityInputVCDelegate(onCompletedInputUtility utility: UtilityMappableModel, atIndexPath indexPath:IndexPath?)
+    func utilityInputVCDelegate(onDeletedInputUtility utility: UtilityMappableModel, atIndexPath indexPath:IndexPath?)
 }
 class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     @IBOutlet weak var tfBrand: SkyFloatingLabelTextField!
@@ -21,7 +21,7 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblDescription: UILabel!
     @IBOutlet weak var popupView: UIView!
-    var utilityModel = UtilityModel()
+    var utilityModel = UtilityMappableModel()
     var indexPath:IndexPath?
     var delegate:UtilityInputVCDelegate?
     
@@ -94,6 +94,10 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
         }
         return true
     }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if let updatedString = (textView.text as NSString?)?.replacingCharacters(in: range, with: text){
             if updatedString.count > Constants.MAX_LENGHT_DESCRIPTION{
@@ -104,7 +108,6 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
         }
         return true
     }
-    
     @IBAction func onclickBtnLeft(_ sender: Any) {
         self.delegate?.utilityInputVCDelegate(onDeletedInputUtility: utilityModel,atIndexPath:indexPath)
         self.dismiss(animated: true, completion: nil)

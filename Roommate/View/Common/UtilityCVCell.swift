@@ -1,5 +1,5 @@
 //
-//  NewUtilityCVCell.swift
+//  UtilityCVCell.swift
 //  Roommate
 //
 //  Created by TrinhHC on 10/5/18.
@@ -7,17 +7,17 @@
 //
 
 import UIKit
-protocol NewUtilityCVCellDelegate:class {
-    func newUtilityCVCellDelegate(newUtilityCVCell cell:NewUtilityCVCell,onSelectedUtility utility:UtilityModel)
+protocol UtilityCVCellDelegate:class {
+    func newUtilityCVCellDelegate(newUtilityCVCell cell: UtilityCVCell, onSelectedUtility utility: UtilityMappableModel)
     
 }
-class NewUtilityCVCell: UICollectionViewCell {
+class UtilityCVCell: UICollectionViewCell {
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var imgvIcon: UIImageView!
-    weak var delegate:NewUtilityCVCellDelegate?
+    weak var delegate: UtilityCVCellDelegate?
     
     
-    var data:UtilityModel?{
+    var data: UtilityMappableModel?{
         didSet{
             lblTitle.text = DBManager.shared.getRecord(id: (data?.utilityId)!, ofType: UtilityModel.self)?.name
             imgvIcon.image = UIImage(named: "cctv")
@@ -39,7 +39,7 @@ class NewUtilityCVCell: UICollectionViewCell {
         imgvIcon.tintColor = .lightSubTitle
         self.layer.borderColor = UIColor.lightSubTitle.cgColor
         self.layer.borderWidth = 1.0
-        self.layer.cornerRadius = CGFloat((Constants.HEIGHT_CELL_NEW_UTILITYCV-5)/2)
+        self.layer.cornerRadius = CGFloat((Constants.HEIGHT_CELL_UTILITYCV-5)/2)
         imgvIcon.tintColor = .lightGray
     }
     

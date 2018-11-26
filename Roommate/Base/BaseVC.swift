@@ -96,11 +96,10 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             hub.contentColor = .defaultBlue
         }
         DispatchQueue.global(qos: .background).async {
-            if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestArray(apiRouter: APIRouter.utility(), returnType:UtilityModel.self)}
-            DBManager.shared.getRecords(ofType: UtilityModel.self)?.forEach{print("\($0.name)-\($0.utilityId)")}
+            if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestUtilitiesArray()}
             if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
             if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
-            if !DBManager.shared.isExisted(ofType: DistrictModel.self){
+            if !DBManager.shared.isExisted(ofType: RoomModel.self){
                 self.requestCurrentRoom()
             }
             
@@ -121,7 +120,55 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             
         }
     }
-    
+    //For Objectmapper and realm
+    func requestArray<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){
+        self.group.enter()
+        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: nil, returnType: T.self) { (values, error, statusCode) -> (Void) in
+            
+            if error == nil{
+                //200
+                if statusCode == .OK{
+                    guard let values = values else{
+                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+                        self.group.leave()
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        DBManager.shared.addRecords(ofType: T.self, objects: values)
+                        
+                    }
+                    
+                }
+            }
+            self.group.leave()
+        }
+        self.group.wait()
+    }
+    func requestUtilitiesArray(){
+        self.group.enter()
+        APIConnection.requestArray(apiRouter: APIRouter.utility(), errorNetworkConnectedHander: nil, returnType: UtilityMappableModel.self) { (values, error, statusCode) -> (Void) in
+            
+            if error == nil{
+                //200
+                if statusCode == .OK{
+                    guard let values = values else{
+                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+                        self.group.leave()
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        _ = DBManager.shared.addRecords(ofType: UtilityModel.self, objects: values.compactMap({ (utility) -> UtilityModel? in
+                            UtilityModel(utilityMappableModel: utility)
+                        }))
+                        
+                    }
+                    
+                }
+            }
+            self.group.leave()
+        }
+        self.group.wait()
+    }
 //    func requestArray<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander:(()->Void)? =  nil,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
 //        //        self.group.enter()
 //        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: errorNetworkConnectedHander, returnType: T.self) { (values, error, statusCode) -> (Void) in
@@ -177,7 +224,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
 //    }
     func requestCurrentRoom(){
         self.group.enter()
-        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: DBManager.shared.getUser()!.userId), returnType: RoomResponseModel.self){ (value,error, statusCode) -> (Void) in
+        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: DBManager.shared.getUser()!.userId), returnType: RoomMappableModel.self){ (value, error, statusCode) -> (Void) in
             
             if error == nil{
                 //200
@@ -187,36 +234,14 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
                         self.group.leave()
                         return
                     }
-                    print(DBManager.shared.addSingletonModel(ofType: RoomModel.self, object: RoomModel(roomResponseModel: value)))
+                    print(DBManager.shared.addSingletonModel(ofType:RoomModel.self, object: RoomModel(roomResponseModel: value)))
                 }
             }
             self.group.leave()
         }
         self.group.wait()
     }
-    func requestArray<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){
-        self.group.enter()
-        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: nil, returnType: T.self) { (values, error, statusCode) -> (Void) in
-            
-            if error == nil{
-                //200
-                if statusCode == .OK{
-                    guard let values = values else{
-                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
-                        self.group.leave()
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        DBManager.shared.addRecords(ofType: T.self, objects: values)
-                        
-                    }
-                    
-                }
-            }
-            self.group.leave()
-        }
-        self.group.wait()
-    }
+    
     
     //MARK: Process bookmark
     func processBookmark(view:UICollectionView,model:BasePostResponseModel,row:Int,completed:@escaping (_ model:BasePostResponseModel)->(Void)){
@@ -352,7 +377,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
     //MARK: Back button on navigation bar
     
     
-    func setBackButtonForNavigationBar(isEmbedInNewNavigationController:Bool? = true){
+    func setBackButtonForNavigationBar(isEmbedInNewNavigationController:Bool? = false){
         //Back button
         if isEmbedInNewNavigationController!{
             let backImage = UIImage(named: "back")
@@ -367,14 +392,14 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.backgroundColor = .clear
     }
-    func translateNavigationBar(){
-        
+    func translateNavigationBarBottomBorder(){
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.backgroundColor = .clear
     }
     func presentInNewNavigationController(viewController:UIViewController){
         let mainVC = UIViewController()
+        mainVC.view.backgroundColor = .white
         let nv = UINavigationController(rootViewController: mainVC)
         present(nv, animated: false) {
             nv.pushViewController(viewController, animated: true)

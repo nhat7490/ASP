@@ -12,7 +12,7 @@ class RoomPostResponseModel:BasePostResponseModel {
     var name:String?
     var  area: Int?
     var address: String?
-    var utilities: [UtilityModel]!
+    var utilities: [UtilityMappableModel]!
     var imageUrls: [String]?
     var numberPartner, genderPartner: Int?
     var postDesription: String?

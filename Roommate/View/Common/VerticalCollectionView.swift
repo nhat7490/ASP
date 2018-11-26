@@ -57,7 +57,7 @@ class VerticalCollectionView: UIView ,UICollectionViewDelegate,UICollectionViewD
             collectionView.reloadData()
         }
     }
-    var roomsOwner:[RoomResponseModel] = []{
+    var roomsOwner:[RoomMappableModel] = []{
         didSet{
             collectionView.reloadData()
         }

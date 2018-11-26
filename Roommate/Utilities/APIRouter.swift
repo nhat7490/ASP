@@ -21,7 +21,7 @@ enum APIRouter:URLRequestConvertible{
     case city()
     case district()
     case utility()
-    case createRoom(model:RoomResponseModel)
+    case createRoom(model: RoomMappableModel)
     case postForAll(model:FilterArgumentModel)
     case postForBookmark(model:FilterArgumentModel)
     case createBookmark(model:BookmarkRequestModel)
@@ -35,10 +35,11 @@ enum APIRouter:URLRequestConvertible{
     case findExitedUserInRoom(username:String)
     case editMember(roomMemberRequestModel:RoomMemberRequestModel)
     case removeRoom(roomId:Int)
-    case updateRoom(model:RoomResponseModel)
+    case updateRoom(model: RoomMappableModel)
     case findByUsername(username:String)
-    case createUser(model:UserModel)
+    case createUser(model:UserMappableModel)
     case searchPostByAddress(model:SearchRequestModel)
+    case createRoommatePost(model: RoommatePostRequestModel)
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -49,7 +50,7 @@ enum APIRouter:URLRequestConvertible{
     }
     
     var httpMethod:HTTPMethod{
-        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember,.getUserPost,.createUser,.searchPostByAddress:
+        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost:
             return .post
         case .removeBookmark,.removeRoom:
             return .delete
@@ -113,6 +114,8 @@ enum APIRouter:URLRequestConvertible{
             return "user/createUser";
         case .searchPostByAddress:
             return "post/search";
+        case .createRoommatePost:
+            return "post/createRoommatePost";
         }
     }
     
@@ -162,6 +165,8 @@ enum APIRouter:URLRequestConvertible{
         case .createUser(let model):
             return Mapper().toJSON(model)
         case .searchPostByAddress(let model):
+            return Mapper().toJSON(model)
+        case .createRoommatePost(let model):
             return Mapper().toJSON(model)
         default:
             return [:]

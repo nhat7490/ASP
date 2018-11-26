@@ -40,13 +40,13 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
     var contentViewHeightConstraint:NSLayoutConstraint?
     var membersViewHeightConstraint:NSLayoutConstraint?
     
-    var room:RoomResponseModel!{
+    var room: RoomMappableModel!{
         didSet{
-            copyRoom = room.copy() as! RoomResponseModel
+            copyRoom = room.copy() as! RoomMappableModel
         }
     }
     
-    var copyRoom:RoomResponseModel!{
+    var copyRoom: RoomMappableModel!{
         didSet{
             if copyRoom.members == nil{
                 copyRoom.members = []
@@ -166,21 +166,39 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
         return true
     }
     func addMemberViewDelegate(addMemberView view: AddMemberView, onClickBtnAdd btnAdd: UIButton) {
-        if !username.isEmpty{
-            let tempMember = MemberResponseModel(username: self.username)
-            if originMember.contains(tempMember){
-                if copyRoom!.members!.contains(tempMember){
-                    APIResponseAlert.apiResponseError(controller: self, type: .existedRoomMember)
+        if username.isValidUsername(){
+            if !username.isEmpty{
+                let tempMember = MemberResponseModel(username: self.username)
+                if originMember.contains(tempMember){
+                    if copyRoom!.members!.contains(tempMember){
+                        APIResponseAlert.apiResponseError(controller: self, type: .existedRoomMember)
+                    }else{
+                        addMember(member: originMember[originMember.index(of: tempMember)!])
+                        membersView.members = copyRoom.members
+                    }
+                }else if copyRoom.members!.count <= copyRoom.maxGuest{
+                    //                if let _ = copyRoom.members?.first(where: { (member) -> Bool in
+                    //                    member.username.lowercased()==username.lowercased()
+                    //                }){
+                    //                    APIResponseAlert.apiResponseError(controller: self, type: .existedRoomMember)
+                    //                }else{
+                    //
+                    //                }
+                    if copyRoom!.members!.contains(tempMember){
+                        APIResponseAlert.apiResponseError(controller: self, type: .existedRoomMember)
+                    }else{
+                        requestUserData(text: username)
+                    }
+                    
+                    
                 }else{
-                    addMember(member: originMember[originMember.index(of: tempMember)!])
-                    membersView.members = copyRoom.members
+                    APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidMaxGuest)
                 }
-            }else if copyRoom.members!.count <= copyRoom.maxGuest{
-                requestUserData(text: username)
-            }else{
-                APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidMaxGuest)
             }
+        }else{
+            AlertController.showAlertInfor(withTitle:  "INFORMATION".localized, forMessage: "ERROR_TYPE_USERNAME".localized, inViewController:self)
         }
+        
     }
     
     //MARK: DropdownListViewDelegate

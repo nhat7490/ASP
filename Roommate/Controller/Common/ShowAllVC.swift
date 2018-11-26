@@ -18,7 +18,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     //MARK: Data for UICollectionView And UITableView
     var roommates:[RoommatePostResponseModel] = []
     var rooms:[RoomPostResponseModel] = []
-    var roomResponseModels:[RoomResponseModel] = []
+    var roomResponseModels:[RoomMappableModel] = []
     var baseSuggestRequestModel:BaseSuggestRequestModel = BaseSuggestRequestModel()
     var filterArgumentModel:FilterArgumentModel = {
         let filter = FilterArgumentModel()
@@ -129,13 +129,12 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         }
         automaticallyAdjustsScrollViewInsets = false
         navigationController?.navigationBar.backgroundColor = .white
-        setBackButtonForNavigationBar()
-        
+        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
         
         view.addSubview(bottomView)
         bottomView.addSubview(collectionView)
         switch showAllVCType{
-        case .suggestRoom,.roomPost,.roommatePost:
+        case .roomPost,.roommatePost:
             //Declare view
             let orderByView = UIView()
             
@@ -174,7 +173,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             }
             tableHeightLayoutConstraint = tableView.anchorTopRight(orderByView.bottomAnchor, btnOrderBy.rightAnchor, 150.0, 1)[3]
             view.bringSubview(toFront: tableView)
-        case .roomForOwner,.roomForMember:
+        case .suggestRoom,.roomForOwner,.roomForMember:
             if #available(iOS 11.0, *) {
                 _ = bottomView.anchor(view.safeAreaLayoutGuide.topAnchor, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -2, right: -Constants.MARGIN_10))
             } else {
@@ -274,15 +273,14 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             //            MBProgressHUD.showAdded(to: self.bottomView, animated: true)
         }
         DispatchQueue.global(qos: .background).async {
-            APIConnection.requestArray(apiRouter:apiRouter, returnType: RoomPostResponseModel.self){ (values, error, statusCode) -> (Void) in
+            APIConnection.requestArray(apiRouter:apiRouter, returnType: RoomPostResponseModel.self) { (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
-                //404, cant parse
-                if error != nil{
+                if error != nil {
                     DispatchQueue.main.async {
-                        self.showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
-                            self.requestRoomPost(apiRouter: apiRouter,withNewFilterArgModel: newFilterArgModel)
+                        self.showErrorView(inView: self.bottomView, withTitle: error == .SERVER_NOT_RESPONSE ? "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE".localized : "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                            self.requestRoomPost(apiRouter: apiRouter, withNewFilterArgModel: newFilterArgModel)
                         })
                     }
                 }else{
@@ -304,6 +302,9 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                             self.collectionView.reloadData()
                             //                            self.isLoadingData = false
                         }
+                    }else if statusCode == .NotFound{
+                        self.roomResponseModels.removeAll()
+                        self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
                     }
                 }
             }
@@ -324,11 +325,10 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
-                //404, cant parse
-                if error != nil{
+                if error != nil {
                     DispatchQueue.main.async {
-                        self.showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
-                            self.requestRoommatePost(apiRouter:apiRouter,withNewFilterArgModel: newFilterArgModel)
+                        self.showErrorView(inView: self.bottomView, withTitle: error == .SERVER_NOT_RESPONSE ? "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE".localized : "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                            self.requestRoommatePost(apiRouter: apiRouter, withNewFilterArgModel: newFilterArgModel)
                         })
                     }
                 }else{
@@ -348,6 +348,9 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                             self.collectionView.reloadData()
                             //                            self.isLoadingData = false
                         }
+                    }else if statusCode == .NotFound{
+                        self.roomResponseModels.removeAll()
+                        self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
                     }
                 }
             }
@@ -361,14 +364,13 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             hub.contentColor = .defaultBlue
         }
         DispatchQueue.global(qos: .background).async {
-            APIConnection.requestArray(apiRouter:apiRouter, returnType: RoomResponseModel.self){ (values, error, statusCode) -> (Void) in
+            APIConnection.requestArray(apiRouter:apiRouter, returnType: RoomMappableModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
-                //404, cant parse
-                if error != nil && statusCode != .NotFound{
+                if error != nil {
                     DispatchQueue.main.async {
-                        self.showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                        self.showErrorView(inView: self.bottomView, withTitle:error == .SERVER_NOT_RESPONSE ?  "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE".localized : "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
                             self.requestRoom(apiRouter: apiRouter,withNewFilterArgModel: newFilterArgModel)
                         })
                     }
@@ -385,14 +387,15 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                             self.roomForOwnerAndMemberPage = self.roomForOwnerAndMemberPage-1
                         }
                         self.roomResponseModels.append(contentsOf: values)
-                        
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                            //                            self.isLoadingData = false
+                        }
                     }else if statusCode == .NotFound{
                         self.roomResponseModels.removeAll()
+                        self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
                     }
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                        //                            self.isLoadingData = false
-                    }
+
                 }
             }
         }
@@ -419,8 +422,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     @objc func didReceiveEditRoomNotification(_ notification:Notification){
         switch showAllVCType{
         case .roomForOwner:
-            if notification.object is RoomResponseModel{
-                guard let room = notification.object as? RoomResponseModel,let index = roomResponseModels.index(of: room) else{
+            if notification.object is RoomMappableModel {
+                guard let room = notification.object as? RoomMappableModel, let index = roomResponseModels.index(of: room) else{
                     return
                 }
                 roomResponseModels[index] = room
@@ -541,7 +544,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                 loadRoommateData(withNewFilterArgModel: true)
             case .roomForOwner,.roomForMember:
                 roomForOwnerAndMemberPage = 1
-                loadRoommateData(withNewFilterArgModel: true)
+                loadRoomData(withNewFilterArgModel: true)
             }
             //Load more data
             //because offset = 0 when view loading ==> need to plus scrollView.frame.height

@@ -144,7 +144,7 @@ enum HTTPStatusCode: Int {
     case NetworkAuthenticationRequired
 }
 enum APIResponseAlertType{
-    case invalidPassword,invalidUsername,internalServerError,invalidMember,nonExistedUsername,addMemberSuccess,existedRoomMember,requiredRoomMaster,invalidMaxGuest,exitedUser
+    case invalidPassword,invalidUsernameOrPassword,invalidUsername,internalServerError,invalidMember,nonExistedUsername,addMemberSuccess,existedRoomMember,requiredRoomMaster,invalidMaxGuest,exitedUser
 }
 enum AlertType{
     case normal,city,district,roomMaster

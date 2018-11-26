@@ -14,7 +14,7 @@ class UtilityDetailView: UIView {
     @IBOutlet weak var lblQuantity: UILabel!
     @IBOutlet weak var tvDescription: UITextView!
     
-    var utilityModel:UtilityModel?{
+    var utilityModel: UtilityMappableModel?{
         didSet{
             guard let utilityModel = utilityModel else {
                 return

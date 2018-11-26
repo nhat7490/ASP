@@ -8,9 +8,11 @@
 
 import UIKit
 import MBProgressHUD
-class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDelegate{
+class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDelegate,UtilitiesViewDelegate{
     
-    var room:RoomResponseModel!{
+    
+    
+    var room: RoomMappableModel!{
         didSet{
             if room.members == nil{
                 room.members = []
@@ -92,7 +94,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     func setupUI() {
         //Navigation bar
         let backImage = UIImage(named: "back")
-        setBackButtonForNavigationBar()
+        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
         
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -106,8 +108,8 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         //Caculator height
         let padding:UIEdgeInsets = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
         let membersViewHeight:CGFloat
-        if room.members?.count != 0{
-            membersViewHeight = Constants.HEIGHT_VIEW_MEMBERS
+        if room.members?.count != 0 && room.members!.count>5{
+            membersViewHeight =  Constants.HEIGHT_VIEW_MEMBERS
         }else{
             membersViewHeight = 100.0
             showNoDataView(inView: membersView.tableView, withTitle: "NO_MEMBER_ROOM".localized)
@@ -115,7 +117,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         
         
         let numberOfRow = room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1
-        let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITYCV * CGFloat(numberOfRow) + 60.0
+        let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
         let part1 = Constants.HEIGHT_HORIZONTAL_ROOM_VIEW + Constants.HEIGHT_VIEW_BASE_INFORMATION
         let part2 = membersViewHeight + utilitiesViewHeight
         let part3 = Constants.HEIGHT_VIEW_DESCRIPTION + Constants.HEIGHT_LARGE_SPACE
@@ -161,7 +163,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         //Data for baseInformationView
         horizontalImagesView.images = room.imageUrls
         baseInformationView.lblMainTitle.text = room.name
-        baseInformationView.lblStatus.attributedText = status
+        baseInformationView.lblTitleDescription.attributedText = status
         baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
         baseInformationView.tvInfoTop.text = room.address
         baseInformationView.lblInfoBottom.text = String(format: "AREA".localized,room.area)
@@ -177,13 +179,14 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         membersView.delegate = self
         membersView.lblTitle.text = "ROOM_DETAIL_MEMBER_TITLE".localized
         membersView.lblLeft.text = String(format: "ROOM_DETAIL_MAX_NUMBER_OF_MEMBER".localized,room.maxGuest)
-        membersView.lblCenter.text = String(format: "ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER".localized,room.currentMember)
-        membersView.lblRight.text = String(format: "ROOM_DETAIL_ADDED_NUMBER_OF_MEMBER".localized,room.members?.count ?? 0)
+//        membersView.lblCenter.text = String(format: "ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER".localized,room.currentMember)
+        membersView.lblCenter.text = String(format: "ROOM_DETAIL_ADDED_NUMBER_OF_MEMBER".localized,room.members?.count ?? 0)
         
         
         //Data for utilityView
         utilitiesView.lblTitle.text = "UTILITY_TITLE".localized
         utilitiesView.utilities = room.utilities
+        utilitiesView.delegate = self
         
         //Data for descriptionView
         descriptionsView.viewType = viewType
@@ -203,9 +206,9 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     
     
     @objc func didReceiveEditRoomNotification(_ notification:Notification){
-        if notification.object is RoomResponseModel{
+        if notification.object is RoomMappableModel {
             
-            guard let room = notification.object as? RoomResponseModel else{
+            guard let room = notification.object as? RoomMappableModel else{
                 return
             }
             self.room = room
@@ -226,7 +229,16 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
 //        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
     }
     
-    
+    //MARK: UtilitiesViewDelegate
+    func utilitiesViewDelegate(utilitiesView view: UtilitiesView, didSelectUtilityAt indexPath: IndexPath) {
+        let utility = room.utilities[indexPath.row]
+        utility.name = DBManager.shared.getRecord(id: utility.utilityId, ofType: UtilityModel.self)!.name
+        let customTitle = NSAttributedString(string: utility.name, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
+        let customMessage = NSMutableAttributedString(string: "Brand: \(utility.brand)\n", attributes: [NSAttributedStringKey.font:UIFont.small])
+        customMessage.append(NSAttributedString(string: "Quantity: \(utility.quantity)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+        customMessage.append(NSAttributedString(string: "Description: \(utility.utilityDescription)", attributes: [NSAttributedStringKey.font:UIFont.small]))
+        AlertController.showAlertInfoWithAttributeString(withTitle: customTitle, forMessage: customMessage, inViewController: self)
+    }
     //MARK: OptionViewDelegate
     func optionViewDelegate(view optionView: OptionView, onClickBtnLeft btnLeft: UIButton) {
         //Valid information at time input. So we dont need to valid here

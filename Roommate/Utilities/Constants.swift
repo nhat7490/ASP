@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://172.20.10.6:8080/"
+    static let BASE_URL_API = "http://192.168.100.112:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
@@ -48,7 +48,7 @@ class Constants{
     static let CELL_ROOMCV = "RoomCVCell"
     static let CELL_ROOMPOSTCV = "RoomPostCVCell"
     static let CELL_ORDERTV = "OrderTVCell"
-    static let CELL_NEWUTILITYCV = "NewUtilityCVCell"
+    static let CELL_UTILITYCV = "UtilityCVCell"
     static let CELL_NAVIGATIONCV = "NavigationCVCell"
     static let CELL_IMAGECV = "ImageCVCell"
     static let CELL_ICONTITLETV = "IconTitleTVCell"
@@ -91,6 +91,7 @@ class Constants{
     static let HEIGHT_VIEW_DROPDOWN_LIST:CGFloat = 81.0
     static let HEIGHT_VIEW_SLIDER:CGFloat = 90.0
     static let HEIGHT_LARGE_SPACE:CGFloat = 20.0
+    static let HEIGHT_TITLE:CGFloat = 50.0
     static let HEIGHT_MEDIUM_SPACE:CGFloat = 10.0
     static let HEIGHT_CELL_ROOMPOSTCV:CGFloat = 240
     static let HEIGHT_CELL_ROOMMATEPOSTCV:CGFloat = 175
@@ -117,10 +118,13 @@ class Constants{
     //MARK: Common height
     static let HEIGHT_UTILITY_INPUT_VIEW:CGFloat = 160.0
     static let HEIGHT_UTILITY_DETAIL_VIEW:CGFloat = 160.0
-    static let HEIGHT_NEW_INPUT_VIEW:CGFloat = 70.0
-    static let HEIGHT_CELL_NEW_UTILITYCV:CGFloat = 50.0
+    static let HEIGHT_INPUT_VIEW:CGFloat = 70.0
+    static let HEIGHT_CELL_UTILITYCV:CGFloat = 50.0
     static let HEIGHT_CELL_NAVIGATIONCV:CGFloat = 80.0
     static let HEIGHT_ROOM_INFOR_TITLE:CGFloat = 30.0
+    static let HEIGHT_CELL_ADD_MEMBER_VIEW:CGFloat = 100.0
+
+    //MARK: Common Lenght
     static let MAX_MEMBER:Int = 10
     static let MIN_MEMBER:Int = 0
     static let MAX_PRICE:Double = 50_000_000.0
@@ -132,8 +136,10 @@ class Constants{
     static let MAX_LENGHT_ADDRESS:Int = 250
     static let MAX_LENGHT_DESCRIPTION:Int = 250
     static let MAX_LENGHT_NORMAL_TEXT:Int = 50
-    static let HEIGHT_CELL_ADD_MEMBER_VIEW:CGFloat = 100.0
-    
+
+    //MARK: Common width
+    static let WIDTH_LOCATION_VIEW:CGFloat = 65.0
+
     //MARK: Common
     static let MAX_Y_OFFSET:CGFloat = 50.0
     static let MAX_IMAGE:Int = 12
@@ -158,6 +164,7 @@ class Constants{
     static let NOTIFICATION_REMOVE_BOOKMARK:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_BOOKMARK")
     static let NOTIFICATION_REMOVE_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_ROOM")
     static let NOTIFICATION_EDIT_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_EDIT_ROOM")
+    static let NOTIFICATION_EDIT_ROOM_MEMBER:NSNotification.Name = NSNotification.Name("NOTIFICATION_EDIT_ROOM_MEMBER")
     static let NOTIFICATION_CREATE_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_CREATE_ROOM")
     
     static let NOTIFICATION_SIGNOUT:NSNotification.Name = NSNotification.Name("NOTIFICATION_SIGNOUT")

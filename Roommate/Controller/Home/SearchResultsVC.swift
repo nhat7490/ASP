@@ -88,7 +88,7 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
         navigationItem.titleView = searchController.searchBar
         let leftItem = UIBarButtonItem(customView: locationSearchView)
         _ = leftItem.customView?.anchorHeight(equalToConstrant: navigationItem.titleView!.frame.height)
-        _ = leftItem.customView?.anchorWidth(equalToConstrant: 100.0)
+        _ = leftItem.customView?.anchorWidth(equalToConstrant: Constants.WIDTH_LOCATION_VIEW)
         navigationItem.leftBarButtonItem = leftItem
         
         //Add Constraints
@@ -135,6 +135,8 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
         searchRequestModel.address = dictionary.keys.first?.address
         searchRequestModel.latitude = dictionary.values.first?.lat
         searchRequestModel.longitude = dictionary.values.first?.lng
+        searchResults = nil
+        collectionView.reloadData()
         requestSearchData()
     }
     //MARK: LocationSearchViewDelegate
@@ -247,6 +249,7 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
         hub.mode = .indeterminate
         hub.bezelView.backgroundColor = .white
         hub.contentColor = .defaultBlue
+        hub.label.text = "SEARCH_LOADING".localized
         DispatchQueue.global(qos: .background).async {
             APIConnection.requestObject(apiRouter: APIRouter.searchPostByAddress(model: self.searchRequestModel), errorNetworkConnectedHander: {
                 DispatchQueue.main.async {

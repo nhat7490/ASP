@@ -26,14 +26,31 @@ class APIConnection: NSObject {
         Alamofire.request(apiRouter).responseArray { (response:DataResponse<[T]>) in
             //Fail to connect to server
             if let _ = response.error{
+//                //Http response nil: Timeout or cannot connect
+//                if response.response == nil {
+//                    completion(nil,ApiResponseErrorType.SERVER_NOT_RESPONSE,nil)
+//                    //Error to convert json to object
+//                }else{
+//                    //Default code 404 when return from server
+//                    completion(nil, .PARSE_RESPONSE_FAIL, .NotFound)
+//                }
+                //Fail to connect to server
                 //Http response nil: Timeout or cannot connect
                 if response.response == nil {
                     completion(nil,ApiResponseErrorType.SERVER_NOT_RESPONSE,nil)
-                    //Error to convert json to object
+
                 }else{
-                    //Default code 404 when return from server
-                    completion(nil, .PARSE_RESPONSE_FAIL, .NotFound)
+                    //Error to convert json to object
+                    //Default code 404,403 cause error parse response to json
+                    if let statusCode = response.response?.statusCode{
+                        completion(nil,nil,HTTPStatusCode(rawValue: statusCode))
+                    }else{
+                        //PARSE_RESPONSE_FAIL
+                        completion(nil,ApiResponseErrorType.PARSE_RESPONSE_FAIL,nil)
+                    }
+
                 }
+
                 //Success
             }else{
                 guard let code = response.response?.statusCode,let httpStatusCode = HTTPStatusCode(rawValue: code) else{
@@ -57,34 +74,37 @@ class APIConnection: NSObject {
             }
         }
         Alamofire.request(apiRouter).responseObject { (response:DataResponse<T>) in
-            //Fail to connect to server
+            //Parse response to object fail
             if let _ = response.error{
+                //Fail to connect to server
                 //Http response nil: Timeout or cannot connect
                 if response.response == nil {
                     completion(nil,ApiResponseErrorType.SERVER_NOT_RESPONSE,nil)
-                    //Error to convert json to object
+
                 }else{
-                    //Default code 404 when return from server
-                    let statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode)!)
-                    if statusCode == HTTPStatusCode.NotFound || statusCode == HTTPStatusCode.OK {
-                        completion(nil,nil,statusCode)
+                    //Error to convert json to object
+                    //Default code 404,403 cause error parse response to json
+                    if let statusCode = response.response?.statusCode{
+                        completion(nil,nil,HTTPStatusCode(rawValue: statusCode))
                     }else{
                         //PARSE_RESPONSE_FAIL
                         completion(nil,ApiResponseErrorType.PARSE_RESPONSE_FAIL,nil)
                     }
                     
                 }
-                //Success
+
             }else{
+                //Parse response to object success
                 guard let code = response.response?.statusCode,let httpStatusCode = HTTPStatusCode(rawValue: code) else{
                     return
                 }
-                //Default success code 200 or 201
-                if httpStatusCode == .OK || httpStatusCode == .Created{
-                    completion(response.result.value,nil,httpStatusCode)
-                }else{
-                    completion(nil,nil,httpStatusCode)
-                }
+                completion(response.result.value,nil,httpStatusCode)
+//                //Default success code 200 or 201
+//                if httpStatusCode == .OK || httpStatusCode == .Created{
+//                    completion(response.result.value,nil,httpStatusCode)
+//                }else{
+//                    completion(nil,nil,httpStatusCode)
+//                }
             }
             
         }

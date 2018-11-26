@@ -7,11 +7,9 @@
 //
 
 import Foundation
-import ObjectMapper
-import RealmSwift
-import ObjectMapper_Realm
 import Realm
-class UserModel:BaseModel{
+import RealmSwift
+class UserModel:Object{
     
     @objc dynamic var userId = 0
     @objc dynamic var username:String?
@@ -23,27 +21,24 @@ class UserModel:BaseModel{
     @objc dynamic var phone:String?
     @objc dynamic var gender = 1
     @objc dynamic var roleId = 4
-    
-    //MARK: ObjectMapper
-    required convenience init?(map: Map) {
-        self.init()
-    }
-    
-    override func mapping(map: Map){
-        super.mapping(map: map)
-        userId <- map["userId"]
-        username <- map["username"]
-        password <- map["password"]
-        email <- map["email"]
-        fullname <- map["fullname"]
-        imageProfile <- map["imageProfile"]
-        dob <- (map["dob"],CustomDateFormatTransform(formatString: "yyyy-MM-dd"))
-        phone <- map["phone"]
-        gender <- map["gender"]
-        roleId <- map["roleId"]
+    @objc dynamic var suggestSettingModel:SuggestSettingModel?
 
+    init(userMappedModel:UserMappableModel) {
+        super.init()
+        self.userId = userMappedModel.userId
+        self.username = userMappedModel.username
+        self.password = userMappedModel.password
+        self.email = userMappedModel.email
+        self.fullname = userMappedModel.fullname
+        self.imageProfile = userMappedModel.imageProfile
+        self.dob = userMappedModel.dob
+        self.phone = userMappedModel.phone
+        self.gender = userMappedModel.gender
+        self.roleId = userMappedModel.roleId
+        if let suggestSettingMappedModel = userMappedModel.suggestSettingMappedModel{
+            self.suggestSettingModel =  SuggestSettingModel(suggestSettingMappedModel: suggestSettingMappedModel)
+        }
     }
-
     
     
     //MARK: Object

@@ -119,7 +119,7 @@ class SearchVC:BaseVC,UITableViewDelegate,UITableViewDataSource,UISearchResultsU
 //                                            }
                                         }
                                         
-//                                        self.tableView.reloadData()
+//                                        self.tableView.reloadData() 
                                     }
                                     
                                 }

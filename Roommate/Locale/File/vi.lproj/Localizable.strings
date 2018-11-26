@@ -8,6 +8,7 @@
 //MARK: Navigation Title
 "FILTER"="Bộ lọc";
 "CREATE_ROOM"="Đăng phòng";
+"CREATE_ROOMMATE_POST"="Đăng tìm phòng";
 "ALL_VC"="Tất cả";
 "BOOKMARK_VC"="Đánh dấu";
 "SIGN_IN_TITLE" = "Đăng nhập";
@@ -27,6 +28,7 @@
 "TITLE_MEMBER_CREATED_ROOMMATE_POST" = "Bài viết tìm phòng đã tạo";
 "CURRENT_NUMBER_OF_PERSON" = "Số người hiện tại:%d/%d";
 "NO_OWNER_ROOM"="Bạn chưa tạo phòng nào";
+"TITLE_MEMBER_NO_HISTORY_ROOM"="Bạn chưa ở phòng nào";
 "NO_MEMBER_ROOM"="Phòng chưa thêm thành viên nào";
 "TITLE_USER_DETAIL"="Thông tin của bạn";
 "TITLE_MEMBER_NO_CURRENT_ROOM" = "Bạn không có phòng hiện tại";
@@ -91,7 +93,7 @@
 "ROOM_DETAIL_STATUS_AUTHORIZED"="Đã xác thực";
 "ROOM_DETAIL_STATUS_DECLINED"="Đã từ chối";
 "ROOM_DETAIL_STATUS_PENDING"="Đang xem xét";
-"ROOM_DETAIL_MAX_NUMBER_OF_MEMBER"="Tối đa : %d";
+"ROOM_DETAIL_MAX_NUMBER_OF_MEMBER"="Số người tối đa : %d";
 "ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER"="Hiện tại : %d";
 "ROOM_DETAIL_ADDED_NUMBER_OF_MEMBER"="Đã thêm : %d";
 "GENDER_ACCEPT"="Giới tính";
@@ -184,7 +186,7 @@
 "ERROR_TYPE_ADDRESS_SUGGEST"="Địa chỉ phải chọn từ gợi ý";
 "ERROR_TYPE_INPUT"="Vui lòng nhập thông tin hợp lệ";
 "ERROR_TYPE_DESCRIPTION"="Mô tả từ 5 đến 250 ký tự";
-"ERROR_TYPE_UTILITY"="chọn tối thiểu 5 tiện ích";
+"ERROR_TYPE_UTILITY"="Chọn tối thiểu 5 tiện ích";
 "ERROR_TYPE_EMAIL"="Địa chỉ email không đúng";
 "PLACE_HOLDER_AVATAR_IMAGE"="Ảnh đại diện";
 "PLACE_HOLDER_FULL_NAME"="Tên đầy đủ của bạn";
@@ -199,9 +201,18 @@
 "ROOM_POST_INFOR_TITLE"="Thông tin bài đăng";
 
 
+//MARK: CERoommatePostVC
+"ROOM_POST_SETTING_TITLE"="Thông tin bài đăng (Thông tin này sẽ được cập nhập cho cài đặt gợi ý)";
+"ROOM_POST_PHONE_CONTACT"="Thông tin liên hệ";
+"ROOMMATE_POST_CREATE_SUCCESS"="Tạo bài viết thành công";
+
+
+
+
 
 //MARK: CERoomVC
 "ROOM_CREATE"="Tạo phòng";
+"EDIT_MEMBER_VC"="Sửa thông tin thành viên";
 "ROOM_EDIT"="Sửa thông tin phòng";
 "ROOM_INFOR_TITLE"="Thông tin phòng";
 "ROOM_NAME_TITLE"="Tên Phòng";
@@ -232,6 +243,12 @@
 "PHOTO"="Thư viện";
 "DEVICE_CAMERA_NOT_EXISTED"="Máy của bạn không hỗ trợ camera";
 "ROOM_CREATE_SUCCESS"="Tạo phòng thành công";
+"ROOM_CURRENT_MEMBER_NUMBER"="Số thành viên hiện tại: %d";
+
+"ROOM_MEMBER_LESSTHAN_MAXGUEST"="Số người tối đa không được nhỏ hơn số thành viên được thêm vào phòng";
+
+
+
 
 //MARK: EditMemberVC
 "USER_GUIDE_SLIDE_TO_DELETE"="Vuốt từ phải sang trái để xoá";
@@ -257,11 +274,13 @@
 "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Oops.Lỗi máy chủ, chạm để thử lại";
 //MARK: Alert
 "ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
+"ALERT_INVALID_USERNAME_PASSWORD_MESSAGE"="Tên đăng nhập hoặc tài khoản không đúng";
+
 "ALERT_NON_EXIST_USERNAME"="Tên người dùng không tồn tại";
 "EXISTED_USER"="Tên người dùng đã tồn tại";
 "ALERT_ADD_MEMBER_SUCCESS"="Thêm thành viên thành công";
-"ALERT_INVALID_USERNAME_PASSWORD"="Mật khẩu không đúng";
-"ALERT_INVALID_MEMBER"="Thành viên này đang ở 1 phòng khác";
+"ALERT_INVALID_PASSWORD_MESSAGE"="Mật khẩu không đúng";
+"ALERT_INVALID_MEMBER"="Thành viên này đang ở 1 phòng khác hoặc đang là chủ nhà";
 "ALERT_EXISTED_ROOM_MEMBER"="Thành viên đã tồn tại trong phòng";
 "PLACE_HOLDER_USERNAME"="Tên đăng nhập";
 "PLACE_HOLDER_PASSWORD"="Mật khẩu";
@@ -273,5 +292,8 @@
 "MB_LOAD_DATA_TITLE" = "Đang tải dữ liệu";
 "MB_LOAD_UPLOAD_IMAGE" = "Đang tải ảnh lên";
 "MB_LOAD_CREATE_ROOM" = "Đang tạo phòng";
+"MB_LOAD_CREATE_ROOMMATE_POST" = "Đang tạo bài viết";
 "MB_LOAD_CREATE_USER" ="Đang Đăng ký";
 "MB_LOAD_EDIT_ROOM" = "Đang cập nhập thông tin phòng";
+
+"SEARCH_LOADING"="Đang tìm kiếm...";

@@ -30,10 +30,10 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
     
     func setupUI(){
         title = "SETTING".localized
-        setBackButtonForNavigationBar()
+        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
         
         view.addSubview(settingActionTableView)
-        _ = settingActionTableView.anchor(view: view)
+        _ = settingActionTableView.anchor(view.topAnchor, view.leftAnchor, view.bottomAnchor, view.rightAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
         
     }
     

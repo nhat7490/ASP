@@ -121,7 +121,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
             }
-        }, returnType: UserModel.self) { (user, error, statusCode) -> (Void) in
+        }, returnType: UserMappableModel.self) { (user, error, statusCode) -> (Void) in
             DispatchQueue.main.async {
                 MBProgressHUD.hide(for: self.view, animated: true)
             }
@@ -133,10 +133,8 @@ class SignInVC: BaseVC,UITextFieldDelegate {
             }else{
                 //200
                 if statusCode == .OK{
-                    //                    DispatchQueue.global(qos: .userInteractive).async {
-                    
-                    //                        self.group.notify(queue: DispatchQueue.main, execute: {
-                    _ = DBManager.shared.addUser(user: user!)
+                    let userModel = UserModel(userMappedModel: user!)
+                    let istrue = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: userModel)
                     _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object: SettingModel())
                     let appdelegate = UIApplication.shared.delegate as! AppDelegate
                     appdelegate.window!.rootViewController = self.mainTabBarVC
@@ -144,8 +142,6 @@ class SignInVC: BaseVC,UITextFieldDelegate {
                     //403
                 }else if statusCode == .Forbidden {
                     APIResponseAlert.apiResponseError(controller: self, type: .invalidPassword)
-                }else if statusCode == .NotFound{
-                    APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidUsername)
                 }
             }
         }

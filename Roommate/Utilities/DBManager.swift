@@ -22,21 +22,21 @@ class DBManager {
         return realm.objects(CityModel.self).first != nil ? true : false
     }
     
-    func isExisted<T:BaseModel>(ofType:T.Type)->Bool{
+    func isExisted<T:Object>(ofType:T.Type)->Bool{
         let realm = try! Realm()
         return realm.objects(T.self).count != 0
     }
     //For Common
-    func getRecord<T:BaseModel>(id:Int,ofType:T.Type)->T?{
+    func getRecord<T:Object>(id:Int,ofType:T.Type)->T?{
         let realm = try! Realm()
         return realm.object(ofType:T.self, forPrimaryKey: id)
     }
-    func getRecords<T:BaseModel>(ofType:T.Type) -> Results<T>?{
+    func getRecords<T:Object>(ofType:T.Type) -> Results<T>?{
         let realm = try! Realm()
         return  realm.objects(T.self)
     }
     
-    func addRecords<T:BaseModel>(ofType:T.Type,objects:[T])->Bool{
+    func addRecords<T:Object>(ofType:T.Type,objects:[T])->Bool{
         let realm = try! Realm()
         do{
             try realm.write {
@@ -48,7 +48,7 @@ class DBManager {
         }
     }
     
-    func deleteAllRecords<T:BaseModel>(ofType:T.Type) {
+    func deleteAllRecords<T:Object>(ofType:T.Type) {
         let realm = try! Realm()
         do {
             let objects = realm.objects(T.self)
@@ -59,7 +59,7 @@ class DBManager {
             print("Cannot delete all Disctrict")
         }
     }
-    func updateRecord<T:BaseModel>(ofType:T.Type,object:T)->Bool{
+    func updateRecord<T:Object>(ofType:T.Type,object:T)->Bool{
         let realm = try! Realm()
         do{
             try realm.write {
@@ -72,12 +72,12 @@ class DBManager {
     }
     
     //For SingletonMOdel
-    func getSingletonModel<T:BaseModel>(ofType:T.Type)->T?{
+    func getSingletonModel<T:Object>(ofType:T.Type)->T?{
         let realm = try! Realm()
         return realm.objects(T.self).first
         
     }
-    func addSingletonModel<T:BaseModel>(ofType:T.Type,object:T)->Bool{
+    func addSingletonModel<T:Object>(ofType:T.Type,object:T)->Bool{
         let realm = try! Realm()
         do{
             try realm.write {

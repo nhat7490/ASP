@@ -30,6 +30,8 @@ class APIResponseAlert {
             message = "ALERT_INVALID_USERNAME_MESSAGE"
         case .invalidPassword:
              message = "ALERT_INVALID_PASSWORD_MESSAGE"
+        case .invalidUsernameOrPassword:
+            message = "ALERT_INVALID_USERNAME_PASSWORD_MESSAGE"
         case .internalServerError:
              message = "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"
         case .invalidMember:

@@ -79,7 +79,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     
     
     func setupUI() {
-        setBackButtonForNavigationBar()
+        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
         if #available(iOS 11, *){
             scrollView.contentInsetAdjustmentBehavior = .never
         }else{
@@ -89,8 +89,9 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         //Caculator height
         let padding:UIEdgeInsets = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
         let numberOfRow = viewType == .roomPostDetailForFinder ? (room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1) : (roommate.utilityIds.count%2==0 ? roommate.utilityIds.count/2 : roommate.utilityIds.count/2+1)
-        let utilitiesViewHeight =  Constants.HEIGHT_CELL_NEW_UTILITYCV * CGFloat(numberOfRow) + 60.0
-        let totalContentViewHeight = viewType == .roomPostDetailForFinder ? CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + Constants.HEIGHT_VIEW_GENDER + Constants.HEIGHT_VIEW_DESCRIPTION + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE) : CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + utilitiesViewHeight - 30)
+        let heightBaseInformationView:CGFloat  = ((viewType == .roomPostDetailForFinder) ? Constants.HEIGHT_VIEW_BASE_INFORMATION : Constants.HEIGHT_VIEW_BASE_INFORMATION-30.0 )
+        let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
+        let totalContentViewHeight = viewType == .roomPostDetailForFinder ? CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+heightBaseInformationView+Constants.HEIGHT_VIEW_GENDER + Constants.HEIGHT_VIEW_DESCRIPTION + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE) : CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + utilitiesViewHeight - 30)
         
         //Add View
         view.addSubview(scrollView)
@@ -119,7 +120,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         _ = contentView.anchorHeight(equalToConstrant: CGFloat(totalContentViewHeight))
         
         _ = horizontalImagesView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero ,CGSize(width: 0, height: Constants.HEIGHT_CELL_IMAGECV))
-        _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_BASE_INFORMATION-30.0))
+        _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height:heightBaseInformationView ))
         if viewType == .roomPostDetailForFinder{
         _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
         _ = utilitiesView.anchor(genderView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))
@@ -131,7 +132,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     
     func setData() {
         
-        baseInformationView.lblStatusHeightConstraint.constant = 0
+        baseInformationView.viewType = viewType
         if viewType == .roomPostDetailForFinder{
             //Data for horizontalImagesView
             horizontalImagesView.images = room.imageUrls
@@ -141,7 +142,8 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
             baseInformationView.tvInfoTop.text = room.address
             baseInformationView.lblInfoBottom.text = String(format: "AREA".localized,room.area!)
-            
+            baseInformationView.lblTitleDescription.text  = room.genderPartner == 1 ? String(format: "NUMBER_OF_PERSON".localized,room.genderPartner!,"MALE".localized) :
+                room.genderPartner == 2 ? String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"FEMALE".localized) : String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"\("MALE".localized)/\("FEMALE".localized)")
             //Data for genderview
             genderView.viewType = viewType
             genderView.genderSelect = room.genderPartner == 1 ? GenderSelect.male : room.genderPartner == 2 ? GenderSelect.male : GenderSelect.both
@@ -172,9 +174,9 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             baseInformationView.lblInfoBottom.text = DBManager.shared.getRecord(id: roommate.cityId, ofType: CityModel.self)!.name
             
             //Data for utilityView
-            var utilities:[UtilityModel] = []
+            var utilities:[UtilityMappableModel] = []
             roommate.utilityIds.forEach { (utilityId) in
-                utilities.append(DBManager.shared.getRecord(id: utilityId, ofType: UtilityModel.self)!)
+                utilities.append(UtilityMappableModel(utilityModel: DBManager.shared.getRecord(id: utilityId, ofType: UtilityModel.self)!))
             }
             utilitiesView.utilities = utilities
             

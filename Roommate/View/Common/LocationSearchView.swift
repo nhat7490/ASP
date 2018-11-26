@@ -29,7 +29,7 @@ class LocationSearchView: UIView {
         layer.cornerRadius = 10
         clipsToBounds = true
         btnLocation.backgroundColor = .clear
-        lblTitle.font = .smallTitle
+        lblTitle.font = .small
         lblTitle.textColor = .defaultBlue
         lblTitle.textAlignment = .center
         

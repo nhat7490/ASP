@@ -16,7 +16,7 @@ class RoomCVCell: UICollectionViewCell {
     @IBOutlet weak var tvAddress: UITextView!
     @IBOutlet weak var imgvStatus: UIImageView!
     
-    var room:RoomResponseModel?{
+    var room: RoomMappableModel?{
         didSet{
             guard let room = room else {
                 return

@@ -17,6 +17,7 @@ class FirstLaunchVC:BaseVC{
         super.viewDidLoad()
         imgvIcon.layer.cornerRadius = 15
         imgvIcon.clipsToBounds = true
+        btnSignIn.setTitle("SIGN_IN_TITLE".localized, for: .normal)
         btnSignUpAsGuest.setTitle("SIGN_UP_AS_MEMBER_TITLE".localized, for: .normal)
         btnSignUpAsRoomOwner.setTitle("SIGN_UP_AS_ROOMOWNER_TITLE".localized, for: .normal)
     }

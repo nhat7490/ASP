@@ -14,7 +14,7 @@ class RoomDetailForMasterVC:BaseVC,UtilitiesViewDelegate{
 //        v.utilityForSC = .create
         return v
     }()
-    var utilities:[UtilityModel] = []
+    var utilities:[UtilityMappableModel] = []
 //        [UtilityModel(utility_id: 1, name: "24-hours", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "parking", quantity: 15, brand: "Hello", description: "nothing"),UtilityModel(utility_id: 1, name: "toilet", quantity: 15, brand: "Hello", description: "nothing"),
 //                     UtilityModel(utility_id: 2, name: "aircondition", quantity: 15, brand: "Hello", description: "nothing"),
 //                     UtilityModel(utility_id: 3, name: "cctv", quantity: 15, brand: "Hello", description: "nothing"),

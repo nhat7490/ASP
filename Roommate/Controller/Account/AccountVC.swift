@@ -12,6 +12,7 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     
     lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
+        sv.delegate = self
         sv.alwaysBounceVertical = true
         sv.showsVerticalScrollIndicator = false
         sv.showsHorizontalScrollIndicator = false
@@ -66,8 +67,8 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     var topContainerViewHeight:CGFloat?
     var bottomContainerViewHeightConstraint:NSLayoutConstraint?
     var verticalRoomViewHeightConstraint:NSLayoutConstraint?
-    var rooms:[RoomResponseModel] = []
-    var currentRoomOfMember:RoomResponseModel?
+    var rooms:[RoomMappableModel] = []
+    var currentRoomOfMember: RoomMappableModel?
     var accountVCType:AccountVCType = .member
     var accountActions = [
         "TITLE_CURRENT_MEMBER_ROOM",
@@ -81,6 +82,9 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         setupUI()
         setupDelegateAndDataSource()
         registerNotification()
+        checkAndLoadInitData(inView: self.view) {
+
+        }
     }
     
     
@@ -150,6 +154,7 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         
     }
     func setupDelegateAndDataSource(){
+//        scrollView.delegate = self
         horizontalImagesView.images = [DBManager.shared.getUser()!.imageProfile!]
         btnSetting.addTarget(self, action: #selector(onClickBtnSetting), for: .touchUpInside)
         if accountVCType == .member{
@@ -178,8 +183,8 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     }
     
     @objc func didReceiveEditRoomNotification(_ notification:Notification){
-        if notification.object is RoomResponseModel{
-            guard let room = notification.object as? RoomResponseModel,let index = rooms.index(of: room) else{
+        if notification.object is RoomMappableModel {
+            guard let room = notification.object as? RoomMappableModel, let index = rooms.index(of: room) else{
                 return
             }
             rooms[index] = room
@@ -226,7 +231,7 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
                                     })
                                 }
                                 
-            }, returnType:RoomResponseModel.self, completion: { (values, error, statusCode) -> (Void) in
+            }, returnType: RoomMappableModel.self, completion: { (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: view, animated: true)
                 }
@@ -234,7 +239,7 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
                 if error != nil{
                     DispatchQueue.main.async {
                         self.updateUIForNoData()
-                        self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                        self.showErrorView(inView: view, withTitle:error == .SERVER_NOT_RESPONSE ?  "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE".localized : "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
                             self.requestRoom(view:view, apiRouter: apiRouter)
                         })
                     }
@@ -267,47 +272,48 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     }
     //MARK: Load Remote Data for room member
     func loadRemoteDataForRoomMember(){
-        if !APIConnection.isConnectedInternet(){
-            showErrorView(inView: self.bottomContainerView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
-                    self.requestCurrentRoom(view:self.accountActionTableView)
-                }
-            }
-        }else{
-            self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
-                self.requestCurrentRoom(view:self.accountActionTableView)
-            }
+//        if !APIConnection.isConnectedInternet(){
+//            showErrorView(inView: self.view, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+//
+//            }
+//        }else{
+//            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+//                self.currentRoomOfMember = RoomMappableModel(roomModel: DBManager.shared.getSingletonModel(ofType: RoomModel.self)!)
+//            }
+//        }
+        self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+            self.currentRoomOfMember = RoomMappableModel(roomModel: DBManager.shared.getSingletonModel(ofType: RoomModel.self)!)
         }
-        
-        
+
     }
     
-    func requestCurrentRoom(view:UIView){
-        DispatchQueue.main.async {
-            let hub = MBProgressHUD.showAdded(to: view, animated: true)
-            hub.mode = .indeterminate
-            hub.bezelView.backgroundColor = .white
-            hub.contentColor = .defaultBlue
-        }
-        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: user!.userId), errorNetworkConnectedHander: {
-            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-        }, returnType: RoomResponseModel.self){ (value,error, statusCode) -> (Void) in
-            DispatchQueue.main.async {
-                MBProgressHUD.hide(for: view, animated: true)
-            }
-            if error == .SERVER_NOT_RESPONSE{
-                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
-            }else if error == .PARSE_RESPONSE_FAIL{
-                APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
-            }else{
-                if statusCode == .OK{
-                    if let value = value{
-                        self.currentRoomOfMember = value
-                    }
-                }
-            }
-        }
-    }
+//    func requestCurrentRoom(view:UIView){
+//        DispatchQueue.main.async {
+//            let hub = MBProgressHUD.showAdded(to: view, animated: true)
+//            hub.mode = .indeterminate
+//            hub.bezelView.backgroundColor = .white
+//            hub.contentColor = .defaultBlue
+//        }
+//        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: user!.userId), errorNetworkConnectedHander: {
+//            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+//        }, returnType: RoomMappableModel.self){ (value, error, statusCode) -> (Void) in
+//            DispatchQueue.main.async {
+//                MBProgressHUD.hide(for: view, animated: true)
+//            }
+//            if error == .SERVER_NOT_RESPONSE{
+//                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+//            }else if error == .PARSE_RESPONSE_FAIL{
+//                APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+//            }else{
+//                if statusCode == .OK{
+//                    if let value = value{
+//                        self.currentRoomOfMember = value
+//                        DBManager.shared.addSingletonModel(ofType: RoomModel.self, object: RoomModel(roomResponseModel: value))
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     //MARK: UIScrollviewDelegate
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {

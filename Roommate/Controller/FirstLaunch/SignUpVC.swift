@@ -36,7 +36,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         let vc = MainTabBarVC()
         return vc
     }()
-    var user:UserModel = UserModel()
+    var user:UserMappableModel = UserMappableModel()
     var uploadImageModel:UploadImageModel?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -281,7 +281,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
                                 return
                             }
                             self.user.userId = id
-                            _ = DBManager.shared.addUser(user: self.user)
+                            _ = DBManager.shared.addUser(user: UserModel(userMappedModel: self.user))
                             _ = DBManager.shared.addSingletonModel(ofType:SettingModel.self, object:SettingModel())
                             DispatchQueue.main.async {
                                 let appdelegate = UIApplication.shared.delegate as! AppDelegate

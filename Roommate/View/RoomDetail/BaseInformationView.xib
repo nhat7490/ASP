@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -126,9 +122,9 @@
                 <outlet property="imgvtop" destination="fGa-8B-952" id="ZfK-KL-90M"/>
                 <outlet property="lblInfoBottom" destination="XO3-hV-Mqk" id="38w-fJ-Ovt"/>
                 <outlet property="lblMainTitle" destination="cNq-JJ-xll" id="eeK-Hj-fmk"/>
-                <outlet property="lblStatus" destination="xkE-Vh-fM0" id="huk-OK-slg"/>
-                <outlet property="lblStatusHeightConstraint" destination="n2k-kV-Rsa" id="AF9-0J-BFU"/>
                 <outlet property="lblSubTitle" destination="JXc-Ri-otr" id="EPe-wi-RR8"/>
+                <outlet property="lblTitleDescription" destination="xkE-Vh-fM0" id="huk-OK-slg"/>
+                <outlet property="lblTitleDescriptionHeightConstraint" destination="n2k-kV-Rsa" id="AF9-0J-BFU"/>
                 <outlet property="tvInfoTop" destination="F9x-M6-iKo" id="6G0-Gv-2OH"/>
             </connections>
             <point key="canvasLocation" x="-76.5" y="54"/>

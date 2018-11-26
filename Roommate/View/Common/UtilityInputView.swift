@@ -14,11 +14,11 @@ class UtilityInputView: UIView,UITextViewDelegate,UITextFieldDelegate {
     @IBOutlet weak var tfQuantity: UITextField!
     @IBOutlet weak var tvDescription: UITextView!
 //    var delegate:UtilityInputViewDelegate?
-    var utilityModel:UtilityModel?{
+    var utilityModel: UtilityMappableModel?{
         didSet{
             tfBrand.text = utilityModel?.brand
             tfQuantity.text = utilityModel?.quantity.toString
-            tvDescription.text = utilityModel?.description
+            tvDescription.text = utilityModel?.utilityDescription
         }
     }
     override func awakeFromNib() {
@@ -35,7 +35,7 @@ class UtilityInputView: UIView,UITextViewDelegate,UITextFieldDelegate {
         
          
         //Init data
-        utilityModel = UtilityModel()
+        utilityModel = UtilityMappableModel()
     }
     
     //MARK: UITextViewDelegate

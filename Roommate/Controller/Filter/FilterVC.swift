@@ -66,7 +66,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
             updateUI()
         }
     }
-    var utilities:[UtilityModel]?
+    var utilities:[UtilityMappableModel]?
     var districts:[DistrictModel]?
     var cities:[CityModel]?
     var selectedUtilities:[Int]?
@@ -101,7 +101,9 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         }
     }
     func setupUIAndData(){
-        self.utilities = (DBManager.shared.getRecords(ofType: UtilityModel.self)?.toArray(type: UtilityModel.self))!
+        self.utilities = DBManager.shared.getRecords(ofType: UtilityModel.self)?.compactMap({ (utility) -> UtilityMappableModel? in
+            UtilityMappableModel(utilityModel: utility)
+        })
         self.utilities?.forEach{print($0.name)}
         self.cities = (DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self))!
         self.districts = (DBManager.shared.getRecords(ofType: DistrictModel.self)?.toArray(type: DistrictModel.self))!
@@ -122,9 +124,8 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         let defaultBottomViewHeight:CGFloat = 60.0
         let defaultPadding = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
         let numberOfRow =  (utilities?.count)!%2==0 ? (utilities?.count)!/2 : (utilities?.count)!/2+1
-        let utilitiesViewHeight:CGFloat =  Constants.HEIGHT_CELL_NEW_UTILITYCV * CGFloat(numberOfRow) + 70.0
-        let contentViewHeight:CGFloat
-            contentViewHeight = CGFloat(Constants.HEIGHT_VIEW_SLIDER+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE)
+        let utilitiesViewHeight:CGFloat =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 70.0
+        let contentViewHeight:CGFloat = CGFloat(Constants.HEIGHT_VIEW_SLIDER+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE)
 
         //Add View
         view.addSubview(scrollView)
@@ -171,7 +172,6 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         selectedDistricts = []
         selectedUtilities = []
         selectedPrice = []
-        selectedPrice?.removeAll()
         selectedPrice?.append(400_000)
         selectedPrice?.append(40_000_000)
         selectedGender = .none

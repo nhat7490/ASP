@@ -15,7 +15,7 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
     
     @IBOutlet weak var collectionView: BaseVerticalCollectionView!
     @IBOutlet weak var lblTitle: UILabel!
-    var utilities:[UtilityModel]?{
+    var utilities:[UtilityMappableModel]?{
         didSet{
             collectionView.isUserInteractionEnabled = true
             collectionView.delegate = self
@@ -41,7 +41,7 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
     
     override func awakeFromNib() {
 //        print("awakeFromNib")
-        collectionView.register(UINib(nibName: Constants.CELL_NEWUTILITYCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_NEWUTILITYCV)
+        collectionView.register(UINib(nibName: Constants.CELL_UTILITYCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_UTILITYCV)
         collectionView.allowsSelection = true
         lblTitle.text = "UTILITY_TITLE".localized
         lblTitle.font = .smallTitle
@@ -54,7 +54,7 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NEWUTILITYCV, for: indexPath) as! NewUtilityCVCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_UTILITYCV, for: indexPath) as! UtilityCVCell
         let utility = utilities![indexPath.row]
         cell.data = utility
         if selectedUtilities.contains(utility.utilityId){
@@ -70,13 +70,13 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        print("Size Of cell \(UIScreen.main.bounds.width/2-2*Constants.MARGIN_10-5.0)")
-        return CGSize(width: UIScreen.main.bounds.width/2-Constants.MARGIN_10-2.5, height:CGFloat(Constants.HEIGHT_CELL_NEW_UTILITYCV-2.5))
+        return CGSize(width: UIScreen.main.bounds.width/2-Constants.MARGIN_10-2.5, height:CGFloat(Constants.HEIGHT_CELL_UTILITYCV-2.5))
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 5//Item in diffrence row
     }
     func setState(isSelected:Bool,atIndexPath indexPath:IndexPath){
-        let cell = collectionView.cellForItem(at: indexPath) as! NewUtilityCVCell
+        let cell = collectionView.cellForItem(at: indexPath) as! UtilityCVCell
         cell.isSetSelected = isSelected
         
     }
