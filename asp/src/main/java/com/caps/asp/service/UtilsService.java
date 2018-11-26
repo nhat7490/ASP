@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static com.caps.asp.constant.Constant.NEWPOST;
 
 @Service
-public class Suggest {
+public class UtilsService {
 
     private PostService postService;
     private RoomService roomService;
@@ -32,7 +32,7 @@ public class Suggest {
     private UserRateService userRateService;
 
 
-    public Suggest(PostService postService, RoomService roomService, RoomHasUtilityService roomHasUtilityService, UserService userService, FavouriteService favouriteService, ImageService imageService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService, DistrictService districtService, RoomRateService roomRateService, UserRateService userRateService) {
+    public UtilsService(PostService postService, RoomService roomService, RoomHasUtilityService roomHasUtilityService, UserService userService, FavouriteService favouriteService, ImageService imageService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService, DistrictService districtService, RoomRateService roomRateService, UserRateService userRateService) {
         this.postService = postService;
         this.roomService = roomService;
         this.roomHasUtilityService = roomHasUtilityService;

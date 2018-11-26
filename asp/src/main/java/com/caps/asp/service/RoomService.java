@@ -21,7 +21,7 @@ public class RoomService {
     }
 
     public int saveRoom(TbRoom room) {
-        return roomRepository.saveAndFlush(room).getRoomId();
+            return roomRepository.saveAndFlush(room).getRoomId();
     }
 
     public TbRoom findRoomById(int roomId) {

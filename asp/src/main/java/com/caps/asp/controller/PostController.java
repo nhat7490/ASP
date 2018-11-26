@@ -15,7 +15,7 @@ import com.caps.asp.model.uimodel.response.post.RoommatePostResponseModel;
 import com.caps.asp.service.*;
 import com.caps.asp.service.filter.BookmarkFilter;
 import com.caps.asp.service.filter.Filter;
-import com.caps.asp.service.Suggest;
+import com.caps.asp.service.UtilsService;
 import com.caps.asp.service.filter.Search;
 import com.caps.asp.util.GoogleAPI;
 import com.google.maps.model.GeocodingResult;
@@ -44,14 +44,14 @@ public class PostController {
     public final UtilityReferenceService utilityReferenceService;
     public final DistrictReferenceService districtReferenceService;
     public final ReferenceService referenceService;
-    public final Suggest suggest;
+    public final UtilsService utilsService;
     public final CityService cityService;
     public final PostHasUtilityService postHasUtilityService;
     public final PostHasDistrictService postHasDistrictService;
     public final UserRateService userRateService;
     public final RoomRateService roomRateService;
 
-    public PostController(PostService postService, RoomService roomService, UserService userService, RoomHasUserService roomHasUserService, RoomHasUtilityService roomHasUtilityService, ImageService imageService, FavouriteService favouriteService, DistrictService districtService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService, ReferenceService referenceService, Suggest suggest, CityService cityService, PostHasUtilityService postHasUtilityService, PostHasDistrictService postHasDistrictService, UserRateService userRateService, RoomRateService roomRateService) {
+    public PostController(PostService postService, RoomService roomService, UserService userService, RoomHasUserService roomHasUserService, RoomHasUtilityService roomHasUtilityService, ImageService imageService, FavouriteService favouriteService, DistrictService districtService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService, ReferenceService referenceService, UtilsService utilsService, CityService cityService, PostHasUtilityService postHasUtilityService, PostHasDistrictService postHasDistrictService, UserRateService userRateService, RoomRateService roomRateService) {
         this.postService = postService;
         this.roomService = roomService;
         this.userService = userService;
@@ -63,7 +63,7 @@ public class PostController {
         this.utilityReferenceService = utilityReferenceService;
         this.districtReferenceService = districtReferenceService;
         this.referenceService = referenceService;
-        this.suggest = suggest;
+        this.utilsService = utilsService;
         this.cityService = cityService;
         this.postHasUtilityService = postHasUtilityService;
         this.postHasDistrictService = postHasDistrictService;
@@ -661,12 +661,12 @@ public class PostController {
                 if (postList == null || postList.size() == 0) {
                     return ResponseEntity
                             .status(OK)
-                            .body(suggest.getNewPost(baseSuggestRequestModel)
+                            .body(utilsService.getNewPost(baseSuggestRequestModel)
                                     .getContent());
                 }
 
                 List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
-                return ResponseEntity.status(OK).body(suggest.mappingRoomPost(postList, roomPostResponseModels, baseSuggestRequestModel.getUserId()));
+                return ResponseEntity.status(OK).body(utilsService.mappingRoomPost(postList, roomPostResponseModels, baseSuggestRequestModel.getUserId()));
             } else if (referenceService.getByUserId(baseSuggestRequestModel.getUserId()) != null) {//sugesst for room master
                 FilterRequestModel filterRequestModel = new FilterRequestModel();
                 List<TbUtilitiesReference> utilitiesReference = utilityReferenceService
@@ -702,17 +702,17 @@ public class PostController {
 
                 Filter filter = new Filter();
                 filter.setFilterArgumentModel(filterArgumentModel);
-                Page<RoomPostResponseModel> roomPostResponseModels = suggest.partnerPostSuggestion(filter);
+                Page<RoomPostResponseModel> roomPostResponseModels = utilsService.partnerPostSuggestion(filter);
                 if (roomPostResponseModels == null) {
                     return ResponseEntity
                             .status(OK)
-                            .body(suggest.getNewPost(baseSuggestRequestModel)
+                            .body(utilsService.getNewPost(baseSuggestRequestModel)
                                     .getContent());
                 }
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             } else if (baseSuggestRequestModel.getLatitude() == null
                     && baseSuggestRequestModel.getLongitude() == null) { //not access location, common new post
-                Page<RoomPostResponseModel> roomPostResponseModels = suggest.getNewPost(baseSuggestRequestModel);
+                Page<RoomPostResponseModel> roomPostResponseModels = utilsService.getNewPost(baseSuggestRequestModel);
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             } else { //access location, common nearby post
                 GoogleAPI googleAPI = new GoogleAPI();
@@ -729,14 +729,14 @@ public class PostController {
                 if (postList == null || postList.size() == 0) {
                     return ResponseEntity
                             .status(OK)
-                            .body(suggest.getNewPost(baseSuggestRequestModel)
+                            .body(utilsService.getNewPost(baseSuggestRequestModel)
                                     .getContent());
                 }
 
                 List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
                 return ResponseEntity
                         .status(OK)
-                        .body(suggest.mappingRoomPost(postList, roomPostResponseModels
+                        .body(utilsService.mappingRoomPost(postList, roomPostResponseModels
                                 , baseSuggestRequestModel.getUserId()));
             }
         } catch (Exception e) {
@@ -771,7 +771,7 @@ public class PostController {
                 });
             });
             List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
-            roomPostResponseModels = suggest.mappingRoomPost(postList, roomPostResponseModels, searchRequestModel.getUserId());
+            roomPostResponseModels = utilsService.mappingRoomPost(postList, roomPostResponseModels, searchRequestModel.getUserId());
             searchResponseModel.setRoomPostResponseModel(roomPostResponseModels);
 
             GoogleAPI googleAPI = new GoogleAPI();
@@ -787,7 +787,7 @@ public class PostController {
 
             nearByPostList.removeAll(postList);
             List<RoomPostResponseModel> nearByRoomPostResponseModels = new ArrayList<>();
-            nearByRoomPostResponseModels = suggest.mappingRoomPost(nearByPostList, nearByRoomPostResponseModels, searchRequestModel.getUserId());
+            nearByRoomPostResponseModels = utilsService.mappingRoomPost(nearByPostList, nearByRoomPostResponseModels, searchRequestModel.getUserId());
             searchResponseModel.setNearByRoomPostResponseModels(nearByRoomPostResponseModels);
             return ResponseEntity.status(OK).body(searchResponseModel);
 //        } catch (Exception e) {
