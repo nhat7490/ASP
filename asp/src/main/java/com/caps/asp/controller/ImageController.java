@@ -20,7 +20,7 @@ public class ImageController {
     @PostMapping("/image/upload")
     public ResponseEntity uploadRoomImage(@RequestParam(value = "image") MultipartFile image) {
         try {
-            return ResponseEntity.ok(new UploadImageResponseModel(image.getOriginalFilename(), amazonService.uploadFile(image)));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new UploadImageResponseModel(image.getOriginalFilename(), amazonService.uploadFile(image)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
