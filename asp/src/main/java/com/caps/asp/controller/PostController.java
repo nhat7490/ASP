@@ -224,56 +224,65 @@ public class PostController {
     public ResponseEntity createRoommatePost(@RequestBody RoommatePostRequestModel roommatePostRequestModel) {
         try {
             TbUser user = userService.findById(roommatePostRequestModel.getUserId());
+            if (user.getRoleId()==MEMBER || user.getRoleId() == ROOM_MASTER){
+                TbPost post = new TbPost();
+                Date date = new Date(System.currentTimeMillis());
+                post.setDatePost(date);
+                post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
+                post.setTypeId(MEMBER_POST);
+                post.setUserId(user.getUserId());
+                post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
+                post.setMinPrice(roommatePostRequestModel.getMinPrice());
+                post.setUserId(roommatePostRequestModel.getUserId());
+                post.setPostId(0);
+                int postId = postService.savePost(post);
 
-            TbPost post = new TbPost();
-            Date date = new Date(System.currentTimeMillis());
-            post.setDatePost(date);
-            post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
-            post.setTypeId(MEMBER_POST);
-            post.setUserId(user.getUserId());
-            post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
-            post.setMinPrice(roommatePostRequestModel.getMinPrice());
-            post.setUserId(roommatePostRequestModel.getUserId());
-            post.setPostId(0);
-            int postId = postService.savePost(post);
+                TbReference reference = referenceService.getByUserId(user.getUserId());
+                if (reference != null ){
+                    reference.setMaxPrice(roommatePostRequestModel.getMaxPrice());
+                    reference.setMinPrice(roommatePostRequestModel.getMinPrice());
+                    referenceService.save(reference);
+                }else {
+                    TbReference tbReference = new TbReference();
+                    tbReference.setMaxPrice(roommatePostRequestModel.getMaxPrice());
+                    tbReference.setMinPrice(roommatePostRequestModel.getMinPrice());
+                    referenceService.save(tbReference);
+                }
 
-            TbReference reference = referenceService.getByUserId(user.getUserId());
-            reference.setMaxPrice(roommatePostRequestModel.getMaxPrice());
-            reference.setMinPrice(roommatePostRequestModel.getMinPrice());
-            referenceService.save(reference);
+                utilityReferenceService.removeAllByUserId(user.getUserId());
 
-            utilityReferenceService.removeAllByUserId(user.getUserId());
+                for (Integer utilityId : roommatePostRequestModel.getUtilityIds()) {
+                    TbPostHasUtility postHasUtility = new TbPostHasUtility();
+                    postHasUtility.setId(0);
+                    postHasUtility.setPostId(postId);
+                    postHasUtility.setUtilityId(utilityId);
+                    postHasUtilityService.save(postHasUtility);
 
-            for (Integer utilityId : roommatePostRequestModel.getUtilityIds()) {
-                TbPostHasUtility postHasUtility = new TbPostHasUtility();
-                postHasUtility.setId(0);
-                postHasUtility.setPostId(postId);
-                postHasUtility.setUtilityId(utilityId);
-                postHasUtilityService.save(postHasUtility);
+                    TbUtilitiesReference utilitiesReference = new TbUtilitiesReference();
+                    utilitiesReference.setId(0);
+                    utilitiesReference.setUserId(user.getUserId());
+                    utilitiesReference.setUtilityId(utilityId);
+                    utilityReferenceService.save(utilitiesReference);
+                }
 
-                TbUtilitiesReference utilitiesReference = new TbUtilitiesReference();
-                utilitiesReference.setId(0);
-                utilitiesReference.setUserId(user.getUserId());
-                utilitiesReference.setUtilityId(utilityId);
-                utilityReferenceService.save(utilitiesReference);
+                districtReferenceService.removeAllByUserId(user.getUserId());
+
+                for (Integer districtId : roommatePostRequestModel.getDistrictIds()) {
+                    TbPostHasTbDistrict postHasTbDistrict = new TbPostHasTbDistrict();
+                    postHasTbDistrict.setId(0);
+                    postHasTbDistrict.setPostId(postId);
+                    postHasTbDistrict.setDistrictId(districtId);
+                    postHasDistrictService.save(postHasTbDistrict);
+
+                    TbDistrictReference districtReference = new TbDistrictReference();
+                    districtReference.setId(0);
+                    districtReference.setUserId(user.getUserId());
+                    districtReference.setDistrictId(districtId);
+                    districtReferenceService.save(districtReference);
+                }
+                return ResponseEntity.status(CREATED).build();
             }
-
-            districtReferenceService.removeAllByUserId(user.getUserId());
-
-            for (Integer districtId : roommatePostRequestModel.getDistrictIds()) {
-                TbPostHasTbDistrict postHasTbDistrict = new TbPostHasTbDistrict();
-                postHasTbDistrict.setId(0);
-                postHasTbDistrict.setPostId(postId);
-                postHasTbDistrict.setDistrictId(districtId);
-                postHasDistrictService.save(postHasTbDistrict);
-
-                TbDistrictReference districtReference = new TbDistrictReference();
-                districtReference.setId(0);
-                districtReference.setUserId(user.getUserId());
-                districtReference.setDistrictId(districtId);
-                districtReferenceService.save(districtReference);
-            }
-            return ResponseEntity.status(CREATED).build();
+            return ResponseEntity.status(CONFLICT).build();
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
         }
