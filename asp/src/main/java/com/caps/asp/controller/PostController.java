@@ -359,10 +359,9 @@ public class PostController {
         try {
             Filter filter = new Filter();
             filter.setFilterArgumentModel(filterArgumentModel);
-
+            Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage()
+                    , filterArgumentModel.getOffset(), filter);
             if (filter.getFilterArgumentModel().getTypeId() == MEMBER_POST) {//get member post
-                Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage()
-                        , filterArgumentModel.getOffset(), filter);
                 Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> {
                     RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
 //                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
@@ -418,8 +417,6 @@ public class PostController {
                 });
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
             } else if (filter.getFilterArgumentModel().getTypeId() == MASTER_POST) {//get room master post
-                Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage()
-                        , filterArgumentModel.getOffset(), filter);
                 Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> {
                     RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
 
@@ -747,49 +744,49 @@ public class PostController {
     @PostMapping("post/search")
     public ResponseEntity search(@RequestBody SearchRequestModel searchRequestModel) {
 //        try {
-            Search search = new Search();
-            search.setSearch(searchRequestModel.getAddress()
-                    .trim()
-                    .replaceAll("Việt Nam","")
-                    .split(","));
+        Search search = new Search();
+        search.setSearch(searchRequestModel.getAddress()
+                .trim()
+                .replaceAll("Việt Nam", "")
+                .split(","));
 
-            List<TbRoom> roomList = roomService.findByLikeAddress(search);
-            List<TbPost> postList = new ArrayList<>();
-            SearchResponseModel searchResponseModel = new SearchResponseModel();
-            roomList.forEach(tbRoom -> {
-                int roomId = tbRoom.getRoomId();
-                List<TbRoomHasUser> roomHasUser = roomHasUserService.getAllByRoomId(roomId);
-                roomHasUser.forEach(tbRoomHasUser -> {
-                    TbUser user = userService.findById(tbRoomHasUser.getUserId());
-                    if (user.getRoleId() == ROOM_MASTER) {
-                        TbPost post = postService
-                                .findAllByUserIdAndRoomIdOrderByDatePostDesc(user.getUserId(), roomId);
-                        if (post != null) {
-                            postList.add(post);
-                        }
+        List<TbRoom> roomList = roomService.findByLikeAddress(search);
+        List<TbPost> postList = new ArrayList<>();
+        SearchResponseModel searchResponseModel = new SearchResponseModel();
+        roomList.forEach(tbRoom -> {
+            int roomId = tbRoom.getRoomId();
+            List<TbRoomHasUser> roomHasUser = roomHasUserService.getAllByRoomId(roomId);
+            roomHasUser.forEach(tbRoomHasUser -> {
+                TbUser user = userService.findById(tbRoomHasUser.getUserId());
+                if (user.getRoleId() == ROOM_MASTER) {
+                    TbPost post = postService
+                            .findAllByUserIdAndRoomIdOrderByDatePostDesc(user.getUserId(), roomId);
+                    if (post != null) {
+                        postList.add(post);
                     }
-                });
+                }
             });
-            List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
-            roomPostResponseModels = utilsService.mappingRoomPost(postList, roomPostResponseModels, searchRequestModel.getUserId());
-            searchResponseModel.setRoomPostResponseModel(roomPostResponseModels);
+        });
+        List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
+        roomPostResponseModels = utilsService.mappingRoomPost(postList, roomPostResponseModels, searchRequestModel.getUserId());
+        searchResponseModel.setRoomPostResponseModel(roomPostResponseModels);
 
-            GoogleAPI googleAPI = new GoogleAPI();
-            GeocodingResult geocodingResult = googleAPI.getLocationName(searchRequestModel.getLatitude(), searchRequestModel.getLongitude());
+        GoogleAPI googleAPI = new GoogleAPI();
+        GeocodingResult geocodingResult = googleAPI.getLocationName(searchRequestModel.getLatitude(), searchRequestModel.getLongitude());
 
-            String city = googleAPI.getCity(geocodingResult);
-            int cityId = cityService.findByNameLike(city).getCityId();
+        String city = googleAPI.getCity(geocodingResult);
+        int cityId = cityService.findByNameLike(city).getCityId();
 
-            List<TbPost> nearByPostList = postService.getSuggestedListForMember(Float.parseFloat(searchRequestModel.getLatitude() + "")
-                    , Float.parseFloat(searchRequestModel.getLongitude() + "")
-                    , cityId
-                    , 1, 20);
+        List<TbPost> nearByPostList = postService.getSuggestedListForMember(Float.parseFloat(searchRequestModel.getLatitude() + "")
+                , Float.parseFloat(searchRequestModel.getLongitude() + "")
+                , cityId
+                , 1, 20);
 
-            nearByPostList.removeAll(postList);
-            List<RoomPostResponseModel> nearByRoomPostResponseModels = new ArrayList<>();
-            nearByRoomPostResponseModels = utilsService.mappingRoomPost(nearByPostList, nearByRoomPostResponseModels, searchRequestModel.getUserId());
-            searchResponseModel.setNearByRoomPostResponseModels(nearByRoomPostResponseModels);
-            return ResponseEntity.status(OK).body(searchResponseModel);
+        nearByPostList.removeAll(postList);
+        List<RoomPostResponseModel> nearByRoomPostResponseModels = new ArrayList<>();
+        nearByRoomPostResponseModels = utilsService.mappingRoomPost(nearByPostList, nearByRoomPostResponseModels, searchRequestModel.getUserId());
+        searchResponseModel.setNearByRoomPostResponseModels(nearByRoomPostResponseModels);
+        return ResponseEntity.status(OK).body(searchResponseModel);
 //        } catch (Exception e) {
 //            return ResponseEntity.status(NOT_FOUND).build();
 //        }
