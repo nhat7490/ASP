@@ -4,6 +4,7 @@ import com.caps.asp.model.uimodel.request.UtilityRequestModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class RoomModel {
@@ -15,7 +16,7 @@ public class RoomModel {
     private String address;
     private Integer maxGuest;
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date dateCreated;
+    private Timestamp dateCreated;
     private Integer currentNumber;
     private String description;
     private int status;
@@ -28,12 +29,28 @@ public class RoomModel {
     private List<String> imageUrls;
     List<Integer> userIds;
 
-    public List<Integer> getUserIds() {
-        return userIds;
+    public RoomModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, Timestamp dateCreated, Integer currentNumber, String description, int status, int userId, int cityId, int districtId, Double longitude, Double latitude, List<UtilityRequestModel> utilities, List<String> imageUrls, List<Integer> userIds) {
+        this.roomId = roomId;
+        this.name = name;
+        this.price = price;
+        this.area = area;
+        this.address = address;
+        this.maxGuest = maxGuest;
+        this.dateCreated = dateCreated;
+        this.currentNumber = currentNumber;
+        this.description = description;
+        this.status = status;
+        this.userId = userId;
+        this.cityId = cityId;
+        this.districtId = districtId;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.utilities = utilities;
+        this.imageUrls = imageUrls;
+        this.userIds = userIds;
     }
 
-    public void setUserIds(List<Integer> userIds) {
-        this.userIds = userIds;
+    public RoomModel() {
     }
 
     public int getRoomId() {
@@ -84,11 +101,11 @@ public class RoomModel {
         this.maxGuest = maxGuest;
     }
 
-    public Date getDateCreated() {
+    public Timestamp getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(Timestamp dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -140,6 +157,22 @@ public class RoomModel {
         this.districtId = districtId;
     }
 
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
     public List<UtilityRequestModel> getUtilities() {
         return utilities;
     }
@@ -156,19 +189,11 @@ public class RoomModel {
         this.imageUrls = imageUrls;
     }
 
-    public Double getLongitude() {
-        return longitude;
+    public List<Integer> getUserIds() {
+        return userIds;
     }
 
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
+    public void setUserIds(List<Integer> userIds) {
+        this.userIds = userIds;
     }
 }

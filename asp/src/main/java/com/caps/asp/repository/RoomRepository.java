@@ -1,8 +1,6 @@
 package com.caps.asp.repository;
 
-import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbRoom;
-import com.caps.asp.service.filter.Search;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

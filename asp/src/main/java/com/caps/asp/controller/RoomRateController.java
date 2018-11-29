@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -37,8 +38,8 @@ public class RoomRateController {
             if (roomRate == null) {
                 TbRoomRate rate = new TbRoomRate();
                 rate.setComment(roomRateRequestModel.getComment());
-                Date date = new Date(System.currentTimeMillis());
-                rate.setDate(date);
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                rate.setDate(timestamp);
                 rate.setLocationRate(roomRateRequestModel.getLocationRate());
                 rate.setSecurityRate(roomRateRequestModel.getSecurityRate());
                 rate.setUtilityRate(roomRateRequestModel.getUtilityRate());
@@ -52,8 +53,8 @@ public class RoomRateController {
                 roomRate.setLocationRate(roomRateRequestModel.getLocationRate());
                 roomRate.setSecurityRate(roomRateRequestModel.getSecurityRate());
                 roomRate.setUtilityRate(roomRateRequestModel.getUtilityRate());
-                Date date = new Date(System.currentTimeMillis());
-                roomRate.setDate(date);
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                roomRate.setDate(timestamp);
                 roomRateService.saveRoomRate(roomRate);
                 return ResponseEntity.status(CREATED).build();
             }

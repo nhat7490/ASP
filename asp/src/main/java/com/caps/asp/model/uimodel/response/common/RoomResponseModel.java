@@ -3,6 +3,7 @@ package com.caps.asp.model.uimodel.response.common;
 import com.caps.asp.model.TbRoomHasUtility;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class RoomResponseModel {
@@ -16,7 +17,7 @@ public class RoomResponseModel {
     private int userId;
     private int cityId;
     private int districtId;
-    private Date dateCreated;
+    private Timestamp dateCreated;
     private int statusId;
     private List<TbRoomHasUtility> utilities;
     private List<String> imageUrls;
@@ -27,10 +28,7 @@ public class RoomResponseModel {
     private Double longitude;
     private List<RoomRateResponseModel> roomRateResponseModels;
 
-    public RoomResponseModel() {
-    }
-
-    public RoomResponseModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, Integer currentMember, int userId, int cityId, int districtId, Date dateCreated, int statusId, List<TbRoomHasUtility> utilities, List<String> imageUrls, List<MemberResponseModel> members, String description, String phoneNumber, Double latitude, Double longitude, List<RoomRateResponseModel> roomRateResponseModels) {
+    public RoomResponseModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, Integer currentMember, int userId, int cityId, int districtId, Timestamp dateCreated, int statusId, List<TbRoomHasUtility> utilities, List<String> imageUrls, List<MemberResponseModel> members, String description, String phoneNumber, Double latitude, Double longitude, List<RoomRateResponseModel> roomRateResponseModels) {
         this.roomId = roomId;
         this.name = name;
         this.price = price;
@@ -53,12 +51,7 @@ public class RoomResponseModel {
         this.roomRateResponseModels = roomRateResponseModels;
     }
 
-    public List<RoomRateResponseModel> getRoomRateResponseModels() {
-        return roomRateResponseModels;
-    }
-
-    public void setRoomRateResponseModels(List<RoomRateResponseModel> roomRateResponseModels) {
-        this.roomRateResponseModels = roomRateResponseModels;
+    public RoomResponseModel() {
     }
 
     public int getRoomId() {
@@ -141,11 +134,11 @@ public class RoomResponseModel {
         this.districtId = districtId;
     }
 
-    public Date getDateCreated() {
+    public Timestamp getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(Timestamp dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -211,5 +204,13 @@ public class RoomResponseModel {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public List<RoomRateResponseModel> getRoomRateResponseModels() {
+        return roomRateResponseModels;
+    }
+
+    public void setRoomRateResponseModels(List<RoomRateResponseModel> roomRateResponseModels) {
+        this.roomRateResponseModels = roomRateResponseModels;
     }
 }

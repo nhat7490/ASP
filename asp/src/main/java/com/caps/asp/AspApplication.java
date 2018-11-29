@@ -12,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @SpringBootApplication
 public class AspApplication {
@@ -38,20 +41,15 @@ public class AspApplication {
 
         FirebaseApp.initializeApp(options);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("accommodation-ad340");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Object document = dataSnapshot.child("chile").getValue().toString();
-                System.out.println("Hello");
-                System.out.println(document);
-            }
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("notifications/user");
+        DatabaseReference usersRef = ref.child("user");
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+        Map<String,String> noti = new HashMap<>();
+
+        noti.put("aa","bbb");
+        noti.put("aaaaa","aaaaaabbb");
+        usersRef.setValueAsync(noti);
 
     }
 

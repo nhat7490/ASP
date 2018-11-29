@@ -55,21 +55,19 @@ public class UserController {
 
 
                 TbReference  reference = referenceService.getByUserId(user.getUserId());
-                if(reference != null){
-                    userSuggestSettingModel.setPrice(Arrays.asList(reference.getMinPrice(),reference.getMaxPrice()));
+                userSuggestSettingModel.setPrice(Arrays.asList(reference.getMinPrice(),reference.getMaxPrice()));
 
-                    List<TbUtilitiesReference> utilitiesReference = utilityReferenceService.findAllByUserId(user.getUserId());
+                List<TbUtilitiesReference> utilitiesReference = utilityReferenceService.findAllByUserId(user.getUserId());
+                userSuggestSettingModel.setUtilities(utilitiesReference.stream().map(
+                        tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
+                        .collect(Collectors.toList()));
 
-                    userSuggestSettingModel.setUtilities(utilitiesReference.stream().map(
-                            tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
-                            .collect(Collectors.toList()));
+                List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(user.getUserId());
+                userSuggestSettingModel.setDistricts(districtReferences.stream().map(
+                        tbDistrictReference -> tbDistrictReference.getDistrictId())
+                        .collect(Collectors.toList()));
 
-                    List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(user.getUserId());
-                    userSuggestSettingModel.setDistricts(districtReferences.stream().map(
-                            tbDistrictReference -> tbDistrictReference.getDistrictId())
-                            .collect(Collectors.toList()));
-                    userResponseModel.setUserSuggestSettingModel(userSuggestSettingModel);
-                }
+                userResponseModel.setUserSuggestSettingModel(userSuggestSettingModel);
 
                 return ResponseEntity.status(OK).body(userResponseModel);
             }else {

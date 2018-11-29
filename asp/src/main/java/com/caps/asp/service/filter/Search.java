@@ -1,6 +1,5 @@
 package com.caps.asp.service.filter;
 
-import com.caps.asp.model.TbPost;
 import com.caps.asp.model.TbRoom;
 import org.springframework.data.jpa.domain.Specification;
 

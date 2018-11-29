@@ -1,7 +1,7 @@
 package com.caps.asp.model;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -11,7 +11,7 @@ public class TbUserRate {
     private Double behaviourRate;
     private Double lifeStyleRate;
     private Double paymentRate;
-    private Date date;
+    private Timestamp date;
     private String comment;
     private Integer userId;
     private Integer ownerId;
@@ -58,11 +58,11 @@ public class TbUserRate {
 
     @Basic
     @Column(name = "date", nullable = true)
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

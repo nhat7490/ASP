@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -72,8 +73,8 @@ public class RoomController {
                 room.setArea(roomRequestModel.getArea());
                 room.setAddress(roomRequestModel.getAddress());
                 room.setMaxGuest(roomRequestModel.getMaxGuest());
-                Date date = new Date(System.currentTimeMillis());
-                room.setDate(date);
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                room.setDate(timestamp);
                 room.setCurrentNumber(0);
                 room.setDescription(roomRequestModel.getDescription());
                 room.setStatusId(PENDING);
@@ -468,8 +469,8 @@ public class RoomController {
 //            postService.removeByRoomId(roomMemberModel.getRoomId());
                 roomMembers.forEach(tbRoomHasUser -> {
                     TbUser user = userService.findById(tbRoomHasUser.getUserId());
-                    Date date = new Date(System.currentTimeMillis());
-                    tbRoomHasUser.setDateOut(date);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    tbRoomHasUser.setDateOut(timestamp);
                     roomHasUserService.saveRoomMember(tbRoomHasUser);
                     user.setRoleId(MEMBER);
                     userService.saveUser(user);
@@ -499,8 +500,8 @@ public class RoomController {
                             //Set Date out
                             TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomId(memberRequestModel.getUserId()
                                     , roomMemberModel.getRoomId());
-                            Date date = new Date(System.currentTimeMillis());
-                            roomHasUser.setDateOut(date);
+                            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                            roomHasUser.setDateOut(timestamp);
                             roomHasUserService.saveRoomMember(roomHasUser);
                         });
 
@@ -515,8 +516,8 @@ public class RoomController {
                             //Set Date in
                             TbRoomHasUser roomHasUser = new TbRoomHasUser();
                             roomHasUser.setId(0);
-                            Date date = new Date(System.currentTimeMillis());
-                            roomHasUser.setDateIn(date);
+                            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                            roomHasUser.setDateIn(timestamp);
                             roomHasUser.setUserId(memberRequestModel.getUserId());
                             roomHasUser.setRoomId(roomMemberModel.getRoomId());
                             roomHasUserService.saveRoomMember(roomHasUser);
@@ -553,6 +554,8 @@ public class RoomController {
                     TbUser tbUser = userService.findById(TbRoomHasUser.getUserId());
                     tbUser.setRoleId(ROOM_MASTER);
                     userService.updateUserById(tbUser);
+
+
                 }
             }
             return ResponseEntity.status(OK).build();

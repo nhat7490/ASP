@@ -25,6 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -246,7 +250,9 @@ public class PostController {
             if (user.getRoleId() == MEMBER || user.getRoleId() == ROOM_MASTER) {
                 TbPost post = new TbPost();
                 Date date = new Date(System.currentTimeMillis());
-                post.setDatePost(date);
+
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                post.setDatePost(timestamp);
                 post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
                 post.setTypeId(MEMBER_POST);
                 post.setUserId(user.getUserId());
@@ -315,8 +321,10 @@ public class PostController {
                 TbPost post = postService.findByPostId(roommatePostRequestModel.getPostId());
                 if (post != null && post.getTypeId() == MEMBER_POST
                         && post.getUserId().equals(roommatePostRequestModel.getUserId())) {
-                    Date date = new Date(System.currentTimeMillis());
-                    post.setDatePost(date);
+
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+                    post.setDatePost(timestamp);
                     post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
                     post.setUserId(user.getUserId());
                     post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
@@ -347,16 +355,14 @@ public class PostController {
                 post.setTypeId(MASTER_POST);
                 post.setLongtitude(room.getLongtitude());
                 post.setLattitude(room.getLattitude());
-                Date date = new Date(System.currentTimeMillis());
-                post.setDatePost(date);
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                post.setDatePost(timestamp);
                 post.setNumberPartner(roomPostRequestModel.getNumberPartner());
                 post.setPhoneContact(roomPostRequestModel.getPhoneContact());
                 post.setName(roomPostRequestModel.getName());
-                post.setMinPrice(roomPostRequestModel.getMinPrice());
                 post.setRoomId(roomPostRequestModel.getRoomId());
                 post.setGenderPartner(roomPostRequestModel.getGenderPartner());
                 post.setUserId(roomPostRequestModel.getUserId());
-                post.setDescription(post.getDescription());
                 post.setPostId(0);
 
                 int postId = postService.savePost(post);
@@ -402,8 +408,8 @@ public class PostController {
                 if (post != null) {
                     post.setLongtitude(room.getLongtitude());
                     post.setLattitude(room.getLattitude());
-                    Date date = new Date(System.currentTimeMillis());
-                    post.setDatePost(date);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    post.setDatePost(timestamp);
                     post.setNumberPartner(roomPostRequestModel.getNumberPartner());
                     post.setPhoneContact(roomPostRequestModel.getPhoneContact());
                     post.setName(roomPostRequestModel.getName());

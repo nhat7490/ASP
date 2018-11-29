@@ -1,6 +1,7 @@
 package com.caps.asp.model.uimodel.response.common;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class RoomRateResponseModel {
     private Double security;
@@ -8,12 +9,12 @@ public class RoomRateResponseModel {
     private Double utility;
     private UserResponseModel userResponseModel;
     private String comment;
-    private Date date;
+    private Timestamp date;
 
     public RoomRateResponseModel() {
     }
 
-    public RoomRateResponseModel(Double security, Double location, Double utility, UserResponseModel userResponseModel, String comment, Date date) {
+    public RoomRateResponseModel(Double security, Double location, Double utility, UserResponseModel userResponseModel, String comment, Timestamp date) {
         this.security = security;
         this.location = location;
         this.utility = utility;
@@ -62,11 +63,11 @@ public class RoomRateResponseModel {
         this.comment = comment;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 }

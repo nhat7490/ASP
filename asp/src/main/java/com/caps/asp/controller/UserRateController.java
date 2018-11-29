@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -41,8 +42,8 @@ public class UserRateController {
                 if (userRateRequestModel.getOwnerId() == ownerId) {
                     if (userRate == null) {
                         TbUserRate rate = new TbUserRate();
-                        Date date = new Date(System.currentTimeMillis());
-                        rate.setDate(date);
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        rate.setDate(timestamp);
                         rate.setBehaviourRate(userRateRequestModel.getBehaviourRate());
                         rate.setLifeStyleRate(userRateRequestModel.getLifeStyleRate());
                         rate.setPaymentRate(userRateRequestModel.getPaymentRate());
@@ -53,8 +54,8 @@ public class UserRateController {
                         userRateService.saveUserRate(rate);
                         return ResponseEntity.status(CREATED).build();
                     } else {
-                        Date date = new Date(System.currentTimeMillis());
-                        userRate.setDate(date);
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        userRate.setDate(timestamp);
                         userRate.setPaymentRate(userRateRequestModel.getPaymentRate());
                         userRate.setLifeStyleRate(userRateRequestModel.getLifeStyleRate());
                         userRate.setBehaviourRate(userRateRequestModel.getBehaviourRate());

@@ -3,17 +3,18 @@ package com.caps.asp.model.uimodel.response.post;
 import com.caps.asp.model.uimodel.response.common.UserResponseModel;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class BasePostResponeModel {
     private Integer postId;
     private String phoneContact;
-    private Date date;
+    private Timestamp date;
     private UserResponseModel userResponseModel;
     private boolean isFavourite;
     private double minPrice;
     private Integer favouriteId;
 
-    public BasePostResponeModel(Integer postId, String phoneContact, Date date, UserResponseModel userResponseModel, boolean isFavourite, double minPrice, Integer favouriteId) {
+    public BasePostResponeModel(Integer postId, String phoneContact, Timestamp date, UserResponseModel userResponseModel, boolean isFavourite, double minPrice, Integer favouriteId) {
         this.postId = postId;
         this.phoneContact = phoneContact;
         this.date = date;
@@ -42,11 +43,11 @@ public class BasePostResponeModel {
         this.phoneContact = phoneContact;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
