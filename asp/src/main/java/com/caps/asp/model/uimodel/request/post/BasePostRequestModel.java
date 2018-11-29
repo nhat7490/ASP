@@ -5,15 +5,24 @@ public class BasePostRequestModel {
     //minPrice is price of roompost and min price in roommate post
     private double minPrice;
     private String phoneContact;
+    private int postId;
 
+    public BasePostRequestModel(Integer userId, double minPrice, String phoneContact, int postId) {
+        this.userId = userId;
+        this.minPrice = minPrice;
+        this.phoneContact = phoneContact;
+        this.postId = postId;
+    }
 
     public BasePostRequestModel() {
     }
 
-    public BasePostRequestModel(Integer userId, double minPrice, String phoneContact) {
-        this.userId = userId;
-        this.minPrice = minPrice;
-        this.phoneContact = phoneContact;
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
     }
 
     public String getPhoneContact() {

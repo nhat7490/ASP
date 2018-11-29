@@ -65,7 +65,7 @@ public class PostService {
 
     public TbPost findAllByUserIdAndRoomIdOrderByDatePostDesc(int userId, int roomId) {
         List<TbPost> postList = postRepository.findAllByUserIdAndRoomIdOrderByDatePostDesc(userId, roomId);
-        if (postList.size()!=0){
+        if (postList.size() != 0) {
             return postList.get(0);
         }
         return null;
@@ -154,9 +154,13 @@ public class PostService {
         postRepository.removeAllByUserId(userId);
     }
 
+    public void removeByPostId(int postId) {
+        postRepository.removeByPostId(postId);
+    }
+
     public TbPost findAllByUserIdAndTypeIdOrderByDatePostDesc(int userId, int typeId) {
         List<TbPost> postList = postRepository.findAllByUserIdAndTypeIdOrderByDatePostDesc(userId, typeId);
-        if (postList.size()!=0){
+        if (postList.size() != 0) {
             return postList.get(0);
         }
         return null;
