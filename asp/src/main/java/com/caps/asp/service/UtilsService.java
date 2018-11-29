@@ -105,28 +105,48 @@ public class UtilsService {
                 List<TbRoomRate> roomRateList = roomRateService.findAllByRoomId(tbPost.getRoomId());
                 List<RoomRateResponseModel> roomRateResponseModels = new ArrayList<>();
                 if (roomRateList != null) {
-                    roomRateList.forEach(tbRoomRate -> {
-                        RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
-                        roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
-                        roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
-                        roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
-                        UserResponseModel user = new UserResponseModel();
-                        TbUser tbUser = userService.findById(tbRoomRate.getUserId());
-                        user.setUserId(tbUser.getUserId());
-                        user.setFullname(tbUser.getFullname());
-                        user.setImageProfile(tbUser.getImageProfile());
-                        List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
-                        user.setUserRateList(tbUserRates);
-                        roomRateResponseModel.setUserResponseModel(user);
-                        roomRateResponseModel.setComment(tbRoomRate.getComment());
-                        roomRateResponseModel.setDate(tbRoomRate.getDate());
+                    Double avarageSecurity = 0.0;
+                    Double avarageLocation = 0.0;
+                    Double avarageUtility = 0.0;
+                    int count = 0;
 
-                        roomRateResponseModels.add(roomRateResponseModel);
-                    });
-                    roomPostResponseModel.setRoomRateResponseModels(roomRateResponseModels);
+                    for (TbRoomRate tbRoomRate : roomRateList) {
+                        if (count < 6) {
+                            RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
+                            roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
+                            roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
+                            roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
+                            UserResponseModel user = new UserResponseModel();
+                            TbUser tbUser = userService.findById(tbRoomRate.getUserId());
+                            user.setUserId(tbUser.getUserId());
+                            user.setFullname(tbUser.getFullname());
+                            user.setImageProfile(tbUser.getImageProfile());
+                            List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
+                            user.setUserRateList(tbUserRates);
+                            roomRateResponseModel.setUserResponseModel(user);
+                            roomRateResponseModel.setComment(tbRoomRate.getComment());
+                            roomRateResponseModel.setDate(tbRoomRate.getDate());
+
+                            roomRateResponseModels.add(roomRateResponseModel);
+                            count++;
+                        }
+                        avarageSecurity += tbRoomRate.getSecurityRate();
+                        avarageLocation += tbRoomRate.getLocationRate();
+                        avarageUtility += tbRoomRate.getUtilityRate();
+                    }
+
+                    avarageSecurity = Double.parseDouble(Math.round((avarageSecurity / roomRateList.size()) * 10) + "");
+                    avarageLocation = Double.parseDouble(Math.round((avarageLocation / roomRateList.size()) * 10) + "");
+                    avarageUtility = Double.parseDouble(Math.round((avarageUtility / roomRateList.size()) * 10) + "");
+
+                    roomPostResponseModel.setAvarageSecurity(avarageSecurity / 10);
+                    roomPostResponseModel.setAvarageLocation(avarageLocation / 10);
+                    roomPostResponseModel.setAvarageUtility(avarageUtility / 10);
                 }
+                roomPostResponseModel.setRoomRateResponseModels(roomRateResponseModels);
                 return roomPostResponseModel;
             });
+
             return roomPostResponseModels;
         }
         return null;
@@ -197,24 +217,43 @@ public class UtilsService {
             List<TbRoomRate> roomRateList = roomRateService.findAllByRoomId(tbPost.getRoomId());
             List<RoomRateResponseModel> roomRateResponseModels = new ArrayList<>();
             if (roomRateList != null) {
-                roomRateList.forEach(tbRoomRate -> {
-                    RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
-                    roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
-                    roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
-                    roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
-                    UserResponseModel user = new UserResponseModel();
-                    TbUser tbUser = userService.findById(tbRoomRate.getUserId());
-                    user.setUserId(tbUser.getUserId());
-                    user.setFullname(tbUser.getFullname());
-                    user.setImageProfile(tbUser.getImageProfile());
-                    List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
-                    user.setUserRateList(tbUserRates);
-                    roomRateResponseModel.setUserResponseModel(user);
-                    roomRateResponseModel.setComment(tbRoomRate.getComment());
-                    roomRateResponseModel.setDate(tbRoomRate.getDate());
+                Double avarageSecurity = 0.0;
+                Double avarageLocation = 0.0;
+                Double avarageUtility = 0.0;
+                int count = 0;
 
-                    roomRateResponseModels.add(roomRateResponseModel);
-                });
+                for (TbRoomRate tbRoomRate : roomRateList) {
+                    if (count < 6) {
+                        RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
+                        roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
+                        roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
+                        roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
+                        UserResponseModel user = new UserResponseModel();
+                        TbUser tbUser = userService.findById(tbRoomRate.getUserId());
+                        user.setUserId(tbUser.getUserId());
+                        user.setFullname(tbUser.getFullname());
+                        user.setImageProfile(tbUser.getImageProfile());
+                        List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
+                        user.setUserRateList(tbUserRates);
+                        roomRateResponseModel.setUserResponseModel(user);
+                        roomRateResponseModel.setComment(tbRoomRate.getComment());
+                        roomRateResponseModel.setDate(tbRoomRate.getDate());
+
+                        roomRateResponseModels.add(roomRateResponseModel);
+                        count++;
+                    }
+                    avarageSecurity += tbRoomRate.getSecurityRate();
+                    avarageLocation += tbRoomRate.getLocationRate();
+                    avarageUtility += tbRoomRate.getUtilityRate();
+                }
+
+                avarageSecurity = Double.parseDouble(Math.round((avarageSecurity / roomRateList.size()) * 10) + "");
+                avarageLocation = Double.parseDouble(Math.round((avarageLocation / roomRateList.size()) * 10) + "");
+                avarageUtility = Double.parseDouble(Math.round((avarageUtility / roomRateList.size()) * 10) + "");
+
+                roomPostResponseModel.setAvarageSecurity(avarageSecurity / 10);
+                roomPostResponseModel.setAvarageLocation(avarageLocation / 10);
+                roomPostResponseModel.setAvarageUtility(avarageUtility / 10);
             }
             roomPostResponseModel.setRoomRateResponseModels(roomRateResponseModels);
             roomPostResponseModels.add(roomPostResponseModel);

@@ -17,28 +17,12 @@ public class RoomPostResponseModel extends BasePostResponeModel {
     private Integer numberPartner;
     private Integer genderPartner;
     private String description;
+    private Double avarageSecurity;
+    private Double avarageLocation;
+    private Double avarageUtility;
     private List<RoomRateResponseModel> roomRateResponseModels;
 
-    public List<RoomRateResponseModel> getRoomRateResponseModels() {
-        return roomRateResponseModels;
-    }
-
-    public void setRoomRateResponseModels(List<RoomRateResponseModel> roomRateResponseModels) {
-        this.roomRateResponseModels = roomRateResponseModels;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public RoomPostResponseModel() {
-    }
-
-    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponseModel userResponseModel, boolean isFavourite, double minPrice, Integer favouriteId, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner, String description, List<RoomRateResponseModel> roomRateResponseModels) {
+    public RoomPostResponseModel(Integer postId, String phoneContact, Date date, UserResponseModel userResponseModel, boolean isFavourite, double minPrice, Integer favouriteId, String name, Integer area, String address, List<TbRoomHasUtility> utilities, List<String> imageUrls, Integer numberPartner, Integer genderPartner, String description, Double avarageSecurity, Double avarageLocation, Double avarageUtility, List<RoomRateResponseModel> roomRateResponseModels) {
         super(postId, phoneContact, date, userResponseModel, isFavourite, minPrice, favouriteId);
         this.name = name;
         this.area = area;
@@ -48,7 +32,13 @@ public class RoomPostResponseModel extends BasePostResponeModel {
         this.numberPartner = numberPartner;
         this.genderPartner = genderPartner;
         this.description = description;
+        this.avarageSecurity = avarageSecurity;
+        this.avarageLocation = avarageLocation;
+        this.avarageUtility = avarageUtility;
         this.roomRateResponseModels = roomRateResponseModels;
+    }
+
+    public RoomPostResponseModel() {
     }
 
     public String getName() {
@@ -105,5 +95,45 @@ public class RoomPostResponseModel extends BasePostResponeModel {
 
     public void setGenderPartner(Integer genderPartner) {
         this.genderPartner = genderPartner;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getAvarageSecurity() {
+        return avarageSecurity;
+    }
+
+    public void setAvarageSecurity(Double avarageSecurity) {
+        this.avarageSecurity = avarageSecurity;
+    }
+
+    public Double getAvarageLocation() {
+        return avarageLocation;
+    }
+
+    public void setAvarageLocation(Double avarageLocation) {
+        this.avarageLocation = avarageLocation;
+    }
+
+    public Double getAvarageUtility() {
+        return avarageUtility;
+    }
+
+    public void setAvarageUtility(Double avarageUtility) {
+        this.avarageUtility = avarageUtility;
+    }
+
+    public List<RoomRateResponseModel> getRoomRateResponseModels() {
+        return roomRateResponseModels;
+    }
+
+    public void setRoomRateResponseModels(List<RoomRateResponseModel> roomRateResponseModels) {
+        this.roomRateResponseModels = roomRateResponseModels;
     }
 }
