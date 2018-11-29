@@ -352,9 +352,11 @@ public class PostController {
                 post.setNumberPartner(roomPostRequestModel.getNumberPartner());
                 post.setPhoneContact(roomPostRequestModel.getPhoneContact());
                 post.setName(roomPostRequestModel.getName());
+                post.setMinPrice(roomPostRequestModel.getMinPrice());
                 post.setRoomId(roomPostRequestModel.getRoomId());
                 post.setGenderPartner(roomPostRequestModel.getGenderPartner());
                 post.setUserId(roomPostRequestModel.getUserId());
+                post.setDescription(post.getDescription());
                 post.setPostId(0);
 
                 int postId = postService.savePost(post);
@@ -654,7 +656,7 @@ public class PostController {
                     roommatePostResponseModel.setFavourite(true);
                     roommatePostResponseModel.setFavouriteId(favourite.getId());
                     roommatePostResponseModel.setMinPrice(tbPost.getMinPrice());
-//                    roommatePostResponseModel.setMaxPrice(tbPost.getMaxPrice());
+                    roommatePostResponseModel.setMaxPrice(tbPost.getMaxPrice());
                     return roommatePostResponseModel;
                 });
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());

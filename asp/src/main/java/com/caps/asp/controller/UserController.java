@@ -55,19 +55,21 @@ public class UserController {
 
 
                 TbReference  reference = referenceService.getByUserId(user.getUserId());
-                userSuggestSettingModel.setPrice(Arrays.asList(reference.getMinPrice(),reference.getMaxPrice()));
+                if(reference != null){
+                    userSuggestSettingModel.setPrice(Arrays.asList(reference.getMinPrice(),reference.getMaxPrice()));
 
-                List<TbUtilitiesReference> utilitiesReference = utilityReferenceService.findAllByUserId(user.getUserId());
-                userSuggestSettingModel.setUtilities(utilitiesReference.stream().map(
-                        tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
-                        .collect(Collectors.toList()));
+                    List<TbUtilitiesReference> utilitiesReference = utilityReferenceService.findAllByUserId(user.getUserId());
 
-                List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(user.getUserId());
-                userSuggestSettingModel.setDistricts(districtReferences.stream().map(
-                        tbDistrictReference -> tbDistrictReference.getDistrictId())
-                        .collect(Collectors.toList()));
+                    userSuggestSettingModel.setUtilities(utilitiesReference.stream().map(
+                            tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
+                            .collect(Collectors.toList()));
 
-                userResponseModel.setUserSuggestSettingModel(userSuggestSettingModel);
+                    List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(user.getUserId());
+                    userSuggestSettingModel.setDistricts(districtReferences.stream().map(
+                            tbDistrictReference -> tbDistrictReference.getDistrictId())
+                            .collect(Collectors.toList()));
+                    userResponseModel.setUserSuggestSettingModel(userSuggestSettingModel);
+                }
 
                 return ResponseEntity.status(OK).body(userResponseModel);
             }else {
