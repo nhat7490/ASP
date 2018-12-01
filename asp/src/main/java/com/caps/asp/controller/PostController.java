@@ -360,8 +360,10 @@ public class PostController {
                 post.setNumberPartner(roomPostRequestModel.getNumberPartner());
                 post.setPhoneContact(roomPostRequestModel.getPhoneContact());
                 post.setName(roomPostRequestModel.getName());
+                post.setMinPrice(roomPostRequestModel.getMinPrice());
                 post.setRoomId(roomPostRequestModel.getRoomId());
                 post.setGenderPartner(roomPostRequestModel.getGenderPartner());
+                post.setDescription(post.getDescription());
                 post.setUserId(roomPostRequestModel.getUserId());
                 post.setPostId(0);
 

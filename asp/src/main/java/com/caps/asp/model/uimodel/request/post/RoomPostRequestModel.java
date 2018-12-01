@@ -3,7 +3,6 @@ package com.caps.asp.model.uimodel.request.post;
 // find partner
 public class RoomPostRequestModel extends BasePostRequestModel{
     private String name;
-    private String phoneContact;
     private Integer numberPartner;
     private Integer genderPartner;
     private String description;
@@ -15,14 +14,6 @@ public class RoomPostRequestModel extends BasePostRequestModel{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPhoneContact() {
-        return phoneContact;
-    }
-
-    public void setPhoneContact(String phoneContact) {
-        this.phoneContact = phoneContact;
     }
 
     public Integer getNumberPartner() {
