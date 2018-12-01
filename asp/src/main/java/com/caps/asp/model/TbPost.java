@@ -23,6 +23,7 @@ public class TbPost {
     private String description;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id", nullable = false)
     public Integer getPostId() {
         return postId;

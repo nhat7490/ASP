@@ -252,14 +252,13 @@ public class PostController {
                 Date date = new Date(System.currentTimeMillis());
 
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                post.setPostId(0);
                 post.setDatePost(timestamp);
                 post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
                 post.setTypeId(MEMBER_POST);
                 post.setUserId(user.getUserId());
                 post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
                 post.setMinPrice(roommatePostRequestModel.getMinPrice());
-                post.setUserId(roommatePostRequestModel.getUserId());
-                post.setPostId(0);
                 int postId = postService.savePost(post);
 
                 TbReference reference = referenceService.getByUserId(user.getUserId());
@@ -271,6 +270,7 @@ public class PostController {
                     TbReference tbReference = new TbReference();
                     tbReference.setMaxPrice(roommatePostRequestModel.getMaxPrice());
                     tbReference.setMinPrice(roommatePostRequestModel.getMinPrice());
+                    tbReference.setUserId(roommatePostRequestModel.getUserId());
                     referenceService.save(tbReference);
                 }
 
@@ -317,24 +317,78 @@ public class PostController {
     public ResponseEntity updateRoommatePost(@RequestBody RoommatePostRequestModel roommatePostRequestModel) {
         try {
             TbUser user = userService.findById(roommatePostRequestModel.getUserId());
-            if (user.getRoleId() == MEMBER || user.getRoleId() == ROOM_MASTER) {
-                TbPost post = postService.findByPostId(roommatePostRequestModel.getPostId());
-                if (post != null && post.getTypeId() == MEMBER_POST
-                        && post.getUserId().equals(roommatePostRequestModel.getUserId())) {
+            TbPost post = postService.findByPostId(roommatePostRequestModel.getPostId());
+            if (post != null && post.getTypeId() == MEMBER_POST
+                    && post.getUserId().equals(roommatePostRequestModel.getUserId())) {
 
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
+                post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
+                post.setMinPrice(roommatePostRequestModel.getMinPrice());
 
-                    post.setDatePost(timestamp);
-                    post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
-                    post.setUserId(user.getUserId());
-                    post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
-                    post.setMinPrice(roommatePostRequestModel.getMinPrice());
-                    post.setUserId(roommatePostRequestModel.getUserId());
+                TbPost newestPost = postService.findAllByUserIdAndTypeIdOrderByDatePostDesc(roommatePostRequestModel.getUserId(),
+                        MEMBER_POST);
+                if (newestPost.getPostId().equals(roommatePostRequestModel.getPostId())) {
+
+                    int postId = postService.savePost(post);
+
+                    TbReference reference = referenceService.getByUserId(user.getUserId());
+                    reference.setMaxPrice(roommatePostRequestModel.getMaxPrice());
+                    reference.setMinPrice(roommatePostRequestModel.getMinPrice());
+                    referenceService.save(reference);
+
+                    utilityReferenceService.removeAllByUserId(user.getUserId());
+
+                    for (Integer utilityId : roommatePostRequestModel.getUtilityIds()) {
+                        TbPostHasUtility postHasUtility = new TbPostHasUtility();
+                        postHasUtility.setId(0);
+                        postHasUtility.setPostId(postId);
+                        postHasUtility.setUtilityId(utilityId);
+                        postHasUtilityService.save(postHasUtility);
+
+                        TbUtilitiesReference utilitiesReference = new TbUtilitiesReference();
+                        utilitiesReference.setId(0);
+                        utilitiesReference.setUserId(user.getUserId());
+                        utilitiesReference.setUtilityId(utilityId);
+                        utilityReferenceService.save(utilitiesReference);
+                    }
+
+                    districtReferenceService.removeAllByUserId(user.getUserId());
+
+                    for (Integer districtId : roommatePostRequestModel.getDistrictIds()) {
+                        TbPostHasTbDistrict postHasTbDistrict = new TbPostHasTbDistrict();
+                        postHasTbDistrict.setId(0);
+                        postHasTbDistrict.setPostId(postId);
+                        postHasTbDistrict.setDistrictId(districtId);
+                        postHasDistrictService.save(postHasTbDistrict);
+
+                        TbDistrictReference districtReference = new TbDistrictReference();
+                        districtReference.setId(0);
+                        districtReference.setUserId(user.getUserId());
+                        districtReference.setDistrictId(districtId);
+                        districtReferenceService.save(districtReference);
+                    }
+
+                } else {
 
                     postService.savePost(post);
-                    return ResponseEntity.status(OK).build();
+
+                    for (Integer utilityId : roommatePostRequestModel.getUtilityIds()) {
+                        TbPostHasUtility postHasUtility = new TbPostHasUtility();
+                        postHasUtility.setId(0);
+                        postHasUtility.setPostId(post.getPostId());
+                        postHasUtility.setUtilityId(utilityId);
+                        postHasUtilityService.save(postHasUtility);
+                    }
+
+                    for (Integer districtId : roommatePostRequestModel.getDistrictIds()) {
+                        TbPostHasTbDistrict postHasTbDistrict = new TbPostHasTbDistrict();
+                        postHasTbDistrict.setId(0);
+                        postHasTbDistrict.setPostId(post.getPostId());
+                        postHasTbDistrict.setDistrictId(districtId);
+                        postHasDistrictService.save(postHasTbDistrict);
+                    }
                 }
-                return ResponseEntity.status(CONFLICT).build();
+                return ResponseEntity.status(OK).build();
             }
             return ResponseEntity.status(CONFLICT).build();
         } catch (Exception e) {
@@ -400,32 +454,23 @@ public class PostController {
     @PutMapping("/post/updateRoomPost")
     public ResponseEntity updateRoomPost(@RequestBody RoomPostRequestModel roomPostRequestModel) {
         try {
-            TbUser user = userService.findById(roomPostRequestModel.getUserId());
             TbRoom room = roomService.findRoomById(roomPostRequestModel.getRoomId());
-            TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomIdAndDateOutIsNull(user.getUserId(), room.getRoomId());
-//        TbPost excistedPost = postService.findByRoomId(room.getRoomId());
+            TbPost post = postService.findByPostId(roomPostRequestModel.getPostId());
+            if (post != null && post.getTypeId() == MASTER_POST
+                    && post.getUserId().equals(roomPostRequestModel.getUserId())) {
 
-            if (user.getRoleId() == ROOM_MASTER && roomHasUser != null) {
-                TbPost post = postService.findByPostId(roomPostRequestModel.getPostId());
-                if (post != null) {
-                    post.setLongtitude(room.getLongtitude());
-                    post.setLattitude(room.getLattitude());
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    post.setDatePost(timestamp);
-                    post.setNumberPartner(roomPostRequestModel.getNumberPartner());
-                    post.setPhoneContact(roomPostRequestModel.getPhoneContact());
-                    post.setName(roomPostRequestModel.getName());
-                    post.setRoomId(roomPostRequestModel.getRoomId());
-                    post.setGenderPartner(roomPostRequestModel.getGenderPartner());
-                    post.setUserId(roomPostRequestModel.getUserId());
+                post.setLongtitude(room.getLongtitude());
+                post.setLattitude(room.getLattitude());
+                post.setNumberPartner(roomPostRequestModel.getNumberPartner());
+                post.setPhoneContact(roomPostRequestModel.getPhoneContact());
+                post.setName(roomPostRequestModel.getName());
+                post.setGenderPartner(roomPostRequestModel.getGenderPartner());
 
-                    postService.savePost(post);
-                    return ResponseEntity.status(OK).build();
-                }
-                return ResponseEntity.status(CONFLICT).build();
-            } else {
-                return ResponseEntity.status(CONFLICT).build();
+                postService.savePost(post);
+                return ResponseEntity.status(OK).build();
             }
+            return ResponseEntity.status(CONFLICT).build();
+
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
         }

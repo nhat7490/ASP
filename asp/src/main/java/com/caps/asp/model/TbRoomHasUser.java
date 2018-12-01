@@ -14,6 +14,7 @@ public class TbRoomHasUser {
     private Timestamp dateOut;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public Integer getId() {
         return id;

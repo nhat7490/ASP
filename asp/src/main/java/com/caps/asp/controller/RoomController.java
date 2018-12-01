@@ -1,6 +1,7 @@
 package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
+import com.caps.asp.model.firebase.NotificationModel;
 import com.caps.asp.model.uimodel.request.MemberRequestModel;
 import com.caps.asp.model.uimodel.response.common.UserResponseModel;
 import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
@@ -461,6 +462,7 @@ public class RoomController {
     public ResponseEntity editMember(@RequestBody RoomMemberRequestModel roomMemberModel) {
         try {
             List<TbRoomHasUser> roomMembers = roomHasUserService.findByRoomIdAndDateOutIsNull(roomMemberModel.getRoomId());
+            NotificationModel notificationModel = new NotificationModel();
 
             if (roomMemberModel.getMemberRequestModels() == null) {
 //            TbPost post = postService.findByRoomId(roomMemberModel.getRoomId());
@@ -474,6 +476,7 @@ public class RoomController {
                     roomHasUserService.saveRoomMember(tbRoomHasUser);
                     user.setRoleId(MEMBER);
                     userService.saveUser(user);
+
                 });
             } else {
                 List<MemberRequestModel> memberRequestModels = roomMemberModel.getMemberRequestModels();
