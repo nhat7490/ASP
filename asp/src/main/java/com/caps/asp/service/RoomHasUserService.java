@@ -58,7 +58,7 @@ public class RoomHasUserService {
     public Page<TbRoomHasUser> getHistoryRoom(int page, int items, int userId) {
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
-        return roomHasUserRepository.findAllByUserIdAndDateOutIsNotNullOrderByDateOutDesc(userId, pageable);
+        return roomHasUserRepository.findAllByUserIdOrderByDateOutDesc(userId, pageable);
     }
 
     public TbRoomHasUser getByRoomIdAndDateOutIsNull(int roomId){
