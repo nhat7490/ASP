@@ -7,8 +7,10 @@ import com.google.firebase.database.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,13 +21,19 @@ import java.util.UUID;
 @SpringBootApplication
 public class AspApplication {
 
+    static File getFile(String schemaPath) throws IOException {
+        return new ClassPathResource(schemaPath).getFile();
+    }
+
     public static void main(String[] args) {
 
         SpringApplication.run(AspApplication.class, args);
         FileInputStream serviceAccount = null;
         try {
-            serviceAccount = new FileInputStream("D:\\Capstone\\ASP\\asp\\src\\main\\resources\\accommodation-ad340-firebase-adminsdk-dg6g4-2c59734e89.json");
+            serviceAccount = new FileInputStream(getFile("static/accommodation-ad340-firebase-adminsdk-dg6g4-2c59734e89.json"));
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -48,7 +56,7 @@ public class AspApplication {
         Map<String,String> noti = new HashMap<>();
 
         noti.put("aa","bbb");
-        noti.put("aaaaa","aaaaaabbb");
+        noti.put("alonaa","aaaaaabbb");
         usersRef.setValueAsync(noti);
 
     }
