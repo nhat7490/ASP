@@ -18,11 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.caps.asp.constant.Constant.*;
@@ -42,9 +42,10 @@ public class RoomController {
     public final AmazonService amazonService;
     public final RoomRateService roomRateService;
     public final UserRateService userRateService;
+    public final FireBaseService fireBaseService;
 
 
-    public RoomController(RoomService roomService, RoomHasUtilityService roomHasUtilityService, PostHasUtilityService postHasUtilityService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, AmazonService amazonService, RoomRateService roomRateService, UserRateService userRateService) {
+    public RoomController(RoomService roomService, RoomHasUtilityService roomHasUtilityService, PostHasUtilityService postHasUtilityService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, AmazonService amazonService, RoomRateService roomRateService, UserRateService userRateService, FireBaseService fireBaseService) {
         this.roomService = roomService;
         this.roomHasUtilityService = roomHasUtilityService;
         this.postHasUtilityService = postHasUtilityService;
@@ -57,6 +58,7 @@ public class RoomController {
         this.amazonService = amazonService;
         this.roomRateService = roomRateService;
         this.userRateService = userRateService;
+        this.fireBaseService = fireBaseService;
     }
 
     @Transactional
@@ -458,11 +460,10 @@ public class RoomController {
     }
 
     @Transactional
-    @PostMapping("room/editMember")
+    @PutMapping("room/editMember")
     public ResponseEntity editMember(@RequestBody RoomMemberRequestModel roomMemberModel) {
         try {
             List<TbRoomHasUser> roomMembers = roomHasUserService.findByRoomIdAndDateOutIsNull(roomMemberModel.getRoomId());
-            NotificationModel notificationModel = new NotificationModel();
 
             if (roomMemberModel.getMemberRequestModels() == null) {
 //            TbPost post = postService.findByRoomId(roomMemberModel.getRoomId());
@@ -477,6 +478,19 @@ public class RoomController {
                     user.setRoleId(MEMBER);
                     userService.saveUser(user);
 
+                    NotificationModel notificationModel = new NotificationModel();
+                    notificationModel.setDate(timestamp.toString());
+                    UUID noti_uuid = UUID.randomUUID();
+                    notificationModel.setNoti_uuid(noti_uuid.toString());
+                    notificationModel.setUser_id(tbRoomHasUser.getUserId().toString());
+                    notificationModel.setRole_id(user.getRoleId().toString());
+                    notificationModel.setRoom_id(tbRoomHasUser.getRoomId().toString());
+                    notificationModel.setRoom_name(roomService
+                            .findRoomById(tbRoomHasUser.getRoomId()).getName());
+                    notificationModel.setStatus(NEW_NOTI + "");
+                    notificationModel.setType(REMOVE_MEMBER + "");
+
+                    fireBaseService.pushNoti(notificationModel);
                 });
             } else {
                 List<MemberRequestModel> memberRequestModels = roomMemberModel.getMemberRequestModels();
