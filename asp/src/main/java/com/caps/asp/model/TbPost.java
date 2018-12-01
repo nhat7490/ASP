@@ -6,6 +6,26 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_post", schema = "asp", catalog = "")
+@NamedStoredProcedureQueries({
+        @NamedStoredProcedureQuery(name = "getSuggestedList",
+                procedureName = "CalculateDistance",
+                resultClasses = {TbPost.class},
+                parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "userId", type = Integer.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "pageOf", type = Integer.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "size", type = Integer.class)
+                }),
+        @NamedStoredProcedureQuery(name = "getSuggestedListForMember",
+                procedureName = "CalculateDistanceForMember",
+                resultClasses = {TbPost.class},
+                parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "latitude", type = Float.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "longitude", type = Float.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "cityId", type = Integer.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "pageOf", type = Integer.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "size", type = Integer.class)
+                })
+})
 public class TbPost {
     private Integer postId;
     private String name;

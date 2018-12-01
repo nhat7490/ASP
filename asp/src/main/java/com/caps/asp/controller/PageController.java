@@ -1,6 +1,7 @@
 package com.caps.asp.controller;
 
 import com.caps.asp.model.*;
+import com.caps.asp.model.firebase.NotificationModel;
 import com.caps.asp.model.uimodel.common.RoomModel;
 import com.caps.asp.service.*;
 import org.springframework.data.domain.Page;
@@ -12,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.caps.asp.constant.Constant.*;
@@ -29,9 +32,10 @@ public class PageController {
     private final PostHasDistrictService postHasDistrictService;
     private final RoomHasUtilityService roomHasUtilityService;
     private final PostHasUtilityService postHasUtilityService;
+    private final FireBaseService fireBaseService;
 
 
-    public PageController(RoomService roomService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, RoomHasUtilityService roomHasUtilityService, PostHasUtilityService postHasUtilityService) {
+    public PageController(RoomService roomService, ImageService imageService, UserService userService, RoomHasUserService roomHasUserService, PostService postService, FavouriteService favouriteService, PostHasDistrictService postHasDistrictService, RoomHasUtilityService roomHasUtilityService, PostHasUtilityService postHasUtilityService, FireBaseService fireBaseService) {
         this.roomService = roomService;
         this.imageService = imageService;
         this.userService = userService;
@@ -41,6 +45,7 @@ public class PageController {
         this.postHasDistrictService = postHasDistrictService;
         this.roomHasUtilityService = roomHasUtilityService;
         this.postHasUtilityService = postHasUtilityService;
+        this.fireBaseService = fireBaseService;
     }
 
     @GetMapping("/")
@@ -82,6 +87,20 @@ public class PageController {
         TbRoom room = roomService.findRoomById(roomId);
         room.setStatusId(APPROVED);
         roomService.saveRoom(room);
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        NotificationModel notificationModel = new NotificationModel();
+        notificationModel.setDate(timestamp.toString());
+        UUID noti_uuid = UUID.randomUUID();
+        notificationModel.setNoti_uuid(noti_uuid.toString());
+        notificationModel.setUser_id(room.getUserId().toString());
+        notificationModel.setRole_id(userService.findById(room.getUserId()).getRoleId().toString());
+        notificationModel.setRoom_id(room.getRoomId().toString());
+        notificationModel.setRoom_name(room.getName());
+        notificationModel.setStatus(NEW_NOTI + "");
+        notificationModel.setType(REMOVE_MEMBER + "");
+
+        fireBaseService.pushNoti(notificationModel);
         response.sendRedirect("/room");
     }
 
@@ -90,6 +109,20 @@ public class PageController {
         TbRoom room = roomService.findRoomById(roomId);
         room.setStatusId(DECLINED);
         roomService.saveRoom(room);
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        NotificationModel notificationModel = new NotificationModel();
+        notificationModel.setDate(timestamp.toString());
+        UUID noti_uuid = UUID.randomUUID();
+        notificationModel.setNoti_uuid(noti_uuid.toString());
+        notificationModel.setUser_id(room.getUserId().toString());
+        notificationModel.setRole_id(userService.findById(room.getUserId()).getRoleId().toString());
+        notificationModel.setRoom_id(room.getRoomId().toString());
+        notificationModel.setRoom_name(room.getName());
+        notificationModel.setStatus(NEW_NOTI + "");
+        notificationModel.setType(REMOVE_MEMBER + "");
+
+        fireBaseService.pushNoti(notificationModel);
         response.sendRedirect("/room");
     }
 

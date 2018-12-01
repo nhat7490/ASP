@@ -494,17 +494,37 @@ public class RoomController {
                 });
             } else {
                 List<MemberRequestModel> memberRequestModels = roomMemberModel.getMemberRequestModels();
-                List<MemberRequestModel> roomHasUsersMapToMemberRequestModel = roomMembers.stream().map(tbRoomHasUser -> {
-                    TbUser user = userService.findById(tbRoomHasUser.getUserId());
-                    return new MemberRequestModel(user.getUserId(), user.getRoleId());
-                }).collect(Collectors.toList());
+                List<MemberRequestModel> roomHasUsersMapToMemberRequestModel = roomMembers
+                        .stream()
+                        .map(tbRoomHasUser -> {
+                            TbUser user = userService.findById(tbRoomHasUser.getUserId());
+                            return new MemberRequestModel(user.getUserId(), user.getRoleId());
+                        }).collect(Collectors.toList());
 
                 //Case 1: Existed in two list
-                memberRequestModels.stream().filter(roomHasUsersMapToMemberRequestModel::contains).forEach(memberRequestModel -> {
-                    TbUser user = userService.findById(memberRequestModel.getUserId());
-                    user.setRoleId(memberRequestModel.getRoleId());
-                    userService.saveUser(user);
-                });
+                memberRequestModels
+                        .stream()
+                        .filter(roomHasUsersMapToMemberRequestModel::contains)
+                        .forEach(memberRequestModel -> {
+                            TbUser user = userService.findById(memberRequestModel.getUserId());
+                            user.setRoleId(memberRequestModel.getRoleId());
+                            userService.saveUser(user);
+
+                            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                            NotificationModel notificationModel = new NotificationModel();
+                            notificationModel.setDate(timestamp.toString());
+                            UUID noti_uuid = UUID.randomUUID();
+                            notificationModel.setNoti_uuid(noti_uuid.toString());
+                            notificationModel.setUser_id(user.getUserId().toString());
+                            notificationModel.setRole_id(user.getRoleId().toString());
+                            notificationModel.setRoom_id(roomMemberModel.getRoomId() + "");
+                            notificationModel.setRoom_name(roomService
+                                    .findRoomById(roomMemberModel.getRoomId()).getName());
+                            notificationModel.setStatus(NEW_NOTI + "");
+                            notificationModel.setType(UPDATE_MEMBER + "");
+
+                            fireBaseService.pushNoti(notificationModel);
+                        });
 
                 //Case 2: Exist in db but not in request list
                 roomHasUsersMapToMemberRequestModel.stream().filter(memberRequestModel
@@ -520,6 +540,20 @@ public class RoomController {
                             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                             roomHasUser.setDateOut(timestamp);
                             roomHasUserService.saveRoomMember(roomHasUser);
+
+                            NotificationModel notificationModel = new NotificationModel();
+                            notificationModel.setDate(timestamp.toString());
+                            UUID noti_uuid = UUID.randomUUID();
+                            notificationModel.setNoti_uuid(noti_uuid.toString());
+                            notificationModel.setUser_id(user.getUserId().toString());
+                            notificationModel.setRole_id(user.getRoleId().toString());
+                            notificationModel.setRoom_id(roomMemberModel.getRoomId() + "");
+                            notificationModel.setRoom_name(roomService
+                                    .findRoomById(roomMemberModel.getRoomId()).getName());
+                            notificationModel.setStatus(NEW_NOTI + "");
+                            notificationModel.setType(REMOVE_MEMBER + "");
+
+                            fireBaseService.pushNoti(notificationModel);
                         });
 
                 //Case 3: Exist in request list  but not in db list
@@ -538,6 +572,20 @@ public class RoomController {
                             roomHasUser.setUserId(memberRequestModel.getUserId());
                             roomHasUser.setRoomId(roomMemberModel.getRoomId());
                             roomHasUserService.saveRoomMember(roomHasUser);
+
+                            NotificationModel notificationModel = new NotificationModel();
+                            notificationModel.setDate(timestamp.toString());
+                            UUID noti_uuid = UUID.randomUUID();
+                            notificationModel.setNoti_uuid(noti_uuid.toString());
+                            notificationModel.setUser_id(user.getUserId().toString());
+                            notificationModel.setRole_id(user.getRoleId().toString());
+                            notificationModel.setRoom_id(roomMemberModel.getRoomId() + "");
+                            notificationModel.setRoom_name(roomService
+                                    .findRoomById(roomMemberModel.getRoomId()).getName());
+                            notificationModel.setStatus(NEW_NOTI + "");
+                            notificationModel.setType(ADD_MEMBER + "");
+
+                            fireBaseService.pushNoti(notificationModel);
                         });
             }
             return ResponseEntity.status(OK).build();

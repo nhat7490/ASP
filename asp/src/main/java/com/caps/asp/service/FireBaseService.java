@@ -13,10 +13,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class FireBaseService {
@@ -25,7 +23,7 @@ public class FireBaseService {
         return new ClassPathResource(schemaPath).getFile();
     }
 
-    public void pushNoti(NotificationModel notificationModel) {
+    public void initialize() {
         FileInputStream serviceAccount = null;
         try {
             serviceAccount = new FileInputStream(getFile("static/accommodation-ad340-firebase-adminsdk-dg6g4-2c59734e89.json"));
@@ -46,7 +44,9 @@ public class FireBaseService {
         }
 
         FirebaseApp.initializeApp(options);
+    }
 
+    public void pushNoti(NotificationModel notificationModel) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("notifications/users/" + notificationModel.getUser_id());
         DatabaseReference usersRef = ref.child(notificationModel.getNoti_uuid());
