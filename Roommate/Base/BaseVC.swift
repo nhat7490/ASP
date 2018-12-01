@@ -14,6 +14,7 @@ import AVFoundation
 import PhotosUI
 import CoreLocation
 class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,AlertControllerDelegate{
+    var hasBackImageButtonInNavigationBar:Bool? = false
     let locationManager = CLLocationManager()
     let group = DispatchGroup()
     override func viewDidLoad() {
@@ -99,7 +100,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestUtilitiesArray()}
             if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
             if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
-            if !DBManager.shared.isExisted(ofType: RoomModel.self){
+            if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
                 self.requestCurrentRoom()
             }
             
@@ -107,13 +108,27 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             DispatchQueue.main.async {
                 MBProgressHUD.hide(for: view, animated: true)
                 if !DBManager.shared.isExisted(ofType: UtilityModel.self) || !DBManager.shared.isExisted(ofType: CityModel.self) || !DBManager.shared.isExisted(ofType: DistrictModel.self){
+                    
                     DispatchQueue.main.async {
                         self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_ERROR_MESSAGE".localized,onCompleted:{
                             self.checkAndLoadInitData(inView: view,onCompleted: completed)
                         })
                     }
                 }else{
-                    completed()
+                    if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
+                        if !DBManager.shared.isExisted(ofType: RoomModel.self){
+                            DispatchQueue.main.async {
+                                self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_ERROR_MESSAGE".localized,onCompleted:{
+                                    self.checkAndLoadInitData(inView: view,onCompleted: completed)
+                                })
+                            }
+                        }else{
+                            completed()
+                        }
+                    }else{
+                        completed()
+                    }
+                    
                 }
             }
             
@@ -377,9 +392,9 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
     //MARK: Back button on navigation bar
     
     
-    func setBackButtonForNavigationBar(isEmbedInNewNavigationController:Bool? = false){
+    func setBackButtonForNavigationBar(){
         //Back button
-        if isEmbedInNewNavigationController!{
+        if hasBackImageButtonInNavigationBar!{
             let backImage = UIImage(named: "back")
             navigationItem.leftBarButtonItem =  UIBarButtonItem(image: backImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(dimissEntireNavigationController))
         }else{
@@ -388,26 +403,32 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         
         navigationItem.leftBarButtonItem?.tintColor = .defaultBlue
         
+        
+    }
+    func transparentNavigationBarBottomBorder(){
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.backgroundColor = .clear
     }
-    func translateNavigationBarBottomBorder(){
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.backgroundColor = .clear
-    }
-    func presentInNewNavigationController(viewController:UIViewController){
-        let mainVC = UIViewController()
-        mainVC.view.backgroundColor = .white
-        let nv = UINavigationController(rootViewController: mainVC)
-        present(nv, animated: false) {
-            nv.pushViewController(viewController, animated: true)
+    func presentInNewNavigationController(viewController:BaseVC,flag:Bool? = true,animated:Bool? = true){
+        if flag!{
+            viewController.hasBackImageButtonInNavigationBar = flag
+            let mainVC = UIViewController()
+            mainVC.view.backgroundColor = .white
+            let nv = UINavigationController(rootViewController: viewController)
+            present(nv, animated: false) {
+//                nv.pushViewController(viewController, animated: animated!)
+            }
+        }else{
+            self.navigationController?.pushViewController(viewController, animated: animated!)
         }
+        
     }
+    
     @objc func dimissEntireNavigationController(){
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
+    
     @objc func popSelfInNavigationController(){
         self.navigationController?.popViewController(animated: true)
     }

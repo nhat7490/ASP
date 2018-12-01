@@ -31,14 +31,14 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
         OrderType.hightToLowPrice:"HIGH_TO_LOW_PRICE"
     ]
-    var showAllVCType:ShowAllVCType = .roomPost{
+    var showAllVCType:ShowAllVCType = .roomPostForCreatedUser{
         didSet{
             switch showAllVCType{
             case .suggestRoom:
                 baseSuggestRequestModel.offset = Constants.MAX_OFFSET
-            case .roomPost:
+            case .roomPostForCreatedUser:
                 filterArgumentModel.typeId = Constants.ROOM_POST
-            case .roommatePost:
+            case .roommatePostForCreatedUser:
                 filterArgumentModel.typeId = Constants.ROOMMATE_POST
             case .roomForOwner,.roomForMember:
                 break
@@ -118,9 +118,9 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         switch showAllVCType{
         case .suggestRoom:
             title = "SUGGEST".localized
-        case .roomPost:
+        case .roomPostForCreatedUser:
             title = "TITLE_MEMBER_CREATED_ROOM_POST".localized
-        case .roommatePost:
+        case .roommatePostForCreatedUser:
             title = "TITLE_MEMBER_CREATED_ROOMMATE_POST".localized
         case .roomForOwner:
             title = "TITLE_CREATED_ROOM".localized
@@ -129,12 +129,12 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         }
         automaticallyAdjustsScrollViewInsets = false
         navigationController?.navigationBar.backgroundColor = .white
-        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
+        setBackButtonForNavigationBar()
         
         view.addSubview(bottomView)
         bottomView.addSubview(collectionView)
         switch showAllVCType{
-        case .roomPost,.roommatePost:
+        case .roomPostForCreatedUser,.roommatePostForCreatedUser:
             //Declare view
             let orderByView = UIView()
             
@@ -212,10 +212,10 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         case .roomForOwner:
             self.apiRouter = APIRouter.getRoomsByUserId(userId: currentUserId, page: roomForOwnerAndMemberPage, size: Constants.MAX_OFFSET)
             loadRoomForOwnerOrMemberData(withNewFilterArgModel: true)
-        case .roomPost:
+        case .roomPostForCreatedUser:
             self.apiRouter = APIRouter.getUserPost(model: filterArgumentModel)
             loadRoomData(withNewFilterArgModel: true)
-        case .roommatePost:
+        case .roommatePostForCreatedUser:
             self.apiRouter = APIRouter.getUserPost(model: filterArgumentModel)
             loadRoommateData(withNewFilterArgModel: true)
         }
@@ -438,9 +438,9 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         switch showAllVCType{
-        case .suggestRoom,.roomPost:
+        case .suggestRoom,.roomPostForCreatedUser:
             return rooms.count
-        case .roommatePost:
+        case .roommatePostForCreatedUser:
             return roommates.count
         case .roomForOwner,.roomForMember:
             return roomResponseModels.count
@@ -449,13 +449,13 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch showAllVCType{
-        case .suggestRoom,.roomPost:
+        case .suggestRoom,.roomPostForCreatedUser:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMPOSTCV, for: indexPath) as! RoomPostCVCell
             cell.delegate = self
             cell.room = rooms[indexPath.row]
             cell.indexPath = indexPath
             return cell
-        case .roommatePost:
+        case .roommatePostForCreatedUser:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMMATEPOSTCV, for: indexPath) as! RoommatePostCVCell
             cell.delegate = self
             cell.roommate = roommates[indexPath.row]
@@ -470,17 +470,18 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch showAllVCType{
-        case .suggestRoom,.roomPost:
+        case .suggestRoom,.roomPostForCreatedUser:
             let vc = PostDetailVC()
-            vc.viewType = ViewType.roomPostDetailForFinder
+            
+            vc.viewType = showAllVCType == .suggestRoom ? .roomPostDetailForFinder : .roomPostDetailForCreatedUser
             vc.room = rooms[indexPath.row]
 //            let mainVC = UIViewController()
 //            let nv = UINavigationController(rootViewController: mainVC)
 //            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
             presentInNewNavigationController(viewController: vc)
-        case .roommatePost:
+        case .roommatePostForCreatedUser:
             let vc = PostDetailVC()
-            vc.viewType = ViewType.roommatePostDetailForFinder
+            vc.viewType = showAllVCType == .suggestRoom ? .roommatePostDetailForFinder : .roommatePostDetailForCreatedUser
             vc.roommate = roommates[indexPath.row]
 //            let mainVC = UIViewController()
 //            let nv = UINavigationController(rootViewController: mainVC)
@@ -507,9 +508,9 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch showAllVCType{
-        case .suggestRoom,.roomPost:
+        case .suggestRoom,.roomPostForCreatedUser:
             return CGSize(width: collectionView.frame.width/2-5, height: Constants.HEIGHT_CELL_ROOMPOSTCV)
-        case .roommatePost:
+        case .roommatePostForCreatedUser:
             return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_ROOMMATEPOSTCV)
         case .roomForOwner,.roomForMember:
             return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_ROOMFOROWNERCV)
@@ -536,10 +537,10 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             case .suggestRoom:
                 baseSuggestRequestModel.page = 1
                 loadRoomData(withNewFilterArgModel: true)
-            case .roomPost:
+            case .roomPostForCreatedUser:
                 filterArgumentModel.page = 1
                 loadRoomData(withNewFilterArgModel: true)
-            case .roommatePost:
+            case .roommatePostForCreatedUser:
                 filterArgumentModel.page = 1
                 loadRoommateData(withNewFilterArgModel: true)
             case .roomForOwner,.roomForMember:
@@ -556,10 +557,10 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             case .suggestRoom:
                 baseSuggestRequestModel.page = rooms.count/Constants.MAX_OFFSET+2
                 loadRoomData(withNewFilterArgModel: false)
-            case .roomPost:
+            case .roomPostForCreatedUser:
                 filterArgumentModel.page = rooms.count/Constants.MAX_OFFSET+2
                 loadRoomData(withNewFilterArgModel: false)
-            case .roommatePost:
+            case .roommatePostForCreatedUser:
                 filterArgumentModel.page = roommates.count/Constants.MAX_OFFSET+2
                 loadRoommateData(withNewFilterArgModel: false)
             case .roomForOwner,.roomForMember:
@@ -597,10 +598,10 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         //Need to change method to updateUIWhenClickBtnOrder
         updateUIWhenClickBtnOrder()
         switch showAllVCType{
-        case .suggestRoom,.roomPost:
+        case .suggestRoom,.roomPostForCreatedUser:
             filterArgumentModel.page = 1
             loadRoomData(withNewFilterArgModel: true)
-        case .roommatePost:
+        case .roommatePostForCreatedUser:
             filterArgumentModel.orderBy = indexPath.row + 1
             filterArgumentModel.page = 1
             loadRoommateData(withNewFilterArgModel: true)

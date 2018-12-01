@@ -118,7 +118,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     var districts:Results<DistrictModel>?
     
     var cERoomVCType:CEVCType = .create
-    var newRoomModel: RoomMappableModel = RoomMappableModel()
+    var roomMappableModel: RoomMappableModel = RoomMappableModel()
     var cityName:String = ""
     var districtName:String = ""
     var selectedCity:CityModel?
@@ -149,7 +149,8 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     func setupUI(){
         title = cERoomVCType == .create ? "CREATE_ROOM".localized : "ROOM_EDIT".localized
         
-        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
+        setBackButtonForNavigationBar()
+//        translateNavigationBarBottomBorder()
         //Create tempview for bottom button
         let bottomView = UIView()
         
@@ -169,7 +170,6 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         //Add View
         view.addSubview(scrollView)
         view.addSubview(bottomView)
-        
         
         scrollView.addSubview(contentView)
         bottomView.addSubview(btnSubmit)
@@ -253,28 +253,28 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         
         //Data
         if cERoomVCType == CEVCType.edit{
-            nameInputView.text = newRoomModel.name
-            priceInputView.text = newRoomModel.price.toString
-            areaInputView.text = newRoomModel.area.toString
-            addressInputView.text = newRoomModel.address
-            maxMemberSelectView.text = newRoomModel.maxGuest.toString
+            nameInputView.text = roomMappableModel.name
+            priceInputView.text = roomMappableModel.price.toString
+            areaInputView.text = roomMappableModel.area.toString
+            addressInputView.text = roomMappableModel.address
+            maxMemberSelectView.text = roomMappableModel.maxGuest.toString
             
-            cityName = DBManager.shared.getRecord(id: newRoomModel.cityId, ofType: CityModel.self)?.name ?? ""
+            cityName = DBManager.shared.getRecord(id: roomMappableModel.cityId, ofType: CityModel.self)?.name ?? ""
             cityDropdownListView.text = cityName
             
-            districtName = DBManager.shared.getRecord(id: newRoomModel.districtId, ofType: DistrictModel.self)?.name ?? ""
+            districtName = DBManager.shared.getRecord(id: roomMappableModel.districtId, ofType: DistrictModel.self)?.name ?? ""
             districtDropdownListView.text = districtName
             
             addressInputView.isSelectedFromSuggest = true
-            utilitiesView.selectedUtilities = Array(newRoomModel.utilities).map{$0.utilityId}
+            utilitiesView.selectedUtilities = Array(roomMappableModel.utilities).map{$0.utilityId}
             utilitiesView.utilities = Array(utilities!)
-            descriptionsView.text = newRoomModel.roomDescription ?? ""
-            descriptionsView.viewType = ViewType.editForOwner
-            uploadImageModels = newRoomModel.imageUrls.compactMap{UploadImageModel(name: URL(string: $0)?.lastPathComponent, linkUrl: $0)}
+            descriptionsView.text = roomMappableModel.roomDescription ?? ""
+            descriptionsView.viewType = .editForOwner
+            uploadImageModels = roomMappableModel.imageUrls.compactMap{UploadImageModel(name: URL(string: $0)?.lastPathComponent, linkUrl: $0)}
             calculatorHeight()
         }else{
             utilitiesView.utilities = Array(utilities!)
-            descriptionsView.viewType = ViewType.createForOwner
+            descriptionsView.viewType = .createForOwner
         }
         uploadImageView.images = uploadImageModels
         
@@ -327,7 +327,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     
     //MARK: Delegate for subview
     func descriptionViewDelegate(descriptionView view: DescriptionView, textViewDidEndEditing textView: UITextView) {
-        newRoomModel.roomDescription = descriptionsView.text!
+        roomMappableModel.roomDescription = descriptionsView.text!
         descriptionsView.tvContent.resignFirstResponder()
         descriptionsView.tvContent.endEditing(true)
     }
@@ -357,33 +357,33 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         guard let text = maxMemberSelectView.text,let maxMember = Int(text) else {
             return
         }
-        newRoomModel.maxGuest = maxMember
+        roomMappableModel.maxGuest = maxMember
     }
     
     func maxMemberSelectViewDelegate(view maxMemberSelectView: MaxMemberSelectView, onClickBtnPlus btnPlus: UIButton) {
         guard let text = maxMemberSelectView.text,let maxMember = Int(text) else {
             return
         }
-        newRoomModel.maxGuest = maxMember
+        roomMappableModel.maxGuest = maxMember
     }
-    func newInputViewDelegate(newInputView view: InputView, shouldChangeCharactersTo string: String) -> Bool{
+    func inputViewDelegate(inputView view: InputView, shouldChangeCharactersTo string: String) -> Bool{
         switch view {
         case nameInputView:
-            newRoomModel.name = string
+            roomMappableModel.name = string
         case priceInputView:
             if string.isEmpty{return true}
             guard let price = Int(string) else{
                 return false
             }
-            newRoomModel.price = price
+            roomMappableModel.price = price
         case areaInputView:
             if string.isEmpty{return true}
             guard let int = Int(string) else{
                 return false
             }
-            newRoomModel.area = int
+            roomMappableModel.area = int
         case addressInputView:
-            if newRoomModel.districtId == 0{
+            if roomMappableModel.districtId == 0{
                 addressInputView.tfInput.setupUI(placeholder: "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT", title: "ROOM_ADDRESS_TITLE", delegate: addressInputView)
                 return false
             }else{
@@ -405,9 +405,9 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             alert.delegate = self
         }else{
             
-            if newRoomModel.cityId != 0{
+            if roomMappableModel.cityId != 0{
                 let alert = AlertController.showAlertList(withTitle: "LIST_DISTRICT_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .district, forViewController: self, data: districts?.filter({ (district) -> Bool in
-                    district.cityId == self.newRoomModel.cityId
+                    district.cityId == self.roomMappableModel.cityId
                 }).map({ $0.name!
                 }), rhsButtonTitle: "OK".localized)
                 alert.delegate = self
@@ -425,15 +425,15 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             guard let city = cities?[(indexs.first?.row)!]  else{
                 return
             }
-            newRoomModel.cityId = city.cityId
+            roomMappableModel.cityId = city.cityId
             cityName = city.name!
-            newRoomModel.districtId = 0
+            roomMappableModel.districtId = 0
             addressInputView.isSelectedFromSuggest = false
             self.cityDropdownListView.text = self.cityName
             self.districtDropdownListView.dropdownListViewType = .district
         }else if type == AlertType.district{
             guard let districtOfCity = districts?.filter({ (district) -> Bool in
-                district.cityId == self.newRoomModel.cityId
+                district.cityId == self.roomMappableModel.cityId
             }) else{
                 return
             }
@@ -443,7 +443,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
             }
             let district = Array(districtOfCity)[(indexs.first?.row)!]
             addressInputView.isSelectedFromSuggest = false
-            newRoomModel.districtId = district.districtId
+            roomMappableModel.districtId = district.districtId
             self.districtName = district.name!
             self.cityDropdownListView.text = self.cityName
             self.districtDropdownListView.text = self.districtName
@@ -466,16 +466,16 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     }
     //MARK: UtilityInputVCDelegate
     func utilityInputVCDelegate(onCompletedInputUtility utility: UtilityMappableModel, atIndexPath indexPath:IndexPath?) {
-        newRoomModel.utilities.append(utility)
+        roomMappableModel.utilities.append(utility)
         utilitiesView.setState(isSelected: true, atIndexPath: indexPath!)
     }
     func utilityInputVCDelegate(onDeletedInputUtility utility: UtilityMappableModel, atIndexPath indexPath:IndexPath?){
-        guard let index = newRoomModel.utilities.index(where: { (record) -> Bool in
+        guard let index = roomMappableModel.utilities.index(where: { (record) -> Bool in
             utility.utilityId == record.utilityId
         }) else {
             return
         }
-        newRoomModel.utilities.remove(at: index)
+        roomMappableModel.utilities.remove(at: index)
         utilitiesView.setState(isSelected: false, atIndexPath: indexPath!)
     }
     
@@ -503,9 +503,9 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                 return
             }
             addressInputView.isSelectedFromSuggest = true
-            self.newRoomModel.address = selectedRecord.keys.first!.address
-            self.newRoomModel.latitude = selectedRecord.values.first!.lat
-            self.newRoomModel.longitude = selectedRecord.values.first!.lng
+            self.roomMappableModel.address = selectedRecord.keys.first!.address
+            self.roomMappableModel.latitude = selectedRecord.values.first!.lat
+            self.roomMappableModel.longitude = selectedRecord.values.first!.lng
             addressInputView.tfInput.text = selectedRecord.keys.first?.address
             suggestAddress?.removeAll()
             reloadTableViewUI()
@@ -604,34 +604,34 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     func checkValidInformation()->Bool{
         let message = NSMutableAttributedString(string: "")
         
-        if !newRoomModel.name.isValidName(){
+        if !roomMappableModel.name.isValidName(){
             message.append(NSAttributedString(string: "\("ROOM_NAME_TITLE".localized) :  \("ERROR_TYPE_NAME_MAX_CHAR_50".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         
-        if !newRoomModel.price.toString.isValidPrice(){
+        if !roomMappableModel.price.toString.isValidPrice(){
             message.append(NSAttributedString(string: "\("PRICE".localized) :  \("ERROR_TYPE_PRICE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
-        if !newRoomModel.area.toString.isValidArea(){
+        if !roomMappableModel.area.toString.isValidArea(){
             message.append(NSAttributedString(string: "\("AREA_TITLE".localized) :  \("ERROR_TYPE_AREA".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
-        if newRoomModel.cityId == 0 {
+        if roomMappableModel.cityId == 0 {
             message.append(NSAttributedString(string: "\("CITY".localized) :  \("ERROR_TYPE_CITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
-        if newRoomModel.districtId == 0{
+        if roomMappableModel.districtId == 0{
             message.append(NSAttributedString(string: "\("AREA_TITLE".localized) :  \("ERROR_TYPE_DISTRICT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
-        if !addressInputView.isSelectedFromSuggest || newRoomModel.longitude == 0 || newRoomModel.latitude == 0{
+        if !addressInputView.isSelectedFromSuggest || roomMappableModel.longitude == 0 || roomMappableModel.latitude == 0{
             message.append(NSAttributedString(string: "\("ROOM_ADDRESS_TITLE".localized) :  \("ERROR_TYPE_ADDRESS_SUGGEST".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
             
         }
-        if newRoomModel.utilities.count<5{
+        if roomMappableModel.utilities.count<5{
             message.append(NSAttributedString(string: "\("UTILITY_TITLE".localized) :  \("ERROR_TYPE_UTILITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         if uploadImageModels.count<2{
-            message.append(NSAttributedString(string: "\("ROOM_UPLOAD_IMAGE_TITLE".localized) :  \("ROOM_MEMBER_LESSTHAN_MAXGUEST".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            message.append(NSAttributedString(string: "\("ROOM_UPLOAD_IMAGE_TITLE".localized) :  \("ROOM_UPLOAD_LIMIT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         if cERoomVCType == .edit{
-            if let members = newRoomModel.members, members.count > newRoomModel.maxGuest{
+            if let members = roomMappableModel.members, members.count > roomMappableModel.maxGuest{
                 message.append(NSAttributedString(string: "\("ROOM_MEMBER_LESSTHAN_MAXGUEST".localized).\n \(String(format: "ROOM_CURRENT_MEMBER_NUMBER".localized, members.count))", attributes: [NSAttributedStringKey.font:UIFont.small]))
             }
         }
@@ -645,7 +645,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     }
     
     func saveRoom(){
-        newRoomModel.userId = DBManager.shared.getUser()!.userId
+        roomMappableModel.userId = DBManager.shared.getUser()!.userId
         if checkValidInformation(){
             
             let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -664,7 +664,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                         hub.label.text = self.cERoomVCType == .create ?  "MB_LOAD_CREATE_ROOM".localized : "MB_LOAD_EDIT_ROOM".localized
                     }
                     if (self.uploadImageModels.filter{$0.linkUrl==nil}).count == 0{
-                        self.newRoomModel.imageUrls = self.uploadImageModels.compactMap{$0.linkUrl}
+                        self.roomMappableModel.imageUrls = self.uploadImageModels.compactMap{$0.linkUrl}
                         self.ceRoom()
                     }else{
                         DispatchQueue.main.async {
@@ -678,7 +678,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         }
     }
     func ceRoom(){
-        APIConnection.request(apiRouter: self.cERoomVCType == .create ? APIRouter.createRoom(model: self.newRoomModel) : APIRouter.updateRoom(model: self.newRoomModel),  errorNetworkConnectedHander: {
+        APIConnection.request(apiRouter: self.cERoomVCType == .create ? APIRouter.createRoom(model: self.roomMappableModel) : APIRouter.updateRoom(model: self.roomMappableModel),  errorNetworkConnectedHander: {
             DispatchQueue.main.async {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
@@ -696,14 +696,18 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                     DispatchQueue.main.async {
                         MBProgressHUD.hide(for: self.view, animated: true)
                         if self.cERoomVCType == .edit {
-                            self.newRoomModel.statusId = Constants.PENDING
-                            NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_ROOM, object: self.newRoomModel)
+                            self.roomMappableModel.statusId = Constants.PENDING
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_ROOM, object: self.roomMappableModel)
                         }else if self.cERoomVCType == .create{
-                            NotificationCenter.default.post(name: Constants.NOTIFICATION_CREATE_ROOM, object: self.newRoomModel)
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_CREATE_ROOM, object: self.roomMappableModel)
                         }
                         AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage:  self.cERoomVCType == .create ? "ROOM_CREATE_SUCCESS".localized : "EDIT_ROOM_SUCCESS".localized, inViewController: self,rhsButtonHandler: {
                             (action) in
-                            self.navigationController?.dismiss(animated: true, completion:nil)
+                            if self.cERoomVCType == .create{
+                                self.dimissEntireNavigationController()
+                            }else{
+                                self.popSelfInNavigationController()
+                            }
                         })
                         
                         

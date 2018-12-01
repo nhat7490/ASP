@@ -19,8 +19,9 @@ class UtilityCVCell: UICollectionViewCell {
     
     var data: UtilityMappableModel?{
         didSet{
-            lblTitle.text = DBManager.shared.getRecord(id: (data?.utilityId)!, ofType: UtilityModel.self)?.name
-            imgvIcon.image = UIImage(named: "cctv")
+            let utilityName = DBManager.shared.getRecord(id: (data?.utilityId)!, ofType: UtilityModel.self)!.name
+            lblTitle.text = utilityName.localized
+            imgvIcon.image = UIImage(named: utilityName)
         }
     }
     var utilityCVCellType:UtilityCVCellType = .detail

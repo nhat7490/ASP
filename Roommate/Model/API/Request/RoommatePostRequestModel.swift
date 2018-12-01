@@ -21,6 +21,17 @@ class RoommatePostRequestModel:BasePostResquestModel {
         districtIds = []
         cityId = 0
     }
+    init(model:RoommatePostResponseModel){
+        super.init()
+        self.postId = model.postId!
+        self.userId = model.userResponseModel?.userId
+        self.cityId = model.cityId
+        self.districtIds = model.districtIds
+        self.utilityIds = model.utilityIds
+//        self.minPrice = Float(model.minPrice)
+//        self.maxPrice = Float(model.maxPrice)
+        self.phoneContact = phoneContact
+    }
     init(cityId:Int,suggestSettingMappableModel:SuggestSettingMappableModel,phoneContact:String){
         super.init()
         self.cityId = cityId

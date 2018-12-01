@@ -6,19 +6,20 @@ target 'Roommate' do
   use_frameworks!
 
   # Pods for Roommate
-	pod 'Alamofire'
-	pod 'AlamofireObjectMapper'
-	pod 'ObjectMapper'
-	pod 'SDWebImage'
-	pod “TTRangeSlider”
-	pod 'GooglePlaces'
-  	pod 'GooglePlacePicker'
-  	pod 'GoogleMaps'
-	pod 'ObjectMapper+Realm'
-	pod 'SkyFloatingLabelTextField'
+	pod 'Alamofire', '~> 4.7.3'
+	pod 'AlamofireObjectMapper', '~> 5.1.0'
+	pod 'ObjectMapper', '~> 3.3.0'
+	pod 'SDWebImage', '~> 4.4.2'
+	pod 'TTRangeSlider', '~> 1.0.6'
+	pod 'GooglePlaces', '~> 2.7.0'
+  	pod 'GooglePlacePicker', '~> 2.7.0'
+  	pod 'GoogleMaps', '~> 2.7.0'
+	pod 'ObjectMapper+Realm', '~> 0.6'
+	pod 'SkyFloatingLabelTextField', '~> 3.6.0'
 	pod 'Firebase/Core'
-	pod 'MBProgressHUD'
-	pod 'SwiftyJSON'
+	pod 'MBProgressHUD', '~> 1.1.0'
+	pod 'SwiftyJSON', '~> 4.2.0'
+	pod 'Cosmos', '~> 16.0'
 
 end
 

@@ -122,7 +122,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
     func setupUI(){
         automaticallyAdjustsScrollViewInsets = false
         navigationController?.navigationBar.backgroundColor = .white
-        
+//        navigationController?.navigationBar.isHidden = true
         
         //UI for navigation bar
         navigationItem.titleView = segmentControl
@@ -157,17 +157,23 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         bottomView.addSubview(collectionView)
         
         
+        
         //Calculate constraint constant
         let orderByViewHeight = CGFloat(30.0)
         let orderByViewWidth = view.frame.width-Constants.MARGIN_5*4
         
         //Add Constraint
         _ = orderByView.anchor(view.topAnchor, view.leftAnchor, nil, nil, UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0), CGSize(width: orderByViewWidth, height: orderByViewHeight))
+        if #available(iOS 11.0, *) {
+            print(view.safeAreaLayoutGuide.topAnchor)
+        } else {
+            // Fallback on earlier versions
+        }
         _ =  btnOrderBy.anchorTopRight(orderByView.topAnchor, orderByView.rightAnchor, 150.0, orderByViewHeight)
         _ = lblOrderBy.anchorTopRight(orderByView.topAnchor, btnOrderBy.leftAnchor, orderByViewWidth-150.0, orderByViewHeight)
-        _ = imageView.anchor(btnOrderBy.topAnchor,nil,btnOrderBy.bottomAnchor,btnOrderBy.rightAnchor,UIEdgeInsets(top: Constants.MARGIN_10, left: 0, bottom: Constants.MARGIN_10, right: -Constants.MARGIN_10))
-        _ = imageView.anchorWidth(equalTo: btnOrderBy.heightAnchor, constant: -Constants.MARGIN_10)
-        _ = lblSelectTitle.anchor(btnOrderBy.topAnchor,btnOrderBy.leftAnchor,btnOrderBy.bottomAnchor,imageView.leftAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: 0))
+        _ = imageView.anchor(btnOrderBy.topAnchor,nil,btnOrderBy.bottomAnchor,btnOrderBy.rightAnchor,UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
+        _ = imageView.anchorWidth(equalTo: btnOrderBy.heightAnchor, constant: -10)
+        _ = lblSelectTitle.anchor(btnOrderBy.topAnchor,btnOrderBy.leftAnchor,btnOrderBy.bottomAnchor,imageView.leftAnchor,UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
         
         //        bottomView.backgroundColor = .red
         //        collectionView.backgroundColor = .blue
@@ -226,12 +232,12 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
     func loadRoommateData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+                self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
                     self.requestRoommate(apiRouter: self.allVCType == .all ? APIRouter.postForAll(model: self.roommateFilter) : APIRouter.postForBookmark(model: self.roommateFilter),withNewFilterArgModel: withNewFilterArgModel)
                 }
             }
         }else{
-            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+            self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
                 self.requestRoommate(apiRouter: self.allVCType == .all ? APIRouter.postForAll(model: self.roommateFilter) : APIRouter.postForBookmark(model: self.roommateFilter), withNewFilterArgModel: withNewFilterArgModel)
             }
         }
@@ -240,7 +246,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
     
     func  requestRoom(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
-            let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
+            self.hideNoDataView(inView: self.collectionView)
+            let hub = MBProgressHUD.showAdded(to: self.collectionView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
             hub.contentColor = .defaultBlue
@@ -250,7 +257,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         DispatchQueue.global(qos: .background).async {
             APIConnection.requestArray(apiRouter:apiRouter, returnType: RoomPostResponseModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
-                    MBProgressHUD.hide(for: self.bottomView, animated: true)
+                    MBProgressHUD.hide(for: self.collectionView, animated: true)
                 }
                 //404, cant parse
                 if error != nil{
@@ -289,7 +296,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
     }
     func  requestRoommate(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
-            let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
+            self.hideNoDataView(inView: self.collectionView)
+            let hub = MBProgressHUD.showAdded(to: self.collectionView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
             hub.contentColor = .defaultBlue
@@ -299,7 +307,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         DispatchQueue.global(qos: .background).async {
             APIConnection.requestArray(apiRouter:apiRouter, returnType: RoommatePostResponseModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
-                    MBProgressHUD.hide(for: self.bottomView, animated: true)
+                    MBProgressHUD.hide(for: self.collectionView, animated: true)
                 }
                 //404, cant parse
                 if error != nil{
@@ -414,8 +422,18 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
     //MARK: UICollectionView DataSourse and Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if segmentControl.selectedSegmentIndex == 0{
+            if rooms?.count == 0{
+                self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
+            }else{
+                self.hideNoDataView(inView: self.collectionView)
+            }
             return rooms?.count ?? 0
         }else{
+            if roommates?.count == 0{
+                self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
+            }else{
+                self.hideNoDataView(inView: self.collectionView)
+            }
             return roommates?.count ?? 0
         }
         
@@ -560,6 +578,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         if segmentControl.selectedSegmentIndex == 0{
             if rooms == nil{
                 rooms = []
+                self.collectionView.reloadData()
                 loadRoomData(withNewFilterArgModel: true)
             }else{
                 self.collectionView.reloadData()
@@ -567,6 +586,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         }else{
             if roommates == nil{
                 roommates = []
+                self.collectionView.reloadData()
                 loadRoommateData(withNewFilterArgModel: true)
             }else{
                 self.collectionView.reloadData()

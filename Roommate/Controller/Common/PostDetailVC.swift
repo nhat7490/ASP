@@ -6,8 +6,8 @@
 //  Copyright © 2018 TrinhHC. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import MBProgressHUD
 class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewDelegate{
     var room:RoomPostResponseModel!
     var roommate:RoommatePostResponseModel!
@@ -39,11 +39,11 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         return gv
     }()
     
-//    var membersView:MembersView = {
-//        let mv:MembersView = .fromNib()
-//        return mv
-//    }()
-//    
+    //    var membersView:MembersView = {
+    //        let mv:MembersView = .fromNib()
+    //        return mv
+    //    }()
+    //
     var utilitiesView:UtilitiesView = {
         let uv:UtilitiesView = .fromNib()
         return uv
@@ -68,6 +68,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         super.viewDidLoad()
         setupUI()
         setData()
+        registerNotification()
     }
     
     override func viewDidLayoutSubviews() {
@@ -79,7 +80,8 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     
     
     func setupUI() {
-        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
+        setBackButtonForNavigationBar()
+        transparentNavigationBarBottomBorder()
         if #available(iOS 11, *){
             scrollView.contentInsetAdjustmentBehavior = .never
         }else{
@@ -122,32 +124,34 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         _ = horizontalImagesView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero ,CGSize(width: 0, height: Constants.HEIGHT_CELL_IMAGECV))
         _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height:heightBaseInformationView ))
         if viewType == .roomPostDetailForFinder{
-        _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
-        _ = utilitiesView.anchor(genderView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))
-        _ = descriptionsView.anchor(utilitiesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_DESCRIPTION))
+            _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
+            _ = utilitiesView.anchor(genderView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))
+            _ = descriptionsView.anchor(utilitiesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_DESCRIPTION))
         }else{
-             _ = utilitiesView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))
+            _ = utilitiesView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))
         }
     }
     
     func setData() {
         
         baseInformationView.viewType = viewType
+        genderView.viewType = viewType
         if viewType == .roomPostDetailForFinder{
             //Data for horizontalImagesView
+            
             horizontalImagesView.images = room.imageUrls
             
             //Data for baseInformationView
-            baseInformationView.lblMainTitle.text = room.name
-            baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
-            baseInformationView.tvInfoTop.text = room.address
-            baseInformationView.lblInfoBottom.text = String(format: "AREA".localized,room.area!)
-            baseInformationView.lblTitleDescription.text  = room.genderPartner == 1 ? String(format: "NUMBER_OF_PERSON".localized,room.genderPartner!,"MALE".localized) :
-                room.genderPartner == 2 ? String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"FEMALE".localized) : String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"\("MALE".localized)/\("FEMALE".localized)")
+            //            baseInformationView.lblMainTitle.text = room.name
+            //            baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
+            //            baseInformationView.tvInfoTop.text = room.address
+            //            baseInformationView.lblInfoBottom.text = String(format: "AREA".localized,room.area!)
+            //            baseInformationView.lblTitleDescription.text  = room.genderPartner == 1 ? String(format: "NUMBER_OF_PERSON".localized,room.genderPartner!,"MALE".localized) :
+            //                room.genderPartner == 2 ? String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"FEMALE".localized) : String(format: "NUMBER_OF_PERSON".localized,room.numberPartner!,"\("MALE".localized)/\("FEMALE".localized)")
+            baseInformationView.roomPost = room
+            
             //Data for genderview
-            genderView.viewType = viewType
-            genderView.genderSelect = room.genderPartner == 1 ? GenderSelect.male : room.genderPartner == 2 ? GenderSelect.male : GenderSelect.both
-            genderView.lblTitle.text = "GENDER_ACCEPT".localized
+            genderView.genderSelect = GenderSelect(rawValue: room.genderPartner!)
             
             //Data for descriptionView
             descriptionsView.viewType = viewType
@@ -164,14 +168,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             horizontalImagesView.images = [(roommate.userResponseModel?.imageProfile ?? "")]
             
             //Data for baseInformationView
-            baseInformationView.lblMainTitle.text = roommate.userResponseModel?.fullname
-            let dictrictsString = roommate?.districtIds?.map({ (districtId) -> String in
-                (DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.name)!
-            })
-            baseInformationView.imgvBottom.image = UIImage(named: "city")
-            baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
-            baseInformationView.tvInfoTop.text = dictrictsString?.joined(separator: ",")
-            baseInformationView.lblInfoBottom.text = DBManager.shared.getRecord(id: roommate.cityId, ofType: CityModel.self)!.name
+            baseInformationView.roommatePost = roommate
             
             //Data for utilityView
             var utilities:[UtilityMappableModel] = []
@@ -199,21 +196,63 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         view.layoutIfNeeded()
     }
     
+    //MARK: Notification
+    func registerNotification(){
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditPostNotification(_:)), name: Constants.NOTIFICATION_EDIT_POST, object: nil)
+    }
+    
+    
+    @objc func didReceiveEditPostNotification(_ notification:Notification){
+        if notification.object is RoomPostResponseModel {
+            
+            guard let room = notification.object as? RoomPostResponseModel else{
+                return
+            }
+            self.room = room
+            
+        }else{
+            guard let roommate = notification.object as? RoommatePostResponseModel else{
+                return
+            }
+            self.roommate = roommate
+        }
+        setData()
+    }
     
     //MARK: OptionViewDelegate
     func optionViewDelegate(view optionView: OptionView, onClickBtnLeft btnLeft: UIButton) {
         //Valid information at time input. So we dont need to valid here
-        AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_POST_SMS_ALERT".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_MESSAGE".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
-            
-            Utilities.openSystemApp(type: .message, forController: self, withContent:self.viewType == .roomPostDetailForFinder ?  self.room.phoneContact : self.roommate.phoneContact, completionHander: nil)
-        })
+        if viewType == .roomPostDetailForCreatedUser || viewType == .roommatePostDetailForCreatedUser{
+            if viewType == .roomPostDetailForCreatedUser{
+                let vc = CERoomPostVC()
+                vc.cERoomPostVCType = .edit
+                
+                presentInNewNavigationController(viewController: vc,flag: false)
+            }else{
+                let vc = CERoommatePostVC()
+                vc.cERoommateVCType = .edit
+                presentInNewNavigationController(viewController: vc,flag: false)
+            }
+        }else if viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
+            AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_POST_SMS_ALERT".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_MESSAGE".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
+                
+                Utilities.openSystemApp(type: .message, forController: self, withContent:self.viewType == .roomPostDetailForFinder ?  self.room.phoneContact : self.roommate.phoneContact, completionHander: nil)
+            })
+        }
+        
     }
     
     func optionViewDelegate(view optionView: OptionView, onClickBtnRight btnRight: UIButton) {
-        AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_POST_CALL_ALERT".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_CALL".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
-            
-            Utilities.openSystemApp(type: .phone, forController: self, withContent:self.viewType == .roomPostDetailForFinder ?  self.room.phoneContact : self.roommate.phoneContact, completionHander: nil)
-        })
+        if viewType == .roomPostDetailForCreatedUser || viewType == .roommatePostDetailForCreatedUser{
+            AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_TITLE_DELETE_ROOM".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_DELETE_ROOM_OK".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
+                self.requestRemovePost()
+            })
+        }else if viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
+            AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_POST_CALL_ALERT".localized, alertStyle: .alert, forViewController: self, lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_CALL".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
+                
+                Utilities.openSystemApp(type: .phone, forController: self, withContent:self.viewType == .roomPostDetailForFinder ?  self.room.phoneContact : self.roommate.phoneContact, completionHander: nil)
+            })
+        }
     }
     
     //MARK: UtilitiesViewDelegate
@@ -226,6 +265,48 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             customMessage.append(NSAttributedString(string: "Quantity: \(utility.quantity)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
             customMessage.append(NSAttributedString(string: "Description: \(utility.utilityDescription)", attributes: [NSAttributedStringKey.font:UIFont.small]))
             AlertController.showAlertInfoWithAttributeString(withTitle: customTitle, forMessage: customMessage, inViewController: self)
+        }
+    }
+    //MARK: API Connection
+    func requestRemovePost(){
+        //        roomFilter.searchRequestModel = nil
+        let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hub.mode = .indeterminate
+        hub.bezelView.backgroundColor = .white
+        hub.contentColor = .defaultBlue
+        DispatchQueue.global(qos: .background).async {
+            APIConnection.request(apiRouter: APIRouter.removePost(postId: self.viewType == .roomPostDetailForCreatedUser ? self.room.postId! : self.roommate.postId!),  errorNetworkConnectedHander: {
+                DispatchQueue.main.async {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+                }
+            }, completion: { (error, statusCode) -> (Void) in
+                DispatchQueue.main.async {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                }
+                if error != nil{
+                    DispatchQueue.main.async {
+                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+                    }
+                }else{
+                    if statusCode == .OK{
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_POST, object: self.room)
+                            AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "POST_REMOVE_SUCCESS".localized, inViewController:self,rhsButtonHandler:{
+                                (action) in
+                                self.dimissEntireNavigationController()
+                            })
+                            
+                            
+                            
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+                        }
+                    }
+                }
+            })
         }
     }
 }

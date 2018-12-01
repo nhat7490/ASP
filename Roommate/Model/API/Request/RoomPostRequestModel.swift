@@ -7,25 +7,30 @@
 //
 
 import Foundation
+import ObjectMapper
 class RoomPostRequestModel: BasePostResquestModel {
 //    
 //    //Just for room member
-//    var roomId:Int
-//    var name:String?
-//    var area:Int?
-//    var address:String
-//    var numberPatner:Int
-//    var utilities:[UtilityModel]
-//    var description:String
-//
-//    public init(post_id: Int?, phoneContact: String, genderPatner: Int, typeId: Int, userId: Int, cityId: Int,roomId: Int, name: String?, area: Int?, address: String, numberPatner: Int, utilities: [UtilityModel], description: String) {
-//        self.roomId = roomId
-//        self.name = name
-//        self.area = area
-//        self.address = address
-//        self.numberPatner = numberPatner
-//        self.utilities = utilities
-//        self.description = description
-//        super.init(post_id: post_id, phoneContact: phoneContact, genderPatner: genderPatner, typeId: typeId, userId: userId, cityId: cityId)
-//    }
+    var roomId:Int!
+    var name:String!
+    var numberPartner:Int = 1
+    var genderPartner:Int = 0
+    var roomDescription:String?
+    
+    override init() {
+        super.init()
+    }
+    required init?(map: Map) {
+        super.init(map: map)
+    }
+
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        roomId <- map["roomId"]
+        name <- map["name"]
+        numberPartner <- map["numberPartner"]
+        genderPartner <- map["genderPartner"]
+        roomDescription <- map["description"]
+
+    }
 }

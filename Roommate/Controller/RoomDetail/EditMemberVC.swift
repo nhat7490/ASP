@@ -311,7 +311,7 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
                             self.room.members = self.copyRoom.members
                             AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "EDIT_MEMBER_SUCCESS".localized, inViewController: self,rhsButtonHandler:{
                                 (action) in
-                                self.navigationController?.popViewController(animated: true)
+                                self.popSelfInNavigationController()
                             })
                             
                         }

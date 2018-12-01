@@ -110,7 +110,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     var selectedPrice:[Float]?
     var phoneNumber:String = ""
     weak var delegate:FilterVCDelegate?
-    
+    var cERoommateVCType:CEVCType = .create
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,8 +135,10 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     }
     
     func setupUI(){
+        title = cERoommateVCType == .create ? "CREATE_ROOMMATE_POST".localized : "EDIT_POST".localized
         edgesForExtendedLayout = .top// view above navigation bar
-        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
+        setBackButtonForNavigationBar()
+//        translateNavigationBarBottomBorder()
         let barButtonItem = UIBarButtonItem(title: "RESET".localized, style: .done, target: self, action: #selector(onClickBtnReset))
         barButtonItem.tintColor  = .defaultBlue
         navigationItem.rightBarButtonItem = barButtonItem
@@ -385,7 +387,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         hub.mode = .indeterminate
         hub.bezelView.backgroundColor = .white
         hub.contentColor = .defaultBlue
-        hub.label.text = "MB_LOAD_CREATE_ROOMMATE_POST".localized
+        hub.label.text = "MB_LOAD_CREATE_POST".localized
         DispatchQueue.global(qos: .userInteractive).async {
             APIConnection.request(apiRouter:APIRouter.createRoommatePost(model: self.roommatePostRequestModel),  errorNetworkConnectedHander: {
             DispatchQueue.main.async {
@@ -400,24 +402,24 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                 DispatchQueue.main.async {
                     APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
                 }
-            }else if error == .PARSE_RESPONSE_FAIL {
-                DispatchQueue.main.async {
-                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
-                }
             }else{
                 //200
                 if statusCode == .Created{
                     DispatchQueue.main.async {
                         hub.hide(animated: true)
                         self.currentUser.suggestSettingMappedModel = self.suggestSettingMappableModel
-                        let isTrue = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: UserModel(userMappedModel: self.currentUser))
-                        AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage:  "ROOMMATE_POST_CREATE_SUCCESS".localized, inViewController: self,rhsButtonHandler: {
+                        _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: UserModel(userMappedModel: self.currentUser))
+                        AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: self.cERoommateVCType == .create ? "POST_CREATE_SUCCESS".localized : "POST_EDIT_SUCCESS".localized, inViewController: self,rhsButtonHandler: {
                             (action) in
-                            self.navigationController?.dismiss(animated: true, completion:nil)
+                            if self.cERoommateVCType == .create{
+                                self.dimissEntireNavigationController()
+                            }else{
+                                self.popSelfInNavigationController()
+                            }
                         })
                         
                     }
-                }else  if statusCode == .Conflict{
+                }else  if statusCode == .Conflict || statusCode == .InternalServerError{
                     DispatchQueue.main.async {
                         APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
                     }

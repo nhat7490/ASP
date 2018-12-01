@@ -30,7 +30,7 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
     
     func setupUI(){
         title = "SETTING".localized
-        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
+        setBackButtonForNavigationBar()
         
         view.addSubview(settingActionTableView)
         _ = settingActionTableView.anchor(view.topAnchor, view.leftAnchor, view.bottomAnchor, view.rightAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
@@ -68,11 +68,12 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
         if user?.roleId == Constants.ROOMOWNER{
             switch indexPath.row{
             case 0:
-                DBManager.shared.deleteAllUsers()
                 let appdelegate = UIApplication.shared.delegate as! AppDelegate
                 appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) )
                 NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
-                self.navigationController?.dismiss(animated: true, completion: nil)
+                self.navigationController?.dismiss(animated: true, completion: {
+                    DBManager.shared.deleteAllUsers()
+                })
             default:
                 break
             }
@@ -81,11 +82,13 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
             case 0:
                 break
             case 1:
-                DBManager.shared.deleteAllUsers()
+                
                 let appdelegate = UIApplication.shared.delegate as! AppDelegate
                 appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) ) 
                 NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
-                self.navigationController?.dismiss(animated: true, completion: nil)
+                self.navigationController?.dismiss(animated: true, completion: {
+                    DBManager.shared.deleteAllUsers()
+                })
             default:
                 break
             }

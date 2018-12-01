@@ -25,6 +25,8 @@ class MaxMemberSelectView: UIView {
             self.lblContent.text = newValue
         }
     }
+    var minMember = Constants.MIN_MEMBER
+    var maxMember = Constants.MAX_MEMBER
     var delegate:MaxMemberSelectViewDelegate?
     
     override func awakeFromNib() {
@@ -49,7 +51,7 @@ class MaxMemberSelectView: UIView {
         
     }
     @IBAction func onClickBtnSub(_ sender: Any) {
-        guard let text = lblContent.text, let int = Int(text),int != Constants.MIN_MEMBER else {
+        guard let text = lblContent.text, let int = Int(text),int != minMember else {
             return
         }
         self.text = "\(int - 1)"
@@ -58,7 +60,7 @@ class MaxMemberSelectView: UIView {
     
     @IBAction func onClickBtnPlus(_ sender: UIButton) {
         
-        guard let text = lblContent.text, let int = Int(text),int != Constants.MAX_MEMBER else {
+        guard let text = lblContent.text, let int = Int(text),int != maxMember else {
             return
         }
         self.text = "\(int + 1)"

@@ -92,6 +92,8 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         //        navigationItem.rightBarButtonItem =  UIBarButtonItem(image: UIImage(named: "filter"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(onClickBtnSetting))
         //        navigationItem.rightBarButtonItem?.tintColor = .defaultBlue
         
+        navigationController?.navigationBar.isHidden = true
+        
         if #available(iOS 11.0, *) {
             self.scrollView.contentInsetAdjustmentBehavior = .never
         } else {
@@ -386,9 +388,9 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         case 1:
             vc.showAllVCType = .roomForMember
         case 2:
-            vc.showAllVCType = .roomPost
+            vc.showAllVCType = .roomPostForCreatedUser
         case 3:
-            vc.showAllVCType = .roommatePost
+            vc.showAllVCType = .roommatePostForCreatedUser
         default:
             break
             

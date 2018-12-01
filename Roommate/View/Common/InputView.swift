@@ -9,7 +9,7 @@
 import UIKit
 import SkyFloatingLabelTextField
 protocol NewInputViewDelegate:class {
-    func newInputViewDelegate(newInputView view:InputView,shouldChangeCharactersTo string:String)->Bool
+    func inputViewDelegate(inputView view:InputView,shouldChangeCharactersTo string:String)->Bool
 }
 class InputView: UIView,UITextFieldDelegate {
     @IBOutlet weak var tfInput: SkyFloatingLabelTextField!
@@ -23,6 +23,8 @@ class InputView: UIView,UITextFieldDelegate {
         }
     }
     var isSelectedFromSuggest:Bool = false
+    lazy var maxPrice = Constants.MAX_PRICE
+    lazy var minPrice = Constants.MIN_PRICE
     var inputViewType:InputViewType?{
         didSet{
             switch self.inputViewType! {
@@ -42,8 +44,9 @@ class InputView: UIView,UITextFieldDelegate {
 //                initData(title: "ROOM_ADDRESS_TITLE", placeHolder: "PLACE_HOLDER_ADDRESS")
             case .phone:
                 tfInput.addToobarButton()
-                tfInput.setupUI(placeholder: "ROOM_PHONE_TITLE", title: "ROOM_PHONE_TITLE", keyboardType: .numberPad, delegate: self)
-//                initData(title: "ROOM_PHONE_TITLE", placeHolder: "PLACE_HOLDER_PHONE")
+                tfInput.setupUI(placeholder: "PLACE_HOLDER_PHONE_NUMBER", title: "PLACE_HOLDER_PHONE_NUMBER", keyboardType: .numberPad, delegate: self)
+            case .roomPostName:
+                tfInput.setupUI(placeholder: "ROOM_POST_NAME", title: "ROOM_POST_NAME", delegate: self)
             }
         }
     }
@@ -77,11 +80,21 @@ class InputView: UIView,UITextFieldDelegate {
             }else{
                 tfInput.errorMessage = "ERROR_TYPE_NAME_MAX_CHAR_50".localized
             }
+        case .roomPostName:
+            if updatedString.count > Constants.MAX_LENGHT_NORMAL_TEXT{
+                return false
+            }
+            if updatedString.isValidName(){
+                tfInput.errorMessage = ""
+                
+            }else{
+                tfInput.errorMessage = "ERROR_TYPE_NAME_MAX_CHAR_50".localized
+            }
         case .price:
-            if updatedString.isValidPrice(){
+            if let value = updatedString.toDouble() , (value >= minPrice && value <= maxPrice){
                 tfInput.errorMessage = ""
             }else{
-                tfInput.errorMessage = "ERROR_TYPE_PRICE".localized
+                tfInput.errorMessage = String(format: "ERROR_TYPE_PRICE".localized, Int(minPrice).formatString,Int(maxPrice).formatString)
             }
         case .area:
             if updatedString.isValidArea(){
@@ -111,7 +124,7 @@ class InputView: UIView,UITextFieldDelegate {
                 tfInput.errorMessage = "ERROR_TYPE_PHONE".localized
             }
         }
-        return delegate?.newInputViewDelegate(newInputView: self, shouldChangeCharactersTo: updatedString) ?? false
+        return delegate?.inputViewDelegate(inputView: self, shouldChangeCharactersTo: updatedString) ?? false
         
     }
     

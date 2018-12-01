@@ -40,6 +40,11 @@ enum APIRouter:URLRequestConvertible{
     case createUser(model:UserMappableModel)
     case searchPostByAddress(model:SearchRequestModel)
     case createRoommatePost(model: RoommatePostRequestModel)
+    case createRoomPost(model: RoomPostRequestModel)
+    case editRoomPost(model: RoomPostRequestModel)
+    case editRoommatePost(model: RoommatePostRequestModel)
+    case removePost(postId: Int)
+    
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -50,11 +55,11 @@ enum APIRouter:URLRequestConvertible{
     }
     
     var httpMethod:HTTPMethod{
-        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.editMember,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost:
+        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost,.createRoomPost:
             return .post
-        case .removeBookmark,.removeRoom:
+        case .removeBookmark,.removeRoom,.removePost:
             return .delete
-        case .updateRoom:
+        case .updateRoom,.editRoomPost,.editMember,.editRoommatePost:
             return .put
         default:
             return .get
@@ -116,6 +121,14 @@ enum APIRouter:URLRequestConvertible{
             return "post/search";
         case .createRoommatePost:
             return "post/createRoommatePost";
+        case .createRoomPost:
+            return "post/createRoomPost";
+        case .editRoomPost:
+            return "post/updateRoomPost";
+        case .editRoommatePost:
+            return "post/updateRoommatePost";
+        case .removePost(let postId):
+            return "post/delete/\(postId)";
         }
     }
     
@@ -167,6 +180,10 @@ enum APIRouter:URLRequestConvertible{
         case .searchPostByAddress(let model):
             return Mapper().toJSON(model)
         case .createRoommatePost(let model):
+            return Mapper().toJSON(model)
+        case .createRoomPost(let model):
+            return Mapper().toJSON(model)
+        case .editRoomPost(let model):
             return Mapper().toJSON(model)
         default:
             return [:]

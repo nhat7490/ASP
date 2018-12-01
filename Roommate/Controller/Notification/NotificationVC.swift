@@ -37,6 +37,7 @@ class NotificationVC:UIViewController,UICollectionViewDelegate,UICollectionViewD
     }
     func setupUI() {
         //For collectionView
+        navigationController?.navigationBar.isHidden = true
         view.addSubview(collectionView)
         _ = collectionView.anchorTopLeft( view.topAnchor,  view.leftAnchor,  view.widthAnchor,  view.heightAnchor)
         collectionView.register(NotificationCVCell.self, forCellWithReuseIdentifier:Constants.CELL_NOTIFICATIONCV)

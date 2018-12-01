@@ -33,7 +33,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
 //    }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        setBackButtonForNavigationBar(isEmbedInNewNavigationController:  false)
+        setBackButtonForNavigationBar()
         imgvIcon.layer.cornerRadius = 15
         imgvIcon.clipsToBounds = true
         
@@ -139,9 +139,11 @@ class SignInVC: BaseVC,UITextFieldDelegate {
                     let appdelegate = UIApplication.shared.delegate as! AppDelegate
                     appdelegate.window!.rootViewController = self.mainTabBarVC
                     
-                    //403
-                }else if statusCode == .Forbidden {
-                    APIResponseAlert.apiResponseError(controller: self, type: .invalidPassword)
+                    //403 || 404
+                }else if statusCode == .Forbidden || statusCode == .NotFound {
+                    APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.invalidUsernameOrPassword)
+                }else{
+                    APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
                 }
             }
         }

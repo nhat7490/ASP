@@ -81,7 +81,7 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
     func setupUI(){
         title = "SEARCH".localized
         
-        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
+        setBackButtonForNavigationBar()
         //Add View
         view.addSubview(collectionView)
         

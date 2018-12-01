@@ -19,8 +19,8 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
             }
         }
     }
-    
-    let scrollView:UIScrollView = {
+
+    lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
         sv.bounces = false
         sv.showsVerticalScrollIndicator = false
@@ -29,16 +29,16 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         
         
     }()
-    let contentView:UIView={
+    lazy var contentView:UIView={
         let cv = UIView()
         return cv
     }()
-    var horizontalImagesView:HorizontalImagesView = {
+    lazy var horizontalImagesView:HorizontalImagesView = {
         let hv:HorizontalImagesView = .fromNib()
         return hv
     }()
     
-    var baseInformationView:BaseInformationView = {
+    lazy var baseInformationView:BaseInformationView = {
         let bv:BaseInformationView = .fromNib()
         return bv
     }()
@@ -47,29 +47,29 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
 //        let gv:GenderView = .fromNib()
 //        return gv
 //    }()
-    
-    var membersView:MembersView = {
+
+    lazy var membersView:MembersView = {
         let mv:MembersView = .fromNib()
         return mv
     }()
-    
-    var utilitiesView:UtilitiesView = {
+
+    lazy var utilitiesView:UtilitiesView = {
         let uv:UtilitiesView = .fromNib()
         return uv
     }()
-    
-    
-    var descriptionsView:DescriptionView = {
+
+
+    lazy var descriptionsView:DescriptionView = {
         let dv:DescriptionView = .fromNib()
         return dv
     }()
-    
-    var optionView:OptionView = {
+
+    lazy var optionView:OptionView = {
         let ov:OptionView = .fromNib()
         return ov
     }()
-    
-    var viewType:ViewType = .detailForOwner
+
+    lazy var viewType:ViewType = .detailForOwner
     
     
     //MARK: RoomDetailVC
@@ -93,12 +93,15 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     
     func setupUI() {
         //Navigation bar
-        let backImage = UIImage(named: "back")
-        setBackButtonForNavigationBar(isEmbedInNewNavigationController: true)
-        
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.backgroundColor = .clear
+//        title = "ROOM_INFOR_TITLE".localized
+        setBackButtonForNavigationBar()
+        transparentNavigationBarBottomBorder()
+//        let backImage = UIImage(named: "back")
+//
+//
+//        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//        navigationController?.navigationBar.shadowImage = UIImage()
+//        navigationController?.navigationBar.backgroundColor = .clear
         if #available(iOS 11, *){
             scrollView.contentInsetAdjustmentBehavior = .never
         }else{
@@ -162,11 +165,8 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
                                                                                                           NSAttributedStringKey.foregroundColor:UIColor.white])
         //Data for baseInformationView
         horizontalImagesView.images = room.imageUrls
-        baseInformationView.lblMainTitle.text = room.name
-        baseInformationView.lblTitleDescription.attributedText = status
-        baseInformationView.lblSubTitle.text = "BASE_INFORMATION".localized
-        baseInformationView.tvInfoTop.text = room.address
-        baseInformationView.lblInfoBottom.text = String(format: "AREA".localized,room.area)
+        baseInformationView.viewType = viewType
+        baseInformationView.room = room
         
 //        //Data for genderview
 //        genderView.viewType = viewType
@@ -219,7 +219,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         if room.statusId == Constants.AUTHORIZED{
             let vc = EditMemberVC()
             vc.room = room
-            self.navigationController?.pushViewController(vc, animated: true)
+            presentInNewNavigationController(viewController: vc,flag: false)
         }else{
             AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "INVALID_ROOM_STATUS".localized, inViewController: self)
         }
@@ -246,9 +246,9 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         case .detailForOwner:
             AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_TITLE_EDIT_ROOM".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_EDIT_ROOM_OK".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
                 let vc = CERoomVC()
-                vc.newRoomModel = self.room
+                vc.roomMappableModel = self.room
                 vc.cERoomVCType = .edit
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.presentInNewNavigationController(viewController: vc,flag: false)
             })
         case .detailForMember:
             AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_SMS_ALERT".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_MESSAGE".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
@@ -306,7 +306,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
                             NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_ROOM, object: self.room)
                             AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "REMOVE_SUCCESS".localized, inViewController:self,rhsButtonHandler:{
                                 (action) in
-                                self.navigationController?.dismiss(animated: true, completion: nil)
+                                self.dimissEntireNavigationController()
                             })
                             
                             

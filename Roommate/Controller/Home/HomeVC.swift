@@ -95,7 +95,7 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     var baseSuggestRequestModel = BaseSuggestRequestModel()
     var setting:SettingMappableModel?{
         get{
-            return SettingMappableModel(settingModel: DBManager.shared.getSingletonModel(ofType: SettingModel.self)!)
+            return SettingMappableModel(settingModel: DBManager.shared.getSingletonModel(ofType: SettingModel.self) ?? SettingModel())
         }
     }
     var actionsForRoomMaster:[[String]] = [
@@ -150,7 +150,7 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     }
     //MARK: Setup UI and Delegate
     func setupUI(){
-        translateNavigationBarBottomBorder()
+        transparentNavigationBarBottomBorder()
 //        extendedLayoutIncludesOpaqueBars = true
         let suggestRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
         let newRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
@@ -508,6 +508,8 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
 ////
 ////            }
 ////
+            let vc = CERoomPostVC()
+            presentInNewNavigationController(viewController: vc)
             break
         default:
             break
@@ -520,10 +522,12 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     }
     //MARK: LocationSearchViewDelegate
     func locationSearchViewDelegate(locationSearchView view: LocationSearchView, onClickButtonLocation btnLocation: UIButton) {
-        let alert = AlertController.showAlertList(withTitle: "LIST_CITY_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .city, forViewController: self, data: cities?.map({ (city) -> String     in
-            city.name!
-        }), rhsButtonTitle: "DONE".localized)
-        alert.delegate = self
+        if NetworkStatus.isConnected(){
+            let alert = AlertController.showAlertList(withTitle: "LIST_CITY_TITLE".localized, andMessage: nil, alertStyle: .alert,alertType: .city, forViewController: self, data: cities?.map({ (city) -> String     in
+                city.name!
+            }), rhsButtonTitle: "DONE".localized)
+            alert.delegate = self
+        }
     }
     //MARK: UIAlertControllerDelegate
     override func alertControllerDelegate(alertController: AlertController,withAlertType type:AlertType, onCompleted indexs: [IndexPath]?) {

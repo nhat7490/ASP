@@ -45,7 +45,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         registerNotificationForKeyboard()
     }
     func setupUI(){
-        setBackButtonForNavigationBar(isEmbedInNewNavigationController: false)
+        setBackButtonForNavigationBar()
         vTop.layer.cornerRadius = 15
         vTop.clipsToBounds = true
         

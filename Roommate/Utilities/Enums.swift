@@ -43,7 +43,7 @@ enum SystemAppType {
     case phone, message, email
 }
 enum ViewType{
-    case detailForOwner,detailForMember,createForOwner,roomPostDetailForFinder,roommatePostDetailForFinder,editForOwner
+    case detailForOwner,detailForMember,createForOwner,roomPostDetailForFinder,roomPostDetailForCreatedUser,roommatePostDetailForCreatedUser,roommatePostDetailForFinder,editForOwner,ceRoomPostForMaster
 }
 enum DropdownListViewType{
     case city,district,roomMaster
@@ -61,7 +61,7 @@ enum AllVCType{
 }
 
 enum ShowAllVCType{
-    case suggestRoom,roomForOwner,roomForMember,roomPost,roommatePost
+    case suggestRoom,roomForOwner,roomForMember,roomPostForCreatedUser,roommatePostForCreatedUser
 }
 
 enum AccountVCType{
@@ -72,7 +72,7 @@ enum FilterVCType{
     case room,roommate
 }
 enum InputViewType{
-    case roomName,price,area,address,phone
+    case roomName,price,area,address,phone,roomPostName
 }
 
 enum HTTPStatusCode: Int {
@@ -163,3 +163,7 @@ enum ImageCVCellType{
 enum RequestType{
     case room,suggest
 }
+enum RateCVCellType{
+    case room,suggest
+}
+

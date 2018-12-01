@@ -84,6 +84,7 @@
 		6943D9A82153F5F3002CFEBB /* ListRoommateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A72153F5F3002CFEBB /* ListRoommateVC.swift */; };
 		6943D9AA2153F65E002CFEBB /* RoleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A92153F65E002CFEBB /* RoleVC.swift */; };
 		6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9AD2153FA14002CFEBB /* LocalizationPreferences.swift */; };
+		6943EE5D21AFDCEC00A61DDE /* RateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943EE5C21AFDCEC00A61DDE /* RateVC.swift */; };
 		6953440221A67E9B0027D84B /* IconTitleCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953440021A67E9B0027D84B /* IconTitleCVCell.swift */; };
 		6953440321A67E9B0027D84B /* IconTitleCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6953440121A67E9B0027D84B /* IconTitleCVCell.xib */; };
 		695B1A2D21898BA900C004DB /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695B1A2C21898BA900C004DB /* SettingModel.swift */; };
@@ -179,6 +180,8 @@
 		69F4EDFB216F629A006998A7 /* InputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69F4EDFA216F629A006998A7 /* InputView.xib */; };
 		69F4EDFD216F62A6006998A7 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F4EDFC216F62A6006998A7 /* InputView.swift */; };
 		69F6BECC216B759500DFD3B3 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F6BECB216B759500DFD3B3 /* UserModel.swift */; };
+		69FCC85E21AEFE4100D187C1 /* RateCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FCC85C21AEFE4100D187C1 /* RateCVCell.swift */; };
+		69FCC85F21AEFE4100D187C1 /* RateCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69FCC85D21AEFE4100D187C1 /* RateCVCell.xib */; };
 		C0D680C4CE1811944AB4B691 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D68EAA07119A21C4B2B4DD /* DBManager.swift */; };
 		C0D680F821FFA53DBD73EC50 /* BasePostRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D687CC03309A09A15B6DCA /* BasePostRequestModel.swift */; };
 		C0D682615994038C055616A3 /* RoommatePostRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D68E80AC0B1DB9F607C64C /* RoommatePostRequestModel.swift */; };
@@ -271,6 +274,7 @@
 		6943D9A72153F5F3002CFEBB /* ListRoommateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRoommateVC.swift; sourceTree = "<group>"; };
 		6943D9A92153F65E002CFEBB /* RoleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleVC.swift; sourceTree = "<group>"; };
 		6943D9AD2153FA14002CFEBB /* LocalizationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationPreferences.swift; sourceTree = "<group>"; };
+		6943EE5C21AFDCEC00A61DDE /* RateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateVC.swift; sourceTree = "<group>"; };
 		694F2FF8216BF00E0005323A /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		694F2FFA216BF00E0005323A /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6953440021A67E9B0027D84B /* IconTitleCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTitleCVCell.swift; sourceTree = "<group>"; };
@@ -377,6 +381,8 @@
 		69F6BECD216B761600DFD3B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		69F6BECF216B762500DFD3B3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		69F6BED1216B762C00DFD3B3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		69FCC85C21AEFE4100D187C1 /* RateCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateCVCell.swift; sourceTree = "<group>"; };
+		69FCC85D21AEFE4100D187C1 /* RateCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RateCVCell.xib; sourceTree = "<group>"; };
 		7108C76CDC3840CC93B3D71C /* Pods_Roommate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roommate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		886F5C280B014BE8CFB24F09 /* Pods-Roommate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roommate.release.xcconfig"; path = "Pods/Target Support Files/Pods-Roommate/Pods-Roommate.release.xcconfig"; sourceTree = "<group>"; };
 		BED42C13279C1047F3CA8DCD /* Pods-Roommate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roommate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Roommate/Pods-Roommate.debug.xcconfig"; sourceTree = "<group>"; };
@@ -407,7 +413,6 @@
 			children = (
 				6925AA932164B03100232311 /* RoomDetaillVC.swift */,
 				690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */,
-				690B2066215BA14500DAD053 /* PostDetailVC.swift */,
 				69355ED1218CC09D003339E2 /* EditMemberVC.swift */,
 			);
 			path = RoomDetail;
@@ -518,6 +523,15 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		6943EE5E21AFDCFF00A61DDE /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				6943EE5C21AFDCEC00A61DDE /* RateVC.swift */,
+				690B2066215BA14500DAD053 /* PostDetailVC.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		69588FE4217330CC00894F0D /* Request */ = {
 			isa = PBXGroup;
 			children = (
@@ -538,17 +552,17 @@
 		69588FE5217330DB00894F0D /* Response */ = {
 			isa = PBXGroup;
 			children = (
-				690A61E121766E9C00BA9564 /* RoomPostResponseModel.swift */,
 				690A61E32176850500BA9564 /* UserResponseModel.swift */,
-				6993A72B217CBC3B00E8112C /* RoommatePostResponseModel.swift */,
 				690660592180CED500E446F9 /* CreateResponseModel.swift */,
-				692EE6712181F70B004E5D10 /* BasePostResponseModel.swift */,
 				69AFA9D821837C3D004244C6 /* GPAutocompletePrediction.swift */,
 				69AFA9DA21837CC2004244C6 /* GPPrediction.swift */,
 				69AFA9DC21837F45004244C6 /* GPPlaceResult.swift */,
 				6906E4152187F7EB001C4E61 /* UploadImageResponseModel.swift */,
 				69AD763F218B591C0073CD27 /* MemberResponseModel.swift */,
 				6940E14621A52AED00ABB2A7 /* SearchResponseModel.swift */,
+				690A61E121766E9C00BA9564 /* RoomPostResponseModel.swift */,
+				6993A72B217CBC3B00E8112C /* RoommatePostResponseModel.swift */,
+				692EE6712181F70B004E5D10 /* BasePostResponseModel.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -700,6 +714,8 @@
 				69CC88462193672400ADC0FA /* ActionTVCell.xib */,
 				6953440021A67E9B0027D84B /* IconTitleCVCell.swift */,
 				6953440121A67E9B0027D84B /* IconTitleCVCell.xib */,
+				69FCC85C21AEFE4100D187C1 /* RateCVCell.swift */,
+				69FCC85D21AEFE4100D187C1 /* RateCVCell.xib */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -785,6 +801,7 @@
 		69A02FE221538D010087897F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				6943EE5E21AFDCFF00A61DDE /* Common */,
 				696219002163FDCE00044EB4 /* Filter */,
 				690B2068215BA26500DAD053 /* RoomDetail */,
 				6943D98D2153F29E002CFEBB /* FirstLaunch */,
@@ -1002,6 +1019,7 @@
 				6907E89F2160E42C009A5F25 /* UtilitiesView.xib in Resources */,
 				6993A728217CBB8200E8112C /* RoommatePostCVCell.xib in Resources */,
 				69AD7644218B5F8E0073CD27 /* RoomCVCell.xib in Resources */,
+				69FCC85F21AEFE4100D187C1 /* RateCVCell.xib in Resources */,
 				695B1A392189C73000C004DB /* InfoPlist.strings in Resources */,
 				69B7D45E21649CF800B3E942 /* DropdownListView.xib in Resources */,
 				697A752F2163188800B7618B /* MembersView.xib in Resources */,
@@ -1079,6 +1097,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Roommate/Pods-Roommate-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
+				"${BUILT_PRODUCTS_DIR}/Cosmos/Cosmos.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
@@ -1095,6 +1114,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cosmos.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
@@ -1153,6 +1173,7 @@
 				69DC86E02188AEF600D776A2 /* UploadImageModel.swift in Sources */,
 				6943D9822153F121002CFEBB /* CERoomPostVC.swift in Sources */,
 				690660562180883D00E446F9 /* FilterRequestModel.swift in Sources */,
+				6943EE5D21AFDCEC00A61DDE /* RateVC.swift in Sources */,
 				690A61E42176850500BA9564 /* UserResponseModel.swift in Sources */,
 				692E8FA2216371BD00AF5927 /* GenderView.swift in Sources */,
 				697F05B5218AD8AB0010C681 /* NoDataView.swift in Sources */,
@@ -1222,6 +1243,7 @@
 				69CC883C21934E5F00ADC0FA /* UserView.swift in Sources */,
 				69355ED2218CC09D003339E2 /* EditMemberVC.swift in Sources */,
 				6993A72A217CBBBC00E8112C /* RoommatePostCVCell.swift in Sources */,
+				69FCC85E21AEFE4100D187C1 /* RateCVCell.swift in Sources */,
 				69ECD510217DB8EC00976B33 /* BookmarkRequestModel.swift in Sources */,
 				6940E14721A52AED00ABB2A7 /* SearchResponseModel.swift in Sources */,
 				69C9F333219159BE00C15E43 /* ShowAllVC.swift in Sources */,

@@ -112,7 +112,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     }
     
     func setupUI(){
-        
+        setBackButtonForNavigationBar()
         edgesForExtendedLayout = .top// view above navigation bar
         let barButtonItem = UIBarButtonItem(title: "RESET".localized, style: .done, target: self, action: #selector(onClickBtnReset))
         barButtonItem.tintColor  = .defaultBlue
@@ -175,6 +175,8 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         selectedPrice?.append(400_000)
         selectedPrice?.append(40_000_000)
         selectedGender = .none
+        cityDropdownListView.dropdownListViewType = .city
+        districtDropdownListView.dropdownListViewType = .district
         if let setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self), let city = DBManager.shared.getRecord(id: setting.cityId, ofType: CityModel.self){
             selectedCity = city
             cityDropdownListView.text = selectedCity?.name
@@ -187,8 +189,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
                     selectedDistricts = districts.map({ (districtId) -> DistrictModel   in
                         DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)!
                     })
-                    let dictristString = selectedDistricts?.compactMap{$0.name}
-                    districtDropdownListView.text = dictristString?.joined(separator: ",")
+                    districtDropdownListView.text = selectedDistricts?.compactMap{$0.name}.joined(separator: ",")
                 }
                 cityDropdownListView.text = selectedCity?.name
             }
@@ -320,7 +321,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
         filterArgumentModel.filterRequestModel?.utilities = utilities
         
         self.delegate?.filterVCDelegate(filterVC: self, onCompletedWithFilter: filterArgumentModel)
-        self.navigationController?.popViewController(animated: true)
+        dimissEntireNavigationController()
     }
     //MARK: Handler for reset button
     @objc  func onClickBtnReset(){

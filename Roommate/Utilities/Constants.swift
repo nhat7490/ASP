@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://192.168.100.112:8080/"
+    static let BASE_URL_API = "http://192.168.100.126:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
@@ -126,7 +126,7 @@ class Constants{
 
     //MARK: Common Lenght
     static let MAX_MEMBER:Int = 10
-    static let MIN_MEMBER:Int = 0
+    static let MIN_MEMBER:Int = 1
     static let MAX_PRICE:Double = 50_000_000.0
     static let MIN_PRICE:Double = 300_000.0
     static let MAX_QUANTITY:Int = 20
@@ -138,7 +138,7 @@ class Constants{
     static let MAX_LENGHT_NORMAL_TEXT:Int = 50
 
     //MARK: Common width
-    static let WIDTH_LOCATION_VIEW:CGFloat = 65.0
+    static let WIDTH_LOCATION_VIEW:CGFloat = 100.0
 
     //MARK: Common
     static let MAX_Y_OFFSET:CGFloat = 50.0
@@ -166,6 +166,9 @@ class Constants{
     static let NOTIFICATION_EDIT_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_EDIT_ROOM")
     static let NOTIFICATION_EDIT_ROOM_MEMBER:NSNotification.Name = NSNotification.Name("NOTIFICATION_EDIT_ROOM_MEMBER")
     static let NOTIFICATION_CREATE_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_CREATE_ROOM")
+    
+    static let NOTIFICATION_REMOVE_POST:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_POST")
+    static let NOTIFICATION_EDIT_POST:NSNotification.Name = NSNotification.Name("NOTIFICATION_EDIT_POST")
     
     static let NOTIFICATION_SIGNOUT:NSNotification.Name = NSNotification.Name("NOTIFICATION_SIGNOUT")
     

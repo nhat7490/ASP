@@ -84,7 +84,7 @@ class APIConnection: NSObject {
                 }else{
                     //Error to convert json to object
                     //Default code 404,403 cause error parse response to json
-                    if let statusCode = response.response?.statusCode{
+                    if let statusCode = response.response?.statusCode ,statusCode != 500{
                         completion(nil,nil,HTTPStatusCode(rawValue: statusCode))
                     }else{
                         //PARSE_RESPONSE_FAIL

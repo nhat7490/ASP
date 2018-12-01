@@ -9,6 +9,8 @@
 "FILTER"="Bộ lọc";
 "CREATE_ROOM"="Đăng phòng";
 "CREATE_ROOMMATE_POST"="Đăng tìm phòng";
+"CREATE_ROOM_POST"="Đăng tìm ở ghép";
+"EDIT_POST"="Sửa bài viết";
 "ALL_VC"="Tất cả";
 "BOOKMARK_VC"="Đánh dấu";
 "SIGN_IN_TITLE" = "Đăng nhập";
@@ -62,8 +64,8 @@
 //MARK: HOMEVC
 "PLACE_HOLDER_SEARCH"="Tìm địa chỉ quận...";
 "TITLE_SUGGEST_ROOM" = "Phòng ở ghép có thể phù hợp với bạn";
-"TITLE_NEW_ROOM" = "Bài đăng tìm người ở ghép mới";
-"TITLE_NEW_ROOMMATE" = "Bài đăng tìm phòng mới";
+"TITLE_NEW_ROOM" = "Bài viết tìm người ở ghép mới";
+"TITLE_NEW_ROOMMATE" = "Bài viết tìm phòng mới";
 "TITLE_VIEW_ALL" = "Xem tất cả";
 "TITLE_SUGGEST" = "Gợi ý";
 "TITLE_HISTORY" = "Lịch sử tìm kiếm";
@@ -177,7 +179,7 @@
 "ERROR_TYPE_NAME_MAX_CHAR_50"="Tên Từ 6 đến 50 ký tự";
 "ERROR_TYPE_QUANTITY"="Số lượng Từ 1 đến 20";
 "ERROR_TYPE_BRAND"="Nhãn Từ 2 đến 50 ký tự";
-"ERROR_TYPE_PRICE"="Giá từ 300,000 VND đến 50,000,000 VND";
+"ERROR_TYPE_PRICE"="Giá từ %@ đến %@";
 "ERROR_TYPE_CITY"="Yêu cầu chọn";
 "ERROR_TYPE_DISTRICT"="Yêu cầu chọn";
 "ERROR_TYPE_AREA"="Diện tích từ 10 - 1000 m2";
@@ -198,15 +200,18 @@
 "PLACE_HOLDER_REPEAT_PASSWORD"="Nhập lại mật khẩu";
 
 //MARK: CERoomPostVC
-"ROOM_POST_INFOR_TITLE"="Thông tin bài đăng";
+"ROOM_POST_INFOR_TITLE"="Thông tin bài biết";
+"ROOM_POST_NAME"="Tên bài viết";
+"ROOM_BASE_INFORMATION"="Thông tin phòng hiện tại của bạn";
+"VIEW_DETAIL" = "Xem chi tiết";
 
 
 //MARK: CERoommatePostVC
-"ROOM_POST_SETTING_TITLE"="Thông tin bài đăng (Thông tin này sẽ được cập nhập cho cài đặt gợi ý)";
+"ROOM_POST_SETTING_TITLE"="Thông tin bài viết (Thông tin này sẽ được cập nhập cho cài đặt gợi ý)";
 "ROOM_POST_PHONE_CONTACT"="Thông tin liên hệ";
-"ROOMMATE_POST_CREATE_SUCCESS"="Tạo bài viết thành công";
-
-
+"POST_CREATE_SUCCESS"="Tạo bài viết thành công";
+"POST_EDIT_SUCCESS"="Sửa bài viết thành công";
+"POST_REMOVE_SUCCESS"="Xoá bài viết thành công";
 
 
 
@@ -219,7 +224,6 @@
 "ROOM_ADDRESS_TITLE"="Địa chỉ";
 "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT"="Địa chỉ: Yêu cầu chọn quận";
 "ROOM_AREA_TITLE"="Diện tích";
-"ROOM_PHONE_TITLE"="Số điện thoại";
 "ROOM_FIND_NUMBER_OF_PERSON_TITLE"="Số người cần tìm";
 "ROOM_HOLDER_CITY_TITLE"="Chọn ngay";
 "ROOM_DISTRICT_TITLE"="Chọn ngay";
@@ -274,7 +278,7 @@
 "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Oops.Lỗi máy chủ, chạm để thử lại";
 //MARK: Alert
 "ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
-"ALERT_INVALID_USERNAME_PASSWORD_MESSAGE"="Tên đăng nhập hoặc tài khoản không đúng";
+"ALERT_INVALID_USERNAME_PASSWORD_MESSAGE"="Tên đăng nhập hoặc mật khẩu không đúng";
 
 "ALERT_NON_EXIST_USERNAME"="Tên người dùng không tồn tại";
 "EXISTED_USER"="Tên người dùng đã tồn tại";
@@ -292,8 +296,25 @@
 "MB_LOAD_DATA_TITLE" = "Đang tải dữ liệu";
 "MB_LOAD_UPLOAD_IMAGE" = "Đang tải ảnh lên";
 "MB_LOAD_CREATE_ROOM" = "Đang tạo phòng";
-"MB_LOAD_CREATE_ROOMMATE_POST" = "Đang tạo bài viết";
+"MB_LOAD_CREATE_POST" = "Đang tạo bài viết";
+
 "MB_LOAD_CREATE_USER" ="Đang Đăng ký";
 "MB_LOAD_EDIT_ROOM" = "Đang cập nhập thông tin phòng";
 
 "SEARCH_LOADING"="Đang tìm kiếm...";
+//MARK:Utility
+"Camera"="Camera an ninh";
+"Freetime"="Giờ giấc tự do";
+"Airconditioner"="Máy lạnh";
+"Cooking"="Nấu ăn";
+"Fan"="Quạt";
+"Bed"="Giường";
+"Internet"="Internet";
+"Notcommonowner"="Không chung chủ";
+"Parking"="Chỗ đậu xe";
+"Police"="Bảo vệ";
+"Fridge"="Tủ lạnh";
+"TV"="Tivi";
+"PrivateWC"="WC riêng";
+"Washingmachine"="Máy giặt";
+"Waterheater"="Máy nước nóng";
