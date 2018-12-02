@@ -29,7 +29,6 @@ public class RoomRateController {
     }
 
 
-    @Transactional
     @PostMapping("/roomrate/create")
     public ResponseEntity createRoomRate(@RequestBody RoomRateRequestModel roomRateRequestModel) {
         TbRoomRate roomRate = roomRateService.findAllByRoomIdAndUserId(roomRateRequestModel.getRoomId(), roomRateRequestModel.getUserId());

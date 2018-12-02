@@ -194,59 +194,59 @@ public class RoomController {
                     room.setLongtitude(roomRequestModel.getLongitude());
                     room.setLattitude(roomRequestModel.getLatitude());
                     roomService.saveRoom(room);
-                }
 
-                //update room utilities
-                roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomRequestModel.getRoomId());
+                    //update room utilities
+                    roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomRequestModel.getRoomId());
 
-                for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
-                    TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
-                    roomHasUtility.setId(0);
-                    roomHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
-                    roomHasUtility.setRoomId(roomRequestModel.getRoomId());
-                    roomHasUtility.setBrand(utilityRequestModel.getBrand());
-                    roomHasUtility.setDescription(utilityRequestModel.getDescription());
-                    roomHasUtility.setQuantity(utilityRequestModel.getQuantity());
-                    roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
-                }
+                    for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
+                        TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
+                        roomHasUtility.setId(0);
+                        roomHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
+                        roomHasUtility.setRoomId(roomRequestModel.getRoomId());
+                        roomHasUtility.setBrand(utilityRequestModel.getBrand());
+                        roomHasUtility.setDescription(utilityRequestModel.getDescription());
+                        roomHasUtility.setQuantity(utilityRequestModel.getQuantity());
+                        roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
+                    }
 
-                //update room images
-                imageService.deleteAllImageByRoomId(roomRequestModel.getRoomId());
+                    //update room images
+                    imageService.deleteAllImageByRoomId(roomRequestModel.getRoomId());
 
-                for (String url : roomRequestModel.getImageUrls()) {
-                    TbImage image = new TbImage();
-                    image.setImageId(0);
-                    image.setRoomId(roomRequestModel.getRoomId());
-                    image.setLinkUrl(url);
-                    imageService.saveImage(image);
-                }
+                    for (String url : roomRequestModel.getImageUrls()) {
+                        TbImage image = new TbImage();
+                        image.setImageId(0);
+                        image.setRoomId(roomRequestModel.getRoomId());
+                        image.setLinkUrl(url);
+                        imageService.saveImage(image);
+                    }
 
-                roomHasUsers.forEach(tbRoomHasUser -> {
-                    TbUser tbUser = userService.findById(tbRoomHasUser.getUserId());
+                    roomHasUsers.forEach(tbRoomHasUser -> {
+                        TbUser tbUser = userService.findById(tbRoomHasUser.getUserId());
 
-                    if (tbUser.getRoleId() == ROOM_MASTER) {
-                        TbPost post = postService.findAllByUserIdAndRoomIdOrderByDatePostDesc(tbUser.getUserId()
-                                , roomRequestModel.getRoomId());
+                        if (tbUser.getRoleId() == ROOM_MASTER) {
+                            TbPost post = postService.findAllByUserIdAndRoomIdOrderByDatePostDesc(tbUser.getUserId()
+                                    , roomRequestModel.getRoomId());
 
-                        if (post != null && post.getDatePost().getTime() > tbRoomHasUser.getDateIn().getTime()) {
-                            post.setMinPrice(roomRequestModel.getPrice());
-                            postService.savePost(post);
-                            postHasUtilityService.deleteAllPostHasUtilityByPostId(roomRequestModel.getRoomId());
+                            if (post != null && post.getDatePost().getTime() > tbRoomHasUser.getDateIn().getTime()) {
+                                post.setMinPrice(roomRequestModel.getPrice());
+                                postService.savePost(post);
+                                postHasUtilityService.deleteAllPostHasUtilityByPostId(roomRequestModel.getRoomId());
 
-                            for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
-                                TbPostHasUtility postHasUtility = new TbPostHasUtility();
-                                postHasUtility.setId(0);
-                                postHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
-                                postHasUtility.setPostId(post.getPostId());
-                                postHasUtility.setBrand(utilityRequestModel.getBrand());
-                                postHasUtility.setDescription(utilityRequestModel.getDescription());
-                                postHasUtility.setQuantity(utilityRequestModel.getQuantity());
-                                postHasUtilityService.save(postHasUtility);
+                                for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
+                                    TbPostHasUtility postHasUtility = new TbPostHasUtility();
+                                    postHasUtility.setId(0);
+                                    postHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
+                                    postHasUtility.setPostId(post.getPostId());
+                                    postHasUtility.setBrand(utilityRequestModel.getBrand());
+                                    postHasUtility.setDescription(utilityRequestModel.getDescription());
+                                    postHasUtility.setQuantity(utilityRequestModel.getQuantity());
+                                    postHasUtilityService.save(postHasUtility);
+                                }
                             }
                         }
-                    }
-                });
-                return ResponseEntity.status(OK).build();
+                    });
+                    return ResponseEntity.status(OK).build();
+                }
             }
             return ResponseEntity.status(CONFLICT).build();
         } catch (Exception e) {

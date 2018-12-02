@@ -31,31 +31,56 @@ public class ReferenceController {
     }
 
     @Transactional
-    @PostMapping("/reference/create")
+    @PostMapping("/reference/save")
     public ResponseEntity createReference(@RequestBody FilterArgumentModel filterArgumentModel) {
         try {
             List<Double> prices = filterArgumentModel.getFilterRequestModel().getPrice();
 
-            TbReference reference = new TbReference();
-            reference.setMinPrice(prices.get(0));
-            reference.setMaxPrice(prices.get(1));
-            reference.setUserId(filterArgumentModel.getUserId());
-            referenceService.save(reference);
+            TbReference checkReference = referenceService.getByUserId(filterArgumentModel.getUserId());
+            if (checkReference == null){
+                TbReference reference = new TbReference();
+                reference.setMinPrice(prices.get(0));
+                reference.setMaxPrice(prices.get(1));
+                reference.setUserId(filterArgumentModel.getUserId());
+                referenceService.save(reference);
 
-            for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
-                TbUtilitiesReference tbUtilitiesReference = new TbUtilitiesReference();
-                tbUtilitiesReference.setId(0);
-                tbUtilitiesReference.setUserId(filterArgumentModel.getUserId());
-                tbUtilitiesReference.setUtilityId(utilityId);
-                utilityReferenceService.save(tbUtilitiesReference);
-            }
+                for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
+                    TbUtilitiesReference tbUtilitiesReference = new TbUtilitiesReference();
+                    tbUtilitiesReference.setId(0);
+                    tbUtilitiesReference.setUserId(filterArgumentModel.getUserId());
+                    tbUtilitiesReference.setUtilityId(utilityId);
+                    utilityReferenceService.save(tbUtilitiesReference);
+                }
 
-            for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
-                TbDistrictReference tbDistrictReference = new TbDistrictReference();
-                tbDistrictReference.setId(0);
-                tbDistrictReference.setUserId(filterArgumentModel.getUserId());
-                tbDistrictReference.setDistrictId(districtId);
-                districtReferenceService.save(tbDistrictReference);
+                for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
+                    TbDistrictReference tbDistrictReference = new TbDistrictReference();
+                    tbDistrictReference.setId(0);
+                    tbDistrictReference.setUserId(filterArgumentModel.getUserId());
+                    tbDistrictReference.setDistrictId(districtId);
+                    districtReferenceService.save(tbDistrictReference);
+                }
+            }else {
+                checkReference.setMinPrice(prices.get(0));
+                checkReference.setMaxPrice(prices.get(1));
+                referenceService.save(checkReference);
+
+                utilityReferenceService.removeAllByUserId(filterArgumentModel.getUserId());
+                for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
+                    TbUtilitiesReference tbUtilitiesReference = new TbUtilitiesReference();
+                    tbUtilitiesReference.setId(0);
+                    tbUtilitiesReference.setUserId(filterArgumentModel.getUserId());
+                    tbUtilitiesReference.setUtilityId(utilityId);
+                    utilityReferenceService.save(tbUtilitiesReference);
+                }
+
+                districtReferenceService.removeAllByUserId(filterArgumentModel.getUserId());
+                for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
+                    TbDistrictReference tbDistrictReference = new TbDistrictReference();
+                    tbDistrictReference.setId(0);
+                    tbDistrictReference.setUserId(filterArgumentModel.getUserId());
+                    tbDistrictReference.setDistrictId(districtId);
+                    districtReferenceService.save(tbDistrictReference);
+                }
             }
             return ResponseEntity.status(CREATED).build();
         } catch (Exception e) {
