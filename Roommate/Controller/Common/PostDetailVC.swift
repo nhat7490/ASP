@@ -90,10 +90,16 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         
         //Caculator height
         let padding:UIEdgeInsets = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
-        let numberOfRow = viewType == .roomPostDetailForFinder ? (room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1) : (roommate.utilityIds.count%2==0 ? roommate.utilityIds.count/2 : roommate.utilityIds.count/2+1)
-        let heightBaseInformationView:CGFloat  = ((viewType == .roomPostDetailForFinder) ? Constants.HEIGHT_VIEW_BASE_INFORMATION : Constants.HEIGHT_VIEW_BASE_INFORMATION-30.0 )
+        let numberOfRow:Int
+        if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser{
+            numberOfRow = (room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1)
+        }else{
+            numberOfRow = (roommate.utilityIds.count%2==0 ? roommate.utilityIds.count/2 : roommate.utilityIds.count/2+1)
+        }
+        
+        let heightBaseInformationView:CGFloat  = ((viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? Constants.HEIGHT_VIEW_BASE_INFORMATION : Constants.HEIGHT_VIEW_BASE_INFORMATION-30.0 )
         let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
-        let totalContentViewHeight = viewType == .roomPostDetailForFinder ? CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+heightBaseInformationView+Constants.HEIGHT_VIEW_GENDER + Constants.HEIGHT_VIEW_DESCRIPTION + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE) : CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + utilitiesViewHeight - 30)
+        let totalContentViewHeight = (viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+heightBaseInformationView+Constants.HEIGHT_VIEW_GENDER + Constants.HEIGHT_VIEW_DESCRIPTION + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE) : CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + utilitiesViewHeight - 30)
         
         //Add View
         view.addSubview(scrollView)
@@ -136,7 +142,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         
         baseInformationView.viewType = viewType
         genderView.viewType = viewType
-        if viewType == .roomPostDetailForFinder{
+        if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser {
             //Data for horizontalImagesView
             
             horizontalImagesView.images = room.imageUrls
@@ -203,18 +209,17 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     
     
     @objc func didReceiveEditPostNotification(_ notification:Notification){
-        if notification.object is RoomPostResponseModel {
-            
-            guard let room = notification.object as? RoomPostResponseModel else{
+        if notification.object is RoomPostRequestModel {
+            guard let model = notification.object as? RoomPostRequestModel else{
                 return
             }
-            self.room = room
+            self.room.model = model
             
         }else{
-            guard let roommate = notification.object as? RoommatePostResponseModel else{
+            guard let model = notification.object as? RoommatePostRequestModel else{
                 return
             }
-            self.roommate = roommate
+            self.roommate.model = model
         }
         setData()
     }
@@ -226,11 +231,12 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             if viewType == .roomPostDetailForCreatedUser{
                 let vc = CERoomPostVC()
                 vc.cERoomPostVCType = .edit
-                
+                vc.roomPostRequestModel = RoomPostRequestModel(model: room)
                 presentInNewNavigationController(viewController: vc,flag: false)
             }else{
                 let vc = CERoommatePostVC()
                 vc.cERoommateVCType = .edit
+                vc.roommatePostRequestModel = RoommatePostRequestModel(model: roommate)
                 presentInNewNavigationController(viewController: vc,flag: false)
             }
         }else if viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
@@ -257,13 +263,13 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     
     //MARK: UtilitiesViewDelegate
     func utilitiesViewDelegate(utilitiesView view: UtilitiesView, didSelectUtilityAt indexPath: IndexPath) {
-        if viewType == .roomPostDetailForFinder{
+        if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser{
             let utility = room.utilities[indexPath.row]
             utility.name = DBManager.shared.getRecord(id: utility.utilityId, ofType: UtilityModel.self)!.name
-            let customTitle = NSAttributedString(string: utility.name, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
-            let customMessage = NSMutableAttributedString(string: "Brand: \(utility.brand)\n", attributes: [NSAttributedStringKey.font:UIFont.small])
-            customMessage.append(NSAttributedString(string: "Quantity: \(utility.quantity)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
-            customMessage.append(NSAttributedString(string: "Description: \(utility.utilityDescription)", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            let customTitle = NSAttributedString(string: utility.name.localized, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
+            let customMessage = NSMutableAttributedString(string: "\(String(key: "BRAND_TITLE", args:utility.brand))\n", attributes: [NSAttributedStringKey.font:UIFont.small])
+            customMessage.append(NSAttributedString(string:"\(String(key: "QUANTITY_TITLE", args:utility.quantity))\n" , attributes: [NSAttributedStringKey.font:UIFont.small]))
+            customMessage.append(NSAttributedString(string:"\(String(key: "DESCRIPTION_PLACE_HOLDER", args:utility.utilityDescription))\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
             AlertController.showAlertInfoWithAttributeString(withTitle: customTitle, forMessage: customMessage, inViewController: self)
         }
     }

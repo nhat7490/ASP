@@ -15,7 +15,7 @@ class RoomMappableModel: Mappable,NSCopying,Equatable,Hashable {
     var area:Int = 0
     var address:String = ""
     var maxGuest:Int = 0
-    var currentMember:Int = 0
+//    var currentMember:Int = 0
     var userId:Int = 0
     var cityId:Int = 0
     var districtId:Int = 0
@@ -29,14 +29,14 @@ class RoomMappableModel: Mappable,NSCopying,Equatable,Hashable {
     var longitude:Double = 0.0
     var latitude:Double = 0.0
 
-    public init(roomId: Int = 0, name: String = "", price: Int = 0, area: Int = 0, address: String = "", maxGuest: Int = 0, currentMember: Int = 0, userId: Int = 0, cityId: Int = 0, districtId: Int = 0, date: Date?, statusId: Int = 0, roomDescription: String?, phoneNumber: String = "", utilities: [UtilityMappableModel]  = [], imageUrls: [String] = [], members: [MemberResponseModel]? = [], longitude: Double = 0.0, latitude: Double = 0.0) {
+    public init(roomId: Int = 0, name: String = "", price: Int = 0, area: Int = 0, address: String = "", maxGuest: Int = 0, userId: Int = 0, cityId: Int = 0, districtId: Int = 0, date: Date?, statusId: Int = 0, roomDescription: String?, phoneNumber: String = "", utilities: [UtilityMappableModel]  = [], imageUrls: [String] = [], members: [MemberResponseModel]? = [], longitude: Double = 0.0, latitude: Double = 0.0) {
         self.roomId = roomId
         self.name = name
         self.price = price
         self.area = area
         self.address = address
         self.maxGuest = maxGuest
-        self.currentMember = currentMember
+//        self.currentMember = currentMember
         self.userId = userId
         self.cityId = cityId
         self.districtId = districtId
@@ -58,7 +58,7 @@ class RoomMappableModel: Mappable,NSCopying,Equatable,Hashable {
         self.area = roomModel.area
         self.address = roomModel.address
         self.maxGuest = roomModel.maxGuest
-        self.currentMember = roomModel.currentMember
+//        self.currentMember = roomModel.currentMember
         self.userId = roomModel.userId
         self.cityId = roomModel.cityId
         self.districtId = roomModel.districtId
@@ -97,7 +97,7 @@ class RoomMappableModel: Mappable,NSCopying,Equatable,Hashable {
         area <- map["area"]
         address <- map["address"]
         maxGuest <- map["maxGuest"]
-        currentMember <- map["currentMember"]
+//        currentMember <- map["currentMember"]
         userId <- map["userId"]
         cityId <- map["cityId"]
         districtId <- map["districtId"]
@@ -116,7 +116,7 @@ class RoomMappableModel: Mappable,NSCopying,Equatable,Hashable {
     }
     
     func copy(with zone: NSZone? = nil) -> Any {
-        let room = RoomMappableModel(roomId: self.roomId, name: self.name, price: self.price, area: self.area, address: self.address, maxGuest: self.maxGuest, currentMember: self.currentMember, userId: self.userId, cityId: self.cityId, districtId: self.districtId, date: self.date, statusId: self.statusId, roomDescription: self.roomDescription,phoneNumber:self.phoneNumber, utilities: self.utilities.copiedElements(), imageUrls: self.imageUrls.copiedElements(), members: self.members?.copiedElements())
+        let room = RoomMappableModel(roomId: self.roomId, name: self.name, price: self.price, area: self.area, address: self.address, maxGuest: self.maxGuest, userId: self.userId, cityId: self.cityId, districtId: self.districtId, date: self.date, statusId: self.statusId, roomDescription: self.roomDescription,phoneNumber:self.phoneNumber, utilities: self.utilities.copiedElements(), imageUrls: self.imageUrls.copiedElements(), members: self.members?.copiedElements())
         return room
     }
     static func == (lhs: RoomMappableModel, rhs: RoomMappableModel) -> Bool {

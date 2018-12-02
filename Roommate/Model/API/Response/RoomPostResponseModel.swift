@@ -14,9 +14,23 @@ class RoomPostResponseModel:BasePostResponseModel {
     var address: String?
     var utilities: [UtilityMappableModel]!
     var imageUrls: [String]?
-    var numberPartner, genderPartner: Int?
+    var numberPartner, genderPartner: Int!
     var postDesription: String?
-    
+    var model:RoomPostRequestModel!{
+        didSet{
+            self.postId = model.postId
+            self.minPrice = model.minPrice
+            self.phoneContact = model.phoneContact
+            self.name = model.name
+            self.numberPartner = model.numberPartner
+            self.genderPartner = model.genderPartner
+            self.postDesription = model.postDescription
+            
+        }
+    }
+    override init(postId:Int){
+        super.init(postId: postId)
+    }
     required init?(map: Map) {
         super.init(map: map)
     }
@@ -32,4 +46,6 @@ class RoomPostResponseModel:BasePostResponseModel {
         genderPartner <- map["genderPartner"]
         postDesription <- map["description"]
     }
+    
+    
 }

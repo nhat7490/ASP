@@ -220,6 +220,54 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             loadRoommateData(withNewFilterArgModel: true)
         }
     }
+    //MARK: Notification
+    func registerNotification(){
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditPostNotification(_:)), name: Constants.NOTIFICATION_EDIT_POST, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
+    }
+    @objc func didReceiveEditPostNotification(_ notification:Notification){
+        if notification.object is RoomPostRequestModel {
+            guard let model = notification.object as? RoomPostRequestModel, let index = rooms.index(of: RoomPostResponseModel(postId: model.postId)) else{
+                return
+            }
+            rooms[index].model = model
+            
+        }else{
+            guard let model = notification.object as? RoommatePostRequestModel, let index = roommates.index(of: RoommatePostResponseModel(postId: model.postId)) else{
+                return
+            }
+            roommates[index].model = model
+        }
+        collectionView.reloadData()
+    }
+    @objc func didReceiveRemoveRoomNotification(_ notification:Notification){
+        
+        switch showAllVCType{
+        case .roomForOwner:
+            rooms.removeAll()
+            loadRoomForOwnerOrMemberData(withNewFilterArgModel: true)
+        default:
+            break
+        }
+    }
+    
+    @objc func didReceiveEditRoomNotification(_ notification:Notification){
+        switch showAllVCType{
+        case .roomForOwner:
+            if notification.object is RoomMappableModel {
+                guard let room = notification.object as? RoomMappableModel, let index = roomResponseModels.index(of: room) else{
+                    return
+                }
+                roomResponseModels[index] = room
+                collectionView.reloadData()
+            }
+        default:
+            break
+        }
+        
+    }
+    //MARK: Remote Data
     
     func loadRoomData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
@@ -265,6 +313,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     
     func  requestRoomPost(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
+            self.rooms.removeAll()
+            self.collectionView.reloadData()
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
@@ -272,6 +322,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             //            hub.label.text = "MB_LOAD_DATA_TITLE".localized
             //            MBProgressHUD.showAdded(to: self.bottomView, animated: true)
         }
+        
         DispatchQueue.global(qos: .background).async {
             APIConnection.requestArray(apiRouter:apiRouter, returnType: RoomPostResponseModel.self) { (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
@@ -313,6 +364,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     
     func  requestRoommatePost(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
+            self.roommates.removeAll()
+            self.collectionView.reloadData()
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
@@ -358,6 +411,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     }
     func  requestRoom(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
+            self.roomResponseModels.removeAll()
+            self.collectionView.reloadData()
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
@@ -402,38 +457,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     }
     
     
-    //MARK: Notification
-    func registerNotification(){
-        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
-    }
     
-    @objc func didReceiveRemoveRoomNotification(_ notification:Notification){
-        
-        switch showAllVCType{
-        case .roomForOwner:
-            rooms.removeAll()
-            loadRoomForOwnerOrMemberData(withNewFilterArgModel: true)
-        default:
-            break
-        }
-    }
-    
-    @objc func didReceiveEditRoomNotification(_ notification:Notification){
-        switch showAllVCType{
-        case .roomForOwner:
-            if notification.object is RoomMappableModel {
-                guard let room = notification.object as? RoomMappableModel, let index = roomResponseModels.index(of: room) else{
-                    return
-                }
-                roomResponseModels[index] = room
-                collectionView.reloadData()
-            }
-        default:
-            break
-        }
-        
-    }
     //MARK: UICollectionView DataSourse and Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         

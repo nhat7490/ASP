@@ -15,11 +15,24 @@ class RoomPostRequestModel: BasePostResquestModel {
     var name:String!
     var numberPartner:Int = 1
     var genderPartner:Int = 0
-    var roomDescription:String?
+    var postDescription:String?
     
     override init() {
         super.init()
     }
+    convenience init(model:RoomPostResponseModel){
+        self.init()
+        self.postId = model.postId
+        self.userId = DBManager.shared.getSingletonModel(ofType: UserModel.self)!.userId
+        self.minPrice = model.minPrice
+        self.phoneContact = model.phoneContact
+        self.name = model.name
+        self.numberPartner = model.numberPartner
+        self.genderPartner = model.genderPartner
+        self.postDescription = model.postDesription
+        
+    }
+
     required init?(map: Map) {
         super.init(map: map)
     }
@@ -30,7 +43,7 @@ class RoomPostRequestModel: BasePostResquestModel {
         name <- map["name"]
         numberPartner <- map["numberPartner"]
         genderPartner <- map["genderPartner"]
-        roomDescription <- map["description"]
+        postDescription <- map["description"]
 
     }
 }

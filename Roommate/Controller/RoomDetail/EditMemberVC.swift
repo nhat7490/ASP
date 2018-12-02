@@ -270,8 +270,10 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
                         self.addMember(member: member)
                         DispatchQueue.main.async {
                             self.addMemberView.clearText()
+                            self.username = ""
                             self.membersView.members = self.copyRoom?.members
-                            APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.addMemberSuccess)
+                            
+//                            APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.addMemberSuccess)
                         }
                         //403
                     }else if statusCode == .Conflict {
@@ -309,6 +311,7 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
                     if statusCode == .OK{
                         DispatchQueue.main.async {
                             self.room.members = self.copyRoom.members
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_ROOM, object: self.room)
                             AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "EDIT_MEMBER_SUCCESS".localized, inViewController: self,rhsButtonHandler:{
                                 (action) in
                                 self.popSelfInNavigationController()

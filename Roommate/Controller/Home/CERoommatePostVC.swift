@@ -201,9 +201,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         
     }
     func updateUI(){
-        if let suggestSettingMappedModel = currentUser.suggestSettingMappedModel{
-            self.suggestSettingMappableModel = suggestSettingMappedModel
-        }
+        
         selectedCity = DBManager.shared.getRecord(id: setting.cityId, ofType: CityModel.self)
         selectedDistricts = []
         selectedUtilities = []
@@ -215,11 +213,32 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             selectedCity = city
             cityDropdownListView.text = selectedCity?.name
         }
-        
-        if let suggestSettingMappableModel = suggestSettingMappableModel{
-            if let districtId = suggestSettingMappableModel.districts?.first, let cityId = DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.cityId{
+        if cERoommateVCType == .create{
+            if let suggestSettingMappableModel = currentUser.suggestSettingMappedModel{
+                self.suggestSettingMappableModel = suggestSettingMappableModel
+                if let districtId = suggestSettingMappableModel.districts?.first, let cityId = DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.cityId{
+                    selectedCity = DBManager.shared.getRecord(id: cityId, ofType: CityModel.self)
+                    if let districts = suggestSettingMappableModel.districts,districts.count != 0{
+                        selectedDistricts = districts.map({ (districtId) -> DistrictModel   in
+                            DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)!
+                        })
+                        let dictristString = selectedDistricts?.compactMap{$0.name}
+                        districtDropdownListView.text = dictristString?.joined(separator: ",")
+                    }
+                    cityDropdownListView.text = selectedCity?.name
+                }
+                
+                if let utilities = suggestSettingMappableModel.utilities{
+                    selectedUtilities = utilities
+                }
+                if let price = suggestSettingMappableModel.price{
+                    selectedPrice = price
+                }
+            }
+        }else{
+            if let districtId = roommatePostRequestModel.districtIds?.first, let cityId = DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.cityId{
                 selectedCity = DBManager.shared.getRecord(id: cityId, ofType: CityModel.self)
-                if let districts = suggestSettingMappableModel.districts,districts.count != 0{
+                if let districts = roommatePostRequestModel.districtIds,districts.count != 0{
                     selectedDistricts = districts.map({ (districtId) -> DistrictModel   in
                         DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)!
                     })
@@ -229,13 +248,19 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                 cityDropdownListView.text = selectedCity?.name
             }
             
-            if let utilities = suggestSettingMappableModel.utilities{
+            if let utilities = roommatePostRequestModel.utilityIds{
                 selectedUtilities = utilities
             }
-            if let price = suggestSettingMappableModel.price{
-                selectedPrice = price
+            if let minPrice = roommatePostRequestModel.minPrice,let maxPrice = roommatePostRequestModel.maxPrice{
+                selectedPrice = [minPrice,maxPrice]
+            }
+            if let phoneNumber = roommatePostRequestModel.phoneContact{
+                self.phoneNumber = phoneNumber
+                self.tfPhoneNumber.text = phoneNumber
             }
         }
+        
+        
         priceSliderView.setSelectedRange(leftSelectedValue: selectedPrice![0], rightSelectedValue: selectedPrice![1])
         utilitiesView.selectedUtilities = selectedUtilities!
 //        genderView.genderSelect = selectedGender
@@ -389,7 +414,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         hub.contentColor = .defaultBlue
         hub.label.text = "MB_LOAD_CREATE_POST".localized
         DispatchQueue.global(qos: .userInteractive).async {
-            APIConnection.request(apiRouter:APIRouter.createRoommatePost(model: self.roommatePostRequestModel),  errorNetworkConnectedHander: {
+            APIConnection.request(apiRouter:self.cERoommateVCType == .create ? APIRouter.createRoommatePost(model: self.roommatePostRequestModel) : APIRouter.editRoommatePost(model: self.roommatePostRequestModel) ,  errorNetworkConnectedHander: {
             DispatchQueue.main.async {
                 hub.hide(animated: true)
                 APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
@@ -404,7 +429,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                 }
             }else{
                 //200
-                if statusCode == .Created{
+                if statusCode == .OK ||  statusCode == .Created {
                     DispatchQueue.main.async {
                         hub.hide(animated: true)
                         self.currentUser.suggestSettingMappedModel = self.suggestSettingMappableModel
@@ -414,6 +439,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                             if self.cERoommateVCType == .create{
                                 self.dimissEntireNavigationController()
                             }else{
+                                NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_POST, object: self.roommatePostRequestModel)
                                 self.popSelfInNavigationController()
                             }
                         })

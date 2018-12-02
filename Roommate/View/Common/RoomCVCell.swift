@@ -21,7 +21,7 @@ class RoomCVCell: UICollectionViewCell {
             guard let room = room else {
                 return
             }
-            imgvAvatar.sd_setImage(with: URL(string: room.imageUrls.first!), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
+            imgvAvatar.sd_setImage(with: URL(string: room.imageUrls.first ?? "default_load_room"), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
                 guard let image = image else{
                     return
                 }
@@ -29,7 +29,7 @@ class RoomCVCell: UICollectionViewCell {
                     self.imgvAvatar.image = image
                 }
             }
-            lblCurrentMember.text = String(format: "CURRENT_NUMBER_OF_PERSON".localized, room.currentMember,room.maxGuest)
+            lblCurrentMember.text = String(format: "CURRENT_NUMBER_OF_PERSON".localized, room.members?.count ?? 0,room.maxGuest)
             imgvStatus.image = room.statusId == Constants.AUTHORIZED ? UIImage(named: "certificated") : UIImage(named: "certificate")
             tvName.text = room.name
             tvPrice.text = String(format: "PRICE_OF_ROOM".localized,room.price.formatString,"PERSON".localized)

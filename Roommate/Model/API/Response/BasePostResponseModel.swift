@@ -9,17 +9,20 @@
 import UIKit
 import ObjectMapper
 class BasePostResponseModel:Mappable,Equatable,Hashable{
-    var postId: Int?
+    var postId: Int!
     var phoneContact:String!
     var date: Date?
     var userResponseModel: UserResponseModel?
     var isFavourite: Bool?
     var favouriteId:Int?
-    var minPrice: Int!
+    var minPrice: Float!
     var hashValue: Int{
         return self.postId!
     }
     
+    init(postId:Int){
+        self.postId = postId
+    }
     
     required init?(map: Map) {
         

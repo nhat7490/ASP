@@ -185,6 +185,8 @@ enum APIRouter:URLRequestConvertible{
             return Mapper().toJSON(model)
         case .editRoomPost(let model):
             return Mapper().toJSON(model)
+        case .editRoommatePost(let model):
+            return Mapper().toJSON(model)
         default:
             return [:]
         }

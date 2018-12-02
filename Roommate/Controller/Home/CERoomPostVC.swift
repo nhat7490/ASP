@@ -88,7 +88,7 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,NewInputViewDelegate,MaxMemberSele
     
     var cERoomPostVCType:CEVCType = .create
     var roomPostRequestModel: RoomPostRequestModel = RoomPostRequestModel()
-    var roomPostResponseModel:RoomPostResponseModel?
+//    var roomPostResponseModel:RoomPostResponseModel?
     var currentRoom:RoomMappableModel = RoomMappableModel(roomModel: DBManager.shared.getSingletonModel(ofType: RoomModel.self)!)
     //MARK: ViewController
     override func viewDidLoad() {
@@ -171,13 +171,13 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,NewInputViewDelegate,MaxMemberSele
         maxMemberSelectView.maxMember = currentRoom.maxGuest
         priceInputView.maxPrice = Double(currentRoom.price)
         if cERoomPostVCType == CEVCType.edit{
-            nameInputView.text = roomPostResponseModel?.name
+            nameInputView.text = roomPostRequestModel.name
             priceInputView.text = roomPostRequestModel.minPrice?.toString
             tfPhoneNumber.text = roomPostRequestModel.phoneContact
             genderView.genderSelect = GenderSelect(rawValue: roomPostRequestModel.genderPartner)
             maxMemberSelectView.text = roomPostRequestModel.numberPartner.toString
             
-            descriptionsView.text = roomPostRequestModel.roomDescription ?? ""
+            descriptionsView.text = roomPostRequestModel.postDescription ?? ""
             descriptionsView.viewType = .editForOwner
         }else{
             descriptionsView.viewType = .ceRoomPostForMaster
@@ -206,7 +206,7 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,NewInputViewDelegate,MaxMemberSele
     
     //MARK: Delegate for subview
     func descriptionViewDelegate(descriptionView view: DescriptionView, textViewDidEndEditing textView: UITextView) {
-        roomPostRequestModel.roomDescription = descriptionsView.text!
+        roomPostRequestModel.postDescription = descriptionsView.text!
         descriptionsView.tvContent.resignFirstResponder()
         descriptionsView.tvContent.endEditing(true)
     }
@@ -323,7 +323,7 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,NewInputViewDelegate,MaxMemberSele
                                 if self.cERoomPostVCType == .create{
                                     self.dimissEntireNavigationController()
                                 }else{
-                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_ROOM, object: self.roomPostRequestModel)
+                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_POST, object: self.roomPostRequestModel)
                                     self.popSelfInNavigationController()
                                 }
                             })

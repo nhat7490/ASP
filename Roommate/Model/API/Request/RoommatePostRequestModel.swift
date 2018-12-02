@@ -28,9 +28,9 @@ class RoommatePostRequestModel:BasePostResquestModel {
         self.cityId = model.cityId
         self.districtIds = model.districtIds
         self.utilityIds = model.utilityIds
-//        self.minPrice = Float(model.minPrice)
-//        self.maxPrice = Float(model.maxPrice)
-        self.phoneContact = phoneContact
+        self.minPrice = model.minPrice
+        self.maxPrice = model.maxPrice
+        self.phoneContact = model.phoneContact
     }
     init(cityId:Int,suggestSettingMappableModel:SuggestSettingMappableModel,phoneContact:String){
         super.init()

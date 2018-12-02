@@ -31,7 +31,7 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
         popupView.layer.cornerRadius = 15
         popupView.clipsToBounds = true
         lblTitle.textAlignment = .center
-        lblTitle.text = utilityModel.name
+        lblTitle.text = utilityModel.name.localized
         lblDescription.text = "DESCRIPTION".localized
         setupTFUI(tfBrand,placeholder: "BRAND_PLACE_HOLDER", title: "BRAND_PLACE_HOLDER")
         setupTFUI(tfQuantity,placeholder: "QUANTITY_PLACE_HOLDER", title: "QUANTITY_PLACE_HOLDER",keyboardType:UIKeyboardType.numberPad)

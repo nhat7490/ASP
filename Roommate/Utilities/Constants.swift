@@ -123,6 +123,7 @@ class Constants{
     static let HEIGHT_CELL_NAVIGATIONCV:CGFloat = 80.0
     static let HEIGHT_ROOM_INFOR_TITLE:CGFloat = 30.0
     static let HEIGHT_CELL_ADD_MEMBER_VIEW:CGFloat = 100.0
+    static let HEIGHT_SUGGEST_ADDRESS:CGFloat = 150.0
 
     //MARK: Common Lenght
     static let MAX_MEMBER:Int = 10

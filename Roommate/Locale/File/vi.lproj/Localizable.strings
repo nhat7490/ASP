@@ -275,7 +275,7 @@
 "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE"="Không thể kết nối mạng, chạm để thử lại";
 "NETWORK_STATUS_ERROR_MESSAGE"="Lỗi mạng, chạm để thử lại";
 "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE"="Không thể kết nối máy chủ, Vui lòng thử lại sau";
-"NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Oops.Lỗi máy chủ, chạm để thử lại";
+"NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE"="Oops.Có lỗi xảy ra, chạm để thử lại";
 //MARK: Alert
 "ALERT_INVALID_USERNAME_MESSAGE"="Tài khoản không tồn tại";
 "ALERT_INVALID_USERNAME_PASSWORD_MESSAGE"="Tên đăng nhập hoặc mật khẩu không đúng";

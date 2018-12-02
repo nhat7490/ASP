@@ -111,11 +111,14 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         //Caculator height
         let padding:UIEdgeInsets = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
         let membersViewHeight:CGFloat
-        if room.members?.count != 0 && room.members!.count>5{
-            membersViewHeight =  Constants.HEIGHT_VIEW_MEMBERS
-        }else{
+        if room.members?.count == 0{
             membersViewHeight = 100.0
             showNoDataView(inView: membersView.tableView, withTitle: "NO_MEMBER_ROOM".localized)
+        }else if room.members!.count<5{
+            membersViewHeight = 60.0 + CGFloat(room.members!.count) * Constants.HEIGHT_CELL_MEMBERTVL
+            
+        }else{
+            membersViewHeight =  Constants.HEIGHT_VIEW_MEMBERS
         }
         
         

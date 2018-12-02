@@ -219,7 +219,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         contentView.bringSubview(toFront: tableView)
         
         //END
-        _ = maxMemberSelectView.anchor(addressInputView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT))
+        _ = maxMemberSelectView.anchor(tableView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_MAX_MEMBER_SELECT))
         _ = utilitiesView.anchor(maxMemberSelectView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: utilitiesViewHeight))
         
         _ = descriptionsView.anchor(utilitiesView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_DESCRIPTION))
@@ -515,7 +515,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     
     func reloadTableViewUI(){
         if !addressInputView.isSelectedFromSuggest{
-            tableViewHeightConstaint?.constant = 150.0
+            tableViewHeightConstaint?.constant = (suggestAddress!.count < 4 ? CGFloat(suggestAddress!.count * 50) : Constants.HEIGHT_SUGGEST_ADDRESS)
             tableView.reloadData()
         }else{
             tableViewHeightConstaint?.constant = 0
@@ -609,7 +609,8 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
         }
         
         if !roomMappableModel.price.toString.isValidPrice(){
-            message.append(NSAttributedString(string: "\("PRICE".localized) :  \("ERROR_TYPE_PRICE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            message.append(NSAttributedString(string: "\("PRICE".localized) :  \(String(format: "ERROR_TYPE_PRICE".localized, Int(Constants.MIN_PRICE).formatString,Int(Constants.MAX_PRICE).formatString))\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            
         }
         if !roomMappableModel.area.toString.isValidArea(){
             message.append(NSAttributedString(string: "\("AREA_TITLE".localized) :  \("ERROR_TYPE_AREA".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
@@ -753,7 +754,15 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
     func calculatorHeight(){
         let numberOfImageRow =  self.uploadImageModels.count%3==0 ? self.uploadImageModels.count/3 : self.uploadImageModels.count/3+1
         let uploadImageViewHeight:CGFloat = CGFloat(numberOfImageRow) * self.imageWith  + Constants.HEIGHT_VIEW_UPLOAD_IMAGE_BASE+Constants.HEIGHT_LARGE_SPACE
-        let contentViewHeight:CGFloat = uploadImageViewHeight + self.fixSizeHeight
+        let contentViewHeight:CGFloat
+        
+        if addressInputView.isSelectedFromSuggest{
+            contentViewHeight = uploadImageViewHeight + self.fixSizeHeight
+        }else{
+            
+            contentViewHeight = uploadImageViewHeight + self.fixSizeHeight + (suggestAddress!.count < 4 ? CGFloat(suggestAddress!.count * 50) : Constants.HEIGHT_SUGGEST_ADDRESS)
+        }
+        
         self.contentViewHeightConstraint?.constant = contentViewHeight
         self.uploadImageViewHeightConstraint?.constant = uploadImageViewHeight
         self.uploadImageView.images = self.uploadImageModels

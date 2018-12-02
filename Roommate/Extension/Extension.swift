@@ -453,6 +453,13 @@ extension Float{
     var toString:String{
         return "\(self)"
     }
+    var formatString:String{
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.decimalSeparator = "."
+        formatter.groupingSeparator = ","
+        return formatter.string(from: NSNumber(value: self))!
+    }
     
 }
 extension Double{
