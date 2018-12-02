@@ -17,6 +17,9 @@ public class UserResponseModel {
     private int roleId;
     private String email;
     private String username;
+    private Double avgBehaviourRate;
+    private Double avgLifeStyleRate;
+    private Double avgPaymentRate;
     private List<TbUserRate> userRateList;
     private UserSuggestSettingModel userSuggestSettingModel;
 
@@ -34,7 +37,31 @@ public class UserResponseModel {
         this.username = user.getUsername();
     }
 
-    public UserResponseModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender, int roleId, String email, String username, List<TbUserRate> userRateList, UserSuggestSettingModel userSuggestSettingModel) {
+    public Double getAvgBehaviourRate() {
+        return avgBehaviourRate;
+    }
+
+    public void setAvgBehaviourRate(Double avgBehaviourRate) {
+        this.avgBehaviourRate = avgBehaviourRate;
+    }
+
+    public Double getAvgLifeStyleRate() {
+        return avgLifeStyleRate;
+    }
+
+    public void setAvgLifeStyleRate(Double avgLifeStyleRate) {
+        this.avgLifeStyleRate = avgLifeStyleRate;
+    }
+
+    public Double getAvgPaymentRate() {
+        return avgPaymentRate;
+    }
+
+    public void setAvgPaymentRate(Double avgPaymentRate) {
+        this.avgPaymentRate = avgPaymentRate;
+    }
+
+    public UserResponseModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender, int roleId, String email, String username, Double avgBehaviourRate, Double avgLifeStyleRate, Double avgPaymentRate, List<TbUserRate> userRateList, UserSuggestSettingModel userSuggestSettingModel) {
         this.userId = userId;
         this.fullname = fullname;
         this.imageProfile = imageProfile;
@@ -44,6 +71,9 @@ public class UserResponseModel {
         this.roleId = roleId;
         this.email = email;
         this.username = username;
+        this.avgBehaviourRate = avgBehaviourRate;
+        this.avgLifeStyleRate = avgLifeStyleRate;
+        this.avgPaymentRate = avgPaymentRate;
         this.userRateList = userRateList;
         this.userSuggestSettingModel = userSuggestSettingModel;
     }

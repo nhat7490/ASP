@@ -8,6 +8,7 @@ import com.caps.asp.service.RoomHasUserService;
 import com.caps.asp.service.RoomService;
 import com.caps.asp.service.UserRateService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,4 +70,6 @@ public class UserRateController {
 
         return ResponseEntity.status(CONFLICT).build();
     }
+
+
 }

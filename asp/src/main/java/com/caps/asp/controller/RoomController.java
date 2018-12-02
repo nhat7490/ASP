@@ -315,6 +315,17 @@ public class RoomController {
         }
     }
 
+    @GetMapping("room/getRoomRates/{roomId}")
+    public ResponseEntity getRoomRates(@PathVariable int roomId, Pageable pageable) {
+        try {
+            return ResponseEntity.status(OK)
+                    .body(roomRateService.findAllByRoomIdOrderByDateDesc(roomId,pageable.getPageNumber(),pageable.getPageSize())
+                    .getContent());
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
+    }
+
     @GetMapping("room/user/{userId}")
     public ResponseEntity findRoomByUserId(@PathVariable Integer userId, Pageable pageable) {
         try {

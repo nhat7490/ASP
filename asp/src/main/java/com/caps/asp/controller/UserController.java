@@ -10,6 +10,8 @@ import com.caps.asp.service.*;
 //import com.caps.asp.util.ResetPassword;
 //import com.caps.asp.util.ResetPassword;
 import com.caps.asp.util.ResetPassword;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,8 +34,9 @@ public class UserController {
     public final ReferenceService referenceService;
     public final UtilityReferenceService utilityReferenceService;
     public final DistrictReferenceService districtReferenceService;
+    public final UserRateService userRateService;
 
-    public UserController(UserService userService, PostService postService, RoomService roomService, RoomHasUserService roomHasUserService, BCryptPasswordEncoder passwordEncoder, ReferenceService referenceService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService) {
+    public UserController(UserService userService, PostService postService, RoomService roomService, RoomHasUserService roomHasUserService, BCryptPasswordEncoder passwordEncoder, ReferenceService referenceService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService, UserRateService userRateService) {
         this.userService = userService;
         this.postService = postService;
         this.roomService = roomService;
@@ -42,6 +45,7 @@ public class UserController {
         this.referenceService = referenceService;
         this.utilityReferenceService = utilityReferenceService;
         this.districtReferenceService = districtReferenceService;
+        this.userRateService = userRateService;
     }
 
     @PostMapping(value = "/user/login", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -133,10 +137,58 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/findById/{id}")
-    public ResponseEntity<TbUser> findById(@PathVariable int id) {
+    @GetMapping("/user/findById/{userId}")
+    public ResponseEntity findById(@PathVariable int userId) {
         try {
-            return ResponseEntity.status(OK).body(userService.findById(id));
+            UserResponseModel userResponseModel = new UserResponseModel();
+            TbUser userDb = userService.findById(userId);
+            userResponseModel.setDob(userDb.getDob());
+            userResponseModel.setPhone(userDb.getPhone());
+            userResponseModel.setGender(userDb.getGender());
+            userResponseModel.setUserId(userDb.getUserId());
+            userResponseModel.setFullname(userDb.getFullname());
+            userResponseModel.setImageProfile(userDb.getImageProfile());
+            List<TbUserRate> userRates = userRateService.findAllByUserIdOrderByDateDesc(userId);
+
+            List<TbUserRate> userRateResponses = new ArrayList<>();
+            if (userRates != null) {
+                Double avgBehaviourRate = 0.0;
+                Double avgLifeStyleRate = 0.0;
+                Double avgPaymentRate = 0.0;
+
+                int count = 0;
+                for (TbUserRate tbUserRate: userRates) {
+                    if (count < 6) {
+                        userRateResponses.add(tbUserRate);
+                        count++;
+                    }
+                     avgBehaviourRate += tbUserRate.getBehaviourRate();;
+                     avgLifeStyleRate += tbUserRate.getLifeStyleRate();;
+                     avgPaymentRate += tbUserRate.getPaymentRate();;
+                }
+
+                avgBehaviourRate = Double.parseDouble(Math.round((avgBehaviourRate / userRates.size()) * 10) + "");
+                avgLifeStyleRate = Double.parseDouble(Math.round((avgLifeStyleRate / userRates.size()) * 10) + "");
+                avgPaymentRate = Double.parseDouble(Math.round((avgPaymentRate / userRates.size()) * 10) + "");
+
+                userResponseModel.setAvgBehaviourRate(avgBehaviourRate / 10);
+                userResponseModel.setAvgLifeStyleRate(avgLifeStyleRate / 10);
+                userResponseModel.setAvgPaymentRate(avgPaymentRate / 10);
+            }
+
+            userResponseModel.setUserRateList(userRateResponses);
+
+            return ResponseEntity.status(OK).body(userResponseModel);
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/user/findAllUserRate/{userId}")
+    public ResponseEntity findById(@PathVariable int userId, Pageable pageable) {
+        try {
+            Page<TbUserRate> userRates = userRateService.findAllByUserId(userId, pageable.getPageNumber(), pageable.getPageSize());
+            return ResponseEntity.status(OK).body(userRates.getContent());
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }
