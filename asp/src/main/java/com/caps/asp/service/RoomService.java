@@ -52,7 +52,7 @@ public class RoomService {
         int actualPage = page - 1;
         Pageable pageable = PageRequest.of(actualPage, items);
 
-        return roomRepository.findAllByStatusId(statusId, pageable);
+        return roomRepository.findAllByStatusIdOrderByDateDesc(statusId, pageable);
     }
 
     public List<TbRoom> getAllByUserId(int userId){

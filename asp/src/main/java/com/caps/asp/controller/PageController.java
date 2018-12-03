@@ -98,7 +98,7 @@ public class PageController {
         notificationModel.setRoom_id(room.getRoomId().toString());
         notificationModel.setRoom_name(room.getName());
         notificationModel.setStatus(NEW_NOTI + "");
-        notificationModel.setType(REMOVE_MEMBER + "");
+        notificationModel.setType(APPROVED + "");
 
         fireBaseService.pushNoti(notificationModel);
         response.sendRedirect("/room");
@@ -120,7 +120,7 @@ public class PageController {
         notificationModel.setRoom_id(room.getRoomId().toString());
         notificationModel.setRoom_name(room.getName());
         notificationModel.setStatus(NEW_NOTI + "");
-        notificationModel.setType(REMOVE_MEMBER + "");
+        notificationModel.setType(DECLINED + "");
 
         fireBaseService.pushNoti(notificationModel);
         response.sendRedirect("/room");

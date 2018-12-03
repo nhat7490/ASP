@@ -61,10 +61,6 @@ public class RoomHasUserService {
         return roomHasUserRepository.findAllByUserIdOrderByDateOutDesc(userId, pageable);
     }
 
-    public TbRoomHasUser getByRoomIdAndDateOutIsNull(int roomId){
-        return roomHasUserRepository.findByRoomIdAndDateOutIsNull(roomId);
-    }
-
     public TbRoomHasUser findByUserIdAndRoomIdAndDateOutIsNull(int userId, int roomId) {
         return roomHasUserRepository.findByUserIdAndRoomIdAndDateOutIsNull(userId, roomId);
     }

@@ -257,18 +257,32 @@ public class RoomController {
     @Transactional
     @DeleteMapping("room/deleteRoom/{roomId}")
     public ResponseEntity deleteRoom(@PathVariable int roomId) {
-        try {
+//        try {
             roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomId);
             imageService.deleteAllImageByRoomId(roomId);
 
-            List<TbRoomHasUser> roomHasUsers = roomHasUserService.getAllByRoomId(roomId);
+            List<TbRoomHasUser> roomHasUsers = roomHasUserService.findByRoomIdAndDateOutIsNull(roomId);
             roomHasUsers.forEach(tbRoomHasUser -> {
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                tbRoomHasUser.setDateOut(timestamp);
+                roomHasUserService.saveRoomMember(tbRoomHasUser);
                 TbUser tbUser = userService.findById(tbRoomHasUser.getUserId());
+                tbUser.setRoleId(MEMBER);
+                userService.saveUser(tbUser);
 
-                if (tbUser.getRoleId() == ROOM_MASTER) {
-                    tbUser.setRoleId(MEMBER);
-                    userService.saveUser(tbUser);
-                }
+                NotificationModel notificationModel = new NotificationModel();
+                notificationModel.setDate(timestamp.toString());
+                UUID noti_uuid = UUID.randomUUID();
+                notificationModel.setNoti_uuid(noti_uuid.toString());
+                notificationModel.setUser_id(tbRoomHasUser.getUserId().toString());
+                notificationModel.setRole_id(tbUser.getRoleId().toString());
+                notificationModel.setRoom_id(tbRoomHasUser.getRoomId().toString());
+                notificationModel.setRoom_name(roomService
+                        .findRoomById(tbRoomHasUser.getRoomId()).getName());
+                notificationModel.setStatus(NEW_NOTI + "");
+                notificationModel.setType(REMOVE_MEMBER + "");
+
+                fireBaseService.pushNoti(notificationModel);
             });
 
             roomHasUserService.removeAllByRoomId(roomId);
@@ -278,14 +292,14 @@ public class RoomController {
                 favouriteService.removeAllByPostId(tbPost.getPostId());
                 postHasDistrictService.removeAllByPostId(tbPost.getPostId());
                 postHasUtilityService.deleteAllPostHasUtilityByPostId(tbPost.getPostId());
-                postService.removeByRoomId(roomId);
             });
+             postService.removeByRoomId(roomId);
             roomRateService.removeByRoomId(roomId);
             roomService.deleteRoom(roomId);
             return ResponseEntity.status(OK).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(CONFLICT).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(CONFLICT).build();
+//        }
     }
 
     @GetMapping("room/viewRoom/{roomId}")
