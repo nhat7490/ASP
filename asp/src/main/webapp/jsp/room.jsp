@@ -142,7 +142,9 @@
                                     <td>
                                         <fmt:formatNumber value="${room.price}" type="number"/>
                                     </td>
-                                    <td>${room.dateCreated}</td>
+                                    <td>
+                                        <fmt:formatDate value="${room.dateCreated}" pattern="dd-MM-yyyy" />
+                                    </td>
                                     <td>${room.address}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary" style="width: 100px"

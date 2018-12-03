@@ -32,7 +32,8 @@
 
     <!-- Custom Fonts -->
     <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css">
+    <link rel="stylesheet prefetch"
+          href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -225,6 +226,7 @@
                             </thead>
                             <tbody>
                             <c:set var="userList" value="${requestScope.USERS}"/>
+                            <c:set var="ADMIN" value="Admin"/>
                             <c:forEach var="user" items="${userList}">
                                 <tr>
                                     <td>${user.userId}</td>
@@ -232,9 +234,32 @@
                                     <td>${user.fullname}</td>
                                     <td>${user.dob}</td>
                                     <td>${user.email}</td>
-                                    <td>${user.gender}</td>
+                                    <td>
+                                        <c:if test="${user.gender eq 1}">
+                                            Nam
+                                        </c:if>
+                                        <c:if test="${user.gender eq 2}">
+                                            Nữ
+                                        </c:if>
+                                    </td>
                                     <td>${user.phone}</td>
-                                    <td>${user.roleId}</td>
+                                    <td>
+                                        <c:if test="${user.roleId eq 1}">
+                                            Admin
+                                        </c:if>
+                                        <c:if test="${user.roleId eq 2}">
+                                            Chủ Nhà
+                                        </c:if>
+                                        <c:if test="${user.roleId eq 3}">
+                                            Chủ Phòng
+                                        </c:if>
+                                        <c:if test="${user.roleId eq 4}">
+                                            Thành Viên
+                                        </c:if>
+                                        <c:if test="${user.roleId eq 5}">
+                                            Quản Trị Viên
+                                        </c:if>
+                                    </td>
                                     <td>
                                         <a href="/users/remove/${user.userId}">
                                             <button type="button" class="btn btn-danger">
@@ -356,7 +381,7 @@
             TbUser["fullname"] = $('#txtFullname').val();
             TbUser["imageProfile"] = $('#txtImage').val();
             TbUser["phone"] = $('#txtPhone').val();
-            TbUser["gender"]=$('#gender').val();
+            TbUser["gender"] = $('#gender').val();
             TbUser["roleId"] = $('#role').val();
             TbUser["dob"] = $('#dob').val();
 
