@@ -116,6 +116,60 @@ public class RoomController {
     }
 
     @Transactional
+    @PostMapping("/room/createRate")
+    public ResponseEntity createRoomRate(@RequestBody RoomRateResponseModel roomRequestModel) {
+//        try {
+//            TbUser user = userService.findById(roomRequestModel.getUserId());
+//            int roomId = 0;
+//
+//            if (user.getRoleId() == HOUSE_OWNER) {
+//                TbRoom room = new TbRoom();
+//                room.setRoomId(0);
+//                room.setName(roomRequestModel.getName());
+//                room.setPrice(roomRequestModel.getPrice());
+//                room.setArea(roomRequestModel.getArea());
+//                room.setAddress(roomRequestModel.getAddress());
+//                room.setMaxGuest(roomRequestModel.getMaxGuest());
+//                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+//                room.setDate(timestamp);
+//                room.setCurrentNumber(0);
+//                room.setDescription(roomRequestModel.getDescription());
+//                room.setStatusId(PENDING);
+//                room.setUserId(roomRequestModel.getUserId());
+//                room.setCityId(roomRequestModel.getCityId());
+//                room.setDistrictId(roomRequestModel.getDistrictId());
+//                room.setLattitude(roomRequestModel.getLatitude());
+//                room.setLongtitude(roomRequestModel.getLongitude());
+//                roomId = roomService.saveRoom(room);
+//
+//                for (UtilityRequestModel utilityRequestModel : roomRequestModel.getUtilities()) {
+//                    TbRoomHasUtility roomHasUtility = new TbRoomHasUtility();
+//                    roomHasUtility.setId(0);
+//                    roomHasUtility.setRoomId(roomId);
+//                    roomHasUtility.setBrand(utilityRequestModel.getBrand());
+//                    roomHasUtility.setDescription(utilityRequestModel.getDescription());
+//                    roomHasUtility.setQuantity(utilityRequestModel.getQuantity());
+//                    roomHasUtility.setUtilityId(utilityRequestModel.getUtilityId());
+//                    roomHasUtilityService.saveRoomHasUtility(roomHasUtility);
+//                }
+//
+//                for (String url : roomRequestModel.getImageUrls()) {
+//                    TbImage image = new TbImage();
+//                    image.setImageId(0);
+//                    image.setRoomId(roomId);
+//                    image.setLinkUrl(url);
+//                    imageService.saveImage(image);
+//                }
+//                return ResponseEntity.status(CREATED).build();
+//            } else {
+//                return ResponseEntity.status((FORBIDDEN)).build();
+//            }
+//        } catch (Exception e) {
+            return ResponseEntity.status(FORBIDDEN).build();
+//        }
+    }
+
+    @Transactional
     @PutMapping("/room/update")
     public ResponseEntity updateRoom(@RequestBody RoomRequestModel roomRequestModel) {
         try {
@@ -462,7 +516,7 @@ public class RoomController {
     @Transactional
     @PutMapping("room/editMember")
     public ResponseEntity editMember(@RequestBody RoomMemberRequestModel roomMemberModel) {
-        try {
+//        try {
             List<TbRoomHasUser> roomMembers = roomHasUserService.findByRoomIdAndDateOutIsNull(roomMemberModel.getRoomId());
 
             if (roomMemberModel.getMemberRequestModels() == null) {
@@ -535,7 +589,7 @@ public class RoomController {
                             user.setRoleId(MEMBER);
                             userService.saveUser(user);
                             //Set Date out
-                            TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomId(memberRequestModel.getUserId()
+                            TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomIdAndDateOutIsNull(memberRequestModel.getUserId()
                                     , roomMemberModel.getRoomId());
                             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                             roomHasUser.setDateOut(timestamp);
@@ -589,9 +643,9 @@ public class RoomController {
                         });
             }
             return ResponseEntity.status(OK).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(CONFLICT).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(CONFLICT).build();
+//        }
     }
 
     @DeleteMapping("/room/removeMember/{userId}")

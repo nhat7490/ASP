@@ -813,14 +813,16 @@ public class PostController {
 
     @PostMapping("/post/suggest")
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
-        try {
+//        try {
             TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
             TbPost checkPost = postService.findAllByUserIdAndTypeIdOrderByDatePostDesc(baseSuggestRequestModel.getUserId(), MASTER_POST);
             boolean checkDate = false;
             if (checkPost != null) {
                 TbRoomHasUser roomHasUser = roomHasUserService
                         .findByUserIdAndRoomIdAndDateOutIsNull(baseSuggestRequestModel.getUserId(), checkPost.getRoomId());
-                checkDate = checkPost.getDatePost().getTime() > roomHasUser.getDateIn().getTime();
+                if (roomHasUser!=null){
+                    checkDate = checkPost.getDatePost().getTime() > roomHasUser.getDateIn().getTime();
+                }
             }
 
             //sugesst for room master
@@ -910,9 +912,9 @@ public class PostController {
                         .body(utilsService.mappingRoomPost(postList, roomPostResponseModels
                                 , baseSuggestRequestModel.getUserId()));
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(NOT_FOUND).build();
+//        }
     }
 
     @PostMapping("post/search")
