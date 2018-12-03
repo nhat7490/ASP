@@ -61,6 +61,7 @@
 
 <body>
 
+<c:set value="${sessionScope.USER}" var="user"/>
 <div id="wrapper">
 
     <!-- Navigation -->
@@ -77,7 +78,12 @@
 
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown open">
-            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Đăng Xuất</a>
+                <c:if test="${not empty user && user.roleId eq 1}">
+                    <li><a href="/log-out"><i class="fa fa-sign-out fa-fw"></i>Đăng Xuất</a>
+                </c:if>
+                <c:if test="${empty user && user.roleId ne 1}">
+                    <li><a href="/"><i class="fa fa-sign-out fa-fw"></i>Đăng Nhập</a>
+                </c:if>
             </li>
             </li>
         </ul>
@@ -186,149 +192,160 @@
                         Danh sách người dùng
                     </div>
                     <!-- /.panel-heading -->
-                    <c:set var="sizes" value="${[10, 20, 50]}"/>
-                    <div style="padding: 4px 15px; font-size: 1.5rem;">
-                        Hiển thị
-                        <select onchange="handleOnChange(${requestScope.CURRENTPAGE}, event.target.value)"
-                                id="page-size">
-                            <c:forEach var="size" items="${sizes}">
-                                <c:if test="${requestScope.SIZE eq size}">
-                                    <option selected value="${size}">${size}</option>
-                                </c:if>
-                                <c:if test="${requestScope.SIZE ne size}">
-                                    <option value="${size}">${size}</option>
-                                </c:if>
-                                <%--<option value="${size}">${size}</option>--%>
-                            </c:forEach>
-                        </select> người dùng
-                    </div>
-                    <div style="padding: 6px 15px; font-size: 1.5rem;">
-                        <button type="submit" class="btn btn-success" data-toggle="modal"
-                                data-target="#adduser"><span class="glyphicon glyphicon-plus"></span></button>
-                    </div>
+                    <c:if test="${empty user || user.roleId ne 1}">
+                        <div class="col-12">
+                            <div class="alert alert-danger text-center">
+                                Bạn cần phải đăng nhập
+                            </div>
+                        </div>
+
+                    </c:if>
+                    <c:if test="${not empty user && user.roleId eq 1}">
+                        <c:set var="sizes" value="${[10, 20, 50]}"/>
+                        <div style="padding: 4px 15px; font-size: 1.5rem;">
+                            Hiển thị
+                            <select onchange="handleOnChange(${requestScope.CURRENTPAGE}, event.target.value)"
+                                    id="page-size">
+                                <c:forEach var="size" items="${sizes}">
+                                    <c:if test="${requestScope.SIZE eq size}">
+                                        <option selected value="${size}">${size}</option>
+                                    </c:if>
+                                    <c:if test="${requestScope.SIZE ne size}">
+                                        <option value="${size}">${size}</option>
+                                    </c:if>
+                                    <%--<option value="${size}">${size}</option>--%>
+                                </c:forEach>
+                            </select> người dùng
+                        </div>
+                        <div style="padding: 6px 15px; font-size: 1.5rem;">
+                            <button type="submit" class="btn btn-success" data-toggle="modal"
+                                    data-target="#adduser"><span class="glyphicon glyphicon-plus"></span></button>
+                        </div>
 
 
-                    <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover"
-                               id="dataTables-example">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Tên đăng nhập</th>
-                                <th>Họ tên</th>
-                                <th>Ngày sinh</th>
-                                <th>Email</th>
-                                <th>Giới tính</th>
-                                <th>Số điện thoại</th>
-                                <th>Vai trò</th>
-                                <th>Thao tác</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:set var="userList" value="${requestScope.USERS}"/>
-                            <c:set var="ADMIN" value="Admin"/>
-                            <c:forEach var="user" items="${userList}">
+                        <div class="panel-body">
+                            <table width="100%" class="table table-striped table-bordered table-hover"
+                                   id="dataTables-example">
+                                <thead>
                                 <tr>
-                                    <td>${user.userId}</td>
-                                    <td>${user.username}</td>
-                                    <td>${user.fullname}</td>
-                                    <td>${user.dob}</td>
-                                    <td>${user.email}</td>
-                                    <td>
-                                        <c:if test="${user.gender eq 1}">
-                                            Nam
-                                        </c:if>
-                                        <c:if test="${user.gender eq 2}">
-                                            Nữ
-                                        </c:if>
-                                    </td>
-                                    <td>${user.phone}</td>
-                                    <td>
-                                        <c:if test="${user.roleId eq 1}">
-                                            Admin
-                                        </c:if>
-                                        <c:if test="${user.roleId eq 2}">
-                                            Chủ Nhà
-                                        </c:if>
-                                        <c:if test="${user.roleId eq 3}">
-                                            Chủ Phòng
-                                        </c:if>
-                                        <c:if test="${user.roleId eq 4}">
-                                            Thành Viên
-                                        </c:if>
-                                        <c:if test="${user.roleId eq 5}">
-                                            Quản Trị Viên
-                                        </c:if>
-                                    </td>
-                                    <td>
-                                        <a href="/users/remove/${user.userId}">
-                                            <button type="button" class="btn btn-danger">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </button>
-                                        </a>
-                                    </td>
+                                    <th>ID</th>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Họ tên</th>
+                                    <th>Ngày sinh</th>
+                                    <th>Email</th>
+                                    <th>Giới tính</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Vai trò</th>
+                                    <th>Thao tác</th>
                                 </tr>
+                                </thead>
+                                <tbody>
+                                <c:set var="userList" value="${requestScope.USERS}"/>
+                                <c:set var="ADMIN" value="Admin"/>
+                                <c:forEach var="user" items="${userList}">
+                                    <tr>
+                                        <td>${user.userId}</td>
+                                        <td>${user.username}</td>
+                                        <td>${user.fullname}</td>
+                                        <td>${user.dob}</td>
+                                        <td>${user.email}</td>
+                                        <td>
+                                            <c:if test="${user.gender eq 1}">
+                                                Nam
+                                            </c:if>
+                                            <c:if test="${user.gender eq 2}">
+                                                Nữ
+                                            </c:if>
+                                        </td>
+                                        <td>${user.phone}</td>
+                                        <td>
+                                            <c:if test="${user.roleId eq 1}">
+                                                Admin
+                                            </c:if>
+                                            <c:if test="${user.roleId eq 2}">
+                                                Chủ Nhà
+                                            </c:if>
+                                            <c:if test="${user.roleId eq 3}">
+                                                Chủ Phòng
+                                            </c:if>
+                                            <c:if test="${user.roleId eq 4}">
+                                                Thành Viên
+                                            </c:if>
+                                            <c:if test="${user.roleId eq 5}">
+                                                Quản Trị Viên
+                                            </c:if>
+                                        </td>
+                                        <td>
+                                            <a href="/users/remove/${user.userId}">
+                                                <button type="button" class="btn btn-danger">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </a>
+                                        </td>
+                                    </tr>
 
-                            </c:forEach>
-                            </tbody>
-                        </table>
-
-                        <ul class="pagination pagination-lg" style="cursor: pointer">
-                            <c:set var="totalPage" value="${requestScope.PAGE}"/>
-                            <c:set var="currentPage" value="${requestScope.CURRENTPAGE}"/>
-
-                            <%--<c:if test="${currentPage eq 1}">--%>
-                            <%--<li><a>Previous</a></li>--%>
-                            <%--<c:forEach var="i" begin="1" end="${totalPage}">--%>
-                            <%--<li onclick="changePage(${i})">--%>
-                            <%--<a>--%>
-                            <%--${i}--%>
-                            <%--</a>--%>
-                            <%--</li>--%>
-                            <%--</c:forEach>--%>
-                            <%--<li onclick="changePage(${currentPage+1})"><a>Next</a></li>--%>
-                            <%--</c:if>--%>
-
-                            <c:if test="${currentPage eq 1 && totalPage ne 1 && totalPage ge 9}">
-                                <li><a>Previous</a></li>
-                                <c:forEach var="i" begin="1" end="9">
-                                    <li onclick="changePage(${i})">
-                                        <a>
-                                                ${i}
-                                        </a>
-                                    </li>
                                 </c:forEach>
-                                <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
-                            </c:if>
+                                </tbody>
+                            </table>
 
-                            <c:if test="${currentPage gt 1 && currentPage le 9}">
-                                <li onclick="changePage(${currentPage - 1})"><a>Previous</a></li>
-                                <c:forEach var="i" begin="1" end="9">
-                                    <li onclick="changePage(${i})">
-                                        <a>
-                                                ${i}
-                                        </a>
-                                    </li>
-                                </c:forEach>
-                                <li onclick="changePage(${currentPage + 1})"><a>Next</a></li>
-                            </c:if>
+                            <ul class="pagination pagination-lg" style="cursor: pointer">
+                                <c:set var="totalPage" value="${requestScope.PAGE}"/>
+                                <c:set var="currentPage" value="${requestScope.CURRENTPAGE}"/>
 
-                            <c:if test="${currentPage gt 9}">
-                                <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
-                                <c:forEach var="i" begin="${currentPage}" end="${currentPage + 8}">
-                                    <c:if test="${i le totalPage}">
+                                    <%--<c:if test="${currentPage eq 1}">--%>
+                                    <%--<li><a>Previous</a></li>--%>
+                                    <%--<c:forEach var="i" begin="1" end="${totalPage}">--%>
+                                    <%--<li onclick="changePage(${i})">--%>
+                                    <%--<a>--%>
+                                    <%--${i}--%>
+                                    <%--</a>--%>
+                                    <%--</li>--%>
+                                    <%--</c:forEach>--%>
+                                    <%--<li onclick="changePage(${currentPage+1})"><a>Next</a></li>--%>
+                                    <%--</c:if>--%>
+
+                                <c:if test="${currentPage eq 1 && totalPage ne 1 && totalPage ge 9}">
+                                    <li><a>Previous</a></li>
+                                    <c:forEach var="i" begin="1" end="9">
                                         <li onclick="changePage(${i})">
                                             <a>
                                                     ${i}
                                             </a>
                                         </li>
-                                    </c:if>
-                                </c:forEach>
-                                <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
-                            </c:if>
+                                    </c:forEach>
+                                    <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
+                                </c:if>
 
-                        </ul>
-                    </div>
+                                <c:if test="${currentPage gt 1 && currentPage le 9}">
+                                    <li onclick="changePage(${currentPage - 1})"><a>Previous</a></li>
+                                    <c:forEach var="i" begin="1" end="9">
+                                        <li onclick="changePage(${i})">
+                                            <a>
+                                                    ${i}
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+                                    <li onclick="changePage(${currentPage + 1})"><a>Next</a></li>
+                                </c:if>
+
+                                <c:if test="${currentPage gt 9}">
+                                    <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
+                                    <c:forEach var="i" begin="${currentPage}" end="${currentPage + 8}">
+                                        <c:if test="${i le totalPage}">
+                                            <li onclick="changePage(${i})">
+                                                <a>
+                                                        ${i}
+                                                </a>
+                                            </li>
+                                        </c:if>
+                                    </c:forEach>
+                                    <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
+                                </c:if>
+
+                            </ul>
+                        </div>
+                    </c:if>
+
                 </div>
             </div>
 

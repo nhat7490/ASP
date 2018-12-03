@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -85,12 +87,15 @@ public class UserController {
     }
 
     @PostMapping(value = "/user/admin", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity adminLogin(@RequestBody UserLoginModel model) {
+    public ResponseEntity adminLogin(HttpServletRequest request,
+                                     @RequestBody UserLoginModel model) {
         try {
             TbUser user = userService.findByUsername(model.getUsername());
             boolean isRight = this.passwordEncoder.matches(model.getPassword(), user.getPassword());
 
             if (user.getRoleId() == ADMIN && isRight) {
+                HttpSession session = request.getSession();
+                session.setAttribute("USER", user);
                 return ResponseEntity.status(OK).body(user);
             }
             return ResponseEntity.status(NOT_FOUND).build();

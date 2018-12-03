@@ -49,6 +49,7 @@
 </head>
 
 <body>
+<c:set value="${sessionScope.USER}" var="user"/>
 
 <div id="wrapper">
 
@@ -66,7 +67,12 @@
 
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown open">
-            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Đăng Xuất</a>
+                <c:if test="${not empty user && user.roleId eq 1}">
+                    <li><a href="/log-out"><i class="fa fa-sign-out fa-fw"></i>Đăng Xuất</a>
+                </c:if>
+                <c:if test="${empty user && user.roleId ne 1}">
+                    <li><a href="/"><i class="fa fa-sign-out fa-fw"></i>Đăng Nhập</a>
+                </c:if>
             </li>
             </li>
         </ul>
@@ -101,165 +107,176 @@
                         Danh sách phòng
                     </div>
                     <!-- /.panel-heading -->
-                    <c:set var="sizes" value="${[10, 20, 50]}"/>
-                    <div style="padding: 0px 15px; font-size: 1.5rem;margin-top: 10px" >
-                        Hiển thị
-                        <select onchange="handleOnChange(${requestScope.CURRENTPAGE}, event.target.value)"
-                                id="page-size">
-                            <c:forEach var="size" items="${sizes}">
-                                <c:if test="${requestScope.SIZE eq size}">
-                                    <option selected value="${size}">${size}</option>
-                                </c:if>
-                                <c:if test="${requestScope.SIZE ne size}">
-                                    <option value="${size}">${size}</option>
-                                </c:if>
-                                <%--<option value="${size}">${size}</option>--%>
-                            </c:forEach>
-                        </select> phòng
-                    </div>
-                    <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover"
-                               id="dataTables-example">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Tên Phòng</th>
-                                <th>Diện tích (m<sup>2</sup>)</th>
-                                <th>Giá (VND)</th>
-                                <th>Ngày đăng</th>
-                                <th>Địa chỉ</th>
-                                <th>Hình ảnh</th>
-                                <th>Thao tác</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:set var="roomList" value="${requestScope.ROOMS}"/>
-                            <c:forEach var="room" items="${roomList}">
+                    <c:if test="${empty user || user.roleId ne 1}">
+                        <div class="col-12">
+                            <div class="alert alert-danger text-center">
+                                Bạn cần phải đăng nhập
+                            </div>
+                        </div>
+
+                    </c:if>
+                    <c:if test="${not empty user && user.roleId eq 1}">
+                        <<c:set var="sizes" value="${[10, 20, 50]}"/>
+                        <div style="padding: 0px 15px; font-size: 1.5rem;margin-top: 10px">
+                            Hiển thị
+                            <select onchange="handleOnChange(${requestScope.CURRENTPAGE}, event.target.value)"
+                                    id="page-size">
+                                <c:forEach var="size" items="${sizes}">
+                                    <c:if test="${requestScope.SIZE eq size}">
+                                        <option selected value="${size}">${size}</option>
+                                    </c:if>
+                                    <c:if test="${requestScope.SIZE ne size}">
+                                        <option value="${size}">${size}</option>
+                                    </c:if>
+                                    <%--<option value="${size}">${size}</option>--%>
+                                </c:forEach>
+                            </select> phòng
+                        </div>
+                        <div class="panel-body">
+                            <table width="100%" class="table table-striped table-bordered table-hover"
+                                   id="dataTables-example">
+                                <thead>
                                 <tr>
-                                    <td>${room.roomId}</td>
-                                    <td>${room.name}</td>
-                                    <td>${room.area}</td>
-                                    <td>
-                                        <fmt:formatNumber value="${room.price}" type="number"/>
-                                    </td>
-                                    <td>
-                                        <fmt:formatDate value="${room.dateCreated}" pattern="dd-MM-yyyy" />
-                                    </td>
-                                    <td>${room.address}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" style="width: 100px"
-                                                data-toggle="modal"
-                                                data-target="#myModal">Xem
-                                        </button>
-                                    </td>
-                                    <div class="modal fade" id="myModal" role="dialog">
-                                        <div class="modal-dialog">
-
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal">&times;
-                                                    </button>
-                                                    <h4 class="modal-title">Hình Ảnh Phòng</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <c:forEach var="image" items="${room.imageUrls}">
-                                                        <img src="${image}" style="width: 100%; margin-bottom:10px">
-                                                    </c:forEach>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                        Close
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <td>
-                                        <a href="/room/approve/${room.roomId}">
-                                            <button type="button" class="btn btn-success">
-                                                <span class="glyphicon glyphicon-ok"></span>
-                                            </button>&nbsp;&nbsp;&nbsp;
-                                        </a>
-                                        <a href="/room/decline/${room.roomId}">
-                                            <button type="button" class="btn btn-danger">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                        </a>
-
-                                    </td>
+                                    <th>ID</th>
+                                    <th>Tên Phòng</th>
+                                    <th>Diện tích (m<sup>2</sup>)</th>
+                                    <th>Giá (VND)</th>
+                                    <th>Ngày đăng</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Thao tác</th>
                                 </tr>
+                                </thead>
+                                <tbody>
+                                <c:set var="roomList" value="${requestScope.ROOMS}"/>
+                                <c:forEach var="room" items="${roomList}">
+                                    <tr>
+                                        <td>${room.roomId}</td>
+                                        <td>${room.name}</td>
+                                        <td>${room.area}</td>
+                                        <td>
+                                            <fmt:formatNumber value="${room.price}" type="number"/>
+                                        </td>
+                                        <td>
+                                            <fmt:formatDate value="${room.dateCreated}" pattern="dd-MM-yyyy"/>
+                                        </td>
+                                        <td>${room.address}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary" style="width: 100px"
+                                                    data-toggle="modal"
+                                                    data-target="#myModal">Xem
+                                            </button>
+                                        </td>
+                                        <div class="modal fade" id="myModal" role="dialog">
+                                            <div class="modal-dialog">
 
-                            </c:forEach>
-                            </tbody>
-                        </table>
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;
+                                                        </button>
+                                                        <h4 class="modal-title">Hình Ảnh Phòng</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <c:forEach var="image" items="${room.imageUrls}">
+                                                            <img src="${image}" style="width: 100%; margin-bottom:10px">
+                                                        </c:forEach>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                            Close
+                                                        </button>
+                                                    </div>
+                                                </div>
 
-                        <ul class="pagination pagination-lg" style="cursor: pointer">
-                            <c:set var="totalPage" value="${requestScope.PAGE}"/>
-                            <c:set var="currentPage" value="${requestScope.CURRENTPAGE}"/>
+                                            </div>
+                                        </div>
 
-                            <%--<c:if test="${currentPage eq 1}">--%>
-                            <%--<li><a>Previous</a></li>--%>
-                            <%--<c:forEach var="i" begin="1" end="${totalPage}">--%>
-                            <%--<li onclick="changePage(${i})">--%>
-                            <%--<a>--%>
-                            <%--${i}--%>
-                            <%--</a>--%>
-                            <%--</li>--%>
-                            <%--</c:forEach>--%>
-                            <%--<li onclick="changePage(${currentPage+1})"><a>Next</a></li>--%>
-                            <%--</c:if>--%>
 
-                            <c:if test="${currentPage eq totalPage && totalPage ne 1}">
-                                <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
-                                <c:forEach var="i" begin="1" end="${totalPage}">
-                                    <li onclick="changePage(${i})">
+                                        <td>
+                                            <a href="/room/approve/${room.roomId}">
+                                                <button type="button" class="btn btn-success">
+                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                </button>&nbsp;&nbsp;&nbsp;
+                                            </a>
+                                            <a href="/room/decline/${room.roomId}">
+                                                <button type="button" class="btn btn-danger">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </a>
+
+                                        </td>
+                                    </tr>
+
+                                </c:forEach>
+                                </tbody>
+                            </table>
+
+                            <ul class="pagination pagination-lg" style="cursor: pointer">
+                                <c:set var="totalPage" value="${requestScope.PAGE}"/>
+                                <c:set var="currentPage" value="${requestScope.CURRENTPAGE}"/>
+
+                                    <%--<c:if test="${currentPage eq 1}">--%>
+                                    <%--<li><a>Previous</a></li>--%>
+                                    <%--<c:forEach var="i" begin="1" end="${totalPage}">--%>
+                                    <%--<li onclick="changePage(${i})">--%>
+                                    <%--<a>--%>
+                                    <%--${i}--%>
+                                    <%--</a>--%>
+                                    <%--</li>--%>
+                                    <%--</c:forEach>--%>
+                                    <%--<li onclick="changePage(${currentPage+1})"><a>Next</a></li>--%>
+                                    <%--</c:if>--%>
+
+                                <c:if test="${currentPage eq totalPage && totalPage ne 1}">
+                                    <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
+                                    <c:forEach var="i" begin="1" end="${totalPage}">
+                                        <li onclick="changePage(${i})">
+                                            <a>
+                                                    ${i}
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+                                    <li><a>Next</a></li>
+                                </c:if>
+
+                                <c:if test="${currentPage gt 1 && currentPage lt totalPage}">
+                                    <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
+                                    <c:forEach var="i" begin="1" end="${totalPage}">
+                                        <li onclick="changePage(${i})">
+                                            <a>
+                                                    ${i}
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+                                    <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
+                                </c:if>
+
+                                <c:if test="${currentPage eq totalPage && totalPage eq 1}">
+                                    <li><a>Previous</a></li>
+                                    <li onclick="changePage(${currentPage})">
                                         <a>
-                                                ${i}
+                                                ${currentPage}
                                         </a>
                                     </li>
-                                </c:forEach>
-                                <li><a>Next</a></li>
-                            </c:if>
+                                    <li><a>Next</a></li>
+                                </c:if>
+                                <c:if test="${currentPage eq 1 && totalPage gt 1}">
+                                    <li><a>Previous</a></li>
+                                    <c:forEach var="i" begin="1" end="${totalPage}">
+                                        <li onclick="changePage(${i})">
+                                            <a>
+                                                    ${i}
+                                            </a>
+                                        </li>
+                                    </c:forEach>
 
-                            <c:if test="${currentPage gt 1 && currentPage lt totalPage}">
-                                <li onclick="changePage(${currentPage-1})"><a>Previous</a></li>
-                                <c:forEach var="i" begin="1" end="${totalPage}">
-                                    <li onclick="changePage(${i})">
-                                        <a>
-                                                ${i}
-                                        </a>
-                                    </li>
-                                </c:forEach>
-                                <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
-                            </c:if>
+                                    <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
+                                </c:if>
+                            </ul>
+                        </div>
+                    </c:if>
 
-                            <c:if test="${currentPage eq totalPage && totalPage eq 1}">
-                                <li><a>Previous</a></li>
-                                <li onclick="changePage(${currentPage})">
-                                    <a>
-                                            ${currentPage}
-                                    </a>
-                                </li>
-                                <li><a>Next</a></li>
-                            </c:if>
-                            <c:if test="${currentPage eq 1 && totalPage gt 1}">
-                                <li><a>Previous</a></li>
-                                <c:forEach var="i" begin="1" end="${totalPage}">
-                                    <li onclick="changePage(${i})">
-                                        <a>
-                                                ${i}
-                                        </a>
-                                    </li>
-                                </c:forEach>
-
-                                <li onclick="changePage(${currentPage+1})"><a>Next</a></li>
-                            </c:if>
-                        </ul>
-                    </div>
                 </div>
             </div>
 
