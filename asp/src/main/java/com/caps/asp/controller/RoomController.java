@@ -172,14 +172,14 @@ public class RoomController {
     @Transactional
     @PutMapping("/room/update")
     public ResponseEntity updateRoom(@RequestBody RoomRequestModel roomRequestModel) {
-        try {
+//        try {
             //update room info
             TbRoom room = roomService.findRoomById(roomRequestModel.getRoomId());
             TbUser user = userService.findById(roomRequestModel.getUserId());
 
             if (user.getRoleId() == HOUSE_OWNER) {
                 List<TbRoomHasUser> roomHasUsers = roomHasUserService.findByRoomIdAndDateOutIsNull(roomRequestModel.getRoomId());
-                if (room != null && roomHasUsers.size() < roomRequestModel.getCurrentMember()) {
+                if (room != null && roomHasUsers.size() <= roomRequestModel.getMaxGuest()) {
                     room.setRoomId(roomRequestModel.getRoomId());
                     room.setName(roomRequestModel.getName());
                     room.setPrice(roomRequestModel.getPrice());
@@ -249,9 +249,9 @@ public class RoomController {
                 }
             }
             return ResponseEntity.status(CONFLICT).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(CONFLICT).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(CONFLICT).build();
+//        }
     }
 
     @Transactional

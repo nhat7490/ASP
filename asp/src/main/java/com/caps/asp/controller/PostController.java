@@ -417,7 +417,7 @@ public class PostController {
                 post.setMinPrice(roomPostRequestModel.getMinPrice());
                 post.setRoomId(roomPostRequestModel.getRoomId());
                 post.setGenderPartner(roomPostRequestModel.getGenderPartner());
-                post.setDescription(post.getDescription());
+                post.setDescription(roomPostRequestModel.getDescription());
                 post.setUserId(roomPostRequestModel.getUserId());
                 post.setPostId(0);
 
@@ -465,7 +465,7 @@ public class PostController {
                 post.setPhoneContact(roomPostRequestModel.getPhoneContact());
                 post.setName(roomPostRequestModel.getName());
                 post.setGenderPartner(roomPostRequestModel.getGenderPartner());
-
+                post.setDescription(roomPostRequestModel.getDescription());
                 postService.savePost(post);
                 return ResponseEntity.status(OK).build();
             }

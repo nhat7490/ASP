@@ -3,6 +3,7 @@ package com.caps.asp.model.uimodel.response.common;
 import com.caps.asp.model.TbUser;
 import com.caps.asp.model.TbUserRate;
 import com.caps.asp.model.uimodel.common.UserSuggestSettingModel;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ public class UserResponseModel {
     private Integer userId;
     private String fullname;
     private String imageProfile;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
     private String phone;
     private int gender;

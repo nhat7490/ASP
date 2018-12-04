@@ -116,7 +116,7 @@
 
                     </c:if>
                     <c:if test="${not empty user && user.roleId eq 1}">
-                        <<c:set var="sizes" value="${[10, 20, 50]}"/>
+                        <c:set var="sizes" value="${[10, 20, 50]}"/>
                         <div style="padding: 0px 15px; font-size: 1.5rem;margin-top: 10px">
                             Hiển thị
                             <select onchange="handleOnChange(${requestScope.CURRENTPAGE}, event.target.value)"
