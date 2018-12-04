@@ -38,51 +38,30 @@ public class ReferenceController {
 
             TbReference checkReference = referenceService.getByUserId(suggestSettingRequestModel.getUserId());
             if (checkReference == null){
-                TbReference reference = new TbReference();
-                reference.setMinPrice(prices.get(0));
-                reference.setMaxPrice(prices.get(1));
-                reference.setUserId(suggestSettingRequestModel.getUserId());
-                referenceService.save(reference);
-
-                for (Integer utilityId : suggestSettingRequestModel.getUtilities()) {
-                    TbUtilitiesReference tbUtilitiesReference = new TbUtilitiesReference();
-                    tbUtilitiesReference.setId(0);
-                    tbUtilitiesReference.setUserId(suggestSettingRequestModel.getUserId());
-                    tbUtilitiesReference.setUtilityId(utilityId);
-                    utilityReferenceService.save(tbUtilitiesReference);
-                }
-
-                for (Integer districtId : suggestSettingRequestModel.getDistricts()) {
-                    TbDistrictReference tbDistrictReference = new TbDistrictReference();
-                    tbDistrictReference.setId(0);
-                    tbDistrictReference.setUserId(suggestSettingRequestModel.getUserId());
-                    tbDistrictReference.setDistrictId(districtId);
-                    districtReferenceService.save(tbDistrictReference);
-                }
-            }else {
-                checkReference.setMinPrice(prices.get(0));
-                checkReference.setMaxPrice(prices.get(1));
-                referenceService.save(checkReference);
-
-                utilityReferenceService.removeAllByUserId(suggestSettingRequestModel.getUserId());
-                for (Integer utilityId : suggestSettingRequestModel.getUtilities()) {
-                    TbUtilitiesReference tbUtilitiesReference = new TbUtilitiesReference();
-                    tbUtilitiesReference.setId(0);
-                    tbUtilitiesReference.setUserId(suggestSettingRequestModel.getUserId());
-                    tbUtilitiesReference.setUtilityId(utilityId);
-                    utilityReferenceService.save(tbUtilitiesReference);
-                }
-
-                districtReferenceService.removeAllByUserId(suggestSettingRequestModel.getUserId());
-                for (Integer districtId : suggestSettingRequestModel.getDistricts()) {
-                    TbDistrictReference tbDistrictReference = new TbDistrictReference();
-                    tbDistrictReference.setId(0);
-                    tbDistrictReference.setUserId(suggestSettingRequestModel.getUserId());
-                    tbDistrictReference.setDistrictId(districtId);
-                    districtReferenceService.save(tbDistrictReference);
-                }
+                checkReference = new TbReference();
             }
-            return ResponseEntity.status(CREATED).build();
+            checkReference.setMinPrice(prices.get(0));
+            checkReference.setMaxPrice(prices.get(1));
+            referenceService.save(checkReference);
+
+            utilityReferenceService.removeAllByUserId(suggestSettingRequestModel.getUserId());
+            for (Integer utilityId : suggestSettingRequestModel.getUtilities()) {
+                TbUtilitiesReference tbUtilitiesReference = new TbUtilitiesReference();
+                tbUtilitiesReference.setId(0);
+                tbUtilitiesReference.setUserId(suggestSettingRequestModel.getUserId());
+                tbUtilitiesReference.setUtilityId(utilityId);
+                utilityReferenceService.save(tbUtilitiesReference);
+            }
+
+            districtReferenceService.removeAllByUserId(suggestSettingRequestModel.getUserId());
+            for (Integer districtId : suggestSettingRequestModel.getDistricts()) {
+                TbDistrictReference tbDistrictReference = new TbDistrictReference();
+                tbDistrictReference.setId(0);
+                tbDistrictReference.setUserId(suggestSettingRequestModel.getUserId());
+                tbDistrictReference.setDistrictId(districtId);
+                districtReferenceService.save(tbDistrictReference);
+            }
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
         }
