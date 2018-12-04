@@ -24,14 +24,15 @@ class AddMemberView: UIView ,UITextFieldDelegate{
         lblTitle.font = .boldMedium
         lblTitle.text = "EDIT_MEMBER_TITLE".localized;
         
-        tfUsername.placeholder = "EDIT_MEMBER_USERNAME".localized
-        tfUsername.placeholderColor = .lightGray
-        tfUsername.titleColor = .defaultBlue
-        tfUsername.title = "EDIT_MEMBER_USERNAME".localized
-        tfUsername.errorColor = .red
-        tfUsername.selectedLineColor = .defaultBlue
-        tfUsername.selectedTitleColor = .defaultBlue//Title color
-        tfUsername.delegate = self
+//        tfUsername.placeholder = "EDIT_MEMBER_USERNAME".localized
+//        tfUsername.placeholderColor = .lightGray
+//        tfUsername.titleColor = .defaultBlue
+//        tfUsername.title = "EDIT_MEMBER_USERNAME".localized
+//        tfUsername.errorColor = .red
+//        tfUsername.selectedLineColor = .defaultBlue
+//        tfUsername.selectedTitleColor = .defaultBlue//Title color
+//        tfUsername.delegate = self
+        tfUsername.setupUI(placeholder: "EDIT_MEMBER_USERNAME", title: "EDIT_MEMBER_USERNAME", delegate: self)
         
         btnAdd.setTitle("EDIT_MEMBER_ADD".localized, for: .normal)
         btnAdd.backgroundColor = .defaultBlue

@@ -311,6 +311,7 @@
 "MB_LOAD_UPLOAD_IMAGE" = "Đang tải ảnh lên";
 "MB_LOAD_CREATE_ROOM" = "Đang tạo phòng";
 "MB_LOAD_CREATE_POST" = "Đang tạo bài viết";
+"MB_LOAD_EDIT_POST" = "Đang cập nhập bài viết";
 
 "MB_LOAD_CREATE_USER" ="Đang Đăng ký";
 "MB_LOAD_EDIT_ROOM" = "Đang cập nhập thông tin phòng";

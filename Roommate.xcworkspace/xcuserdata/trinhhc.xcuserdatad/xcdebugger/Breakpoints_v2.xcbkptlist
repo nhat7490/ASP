@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/CERoomVC.swift"
-            timestampString = "565514244.44042"
+            timestampString = "565606990.4485739"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "223"
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/HomeVC.swift"
-            timestampString = "565532374.451933"
+            timestampString = "565611604.724286"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "627"
-            endingLineNumber = "627"
+            startingLineNumber = "631"
+            endingLineNumber = "631"
             landmarkName = "alertControllerDelegate(alertController:withAlertType:onCompleted:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/RoomDetail/EditMemberVC.swift"
-            timestampString = "565516617.9073679"
+            timestampString = "565611604.724409"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "membersViewDelegate(membersView:onDeleteRecordAtIndexPath:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/RoomDetail/EditMemberVC.swift"
-            timestampString = "565516617.907436"
+            timestampString = "565611604.724488"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "209"
-            endingLineNumber = "209"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
             landmarkName = "dropdownListViewDelegate(view:onClickBtnChangeSelect:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/FirstLaunch/SignUpVC.swift"
-            timestampString = "565514244.441124"
+            timestampString = "565611604.724551"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "132"
@@ -106,7 +106,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/FirstLaunch/SignUpVC.swift"
-            timestampString = "565514244.441193"
+            timestampString = "565611604.7250741"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "285"
@@ -121,24 +121,8 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/Realm/Realm/RLMUtil.mm"
-            timestampString = "563741069.752098"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "269"
-            endingLineNumber = "269"
-            landmarkName = "RLMException(NSString *reason, NSDictionary *additionalUserInfo)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/FirstLaunch/SignUpVC.swift"
-            timestampString = "565514244.441299"
+            timestampString = "565611604.725449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "292"
@@ -154,7 +138,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/FirstLaunch/SignUpVC.swift"
-            timestampString = "565514244.441391"
+            timestampString = "565611604.725791"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "278"
@@ -170,7 +154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/FirstLaunch/SignUpVC.swift"
-            timestampString = "565514244.441465"
+            timestampString = "565611604.726167"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "287"
@@ -186,7 +170,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/CERoomVC.swift"
-            timestampString = "565514244.441527"
+            timestampString = "565606990.449584"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "529"
@@ -202,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Base/BaseVC.swift"
-            timestampString = "565532374.452379"
+            timestampString = "565611604.726662"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
+            startingLineNumber = "341"
+            endingLineNumber = "341"
             landmarkName = "processBookmark(view:model:row:completed:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -234,7 +218,7 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/CERoommatePostVC.swift"
-                  timestampString = "565531129.3490371"
+                  timestampString = "565611606.477332"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "427"
@@ -249,7 +233,7 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/CERoommatePostVC.swift"
-                  timestampString = "565531129.352603"
+                  timestampString = "565611606.480086"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "429"
@@ -298,7 +282,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/FirstLaunch/SignUpVC.swift"
-            timestampString = "565514244.441851"
+            timestampString = "565611604.726835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "283"
@@ -314,7 +298,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/FirstLaunch/SignUpVC.swift"
-            timestampString = "565514244.441911"
+            timestampString = "565611604.727176"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "43"
@@ -330,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/RoomDetail/EditMemberVC.swift"
-            timestampString = "565516617.907741"
+            timestampString = "565611604.7275209"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
             landmarkName = "addMemberViewDelegate(addMemberView:onClickBtnAdd:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -378,7 +362,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/RoomDetail/RoomDetaillVC.swift"
-            timestampString = "565532374.452715"
+            timestampString = "565604922.390256"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "296"
@@ -426,7 +410,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/CERoomPostVC.swift"
-            timestampString = "565514244.442202"
+            timestampString = "565611604.727756"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "171"
@@ -442,7 +426,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Common/ShowAllVC.swift"
-            timestampString = "565532374.452926"
+            timestampString = "565611351.097941"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "315"
@@ -458,7 +442,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Common/ShowAllVC.swift"
-            timestampString = "565532374.453025"
+            timestampString = "565611351.098585"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "250"
@@ -474,7 +458,7 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Common/ShowAllVC.swift"
-                  timestampString = "565531129.408632"
+                  timestampString = "565611606.5251189"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "250"
@@ -489,7 +473,7 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Common/ShowAllVC.swift"
-                  timestampString = "565531129.412093"
+                  timestampString = "565611606.527841"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "251"
@@ -506,28 +490,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Common/ShowAllVC.swift"
-            timestampString = "565532374.453089"
+            timestampString = "565611351.099105"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "218"
             endingLineNumber = "218"
             landmarkName = "setupDataAndDelegate()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Roommate/Controller/FirstLaunch/SignInVC.swift"
-            timestampString = "565523859.583071"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "requestUser()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -586,7 +554,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/CERoomVC.swift"
-            timestampString = "565514244.4426939"
+            timestampString = "565606990.450328"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "517"
@@ -602,7 +570,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Common/ShowAllVC.swift"
-            timestampString = "565532374.453519"
+            timestampString = "565611351.0998189"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "531"
@@ -618,7 +586,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/CERoomVC.swift"
-            timestampString = "565514244.443574"
+            timestampString = "565606990.450407"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "255"
@@ -634,7 +602,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/RoomDetail/RoomDetaillVC.swift"
-            timestampString = "565532374.453617"
+            timestampString = "565604922.391081"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "116"
@@ -650,7 +618,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Common/PostDetailVC.swift"
-            timestampString = "565532374.453688"
+            timestampString = "565611604.728058"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "236"
@@ -666,11 +634,11 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Common/PostDetailVC.swift"
-                  timestampString = "565531129.487358"
+                  timestampString = "565611606.579537"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "212"
-                  endingLineNumber = "212"
+                  startingLineNumber = "236"
+                  endingLineNumber = "236"
                   offsetFromSymbolStart = "24">
                </Location>
                <Location
@@ -681,11 +649,11 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Common/PostDetailVC.swift"
-                  timestampString = "565531129.4907449"
+                  timestampString = "565611606.582765"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "211"
-                  endingLineNumber = "211"
+                  startingLineNumber = "235"
+                  endingLineNumber = "235"
                   offsetFromSymbolStart = "20">
                </Location>
             </Locations>
@@ -714,11 +682,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Notification/NotificationVC.swift"
-            timestampString = "565532374.45419"
+            timestampString = "565611604.728488"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
             landmarkName = "collectionView(_:didSelectItemAt:)"
             landmarkType = "7">
             <Locations>
@@ -730,11 +698,11 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Notification/NotificationVC.swift"
-                  timestampString = "565531129.506267"
+                  timestampString = "565611606.595055"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "119"
-                  endingLineNumber = "119"
+                  startingLineNumber = "121"
+                  endingLineNumber = "121"
                   offsetFromSymbolStart = "336">
                </Location>
                <Location
@@ -745,11 +713,11 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Notification/NotificationVC.swift"
-                  timestampString = "565531129.509774"
+                  timestampString = "565611606.5977761"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
+                  startingLineNumber = "122"
+                  endingLineNumber = "122"
                   offsetFromSymbolStart = "32">
                </Location>
             </Locations>
@@ -762,11 +730,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/FirstLaunch/SignInVC.swift"
-            timestampString = "565523859.584288"
+            timestampString = "565611604.7285939"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
             landmarkName = "requestUser()"
             landmarkType = "7">
          </BreakpointContent>
@@ -778,11 +746,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Notification/NotificationVC.swift"
-            timestampString = "565532374.454301"
+            timestampString = "565611604.728698"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
             landmarkName = "collectionView(_:numberOfItemsInSection:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -794,11 +762,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/HomeVC.swift"
-            timestampString = "565532374.454361"
+            timestampString = "565611604.728781"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "361"
-            endingLineNumber = "361"
+            startingLineNumber = "365"
+            endingLineNumber = "365"
             landmarkName = "searchBarShouldBeginEditing(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -810,7 +778,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Account/AccountVC.swift"
-            timestampString = "565532374.454512"
+            timestampString = "565610732.461915"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "263"
@@ -826,11 +794,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/HomeVC.swift"
-            timestampString = "565532374.454594"
+            timestampString = "565611604.7289"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "435"
-            endingLineNumber = "435"
+            startingLineNumber = "439"
+            endingLineNumber = "439"
             landmarkName = "requestRoom(view:apiRouter:offset:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -842,27 +810,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/HomeVC.swift"
-            timestampString = "565532374.454672"
+            timestampString = "565611604.728979"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
-            landmarkName = "requestRoom(view:apiRouter:offset:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Roommate/Controller/Home/HomeVC.swift"
-            timestampString = "565532374.454749"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "463"
-            endingLineNumber = "463"
+            startingLineNumber = "467"
+            endingLineNumber = "467"
             landmarkName = "requestRoom(view:apiRouter:offset:)"
             landmarkType = "7">
             <Locations>
@@ -874,11 +826,11 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/HomeVC.swift"
-                  timestampString = "565531129.618819"
+                  timestampString = "565611606.632453"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "463"
-                  endingLineNumber = "463"
+                  startingLineNumber = "467"
+                  endingLineNumber = "467"
                   offsetFromSymbolStart = "3420">
                </Location>
                <Location
@@ -889,11 +841,11 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/HomeVC.swift"
-                  timestampString = "565531129.623309"
+                  timestampString = "565611606.635892"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "464"
-                  endingLineNumber = "464"
+                  startingLineNumber = "468"
+                  endingLineNumber = "468"
                   offsetFromSymbolStart = "36">
                </Location>
             </Locations>
@@ -906,7 +858,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/CERoomVC.swift"
-            timestampString = "565526598.2040319"
+            timestampString = "565606990.450917"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "717"
@@ -922,7 +874,7 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/CERoomVC.swift"
-                  timestampString = "565531129.633623"
+                  timestampString = "565611606.644762"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "717"
@@ -937,7 +889,7 @@
                   moduleName = "Roommate"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/CERoomVC.swift"
-                  timestampString = "565531129.637617"
+                  timestampString = "565611606.648235"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "718"
@@ -954,7 +906,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/Home/CERoomVC.swift"
-            timestampString = "565526601.7980551"
+            timestampString = "565606990.4509701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "696"
@@ -970,12 +922,268 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Roommate/Controller/RoomDetail/RoomDetaillVC.swift"
-            timestampString = "565532374.45488"
+            timestampString = "565604922.391723"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "243"
             endingLineNumber = "243"
             landmarkName = "didReceiveEditRoomNotification(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Controller/Home/HomeVC.swift"
+            timestampString = "565611604.729149"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "415"
+            endingLineNumber = "415"
+            landmarkName = "requestRoom(view:apiRouter:offset:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in Roommate.HomeVC.requestRoom(view: __ObjC.UICollectionView, apiRouter: Roommate.APIRouter, offset: Swift.Int) -&gt; ()"
+                  moduleName = "Roommate"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/HomeVC.swift"
+                  timestampString = "565611606.7988501"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "415"
+                  endingLineNumber = "415"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;Roommate.RoomPostResponseModel&gt;&gt;, Swift.Optional&lt;Roommate.ApiResponseErrorType&gt;, Swift.Optional&lt;Roommate.HTTPStatusCode&gt;) -&gt; () in closure #2 () -&gt; () in Roommate.HomeVC.requestRoom(view: __ObjC.UICollectionView, apiRouter: Roommate.APIRouter, offset: Swift.Int) -&gt; ()"
+                  moduleName = "Roommate"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/HomeVC.swift"
+                  timestampString = "565611606.804184"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "416"
+                  endingLineNumber = "416"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Controller/Home/HomeVC.swift"
+            timestampString = "565611604.729208"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "421"
+            endingLineNumber = "421"
+            landmarkName = "requestRoom(view:apiRouter:offset:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Controller/Home/HomeVC.swift"
+            timestampString = "565611604.729282"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "490"
+            endingLineNumber = "490"
+            landmarkName = "requestRoommate(view:apiRouter:offset:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in Roommate.HomeVC.requestRoommate(view: __ObjC.UICollectionView, apiRouter: Roommate.APIRouter, offset: Swift.Int) -&gt; ()"
+                  moduleName = "Roommate"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/HomeVC.swift"
+                  timestampString = "565611606.8225549"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "490"
+                  endingLineNumber = "490"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;Roommate.RoommatePostResponseModel&gt;&gt;, Swift.Optional&lt;Roommate.ApiResponseErrorType&gt;, Swift.Optional&lt;Roommate.HTTPStatusCode&gt;) -&gt; () in closure #2 () -&gt; () in Roommate.HomeVC.requestRoommate(view: __ObjC.UICollectionView, apiRouter: Roommate.APIRouter, offset: Swift.Int) -&gt; ()"
+                  moduleName = "Roommate"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Home/HomeVC.swift"
+                  timestampString = "565611606.826478"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "491"
+                  endingLineNumber = "491"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Base/BaseVC.swift"
+            timestampString = "565611604.729351"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "checkAndLoadInitData(inView:onCompleted:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Base/BaseVC.swift"
+            timestampString = "565611604.729429"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "checkAndLoadInitData(inView:onCompleted:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Base/BaseVC.swift"
+            timestampString = "565611604.729519"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "304"
+            endingLineNumber = "304"
+            landmarkName = "requestCurrentRoom()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Base/BaseVC.swift"
+            timestampString = "565611604.729652"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
+            landmarkName = "requestCurrentRoom()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Controller/Common/ShowAllVC.swift"
+            timestampString = "565611351.102113"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "373"
+            endingLineNumber = "373"
+            landmarkName = "requestRoomPost(apiRouter:withNewFilterArgModel:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Controller/Common/PostDetailVC.swift"
+            timestampString = "565611604.7297699"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
+            landmarkName = "setData()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Roommate.PostDetailVC.setData() -&gt; ()"
+                  moduleName = "Roommate"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Common/PostDetailVC.swift"
+                  timestampString = "565611606.869782"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "212"
+                  endingLineNumber = "212"
+                  offsetFromSymbolStart = "7792">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Roommate.PostDetailVC.setData() -&gt; ()"
+                  moduleName = "Roommate"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/trinhhc/Desktop/CapstoneProject/IOS-UI/Roommate/Controller/Common/PostDetailVC.swift"
+                  timestampString = "565611606.87272"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "212"
+                  endingLineNumber = "212"
+                  offsetFromSymbolStart = "9916">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roommate/Controller/Common/PostDetailVC.swift"
+            timestampString = "565611604.730032"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "setData()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -66,7 +66,7 @@ class UserMappableModel: Mappable {
         email <- map["email"]
         fullname <- map["fullname"]
         imageProfile <- map["imageProfile"]
-        dob <- (map["dob"],CustomDateFormatTransform(formatString: Constants.DATE_FORMAT))
+        dob <- (map["dob"],CustomDateFormatTransform(formatString: Constants.USER_DATE_FORMAT))
         phone <- map["phone"]
         gender <- map["gender"]
         roleId <- map["roleId"]

@@ -165,12 +165,12 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
             navigationItem.hidesSearchBarWhenScrolling = true
         }
     }
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        for view in (self.navigationController?.navigationBar.subviews)! {
-            view.layoutMargins = UIEdgeInsets.zero
-        }
-    }
+//    override func viewWillLayoutSubviews() {
+//        super.viewWillLayoutSubviews()
+//        for view in (self.navigationController?.navigationBar.subviews)! {
+//            view.layoutMargins = UIEdgeInsets.zero
+//        }
+//    }
     //MARK: Setup UI and Delegate
     func setupUI(){
         transparentNavigationBarBottomBorder()
@@ -348,8 +348,12 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
                 
                 self.user.roleId = notification.roleId!
                 _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: UserModel(userMappedModel: self.user))
-                //            ref.child(notification.notificationId).child("status").setValue("\(Constants.NEW_LOADED)")
-                self.topNavigation.reloadData()
+                self.ref.child(notification.notificationId).child("status").setValue("\(Constants.NEW_LOADED)", withCompletionBlock: { (error, ref) in
+                    if error != nil{
+                        self.topNavigation.reloadData()
+                    }
+                })
+                
                 
                 
             }
@@ -394,8 +398,8 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
         if view == self.suggestRoomPostView.collectionView{
             let setting = DBManager.shared.getSingletonModel(ofType: SettingModel.self)
             baseSuggestRequestModel.offset = offset
-            baseSuggestRequestModel.latitude = setting?.latitude.value
-            baseSuggestRequestModel.longitude = setting?.longitude.value
+//            baseSuggestRequestModel.latitude = setting?.latitude.value
+//            baseSuggestRequestModel.longitude = setting?.longitude.value
         }else if view == self.newRoomPostView.collectionView{
             filterForRoomPost.offset = offset
         }

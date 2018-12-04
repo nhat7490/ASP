@@ -109,7 +109,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         contentView.addSubview(horizontalImagesView)
         contentView.addSubview(baseInformationView)
         contentView.addSubview(utilitiesView)
-        if viewType == .roomPostDetailForFinder{
+        if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser {
             contentView.addSubview(genderView)
             contentView.addSubview(descriptionsView)
         }
@@ -130,7 +130,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         
         _ = horizontalImagesView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero ,CGSize(width: 0, height: Constants.HEIGHT_CELL_IMAGECV))
         _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height:heightBaseInformationView ))[3]
-        if viewType == .roomPostDetailForFinder{
+        if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser {
             _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
             utilitiesViewHeightConstraint = utilitiesView.anchor(genderView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
             _ = descriptionsView.anchor(utilitiesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_DESCRIPTION))

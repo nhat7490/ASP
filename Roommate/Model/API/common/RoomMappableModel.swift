@@ -105,7 +105,7 @@ class RoomMappableModel: Mappable,NSCopying,Equatable,Hashable {
         userId <- map["userId"]
         cityId <- map["cityId"]
         districtId <- map["districtId"]
-        date <- map["dateCreated"]
+        date <- (map["dateCreated"],CustomDateFormatTransform(formatString: Constants.DATE_FORMAT))
         statusId <- map["statusId"]
         roomDescription <- map["description"]
         phoneNumber <- map["phoneNumber"]

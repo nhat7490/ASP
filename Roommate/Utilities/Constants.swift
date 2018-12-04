@@ -10,12 +10,13 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://192.168.100.41:8080/"
+    static let BASE_URL_API = "http://192.168.100.150:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
-    static let DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
-    static let SHOW_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
+    static let DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+    static let SHOW_DATE_FORMAT = "dd-MM-yyyy HH:mm:ss"
+    static let USER_DATE_FORMAT = "yyyy-MM-dd"
     //MARK: Constant for Storyboard name
     static let STORYBOARD_MAIN = "Main"
     static let STORYBOARD_HOME = "Home"

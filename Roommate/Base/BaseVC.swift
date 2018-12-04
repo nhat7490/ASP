@@ -100,9 +100,18 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestUtilitiesArray()}
             if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
             if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
-            if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
-                self.requestCurrentRoom()
+            if self.fetchUserData(){
+                if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
+                    self.requestCurrentRoom()
+                }
+            }else{
+                DispatchQueue.main.async {
+                    self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_ERROR_MESSAGE".localized,onCompleted:{
+                        self.checkAndLoadInitData(inView: view,onCompleted: completed)
+                    })
+                }
             }
+            
             
             
             DispatchQueue.main.async {
@@ -162,6 +171,44 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         }
         self.group.wait()
     }
+    func fetchUserData() -> Bool{
+        var success = false
+        guard let currentUser = DBManager.shared.getUser() else {
+            return success
+        }
+        let user = UserMappableModel(userModel: currentUser)
+        self.group.enter()
+        APIConnection.requestObject(apiRouter: APIRouter.login(username: user.username!, password: user.password!), errorNetworkConnectedHander: nil, returnType: UserMappableModel.self) { (userMappableModel, error, statusCode) -> (Void) in
+            if error == nil{
+                //200
+                if statusCode == .OK{
+                    guard let userMappableModel = userMappableModel else{
+                        success = false
+                        self.group.leave()
+                        return
+                    }
+                    userMappableModel.password = user.password
+                    let userModel = UserModel(userMappedModel: userMappableModel)
+                    _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: userModel)
+                    success = true
+                    
+                }else if statusCode == .Forbidden || statusCode == .NotFound {
+                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                    appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) )
+                    NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
+                    self.navigationController?.dismiss(animated: true, completion: {
+                        DBManager.shared.deleteAllUsers()
+                    })
+                    success = false
+                }else{
+                    success = false
+                }
+                self.group.leave()
+            }
+        }
+        self.group.wait()
+        return success
+    }
     func requestUtilitiesArray(){
         self.group.enter()
         APIConnection.requestArray(apiRouter: APIRouter.utility(), errorNetworkConnectedHander: nil, returnType: UtilityMappableModel.self) { (values, error, statusCode) -> (Void) in
@@ -189,59 +236,59 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         }
         self.group.wait()
     }
-//    func requestArray<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander:(()->Void)? =  nil,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
-//        //        self.group.enter()
-//        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: errorNetworkConnectedHander, returnType: T.self) { (values, error, statusCode) -> (Void) in
-//            if error == nil{
-//                //200
-//                if statusCode == .OK{
-//                    guard let values = values else{
-//                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
-//                        //                        self.group.leave()
-//                        return
-//                    }
-//                    completion(values,error,statusCode)
-//                }else{
-//                    completion(nil,nil,statusCode)
-//                }
-//                //
-//            }else{
-//                completion(nil,error,statusCode)
-//            }
-//            //            self.group.leave()
-//        }
-//        //        self.group.wait()
-//        
-//    }
-//    func request(apiRouter:APIRouter,errorNetworkConnectedHander:@escaping ()->Void,completion:@escaping (_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
-//        APIConnection.request(apiRouter: apiRouter, errorNetworkConnectedHander: nil) { (error, statusCode) -> (Void) in
-//            if error == ApiResponseErrorType.SERVER_NOT_RESPONSE{
-//                completion(error,statusCode)
-//            }else{
-//                completion(nil,statusCode)
-//            }
-//        }
-//    }
+    //    func requestArray<T:Mappable>(apiRouter:APIRouter,errorNetworkConnectedHander:(()->Void)? =  nil,returnType:T.Type,completion:@escaping (_ result:[T]?,_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
+    //        //        self.group.enter()
+    //        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: errorNetworkConnectedHander, returnType: T.self) { (values, error, statusCode) -> (Void) in
+    //            if error == nil{
+    //                //200
+    //                if statusCode == .OK{
+    //                    guard let values = values else{
+    //                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+    //                        //                        self.group.leave()
+    //                        return
+    //                    }
+    //                    completion(values,error,statusCode)
+    //                }else{
+    //                    completion(nil,nil,statusCode)
+    //                }
+    //                //
+    //            }else{
+    //                completion(nil,error,statusCode)
+    //            }
+    //            //            self.group.leave()
+    //        }
+    //        //        self.group.wait()
+    //
+    //    }
+    //    func request(apiRouter:APIRouter,errorNetworkConnectedHander:@escaping ()->Void,completion:@escaping (_ error:ApiResponseErrorType?,_ statusCode:HTTPStatusCode?)->(Void)){
+    //        APIConnection.request(apiRouter: apiRouter, errorNetworkConnectedHander: nil) { (error, statusCode) -> (Void) in
+    //            if error == ApiResponseErrorType.SERVER_NOT_RESPONSE{
+    //                completion(error,statusCode)
+    //            }else{
+    //                completion(nil,statusCode)
+    //            }
+    //        }
+    //    }
     
-//    func requestObject<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){
-//        self.group.enter()
-//        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: DBManager.shared.getUser()!.userId), returnType: T.self){ (value,error, statusCode) -> (Void) in
-//
-//            if error == nil{
-//                //200
-//                if statusCode == .OK{
-//                    guard let value = value else{
-//                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
-//                        self.group.leave()
-//                        return
-//                    }
-//                    print(DBManager.shared.addSingletonModel(ofType: T.self, object: value))
-//                }
-//            }
-//            self.group.leave()
-//        }
-//        self.group.wait()
-//    }
+    //    func requestObject<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){
+    //        self.group.enter()
+    //        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: DBManager.shared.getUser()!.userId), returnType: T.self){ (value,error, statusCode) -> (Void) in
+    //
+    //            if error == nil{
+    //                //200
+    //                if statusCode == .OK{
+    //                    guard let value = value else{
+    //                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+    //                        self.group.leave()
+    //                        return
+    //                    }
+    //                    print(DBManager.shared.addSingletonModel(ofType: T.self, object: value))
+    //                }
+    //            }
+    //            self.group.leave()
+    //        }
+    //        self.group.wait()
+    //    }
     func requestCurrentRoom(){
         self.group.enter()
         APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: DBManager.shared.getUser()!.userId), returnType: RoomMappableModel.self){ (value, error, statusCode) -> (Void) in
@@ -424,7 +471,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             mainVC.view.backgroundColor = .white
             let nv = UINavigationController(rootViewController: viewController)
             present(nv, animated: animated!) {
-//                nv.pushViewController(viewController, animated: animated!)
+                //                nv.pushViewController(viewController, animated: animated!)
             }
         }else{
             self.navigationController?.pushViewController(viewController, animated: animated!)

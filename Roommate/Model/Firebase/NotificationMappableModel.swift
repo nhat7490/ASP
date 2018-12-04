@@ -31,7 +31,7 @@ class NotificationMappableModel: Mappable,Equatable,Hashable {
         type <- (map["type"],TransformOf<Int, String>(fromJSON: { Int($0!) }, toJSON: { $0.map { String($0) } }))
         userId <- (map["user_id"],TransformOf<Int, String>(fromJSON: { Int($0!) }, toJSON: { $0.map { String($0) } }))
         roomName <- map["room_name"]
-        date <- (map["date"],CustomDateFormatTransform(formatString:Constants.DATE_FORMAT))
+        date <- (map["date"],CustomDateFormatTransform(formatString:"yyyy-MM-dd HH:mm:ss.SSS"))
     }
     static func ==(lhs:NotificationMappableModel,rhs:NotificationMappableModel)->Bool{
         return lhs.notificationId == rhs.notificationId

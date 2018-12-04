@@ -298,7 +298,9 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,InputViewDelegate,MaxMemberSelectV
         hub.mode = .indeterminate
         hub.bezelView.backgroundColor = .white
         hub.contentColor = .defaultBlue
-        hub.label.text = "MB_LOAD_CREATE_POST".localized
+        
+        hub.label.text = self.cERoomPostVCType == .create ?  "MB_LOAD_CREATE_POST".localized :
+            "MB_LOAD_EDIT_POST".localized
         DispatchQueue.global(qos: .userInteractive).async {
             APIConnection.request(apiRouter:self.cERoomPostVCType == .create ? APIRouter.createRoomPost(model: self.roomPostRequestModel) : APIRouter.editRoomPost(model: self.roomPostRequestModel),  errorNetworkConnectedHander: {
                 DispatchQueue.main.async {

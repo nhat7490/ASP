@@ -140,6 +140,22 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
         //        roomMaster = copyRoom.members?.filter{$0.roleId == Constants.ROOMMASTER}.first
     }
     
+    //MARK: Keyboard Notification handler
+    override func keyBoard(notification: Notification) {
+        super.keyBoard(notification: notification)
+        if notification.name == NSNotification.Name.UIKeyboardWillShow{
+            let userInfor = notification.userInfo!
+            let keyboardFrame:CGRect = (userInfor[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+            print(scrollView.contentInset)
+            print(scrollView.contentOffset)
+            scrollView.contentInset.bottom = keyboardFrame.size.height
+            scrollView.scrollIndicatorInsets = scrollView.contentInset
+            print(scrollView.contentInset)
+            print(scrollView.contentOffset)
+        }else if notification.name == NSNotification.Name.UIKeyboardWillHide{
+            scrollView.contentInset = .zero
+        }
+    }
     //MARK: MembersViewDelegate
     func membersViewDelegate(membersView view:MembersView,onDeleteRecordAtIndexPath indexPath:IndexPath?){
         guard let indexPath = indexPath else {

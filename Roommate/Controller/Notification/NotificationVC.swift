@@ -11,6 +11,7 @@
 import UIKit
 import FirebaseDatabase
 import ObjectMapper
+import AVFoundation
 class NotificationVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     lazy var collectionView:UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -69,6 +70,7 @@ class NotificationVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,
                         if model.status == Constants.NEW || model.status == Constants.NEW_LOADED{
                             
                             if model.status == Constants.NEW{
+                                AudioServicesPlayAlertSound(SystemSoundID(1322))
                                 switch model.type {
                                 case Constants.ROOM_ACCEPT_NOTIFICATION:
                                     NotificationCenter.default.post(name: Constants.NOTIFICATION_ACCEPT_ROOM, object: model)

@@ -49,7 +49,7 @@ class NotificationCVCell: UICollectionViewCell {
                 break
             }
             lblTopRight.attributedText = NSAttributedString(string:text, attributes:dic)
-            lblBottomRight.attributedText = NSAttributedString(string: notification.date.string("yyyy/MM/dd HH:mm:ss"), attributes:dic)
+            lblBottomRight.attributedText = NSAttributedString(string: notification.date.string(Constants.SHOW_DATE_FORMAT), attributes:dic)
         }
     }
     override init(frame: CGRect) {
