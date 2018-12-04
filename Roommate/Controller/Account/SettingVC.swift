@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
     
     
@@ -132,12 +133,18 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
             }else if indexPath.row == 2{
                 
             }else{
+                Database.database().reference().child("notifications/users").child("\(self.user!.userId)").removeAllObservers()
                 let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) )
-                NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
-                self.navigationController?.dismiss(animated: true, completion: {
-                    DBManager.shared.deleteAllUsers()
+                appdelegate.window!.rootViewController?.dismiss(animated: true, completion: {
+                    DBManager.shared.deleteAllRecords(ofType: UserModel.self)
+                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                    appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) )
+//                    NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
+//                    self.navigationController?.dismiss(animated: true, completion: {
+//
+//                    })
                 })
+                
             }
         }
     }

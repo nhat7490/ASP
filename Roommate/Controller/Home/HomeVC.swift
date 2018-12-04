@@ -125,30 +125,33 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     //MARK:ViewController
     override func viewDidLoad() {
         super.viewDidLoad()
-        if !APIConnection.isConnectedInternet(){
-            showErrorView(inView: self.contentView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
-                    DispatchQueue.main.async {
-                        self.setupUI()
-                        self.setupDelegateAndDataSource()
-                        self.enableLocationServices()
-                        self.loadRemoteData()
-                        self.registerNotification()
-                    }
-                }
-            }
-        }else{
-            
-            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
-                DispatchQueue.main.async {
-                self.setupUI()
-                self.setupDelegateAndDataSource()
-                self.enableLocationServices()
-                self.loadRemoteData()
-                self.registerNotification()
-                }
-            }
+        checkAndLoadInitData(view: self.view){
+            self.setupUI()
+            self.setupDelegateAndDataSource()
+            self.enableLocationServices()
+            self.loadRemoteData()
+            self.registerNotification()
         }
+//        if !APIConnection.isConnectedInternet(){
+//            showErrorView(inView: self.contentView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+//                self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+//                    DispatchQueue.main.async {
+//
+//                    }
+//                }
+//            }
+//        }else{
+//
+//            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+//                DispatchQueue.main.async {
+//                self.setupUI()
+//                self.setupDelegateAndDataSource()
+//                self.enableLocationServices()
+//                self.loadRemoteData()
+//                self.registerNotification()
+//                }
+//            }
+//        }
         
         
     }
@@ -276,17 +279,21 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveMemberFromRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_MEMBER_IN_ROOM, object: nil)
     }
     @objc func didReceiveRemoveBookmarkNotification(_ notification:Notification) {
-        DispatchQueue.main.async {
+        DispatchQueue.global(qos: .userInteractive).async   {
             if notification.object is RoomPostResponseModel{
                 if let room = notification.object as? RoomPostResponseModel{
                     if let index = self.newRooms.index(of: room){
                         self.newRooms[index].isFavourite = room.isFavourite
+                        DispatchQueue.main.async{
                         self.newRoomPostView.collectionView.reloadData()
+                    }
                     }
                     if self.user.roleId != 2{
                         if let index = self.suggestRooms.index(of: room){
                             self.suggestRooms[index].isFavourite = room.isFavourite
+                            DispatchQueue.main.async{
                             self.suggestRoomPostView.collectionView.reloadData()
+                            }
                         }
                     }
                 }
@@ -294,26 +301,32 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
                 if let roommate = notification.object as? RoommatePostResponseModel{
                     if let index = self.newRoommates.index(of: roommate){
                         self.newRoommates[index].isFavourite = roommate.isFavourite
+                        DispatchQueue.main.async{
                         self.newRoommatePostView.collectionView.reloadData()
+                        }
                     }
                 }
             }
         }
     }
     @objc func didReceiveAddBookmarkNotification(_ notification:Notification) {
-        DispatchQueue.main.async {
+        DispatchQueue.global(qos: .userInteractive).async  {
             if notification.object is RoomPostResponseModel{
                 if let room = notification.object as? RoomPostResponseModel{
                     if let index = self.newRooms.index(of: room){
                         self.newRooms[index].isFavourite = room.isFavourite
                         self.newRooms[index].favouriteId = room.favouriteId
-                        self.newRoomPostView.collectionView.reloadData()
+                        DispatchQueue.main.async{
+                            self.newRoomPostView.collectionView.reloadData()
+                        }
                     }
                     if self.user.roleId != 2{
                         if let index = self.suggestRooms.index(of: room){
                             self.suggestRooms[index].isFavourite = room.isFavourite
                             self.suggestRooms[index].favouriteId = room.favouriteId
+                            DispatchQueue.main.async{
                             self.suggestRoomPostView.collectionView.reloadData()
+                            }
                         }
                     }
                 }
@@ -322,7 +335,9 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
                     if let index = self.newRoommates.index(of: roommate){
                         self.newRoommates[index].isFavourite = roommate.isFavourite
                         self.newRoommates[index].favouriteId = roommate.favouriteId
-                        self.newRoommatePostView.collectionView.reloadData()
+                        DispatchQueue.main.async{
+                            self.newRoommatePostView.collectionView.reloadData()
+                        }
                     }
                 }
             }
@@ -340,19 +355,36 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
         updateUIForRoleInRoomNotification(notification)
     }
     func updateUIForRoleInRoomNotification(_ notification:Notification){
-        DispatchQueue.main.async {
+        DispatchQueue.global(qos: .userInteractive).async {
             if notification.object is NotificationMappableModel {
                 guard let notification = notification.object as? NotificationMappableModel else{
                     return
                 }
                 
+                
+                if notification.roleId == Constants.ROOMMASTER{
+                    self.requestCurrentRoom()
+                }
                 self.user.roleId = notification.roleId!
                 _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: UserModel(userMappedModel: self.user))
-                self.ref.child(notification.notificationId).child("status").setValue("\(Constants.NEW_LOADED)", withCompletionBlock: { (error, ref) in
-                    if error != nil{
-                        self.topNavigation.reloadData()
-                    }
-                })
+                DispatchQueue.main.async {
+                    self.topNavigation.reloadData()
+                }
+                
+                self.ref.child(notification.notificationId).child("status").setValue("\(Constants.NEW_LOADED)")
+//                if r
+////                DispatchQueue.main.async {
+////                    let hub = MBProgressHUD.showAdded(to: self.topNavigation, animated: true)
+////                    hub.mode = .indeterminate
+////                    hub.bezelView.backgroundColor = .white
+////                    hub.contentColor = .defaultBlue
+////                }
+//                DispatchQueue.global(qos: .background).async {
+//                    self.requestCurrentRoom()
+////                    DispatchQueue.main.async {
+////                        MBProgressHUD.hide(for: self.topNavigation, animated: true)
+////                    }
+//                }
                 
                 
                 

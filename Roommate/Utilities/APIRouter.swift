@@ -44,7 +44,7 @@ enum APIRouter:URLRequestConvertible{
     case editRoomPost(model: RoomPostRequestModel)
     case editRoommatePost(model: RoommatePostRequestModel)
     case removePost(postId: Int)
-    case createSuggestSetting(model:SuggestSettingMappableModel)
+    case saveSuggestSetting(model:SuggestSettingMappableModel)
     
     var httpHeaders:HTTPHeaders{
         switch self{
@@ -56,7 +56,7 @@ enum APIRouter:URLRequestConvertible{
     }
     
     var httpMethod:HTTPMethod{
-        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost,.createRoomPost,.createSuggestSetting:
+        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost,.createRoomPost,.saveSuggestSetting:
             return .post
         case .removeBookmark,.removeRoom,.removePost:
             return .delete
@@ -128,8 +128,8 @@ enum APIRouter:URLRequestConvertible{
             return "post/updateRoomPost";
         case .editRoommatePost:
             return "post/updateRoommatePost";
-        case .createSuggestSetting:
-            return "reference/create";
+        case .saveSuggestSetting:
+            return "reference/save";
         case .removePost(let postId):
             return "post/delete/\(postId)";
         }
@@ -190,7 +190,7 @@ enum APIRouter:URLRequestConvertible{
             return Mapper().toJSON(model)
         case .editRoommatePost(let model):
             return Mapper().toJSON(model)
-        case .createSuggestSetting(let model):
+        case .saveSuggestSetting(let model):
             return Mapper().toJSON(model)
         default:
             return [:]

@@ -15,7 +15,9 @@ import PhotosUI
 import CoreLocation
 class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,AlertControllerDelegate{
     var hasBackImageButtonInNavigationBar:Bool? = false
+    
     let locationManager = CLLocationManager()
+    static var successLoaded = false
     let group = DispatchGroup()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,63 +89,151 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         
     }
     
-    
-    func checkAndLoadInitData(inView view:UIView,onCompleted completed:@escaping ()->Void){
+    func checkAndLoadInitData(view:UIView,_ completed:@escaping ()->Void){
         
-        DispatchQueue.main.async {
-            let hub = MBProgressHUD.showAdded(to: view, animated: true)
-            hub.mode = .indeterminate
-            hub.bezelView.backgroundColor = .white
-            hub.contentColor = .defaultBlue
-        }
-        DispatchQueue.global(qos: .background).async {
-            if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestUtilitiesArray()}
-            if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
-            if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
-            if self.fetchUserData(){
-                if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
-                    self.requestCurrentRoom()
+        if !APIConnection.isConnectedInternet(){
+            showErrorView(inView: view, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+                self.checkAndLoadInitData(view: view){
+                    completed()
                 }
+            }
+        }else{
+            if BaseVC.successLoaded{
+                completed()
             }else{
                 DispatchQueue.main.async {
-                    self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_ERROR_MESSAGE".localized,onCompleted:{
-                        self.checkAndLoadInitData(inView: view,onCompleted: completed)
-                    })
+                    let hub = MBProgressHUD.showAdded(to: view, animated: true)
+                    hub.mode = .indeterminate
+                    hub.bezelView.backgroundColor = .white
+                    hub.contentColor = .defaultBlue
                 }
-            }
-            
-            
-            
-            DispatchQueue.main.async {
-                MBProgressHUD.hide(for: view, animated: true)
-                if !DBManager.shared.isExisted(ofType: UtilityModel.self) || !DBManager.shared.isExisted(ofType: CityModel.self) || !DBManager.shared.isExisted(ofType: DistrictModel.self){
-                    
-                    DispatchQueue.main.async {
-                        self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_ERROR_MESSAGE".localized,onCompleted:{
-                            self.checkAndLoadInitData(inView: view,onCompleted: completed)
-                        })
+                self.group.enter()
+                DispatchQueue.global(qos: .background).async {
+                    if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestUtilitiesArray()}
+                    if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
+                    if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
+                    let loaded =  self.fetchUserData()
+                    if loaded {
+                        if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
+                            self.requestCurrentRoom()
+                        }
                     }
-                }else{
-                    if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
-                        if !DBManager.shared.isExisted(ofType: RoomModel.self){
-                            DispatchQueue.main.async {
-                                self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_ERROR_MESSAGE".localized,onCompleted:{
-                                    self.checkAndLoadInitData(inView: view,onCompleted: completed)
-                                })
+                    
+                    if !DBManager.shared.isExisted(ofType: UtilityModel.self) || !DBManager.shared.isExisted(ofType: CityModel.self) || !DBManager.shared.isExisted(ofType: DistrictModel.self){
+                        BaseVC.successLoaded = false
+                    }else{
+                        if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
+                            if !DBManager.shared.isExisted(ofType: RoomModel.self){
+                                BaseVC.successLoaded = false
+                            }else{
+                                BaseVC.successLoaded = true
                             }
                         }else{
+                            BaseVC.successLoaded = true
+                        }
+                        
+                    }
+                    
+                    DispatchQueue.main.async {
+                        MBProgressHUD.hide(for: view, animated: true)
+                        self.checkAndLoadInitData(view: view){
                             completed()
                         }
-                    }else{
-                        completed()
                     }
+                    
                     
                 }
             }
-            
-            
         }
     }
+    func fetchUserData() -> Bool{
+        var success = false
+        guard let currentUser = DBManager.shared.getUser() else {
+            
+            return success
+        }
+        let user = UserMappableModel(userModel: currentUser)
+        self.group.enter()
+        APIConnection.requestObject(apiRouter: APIRouter.login(username: user.username ?? "", password: user.password ?? ""), errorNetworkConnectedHander: nil, returnType: UserMappableModel.self) { (userMappableModel, error, statusCode) -> (Void) in
+            if error == nil{
+                //200
+                if statusCode == .OK{
+                    guard let userMappableModel = userMappableModel else{
+                        success = false
+                        self.group.leave()
+                        return
+                    }
+                    userMappableModel.password = user.password
+                    let userModel = UserModel(userMappedModel: userMappableModel)
+                    _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: userModel)
+                    success = true
+                    
+                }else{
+                    success = false
+                }
+                self.group.leave()
+            }
+        }
+        self.group.wait()
+        return success
+    }
+    
+//    func checkAndLoadInitData(inView view:UIView,onCompleted completed:@escaping ()->Void){
+//
+//        DispatchQueue.main.async {
+//            let hub = MBProgressHUD.showAdded(to: view, animated: true)
+//            hub.mode = .indeterminate
+//            hub.bezelView.backgroundColor = .white
+//            hub.contentColor = .defaultBlue
+//        }
+//        DispatchQueue.global(qos: .background).async {
+//            if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestUtilitiesArray()}
+//            if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
+//            if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
+//            if self.fetchUserData(){
+//                if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
+//                    self.requestCurrentRoom()
+//                }
+//            }else{
+//                DispatchQueue.main.async {
+//                    self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_ERROR_MESSAGE".localized,onCompleted:{
+//                        self.checkAndLoadInitData(inView: view,onCompleted: completed)
+//                    })
+//                }
+//            }
+//
+//
+//
+//            DispatchQueue.main.async {
+//                MBProgressHUD.hide(for: view, animated: true)
+//                if !DBManager.shared.isExisted(ofType: UtilityModel.self) || !DBManager.shared.isExisted(ofType: CityModel.self) || !DBManager.shared.isExisted(ofType: DistrictModel.self){
+//
+//                    DispatchQueue.main.async {
+//                        self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_ERROR_MESSAGE".localized,onCompleted:{
+//                            self.checkAndLoadInitData(inView: view,onCompleted: completed)
+//                        })
+//                    }
+//                }else{
+//                    if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
+//                        if !DBManager.shared.isExisted(ofType: RoomModel.self){
+//                            DispatchQueue.main.async {
+//                                self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_ERROR_MESSAGE".localized,onCompleted:{
+//                                    self.checkAndLoadInitData(inView: view,onCompleted: completed)
+//                                })
+//                            }
+//                        }else{
+//                            completed()
+//                        }
+//                    }else{
+//                        completed()
+//                    }
+//
+//                }
+//            }
+//
+//
+//        }
+//    }
     //For Objectmapper and realm
     func requestArray<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){
         self.group.enter()
@@ -171,44 +261,45 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         }
         self.group.wait()
     }
-    func fetchUserData() -> Bool{
-        var success = false
-        guard let currentUser = DBManager.shared.getUser() else {
-            return success
-        }
-        let user = UserMappableModel(userModel: currentUser)
-        self.group.enter()
-        APIConnection.requestObject(apiRouter: APIRouter.login(username: user.username!, password: user.password!), errorNetworkConnectedHander: nil, returnType: UserMappableModel.self) { (userMappableModel, error, statusCode) -> (Void) in
-            if error == nil{
-                //200
-                if statusCode == .OK{
-                    guard let userMappableModel = userMappableModel else{
-                        success = false
-                        self.group.leave()
-                        return
-                    }
-                    userMappableModel.password = user.password
-                    let userModel = UserModel(userMappedModel: userMappableModel)
-                    _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: userModel)
-                    success = true
-                    
-                }else if statusCode == .Forbidden || statusCode == .NotFound {
-                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                    appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) )
-                    NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
-                    self.navigationController?.dismiss(animated: true, completion: {
-                        DBManager.shared.deleteAllUsers()
-                    })
-                    success = false
-                }else{
-                    success = false
-                }
-                self.group.leave()
-            }
-        }
-        self.group.wait()
-        return success
-    }
+//    func fetchUserData() -> Bool{
+//        var success = false
+//        guard let currentUser = DBManager.shared.getUser() else {
+//
+//            return success
+//        }
+//        let user = UserMappableModel(userModel: currentUser)
+//        self.group.enter()
+//        APIConnection.requestObject(apiRouter: APIRouter.login(username: user.username ?? "", password: user.password ?? ""), errorNetworkConnectedHander: nil, returnType: UserMappableModel.self) { (userMappableModel, error, statusCode) -> (Void) in
+//            if error == nil{
+//                //200
+//                if statusCode == .OK{
+//                    guard let userMappableModel = userMappableModel else{
+//                        success = false
+//                        self.group.leave()
+//                        return
+//                    }
+//                    userMappableModel.password = user.password
+//                    let userModel = UserModel(userMappedModel: userMappableModel)
+//                    _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: userModel)
+//                    success = true
+//
+//                }else if statusCode == .Forbidden || statusCode == .NotFound {
+//                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
+//                    appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) )
+//                    NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
+//                    self.navigationController?.dismiss(animated: true, completion: {
+//                        DBManager.shared.deleteAllUsers()
+//                    })
+//                    success = false
+//                }else{
+//                    success = false
+//                }
+//                self.group.leave()
+//            }
+//        }
+//        self.group.wait()
+//        return success
+//    }
     func requestUtilitiesArray(){
         self.group.enter()
         APIConnection.requestArray(apiRouter: APIRouter.utility(), errorNetworkConnectedHander: nil, returnType: UtilityMappableModel.self) { (values, error, statusCode) -> (Void) in

@@ -7,24 +7,24 @@
 //
 
 import UIKit
-
+import MBProgressHUD
 class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
-    
+    var group = DispatchGroup()
     override func viewDidLoad() {
         super.viewDidLoad()
 //        self.navigationController?.navigationBar.isHidden = true
-        setupUI();
+//        setupUI();
+        view.backgroundColor = .white
+        if APIConnection.isConnectedInternet(){
+            checkAndLoadInitData(view: self.view)
+        }else{
+            setupUI()
+            
+        }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        checkInitData()
-        viewControllers?.forEach({ (vc) in
-            if vc is UINavigationController{
-                let _ = (vc as! UINavigationController).topViewController?.view
-            }else{
-                let _ = vc.view
-            }
-        })
     }
     
     func setupUI() {
@@ -65,18 +65,169 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
             }
             
         })
+        viewControllers?.forEach({ (vc) in
+            if vc is UINavigationController{
+                let _ = (vc as! UINavigationController).topViewController?.view
+            }else{
+                let _ = vc.view
+            }
+        })
         
     }
     
-    override var selectedIndex: Int{
-        didSet{
-            
-        }
-    }
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         view.layoutIfNeeded()
         return true
     }
+    func checkAndLoadInitData(view:UIView){
+        DispatchQueue.main.async {
+            let hub = MBProgressHUD.showAdded(to: view, animated: true)
+            hub.mode = .indeterminate
+            hub.bezelView.backgroundColor = .white
+            hub.contentColor = .defaultBlue
+        }
+        DispatchQueue.global(qos: .background).async {
+            if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestUtilitiesArray()}
+            if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
+            if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
+            let loaded =  self.fetchUserData()
+            if loaded {
+                if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
+                    self.requestCurrentRoom()
+                }
+            }
+            
+            
+            DispatchQueue.main.async {
+                MBProgressHUD.hide(for: view, animated: true)
+                if !DBManager.shared.isExisted(ofType: UtilityModel.self) || !DBManager.shared.isExisted(ofType: CityModel.self) || !DBManager.shared.isExisted(ofType: DistrictModel.self){
+                    BaseVC.successLoaded = false
+                }else{
+                    if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
+                        if !DBManager.shared.isExisted(ofType: RoomModel.self){
+                            BaseVC.successLoaded = false
+                        }else{
+                            BaseVC.successLoaded = true
+                        }
+                    }else{
+                        BaseVC.successLoaded = true
+                    }
+                    
+                }
+                self.setupUI()
+            }
+            
+            
+        }
+    }
+    
+    //For Objectmapper and realm
+    func requestArray<T:BaseModel>(apiRouter:APIRouter,returnType:T.Type){
+        self.group.enter()
+        APIConnection.requestArray(apiRouter: apiRouter, errorNetworkConnectedHander: nil, returnType: T.self) { (values, error, statusCode) -> (Void) in
+            
+            if error == nil{
+                //200
+                if statusCode == .OK{
+                    guard let values = values else{
+                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+                        self.group.leave()
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        if !DBManager.shared.isExisted(ofType: T.self){
+                            _ = DBManager.shared.addRecords(ofType: T.self, objects: values)
+                        }
+                        
+                        
+                    }
+                    
+                }
+            }
+            self.group.leave()
+        }
+        self.group.wait()
+    }
+    func fetchUserData() -> Bool{
+        var success = false
+        guard let currentUser = DBManager.shared.getUser() else {
+            
+            return success
+        }
+        let user = UserMappableModel(userModel: currentUser)
+        self.group.enter()
+        APIConnection.requestObject(apiRouter: APIRouter.login(username: user.username ?? "", password: user.password ?? ""), errorNetworkConnectedHander: nil, returnType: UserMappableModel.self) { (userMappableModel, error, statusCode) -> (Void) in
+            if error == nil{
+                //200
+                if statusCode == .OK{
+                    guard let userMappableModel = userMappableModel else{
+                        success = false
+                        self.group.leave()
+                        return
+                    }
+                    userMappableModel.password = user.password
+                    let userModel = UserModel(userMappedModel: userMappableModel)
+                    _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: userModel)
+                    success = true
+                    
+                }else{
+                    success = false
+                }
+                self.group.leave()
+            }
+        }
+        self.group.wait()
+        return success
+    }
+    func requestUtilitiesArray(){
+        self.group.enter()
+        APIConnection.requestArray(apiRouter: APIRouter.utility(), errorNetworkConnectedHander: nil, returnType: UtilityMappableModel.self) { (values, error, statusCode) -> (Void) in
+            
+            if error == nil{
+                //200
+                if statusCode == .OK{
+                    guard let values = values else{
+                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+                        self.group.leave()
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        if !DBManager.shared.isExisted(ofType: UtilityModel.self){
+                            _ = DBManager.shared.addRecords(ofType: UtilityModel.self, objects: values.compactMap({ (utility) -> UtilityModel? in
+                                UtilityModel(utilityMappableModel: utility)
+                            }))
+                        }
+                        
+                    }
+                    
+                }
+            }
+            self.group.leave()
+        }
+        self.group.wait()
+    }
+    func requestCurrentRoom(){
+        self.group.enter()
+        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: DBManager.shared.getUser()!.userId), returnType: RoomMappableModel.self){ (value, error, statusCode) -> (Void) in
+            
+            if error == nil{
+                //200
+                if statusCode == .OK{
+                    guard let value = value else{
+                        //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+                        self.group.leave()
+                        return
+                    }
+                    print(DBManager.shared.addSingletonModel(ofType:RoomModel.self, object: RoomModel(roomResponseModel: value)))
+                }else if statusCode == .NotFound{
+                    DBManager.shared.deleteAllRecords(ofType: RoomModel.self)
+                }
+            }
+            self.group.leave()
+        }
+        self.group.wait()
+    }
+    
     
 }
 //

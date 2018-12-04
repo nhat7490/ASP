@@ -111,31 +111,38 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
     //MARK: Viewcontroller
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if !APIConnection.isConnectedInternet(){
-            showErrorView(inView: self.collectionView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
-                    DispatchQueue.main.async {
-                        self.setupUI()
-                        self.setupDataAndDelegate()
-                        self.rooms = []
-                        self.registerNotification()
-                        self.loadRoomData(withNewFilterArgModel: true)
-                    }
-                }
-            }
-        }else{
-            self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
-                DispatchQueue.main.async {
-                    self.setupUI()
-                    self.setupDataAndDelegate()
-                    self.rooms = []
-                    self.registerNotification()
-                    self.loadRoomData(withNewFilterArgModel: true)
-                    
-                }
-            }
+        checkAndLoadInitData(view: self.collectionView){
+            self.setupUI()
+            self.setupDataAndDelegate()
+            self.rooms = []
+            self.registerNotification()
+            self.loadRoomData(withNewFilterArgModel: true)
         }
+        
+//        if !APIConnection.isConnectedInternet(){
+//            showErrorView(inView: self.collectionView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+//                self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
+//                    DispatchQueue.main.async {
+//                        self.setupUI()
+//                        self.setupDataAndDelegate()
+//                        self.rooms = []
+//                        self.registerNotification()
+//                        self.loadRoomData(withNewFilterArgModel: true)
+//                    }
+//                }
+//            }
+//        }else{
+//            self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
+//                DispatchQueue.main.async {
+//                    self.setupUI()
+//                    self.setupDataAndDelegate()
+//                    self.rooms = []
+//                    self.registerNotification()
+//                    self.loadRoomData(withNewFilterArgModel: true)
+//                    
+//                }
+//            }
+//        }
     }
     
     //MARK: Setup UI

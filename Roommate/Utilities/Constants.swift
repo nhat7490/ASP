@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://192.168.100.150:8080/"
+    static let BASE_URL_API = "http://192.168.1.91:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
@@ -107,7 +107,7 @@ class Constants{
     static let HEIGHT_MEDIUM_SPACE:CGFloat = 10.0
     static let HEIGHT_CELL_ROOMPOSTCV:CGFloat = 240
     static let HEIGHT_CELL_ROOMMATEPOSTCV:CGFloat = 175
-    static let HEIGHT_CELL_ROOMFOROWNERCV:CGFloat = 120
+    static let HEIGHT_CELL_ROOMFOROWNERCV:CGFloat = 140
     static let HEIGHT_VIEW_UPLOAD_IMAGE_BASE:CGFloat = 140.0
     static let HEIGHT_CELL_MEMBERTVL:CGFloat = 40.0
     static let HEIGHT_CELL_ACTIONTV:CGFloat = 50.0

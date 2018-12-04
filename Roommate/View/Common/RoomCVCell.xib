@@ -21,7 +21,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g7t-ZI-Vjx">
-                        <rect key="frame" x="0.0" y="0.0" width="510" height="120"/>
+                        <rect key="frame" x="0.0" y="0.0" width="510" height="140"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MVv-Kh-1SS">
                                 <rect key="frame" x="0.0" y="0.0" width="150" height="130"/>
@@ -41,7 +41,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MSo-4Y-yQt">
-                                <rect key="frame" x="150" y="0.0" width="360" height="120"/>
+                                <rect key="frame" x="150" y="0.0" width="360" height="140"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ITE-jR-gYp">
                                         <rect key="frame" x="0.0" y="0.0" width="360" height="30"/>
@@ -114,7 +114,7 @@
                             <constraint firstAttribute="trailing" secondItem="MSo-4Y-yQt" secondAttribute="trailing" id="rRj-Yc-6Gk"/>
                             <constraint firstItem="MSo-4Y-yQt" firstAttribute="top" secondItem="g7t-ZI-Vjx" secondAttribute="top" id="rcj-jn-SbC"/>
                             <constraint firstItem="MVv-Kh-1SS" firstAttribute="top" secondItem="g7t-ZI-Vjx" secondAttribute="top" id="vg3-9P-lWX"/>
-                            <constraint firstAttribute="height" constant="120" id="xuz-Nz-V7L"/>
+                            <constraint firstAttribute="height" constant="140" id="xuz-Nz-V7L"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="wk3-2M-q8g"/>
                     </view>

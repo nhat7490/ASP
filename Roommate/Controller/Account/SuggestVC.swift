@@ -375,7 +375,7 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         hub.bezelView.backgroundColor = .white
         hub.contentColor = .defaultBlue
         DispatchQueue.global(qos: .background).async {
-            APIConnection.request(apiRouter: APIRouter.createSuggestSetting(model: self.suggestSettingMappableModel!),  errorNetworkConnectedHander: {
+            APIConnection.request(apiRouter: APIRouter.saveSuggestSetting(model: self.suggestSettingMappableModel!),  errorNetworkConnectedHander: {
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.view, animated: true)
                     APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)

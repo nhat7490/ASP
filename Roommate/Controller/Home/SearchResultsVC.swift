@@ -20,7 +20,7 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
         cv.showsHorizontalScrollIndicator = false
         cv.showsVerticalScrollIndicator = false
         cv.bounces = false
-//        (cv.collectionViewLayout as UICollectionViewFlowLayout).headerReferenceSize  = CGSize(width: self.view.frame.size.width, height: 30.0)
+        //        (cv.collectionViewLayout as UICollectionViewFlowLayout).headerReferenceSize  = CGSize(width: self.view.frame.size.width, height: 30.0)
         return cv
     }()
     lazy var locationSearchView:LocationSearchView = {
@@ -65,8 +65,12 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
     //MARK: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkAndLoadInitData(view: self.collectionView){
+            self.setupUI()
+            self.setDelegateAndDataSource()
+        }
         
-        checkInitData()
+        //        checkInitData()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -109,27 +113,27 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
         self.cities =  DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self)
         
     }
-    func checkInitData(){
-        if !APIConnection.isConnectedInternet(){
-            showErrorView(inView: self.collectionView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
-                    DispatchQueue.main.async {
-                        self.setupUI()
-                        self.setDelegateAndDataSource()
-                        
-                    }
-                }
-            }
-        }else{
-            self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
-                DispatchQueue.main.async {
-                    self.setupUI()
-                    self.setDelegateAndDataSource()
-                    
-                }
-            }
-        }
-    }
+    //    func checkInitData(){
+    //        if !APIConnection.isConnectedInternet(){
+    //            showErrorView(inView: self.collectionView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+    //                self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
+    //                    DispatchQueue.main.async {
+    //                        self.setupUI()
+    //                        self.setDelegateAndDataSource()
+    //
+    //                    }
+    //                }
+    //            }
+    //        }else{
+    //            self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
+    //                DispatchQueue.main.async {
+    //                    self.setupUI()
+    //                    self.setDelegateAndDataSource()
+    //
+    //                }
+    //            }
+    //        }
+    //    }
     //MARK: UISearchBarDelegate
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         dimissEntireNavigationController()
@@ -188,7 +192,7 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return searchResults == nil ? 0 : 2
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionElementKindSectionHeader:
@@ -233,22 +237,22 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
     }
     //MARK: NewRoomCVCellDelegate
     func roomCVCellDelegate(roomCVCell cell: RoomPostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
-//        processBookmark(view: self.collectionView,  model: indexPath?.section == 0 ? searchResults?.roomPostResponseModel[indexPath?.row] : searchResults?.nearByRoomPostResponseModels[indexPath?.row] , row: row){model in
-//            if self.allVCType == .all{
-//                if model.isFavourite!{
-//                    NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_BOOKMARK, object: model)
-//                }else{
-//                    NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
-//                }
-//            }else if self.allVCType == .bookmark{
-//                //                model.isFavourite =  false//for api
-//                self.rooms?.remove(at: row)
-//                NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
-//            }
-//            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-//            }
-//        }
+        //        processBookmark(view: self.collectionView,  model: indexPath?.section == 0 ? searchResults?.roomPostResponseModel[indexPath?.row] : searchResults?.nearByRoomPostResponseModels[indexPath?.row] , row: row){model in
+        //            if self.allVCType == .all{
+        //                if model.isFavourite!{
+        //                    NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_BOOKMARK, object: model)
+        //                }else{
+        //                    NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
+        //                }
+        //            }else if self.allVCType == .bookmark{
+        //                //                model.isFavourite =  false//for api
+        //                self.rooms?.remove(at: row)
+        //                NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
+        //            }
+        //            DispatchQueue.main.async {
+        //                self.collectionView.reloadData()
+        //            }
+        //        }
     }
     //MARK: Remote Data
     func  requestSearchData(){
@@ -282,7 +286,7 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
                         guard let result = result else{
                             return
                         }
-                       self.searchResults = result
+                        self.searchResults = result
                         
                     }
                     DispatchQueue.main.async {

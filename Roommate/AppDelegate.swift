@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 //        window = UIWindow(frame: UIScreen.main.bounds)
 //        window?.makeKeyAndVisible()
+        window?.backgroundColor = .white
         GMSPlacesClient.provideAPIKey("AIzaSyALHwTQKAUuHGqFmfji7-3U9SF_b04mXds")
         FirebaseApp.configure()
 //        var config = Realm.Configuration()

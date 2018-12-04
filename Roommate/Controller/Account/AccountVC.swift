@@ -87,27 +87,31 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     var user:UserModel? = DBManager.shared.getUser()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupUI()
-        if !APIConnection.isConnectedInternet(){
-            showErrorView(inView: self.bottomContainerView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.bottomContainerView) { () -> (Void) in
-                    DispatchQueue.main.async {
-                        
-                        self.setupDelegateAndDataSource()
-                        self.registerNotification()
-                    }
-                }
-            }
-        }else{
-            self.checkAndLoadInitData(inView: self.bottomContainerView) { () -> (Void) in
-                DispatchQueue.main.async {
-                    
-                    self.setupDelegateAndDataSource()
-                    self.registerNotification()
-                    
-                }
-            }
+        checkAndLoadInitData(view: self.bottomContainerView){
+            self.setupUI()
+            self.setupDelegateAndDataSource()
+            self.registerNotification()
         }
+        
+//        if !APIConnection.isConnectedInternet(){
+//            showErrorView(inView: self.bottomContainerView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+//                self.checkAndLoadInitData(inView: self.bottomContainerView) { () -> (Void) in
+//                    DispatchQueue.main.async {
+//                        
+//                       
+//                    }
+//                }
+//            }
+//        }else{
+//            self.checkAndLoadInitData(inView: self.bottomContainerView) { () -> (Void) in
+//                DispatchQueue.main.async {
+//                    
+//                    self.setupDelegateAndDataSource()
+//                    self.registerNotification()
+//                    
+//                }
+//            }
+//        }
     }
     
     
@@ -203,7 +207,6 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAddRoomNotification(_:)), name: Constants.NOTIFICATION_CREATE_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAcceptRoomNotification(_:)), name: Constants.NOTIFICATION_ACCEPT_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveDeclineRoomNotification(_:)), name: Constants.NOTIFICATION_DECLINE_ROOM, object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAddMemberToRoomNotification(_:)), name: Constants.NOTIFICATION_ADD_MEMBER_TO_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveMemberFromRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_MEMBER_IN_ROOM, object: nil)
     }
     //MARK: Notification
@@ -239,31 +242,20 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     }
     
     @objc func didReceiveDeclineRoomNotification(_ notification:Notification){
-        DispatchQueue.main.async {
+       DispatchQueue.global(qos: .userInteractive).async {
             if notification.object is NotificationMappableModel {
                 guard let notification = notification.object as? NotificationMappableModel, let index = self.rooms.index(of: RoomMappableModel(roomId: notification.roomId!)) else{
                     return
                 }
                 
                 self.rooms[index].statusId = Constants.DECLINED
-                self.roomForOwnerView.roomsOwner  = self.rooms
+                DispatchQueue.main.async{
+                    self.roomForOwnerView.roomsOwner  = self.rooms
+                }
             }
         }
     }
-    @objc func didReceiveAddMemberToRoomNotification(_ notification:Notification){
-        DispatchQueue.main.async {
-            let hub = MBProgressHUD.showAdded(to: self.bottomContainerView, animated: true)
-            hub.mode = .indeterminate
-            hub.bezelView.backgroundColor = .white
-            hub.contentColor = .defaultBlue
-        }
-        DispatchQueue.global(qos: .background).async {
-            self.requestCurrentRoom()
-            DispatchQueue.main.async {
-                MBProgressHUD.hide(for: self.bottomContainerView, animated: true)
-            }
-        }
-    }
+    
     @objc func didReceiveRemoveMemberFromRoomNotification(_ notification:Notification){
         _ = DBManager.shared.deleteAllRecords(ofType: RoomModel.self)
         

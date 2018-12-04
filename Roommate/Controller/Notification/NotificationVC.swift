@@ -32,7 +32,6 @@ class NotificationVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,
 //    }()
     
     lazy var user = DBManager.shared.getUser()
-    
     lazy var ref = Database.database().reference().child("notifications/users").child("\(self.user!.userId)")
     var notifications:[NotificationMappableModel] = []
     var newNotifications:[NotificationMappableModel] = []
@@ -64,29 +63,32 @@ class NotificationVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,
         ref.observe(.childAdded)
                 { (snapshot) in
                     if let dic = snapshot.value as? [String:AnyObject],let model = Mapper<NotificationMappableModel>().map(JSON: dic){
-                        model.notificationId = snapshot.key
-                        self.notifications.append(model)
-                        self.updateUI()
-                        if model.status == Constants.NEW || model.status == Constants.NEW_LOADED{
-                            
-                            if model.status == Constants.NEW{
+                        if model.userId == self.user?.userId{
+                            model.notificationId = snapshot.key
+                            self.notifications.append(model)
+                            self.updateUI()
+                            if model.status == Constants.NEW || model.status == Constants.NEW_LOADED{
                                 AudioServicesPlayAlertSound(SystemSoundID(1322))
-                                switch model.type {
-                                case Constants.ROOM_ACCEPT_NOTIFICATION:
-                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_ACCEPT_ROOM, object: model)
-                                case Constants.ROOM_DENIED_NOTIFICATION:
-                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_DECLINE_ROOM, object: model)
-                                case Constants.ADD_MEMBER_NOTIFICATION:
-                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_MEMBER_TO_ROOM, object: model)
-                                case Constants.REMOVE_MEMBER_NOTIFICATION:
-                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_MEMBER_IN_ROOM, object: model)
-                                case Constants.UPDATE_MEMBER_NOTIFICATION:
-                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_UPDATE_MEMBER_IN_ROOM, object: model)
-                                default:
-                                    break
+                                if model.status == Constants.NEW{
+                                    
+                                    switch model.type {
+                                    case Constants.ROOM_ACCEPT_NOTIFICATION:
+                                        NotificationCenter.default.post(name: Constants.NOTIFICATION_ACCEPT_ROOM, object: model)
+                                    case Constants.ROOM_DENIED_NOTIFICATION:
+                                        NotificationCenter.default.post(name: Constants.NOTIFICATION_DECLINE_ROOM, object: model)
+                                    case Constants.ADD_MEMBER_NOTIFICATION:
+                                        NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_MEMBER_TO_ROOM, object: model)
+                                    case Constants.REMOVE_MEMBER_NOTIFICATION:
+                                        NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_MEMBER_IN_ROOM, object: model)
+                                    case Constants.UPDATE_MEMBER_NOTIFICATION:
+                                        NotificationCenter.default.post(name: Constants.NOTIFICATION_UPDATE_MEMBER_IN_ROOM, object: model)
+                                    default:
+                                        break
+                                    }
                                 }
                             }
                         }
+                        
                         
                     }
         }

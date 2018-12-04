@@ -79,21 +79,7 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if !APIConnection.isConnectedInternet(){
-            showErrorView(inView: self.contentView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
-                    DispatchQueue.main.async {
-                        self.setupUIAndData()
-                    }
-                }
-            }
-        }else{
-            self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
-                DispatchQueue.main.async {
-                    self.setupUIAndData()
-                }
-            }
-        }
+        
     }
     
     
