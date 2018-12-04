@@ -3,7 +3,7 @@ package com.caps.asp.controller;
 import com.caps.asp.model.TbDistrictReference;
 import com.caps.asp.model.TbReference;
 import com.caps.asp.model.TbUtilitiesReference;
-import com.caps.asp.model.uimodel.request.FilterArgumentModel;
+import com.caps.asp.model.uimodel.request.common.SuggestSettingRequestModel;
 import com.caps.asp.service.DistrictReferenceService;
 import com.caps.asp.service.ReferenceService;
 import com.caps.asp.service.UtilityReferenceService;
@@ -32,30 +32,30 @@ public class ReferenceController {
 
     @Transactional
     @PostMapping("/reference/save")
-    public ResponseEntity createReference(@RequestBody FilterArgumentModel filterArgumentModel) {
+    public ResponseEntity createReference(@RequestBody SuggestSettingRequestModel suggestSettingRequestModel) {
         try {
-            List<Double> prices = filterArgumentModel.getFilterRequestModel().getPrice();
+            List<Double> prices = suggestSettingRequestModel.getPrice();
 
-            TbReference checkReference = referenceService.getByUserId(filterArgumentModel.getUserId());
+            TbReference checkReference = referenceService.getByUserId(suggestSettingRequestModel.getUserId());
             if (checkReference == null){
                 TbReference reference = new TbReference();
                 reference.setMinPrice(prices.get(0));
                 reference.setMaxPrice(prices.get(1));
-                reference.setUserId(filterArgumentModel.getUserId());
+                reference.setUserId(suggestSettingRequestModel.getUserId());
                 referenceService.save(reference);
 
-                for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
+                for (Integer utilityId : suggestSettingRequestModel.getUtilities()) {
                     TbUtilitiesReference tbUtilitiesReference = new TbUtilitiesReference();
                     tbUtilitiesReference.setId(0);
-                    tbUtilitiesReference.setUserId(filterArgumentModel.getUserId());
+                    tbUtilitiesReference.setUserId(suggestSettingRequestModel.getUserId());
                     tbUtilitiesReference.setUtilityId(utilityId);
                     utilityReferenceService.save(tbUtilitiesReference);
                 }
 
-                for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
+                for (Integer districtId : suggestSettingRequestModel.getDistricts()) {
                     TbDistrictReference tbDistrictReference = new TbDistrictReference();
                     tbDistrictReference.setId(0);
-                    tbDistrictReference.setUserId(filterArgumentModel.getUserId());
+                    tbDistrictReference.setUserId(suggestSettingRequestModel.getUserId());
                     tbDistrictReference.setDistrictId(districtId);
                     districtReferenceService.save(tbDistrictReference);
                 }
@@ -64,20 +64,20 @@ public class ReferenceController {
                 checkReference.setMaxPrice(prices.get(1));
                 referenceService.save(checkReference);
 
-                utilityReferenceService.removeAllByUserId(filterArgumentModel.getUserId());
-                for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
+                utilityReferenceService.removeAllByUserId(suggestSettingRequestModel.getUserId());
+                for (Integer utilityId : suggestSettingRequestModel.getUtilities()) {
                     TbUtilitiesReference tbUtilitiesReference = new TbUtilitiesReference();
                     tbUtilitiesReference.setId(0);
-                    tbUtilitiesReference.setUserId(filterArgumentModel.getUserId());
+                    tbUtilitiesReference.setUserId(suggestSettingRequestModel.getUserId());
                     tbUtilitiesReference.setUtilityId(utilityId);
                     utilityReferenceService.save(tbUtilitiesReference);
                 }
 
-                districtReferenceService.removeAllByUserId(filterArgumentModel.getUserId());
-                for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
+                districtReferenceService.removeAllByUserId(suggestSettingRequestModel.getUserId());
+                for (Integer districtId : suggestSettingRequestModel.getDistricts()) {
                     TbDistrictReference tbDistrictReference = new TbDistrictReference();
                     tbDistrictReference.setId(0);
-                    tbDistrictReference.setUserId(filterArgumentModel.getUserId());
+                    tbDistrictReference.setUserId(suggestSettingRequestModel.getUserId());
                     tbDistrictReference.setDistrictId(districtId);
                     districtReferenceService.save(tbDistrictReference);
                 }
