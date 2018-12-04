@@ -8,33 +8,34 @@
 
 import UIKit
 import MBProgressHUD
-class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewDelegate{
+class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDelegate{
     var room:RoomPostResponseModel!
     var roommate:RoommatePostResponseModel!
-    let scrollView:UIScrollView = {
+    lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
         sv.bounces = false
         sv.showsVerticalScrollIndicator = false
         sv.showsHorizontalScrollIndicator = false
+        sv.delegate = self
         return sv
         
         
     }()
-    let contentView:UIView={
+    lazy var contentView:UIView={
         let cv = UIView()
         return cv
     }()
-    var horizontalImagesView:HorizontalImagesView = {
+    lazy var horizontalImagesView:HorizontalImagesView = {
         let hv:HorizontalImagesView = .fromNib()
         return hv
     }()
     
-    var baseInformationView:BaseInformationView = {
+    lazy var baseInformationView:BaseInformationView = {
         let bv:BaseInformationView = .fromNib()
         return bv
     }()
     
-    var genderView:GenderView = {
+    lazy var genderView:GenderView = {
         let gv:GenderView = .fromNib()
         return gv
     }()
@@ -44,18 +45,18 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     //        return mv
     //    }()
     //
-    var utilitiesView:UtilitiesView = {
+    lazy var utilitiesView:UtilitiesView = {
         let uv:UtilitiesView = .fromNib()
         return uv
     }()
     
     
-    var descriptionsView:DescriptionView = {
+    lazy var descriptionsView:DescriptionView = {
         let dv:DescriptionView = .fromNib()
         return dv
     }()
     
-    var optionView:OptionView = {
+    lazy var optionView:OptionView = {
         let ov:OptionView = .fromNib()
         return ov
     }()

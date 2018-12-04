@@ -11,7 +11,7 @@ import UIKit
 import MBProgressHUD
 import CoreLocation
 import FirebaseDatabase
-class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HorizontalRoomViewDelegate,VerticalCollectionViewDelegate,LocationSearchViewDelegate,CLLocationManagerDelegate,UISearchControllerDelegate,UISearchBarDelegate{
+class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HorizontalRoomViewDelegate,VerticalCollectionViewDelegate,LocationSearchViewDelegate,CLLocationManagerDelegate,UISearchControllerDelegate,UISearchBarDelegate{
     
     lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
@@ -666,27 +666,27 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
             _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object: SettingModel(settingMappableModel: setting))
         }
     }
-    //MARK: UIScrollviewDelegate
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offset = scrollView.contentOffset.y
-        //        let contentHeight = scrollView.contentSize.height
-        //        print("OFFSET:\(scrollView.contentOffset.y)")
-        //        print("ContentframeHeight:\(scrollView.frame.height)")
-        //        print("ContentContentHeight:\(scrollView.contentSize.height)")
-        //
-        if offset  > 50.0{
-            UIView.animate(withDuration: 1.5, delay: 0, options: UIViewAnimationOptions(), animations: {
-                self.navigationController?.setNavigationBarHidden(true, animated: true)
-                print("Hide")
-            }, completion: nil)
-        }else{
-            
-            UIView.animate(withDuration: 1.5, delay: 0, options: UIViewAnimationOptions(), animations: {
-                self.navigationController?.setNavigationBarHidden(false, animated: true)
-                print("Unhide")
-            }, completion: nil)
-        }
-    }
+//    //MARK: UIScrollviewDelegate
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let offset = scrollView.contentOffset.y
+//        //        let contentHeight = scrollView.contentSize.height
+//        //        print("OFFSET:\(scrollView.contentOffset.y)")
+//        //        print("ContentframeHeight:\(scrollView.frame.height)")
+//        //        print("ContentContentHeight:\(scrollView.contentSize.height)")
+//        //
+//        if offset  > 50.0{
+//            UIView.animate(withDuration: 1.5, delay: 0, options: UIViewAnimationOptions(), animations: {
+//                self.navigationController?.setNavigationBarHidden(true, animated: true)
+//                print("Hide")
+//            }, completion: nil)
+//        }else{
+//
+//            UIView.animate(withDuration: 1.5, delay: 0, options: UIViewAnimationOptions(), animations: {
+//                self.navigationController?.setNavigationBarHidden(false, animated: true)
+//                print("Unhide")
+//            }, completion: nil)
+//        }
+//    }
     
     //    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
     //

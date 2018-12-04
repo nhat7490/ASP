@@ -25,6 +25,12 @@ class BaseInformationView: UIView {
     @IBOutlet weak var lblTitleDescriptionHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var lblMainTitleHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var btnViewDetail: UIButton!
+    var btnTitle:String?{
+        didSet{
+            _ = btnViewDetail.isHidden = false
+            btnViewDetail.setTitle(btnTitle, for: .normal)
+        }
+    }
     weak var delegate:BaseInformationViewDelegate?
     var room:RoomMappableModel!{
         didSet{
@@ -37,6 +43,9 @@ class BaseInformationView: UIView {
                                                                                                                                                                                                                                                                                   NSAttributedStringKey.foregroundColor:UIColor.white])
                 self.lblSubTitle.text = "BASE_INFORMATION".localized
                 self.lblTitleDescription.attributedText = status
+            }else if viewType == .detailForMember{
+                self.lblSubTitle.text = "ROOM_BASE_INFORMATION".localized
+                
             }else{
 //                self.lblMainTitle.text = "ROOM_BASE_INFORMATION".localized
                 self.lblSubTitle.text = "ROOM_BASE_INFORMATION".localized
@@ -48,6 +57,7 @@ class BaseInformationView: UIView {
             self.lblInfoBottom.text = String(format: "AREA".localized,room.area)
         }
     }
+    
     var roommatePost:RoommatePostResponseModel!{
         didSet{
             self.lblMainTitle.text = roommatePost.userResponseModel?.fullname
@@ -75,8 +85,8 @@ class BaseInformationView: UIView {
             if  viewType
                 == .roomPostDetailForFinder || viewType == .detailForOwner{
                 lblTitleDescription.textColor = .lightGray
-            }else if viewType == .ceRoomPostForMaster{
-                _ = btnViewDetail.isHidden = false
+            }else if viewType == .ceRoomPostForMaster || viewType == .detailForMember{
+                
                 lblSubTitle.textColor = .red
                 lblMainTitleHeightConstraint.constant = 0
                 lblTitleDescriptionHeightConstraint.constant = 0
@@ -107,7 +117,7 @@ class BaseInformationView: UIView {
         
         imgvtop.image = UIImage(named: "address")
         imgvBottom.image = UIImage(named: "area")
-        btnViewDetail.setTitle("VIEW_DETAIL".localized, for: .normal)
+        
         btnViewDetail.setTitleColor(.white, for: .normal)
         btnViewDetail.backgroundColor = .defaultBlue
         btnViewDetail.layer.cornerRadius = 15
@@ -115,7 +125,6 @@ class BaseInformationView: UIView {
         btnViewDetail.isHidden = true
         
     }
-    
     @IBAction func onClickBtnViewDetail(_ sender: Any) {
         delegate?.baseInformationViewDelegate(baseInformationView: self, onClickBtnViewAll: btnViewDetail)
         

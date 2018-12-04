@@ -79,19 +79,21 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        checkAndLoadInitData(view: self.view){
+            self.initData()
+            self.setupUI()
+            self.setData()
+        }
     }
     
     
-    func setupUIAndData(){
+    func initData(){
         self.utilities = DBManager.shared.getRecords(ofType: UtilityModel.self)?.compactMap({ (utility) -> UtilityMappableModel? in
             UtilityMappableModel(utilityModel: utility)
         })
         self.utilities?.forEach{print($0.name)}
         self.cities = (DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self))!
         self.districts = (DBManager.shared.getRecords(ofType: DistrictModel.self)?.toArray(type: DistrictModel.self))!
-        setupUI()
-        setData()
     }
     
     func setupUI(){

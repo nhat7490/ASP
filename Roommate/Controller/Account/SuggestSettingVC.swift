@@ -23,20 +23,6 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         return cv
     }()
     
-    lazy var tvSettingDesription:UITextView={
-        let tv = UITextView()
-        tv.font  = .medium
-        tv.textColor = .red
-        tv.text = "ROOM_POST_SETTING_TITLE".localized
-        tv.isEditable = false
-        tv.isUserInteractionEnabled = false
-        tv.isScrollEnabled = false
-        //        tv.textContainerInset = .zero
-        tv.textContainer.lineBreakMode = .byWordWrapping
-        
-        return tv
-    }()
-    
     lazy var cityDropdownListView:DropdownListView = {
         let cv:DropdownListView = .fromNib()
         cv.dropdownListViewType = .city
@@ -62,21 +48,6 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     }()
     
     
-    
-    lazy var tvContactInformations:UITextView={
-        let tv = UITextView()
-        tv.font  = .medium
-        tv.textColor = .red
-        tv.text = "ROOM_POST_PHONE_CONTACT".localized
-        tv.isEditable = false
-        tv.isUserInteractionEnabled = false
-        tv.isScrollEnabled = false
-        //        tv.textContainerInset = .zero
-        tv.textContainer.lineBreakMode = .byWordWrapping
-        
-        return tv
-    }()
-    
     lazy var btnSave:UIButton = {
         let bt = UIButton()
         bt.backgroundColor = .defaultBlue
@@ -94,13 +65,10 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     var utilities:[UtilityMappableModel]?
     var districts:[DistrictModel]?
     var cities:[CityModel]?
-    var roommatePostRequestModel = RoommatePostRequestModel()
     var selectedUtilities:[Int]?
     var selectedCity:CityModel?
     var selectedDistricts:[DistrictModel]?
     var selectedPrice:[Float]?
-    weak var delegate:FilterVCDelegate?
-    var cERoommateVCType:CEVCType = .create
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -125,7 +93,8 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     }
     
     func setupUI(){
-        title = cERoommateVCType == .create ? "CREATE_ROOMMATE_POST".localized : "EDIT_POST".localized
+        title = "SUGGEST_SETTING".localized
+        btnSave.setTitle("SAVE".localized, for: .normal)
         edgesForExtendedLayout = .top// view above navigation bar
         setBackButtonForNavigationBar()
         //        translateNavigationBarBottomBorder()
@@ -141,7 +110,7 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         let numberOfRow =  (utilities?.count)!%2==0 ? (utilities?.count)!/2 : (utilities?.count)!/2+1
         let utilitiesViewHeight:CGFloat =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 70.0
         //        contentViewHeight = CGFloat(Constants.HEIGHT_VIEW_SLIDER+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+Constants.HEIGHT_VIEW_GENDER+utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE)
-        let contentViewHeight:CGFloat = Constants.HEIGHT_VIEW_SLIDER+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+utilitiesViewHeight+Constants.HEIGHT_TITLE+Constants.HEIGHT_LARGE_SPACE+30.0
+        let contentViewHeight:CGFloat = Constants.HEIGHT_VIEW_SLIDER+Constants.HEIGHT_VIEW_DROPDOWN_LIST*2+utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE
         
         //Add View
         view.addSubview(scrollView)
@@ -149,12 +118,10 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         
         scrollView.addSubview(contentView)
         bottomView.addSubview(btnSave)
-        contentView.addSubview(tvSettingDesription)
         contentView.addSubview(cityDropdownListView)
         contentView.addSubview(districtDropdownListView)
         contentView.addSubview(priceSliderView)
         contentView.addSubview(utilitiesView)
-        contentView.addSubview(tvContactInformations)
         //Add Constrant
         
         if #available(iOS 11.0, *) {
@@ -171,14 +138,11 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         _  = contentView.anchorHeight(equalToConstrant: contentViewHeight)
         
         //Suggest Setting
-        _ = tvSettingDesription.anchor(contentView.topAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height:Constants.HEIGHT_TITLE))
-        _ = cityDropdownListView.anchor(tvSettingDesription.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_DROPDOWN_LIST))
+        _ = cityDropdownListView.anchor(contentView.topAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_DROPDOWN_LIST))
         _ = districtDropdownListView.anchor(cityDropdownListView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_DROPDOWN_LIST))
         _ = priceSliderView.anchor(districtDropdownListView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_VIEW_SLIDER))
         _ = utilitiesView.anchor(priceSliderView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: utilitiesViewHeight))
         
-        //Contact
-        _ = tvContactInformations.anchor(utilitiesView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: 30.0))
         
         _ = btnSave.anchor(view: bottomView,UIEdgeInsets(top: Constants.MARGIN_6, left: 0, bottom: -Constants.MARGIN_6, right: 0))
         btnSave.layer.cornerRadius = CGFloat(10)
@@ -200,32 +164,11 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             selectedCity = city
             cityDropdownListView.text = selectedCity?.name
         }
-        if cERoommateVCType == .create{
-            if let suggestSettingMappableModel = currentUser.suggestSettingMappedModel{
-                self.suggestSettingMappableModel = suggestSettingMappableModel
-                if let districtId = suggestSettingMappableModel.districts?.first, let cityId = DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.cityId{
-                    selectedCity = DBManager.shared.getRecord(id: cityId, ofType: CityModel.self)
-                    if let districts = suggestSettingMappableModel.districts,districts.count != 0{
-                        selectedDistricts = districts.map({ (districtId) -> DistrictModel   in
-                            DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)!
-                        })
-                        let dictristString = selectedDistricts?.compactMap{$0.name}
-                        districtDropdownListView.text = dictristString?.joined(separator: ",")
-                    }
-                    cityDropdownListView.text = selectedCity?.name
-                }
-                
-                if let utilities = suggestSettingMappableModel.utilities{
-                    selectedUtilities = utilities
-                }
-                if let price = suggestSettingMappableModel.price{
-                    selectedPrice = price
-                }
-            }
-        }else{
-            if let districtId = roommatePostRequestModel.districtIds?.first, let cityId = DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.cityId{
+        if let suggestSettingMappableModel = currentUser.suggestSettingMappedModel{
+            self.suggestSettingMappableModel = suggestSettingMappableModel
+            if let districtId = suggestSettingMappableModel.districts?.first, let cityId = DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.cityId{
                 selectedCity = DBManager.shared.getRecord(id: cityId, ofType: CityModel.self)
-                if let districts = roommatePostRequestModel.districtIds,districts.count != 0{
+                if let districts = suggestSettingMappableModel.districts,districts.count != 0{
                     selectedDistricts = districts.map({ (districtId) -> DistrictModel   in
                         DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)!
                     })
@@ -235,22 +178,21 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                 cityDropdownListView.text = selectedCity?.name
             }
             
-            if let utilities = roommatePostRequestModel.utilityIds{
+            if let utilities = suggestSettingMappableModel.utilities{
                 selectedUtilities = utilities
             }
-            if let minPrice = roommatePostRequestModel.minPrice,let maxPrice = roommatePostRequestModel.maxPrice{
-                selectedPrice = [minPrice,maxPrice]
+            if let price = suggestSettingMappableModel.price{
+                selectedPrice = price
             }
         }
-        
         
         priceSliderView.setSelectedRange(leftSelectedValue: selectedPrice![0], rightSelectedValue: selectedPrice![1])
         utilitiesView.selectedUtilities = selectedUtilities!
         //        genderView.genderSelect = selectedGender
     }
     func setupDelegateAndDataSource(){
-        title = "SUGGEST_SETTING".localized
-        btnSave.setTitle("APPLY".localized, for: .normal)
+        
+        
         utilitiesView.utilities = utilities
         
         utilitiesView.delegate = self
@@ -365,8 +307,7 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             }
             suggestSettingMappableModel?.utilities = selectedUtilities
             suggestSettingMappableModel?.price = selectedPrice
-            
-            
+            requestSaveSuggest()
         }
     }
     func requestSaveSuggest(){
@@ -397,7 +338,6 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                                 (action) in
                                 self.popSelfInNavigationController()
                             })
-                            
                         }
                     }else{
                         DispatchQueue.main.async {

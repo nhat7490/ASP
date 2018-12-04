@@ -208,7 +208,14 @@ enum APIRouter:URLRequestConvertible{
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.allHTTPHeaderFields = httpHeaders
         urlRequest.httpMethod = httpMethod.rawValue
-        urlRequest.timeoutInterval  = 30
+        
+        switch self{
+        case .getCurrentRoom,.utility(),.district(),.city():
+            urlRequest.timeoutInterval  = 10
+        default:
+            urlRequest.timeoutInterval  = 30
+            
+        }
         
         do{
             switch self.httpMethod {

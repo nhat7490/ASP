@@ -8,7 +8,7 @@
 
 import UIKit
 import MBProgressHUD
-class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource{
+class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITableViewDataSource{
     
     lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()

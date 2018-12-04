@@ -32,6 +32,7 @@
 		6920FB4B21724DED000E06E0 /* BaseTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6920FB4A21724DED000E06E0 /* BaseTabBarVC.swift */; };
 		69225641215B27100040213A /* OrderTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69225640215B27100040213A /* OrderTVCell.swift */; };
 		69225643215B27320040213A /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69225642215B27320040213A /* Protocols.swift */; };
+		692268CF21B701AC00598A98 /* BaseAutoHideNavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692268CE21B701AC00598A98 /* BaseAutoHideNavigationVC.swift */; };
 		69232A1F21614A7E00C782F9 /* BaseHorizontalCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69232A1E21614A7E00C782F9 /* BaseHorizontalCollectionView.swift */; };
 		69232A2121614AC700C782F9 /* BaseHorizontalCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69232A2021614AC700C782F9 /* BaseHorizontalCollectionViewFlowLayout.swift */; };
 		69232A2321614C4E00C782F9 /* ImageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69232A2221614C4E00C782F9 /* ImageCVCell.swift */; };
@@ -75,7 +76,7 @@
 		6943D9822153F121002CFEBB /* CERoomPostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9812153F121002CFEBB /* CERoomPostVC.swift */; };
 		6943D9942153F3BE002CFEBB /* ResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9932153F3BE002CFEBB /* ResetPasswordVC.swift */; };
 		6943D9962153F452002CFEBB /* NotificationDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9952153F452002CFEBB /* NotificationDetailVC.swift */; };
-		6943D9982153F462002CFEBB /* SuggestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9972153F462002CFEBB /* SuggestVC.swift */; };
+		6943D9982153F462002CFEBB /* SuggestSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9972153F462002CFEBB /* SuggestSettingVC.swift */; };
 		6943D99A2153F46E002CFEBB /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9992153F46E002CFEBB /* ProfileVC.swift */; };
 		6943D99C2153F484002CFEBB /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D99B2153F484002CFEBB /* SettingVC.swift */; };
 		6943D9A02153F55F002CFEBB /* PolicyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D99F2153F55F002CFEBB /* PolicyVC.swift */; };
@@ -228,6 +229,7 @@
 		6920FB4A21724DED000E06E0 /* BaseTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarVC.swift; sourceTree = "<group>"; };
 		69225640215B27100040213A /* OrderTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTVCell.swift; sourceTree = "<group>"; };
 		69225642215B27320040213A /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		692268CE21B701AC00598A98 /* BaseAutoHideNavigationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAutoHideNavigationVC.swift; sourceTree = "<group>"; };
 		69232A1E21614A7E00C782F9 /* BaseHorizontalCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHorizontalCollectionView.swift; sourceTree = "<group>"; };
 		69232A2021614AC700C782F9 /* BaseHorizontalCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHorizontalCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		69232A2221614C4E00C782F9 /* ImageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCVCell.swift; sourceTree = "<group>"; };
@@ -271,7 +273,7 @@
 		6943D9812153F121002CFEBB /* CERoomPostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CERoomPostVC.swift; sourceTree = "<group>"; };
 		6943D9932153F3BE002CFEBB /* ResetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordVC.swift; sourceTree = "<group>"; };
 		6943D9952153F452002CFEBB /* NotificationDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailVC.swift; sourceTree = "<group>"; };
-		6943D9972153F462002CFEBB /* SuggestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestVC.swift; sourceTree = "<group>"; };
+		6943D9972153F462002CFEBB /* SuggestSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestSettingVC.swift; sourceTree = "<group>"; };
 		6943D9992153F46E002CFEBB /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		6943D99B2153F484002CFEBB /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6943D99F2153F55F002CFEBB /* PolicyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyVC.swift; sourceTree = "<group>"; };
@@ -512,7 +514,7 @@
 			isa = PBXGroup;
 			children = (
 				6943D96D2153F07C002CFEBB /* AccountVC.swift */,
-				6943D9972153F462002CFEBB /* SuggestVC.swift */,
+				6943D9972153F462002CFEBB /* SuggestSettingVC.swift */,
 				6943D9992153F46E002CFEBB /* ProfileVC.swift */,
 				6943D99B2153F484002CFEBB /* SettingVC.swift */,
 				6943D99F2153F55F002CFEBB /* PolicyVC.swift */,
@@ -911,6 +913,7 @@
 				69232A2021614AC700C782F9 /* BaseHorizontalCollectionViewFlowLayout.swift */,
 				69D9DA172169B68B00B38D35 /* ViewController.swift */,
 				6920FB4A21724DED000E06E0 /* BaseTabBarVC.swift */,
+				692268CE21B701AC00598A98 /* BaseAutoHideNavigationVC.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1190,7 +1193,8 @@
 				69AFA9DB21837CC2004244C6 /* GPPrediction.swift in Sources */,
 				695B1A2D21898BA900C004DB /* SettingModel.swift in Sources */,
 				04D77E452158AFD70045C45C /* CustomSegmentedControl.swift in Sources */,
-				6943D9982153F462002CFEBB /* SuggestVC.swift in Sources */,
+				6943D9982153F462002CFEBB /* SuggestSettingVC.swift in Sources */,
+				692268CF21B701AC00598A98 /* BaseAutoHideNavigationVC.swift in Sources */,
 				69F0FACC21B257990005B205 /* RoomPostMappableModel.swift in Sources */,
 				69BF69F021607917002B5B49 /* BaseVerticalCollectionViewFlowLayout.swift in Sources */,
 				69CC88472193672400ADC0FA /* ActionTVCell.swift in Sources */,

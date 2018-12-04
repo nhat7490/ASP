@@ -166,6 +166,7 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,InputViewDelegate,MaxMemberSelectV
         
         //Data
         baseInformationView.viewType = .ceRoomPostForMaster
+        baseInformationView.btnTitle = "VIEW_DETAIL".localized
         baseInformationView.room = currentRoom
         baseInformationView.delegate = self
         maxMemberSelectView.maxMember = currentRoom.maxGuest

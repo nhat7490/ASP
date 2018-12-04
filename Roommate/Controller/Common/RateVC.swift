@@ -22,17 +22,17 @@ class RateVC: BaseVC {
     }()
 
     lazy var topSingleRateView:SingleRateView = {
-        let sv = SingleRateView()
+        let sv:SingleRateView = .fromNib()
         return sv
     }()
 
     lazy var centerSingleRateView:SingleRateView = {
-        let sv = SingleRateView()
+        let sv:SingleRateView = .fromNib()
         return sv
     }()
 
     lazy var bottomSingleRateView:SingleRateView = {
-        let sv = SingleRateView()
+        let sv:SingleRateView = .fromNib()
         return sv
     }()
 
@@ -61,6 +61,7 @@ class RateVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupDelegateAndDataSource()
     }
     
     func setupUI(){
@@ -94,15 +95,29 @@ class RateVC: BaseVC {
 
         }
 
-        _ = contentView.anchor(scrollView.topAnchor,scrollView.leftAnchor,scrollView.bottomAnchor,scrollView.rightAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10),CGSize(width: 0, height: contentViewHeight))
+        _ = contentView.anchor(scrollView.topAnchor,scrollView.leftAnchor,scrollView.bottomAnchor,scrollView.rightAnchor,.zero,CGSize(width: 0, height: contentViewHeight))
         _ = contentView.anchorWidth(equalTo:scrollView.widthAnchor)
 
         _ = topSingleRateView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor,.zero,CGSize(width: 0, height: Constants.HEIGHT_SINGLE_RATE_VIEW))
-        _ = centerSingleRateView.anchor(topSingleRateView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor,.zero,CGSize(width: 0, height: Constants.HEIGHT_SINGLE_RATE_VIEW))
-        _ = bottomSingleRateView.anchor(centerSingleRateView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor,.zero,CGSize(width: 0, height: Constants.HEIGHT_SINGLE_RATE_VIEW))
+        _ = centerSingleRateView.anchor(topSingleRateView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor,.zero,CGSize(width: 0, height: Constants.HEIGHT_SINGLE_RATE_VIEW))
+        _ = bottomSingleRateView.anchor(centerSingleRateView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor,.zero,CGSize(width: 0, height: Constants.HEIGHT_SINGLE_RATE_VIEW))
+        
+        topSingleRateView.starSize = 50.0
+        centerSingleRateView.starSize = 50.0
+        bottomSingleRateView.starSize = 50.0
+        
     }
     func setupDelegateAndDataSource(){
 //        top
+        topSingleRateView.didFinishTouchingRateView = { [weak self] (rate) in
+            print(rate)
+        }
+        centerSingleRateView.didFinishTouchingRateView = { [weak self] (rate) in
+            print(rate)
+        }
+        bottomSingleRateView.didFinishTouchingRateView = { [weak self] (rate) in
+            print(rate)
+        }
     }
 
     //MARK: Navigation bar button delegate

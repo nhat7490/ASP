@@ -8,7 +8,7 @@
 
 import UIKit
 import MBProgressHUD
-class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDelegate,UtilitiesViewDelegate{
+class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelegate,UtilitiesViewDelegate,BaseInformationViewDelegate{
     
     
     
@@ -25,6 +25,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         sv.bounces = false
         sv.showsVerticalScrollIndicator = false
         sv.showsHorizontalScrollIndicator = false
+        sv.delegate = self
         return sv
         
         
@@ -33,6 +34,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         let cv = UIView()
         return cv
     }()
+    
     lazy var horizontalImagesView:HorizontalImagesView = {
         let hv:HorizontalImagesView = .fromNib()
         return hv
@@ -73,7 +75,15 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     var contentViewHeightConstraint:NSLayoutConstraint?
     var membersViewHeightConstraint:NSLayoutConstraint?
     var ulititiesViewHeightConstraint:NSLayoutConstraint?
-    
+    var currentRoomOfMember: RoomMappableModel?{
+        get{
+            if let room = DBManager.shared.getSingletonModel(ofType: RoomModel.self){
+                return RoomMappableModel(roomModel: room)
+            }else{
+                return nil
+            }
+        }
+    }
     //MARK: RoomDetailVC
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -124,10 +134,10 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
             membersViewHeight =  Constants.HEIGHT_VIEW_MEMBERS
         }
         
-        
+        let baseInformationViewHeight:CGFloat = viewType == .detailForMember ? Constants.HEIGHT_VIEW_BASE_INFORMATION-80 : Constants.HEIGHT_VIEW_BASE_INFORMATION
         let numberOfRow = room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1
         let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
-        let part1 = Constants.HEIGHT_HORIZONTAL_ROOM_VIEW + Constants.HEIGHT_VIEW_BASE_INFORMATION
+        let part1 = Constants.HEIGHT_HORIZONTAL_ROOM_VIEW + baseInformationViewHeight
         let part2 = membersViewHeight + utilitiesViewHeight
         let part3 = Constants.HEIGHT_VIEW_DESCRIPTION + Constants.HEIGHT_LARGE_SPACE
         let totalContentViewHeight = part1 + part2 + part3
@@ -156,7 +166,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         contentViewHeightConstraint = contentView.anchorHeight(equalToConstrant: CGFloat(totalContentViewHeight))
         
         _ = horizontalImagesView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero ,CGSize(width: 0, height: Constants.HEIGHT_CELL_IMAGECV))
-        _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_BASE_INFORMATION))
+        _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: baseInformationViewHeight))
 //        _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
         membersViewHeightConstraint = membersView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: membersViewHeight))[3]
         ulititiesViewHeightConstraint = utilitiesView.anchor(membersView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
@@ -184,7 +194,6 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
         
         ulititiesViewHeightConstraint?.constant = utilitiesViewHeight
-        
         let part1 = Constants.HEIGHT_HORIZONTAL_ROOM_VIEW + Constants.HEIGHT_VIEW_BASE_INFORMATION
         let part2 = membersViewHeight + utilitiesViewHeight
         let part3 = Constants.HEIGHT_VIEW_DESCRIPTION + Constants.HEIGHT_LARGE_SPACE
@@ -197,7 +206,11 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         //Data for baseInformationView
         horizontalImagesView.images = room.imageUrls
         baseInformationView.viewType = viewType
+        baseInformationView.delegate = self
         baseInformationView.room = room
+        if viewType == .detailForMember && currentRoomOfMember?.roomId == room.roomId{
+            baseInformationView.btnTitle = "RATE_ROOM".localized
+        }
         
         membersView.viewType = viewType
         membersView.members = room.members
@@ -276,6 +289,13 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
             }
         }
     }
+    //MARK: BaseInformationViewDelegate
+    func baseInformationViewDelegate(baseInformationView: BaseInformationView, onClickBtnViewAll button: UIButton) {
+        let vc = RateVC()
+        vc.rateVCType = .room
+        presentInNewNavigationController(viewController: vc, flag: false)
+    }
+    
     //MARK: MembersViewDelegate
     func membersViewDelegate(membersView view: MembersView, onClickBtnEdit button:UIButton) {
         if room.statusId == Constants.AUTHORIZED{

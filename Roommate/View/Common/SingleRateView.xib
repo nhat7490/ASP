@@ -29,29 +29,32 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sy0-8I-nLI" customClass="CosmosView" customModule="Cosmos">
-                            <rect key="frame" x="0.0" y="30" width="451" height="50"/>
+                            <rect key="frame" x="150.5" y="30" width="150" height="50"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="50" id="Jfc-24-xIH"/>
+                                <constraint firstAttribute="width" constant="150" id="8IU-7Q-YVD"/>
+                                <constraint firstAttribute="height" constant="50" id="U7w-dy-xOb"/>
                             </constraints>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="starSize">
-                                    <real key="value" value="50"/>
+                                    <real key="value" value="0.0"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="number" keyPath="starMargin">
                                     <real key="value" value="0.0"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="filledBorderColor">
+                                    <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="Sy0-8I-nLI" secondAttribute="trailing" id="5Cg-bB-g3h"/>
-                        <constraint firstItem="Sy0-8I-nLI" firstAttribute="top" secondItem="GY0-AR-f0H" secondAttribute="bottom" id="9ue-rp-bQZ"/>
                         <constraint firstItem="GY0-AR-f0H" firstAttribute="top" secondItem="Isl-Qj-oQU" secondAttribute="top" id="G74-YK-qR1"/>
                         <constraint firstAttribute="trailing" secondItem="GY0-AR-f0H" secondAttribute="trailing" id="GBg-dc-eQK"/>
                         <constraint firstItem="GY0-AR-f0H" firstAttribute="leading" secondItem="Isl-Qj-oQU" secondAttribute="leading" id="Lk5-yK-eO3"/>
-                        <constraint firstItem="Sy0-8I-nLI" firstAttribute="leading" secondItem="Isl-Qj-oQU" secondAttribute="leading" id="h9T-yg-HiS"/>
+                        <constraint firstItem="Sy0-8I-nLI" firstAttribute="centerX" secondItem="Isl-Qj-oQU" secondAttribute="centerX" id="gSl-BN-eur"/>
+                        <constraint firstItem="Sy0-8I-nLI" firstAttribute="top" secondItem="GY0-AR-f0H" secondAttribute="bottom" id="vDz-xJ-jOf"/>
                     </constraints>
                 </view>
             </subviews>
@@ -66,6 +69,7 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="cvRate" destination="Sy0-8I-nLI" id="j4F-V9-EQf"/>
+                <outlet property="cvRateWidthConstraint" destination="8IU-7Q-YVD" id="Up5-cp-Pu2"/>
                 <outlet property="lblTitle" destination="GY0-AR-f0H" id="iX8-Ny-gly"/>
             </connections>
             <point key="canvasLocation" x="62.5" y="-241"/>

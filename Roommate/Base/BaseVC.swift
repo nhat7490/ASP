@@ -13,7 +13,7 @@ import MBProgressHUD
 import AVFoundation
 import PhotosUI
 import CoreLocation
-class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,AlertControllerDelegate{
+class BaseVC:UIViewController,UIScrollViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,AlertControllerDelegate{
     var hasBackImageButtonInNavigationBar:Bool? = false
     
     let locationManager = CLLocationManager()
@@ -44,7 +44,10 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
     @objc func endEditting(){
         view.endEditing(true)
     }
-    
+    //MARK: UIScrollviewDelegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+    }
     func resetFilter(filterType:FilterType){}
     func showNoDataView(inView view:UIView,withTitle title:String?){
         let noDataView:NoDataView = .fromNib()
@@ -146,6 +149,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             }
         }
     }
+    
     func fetchUserData() -> Bool{
         var success = false
         guard let currentUser = DBManager.shared.getUser() else {
