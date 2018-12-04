@@ -30,7 +30,9 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var vInformationHeightConstraint: NSLayoutConstraint!
     var members:[MemberResponseModel]?{
         didSet{
-            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     weak var delegate:MembersViewDelegate?
@@ -87,6 +89,7 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return members?.count ?? 0
     }
     

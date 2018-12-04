@@ -61,7 +61,8 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     }()
     
     var viewType:ViewType = .roomPostDetailForFinder
-    
+    var contentViewHeightConstraint:NSLayoutConstraint?
+    var utilitiesViewHeightConstraint:NSLayoutConstraint?
     
     
     override func viewDidLoad() {
@@ -125,19 +126,40 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
         
         _ = contentView.anchor(scrollView.topAnchor, scrollView.leftAnchor, scrollView.bottomAnchor, scrollView.rightAnchor)
         _ = contentView.anchorWidth(equalTo: scrollView.widthAnchor)
-        _ = contentView.anchorHeight(equalToConstrant: CGFloat(totalContentViewHeight))
+        contentViewHeightConstraint = contentView.anchorHeight(equalToConstrant: CGFloat(totalContentViewHeight))
         
         _ = horizontalImagesView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero ,CGSize(width: 0, height: Constants.HEIGHT_CELL_IMAGECV))
-        _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height:heightBaseInformationView ))
+        _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height:heightBaseInformationView ))[3]
         if viewType == .roomPostDetailForFinder{
             _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
-            _ = utilitiesView.anchor(genderView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))
+            utilitiesViewHeightConstraint = utilitiesView.anchor(genderView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
             _ = descriptionsView.anchor(utilitiesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_DESCRIPTION))
         }else{
-            _ = utilitiesView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))
+            utilitiesViewHeightConstraint = utilitiesView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
         }
     }
-    
+    func updateUI(){
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        baseInformationView.translatesAutoresizingMaskIntoConstraints = false
+        utilitiesView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let numberOfRow:Int
+        if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser{
+            numberOfRow = (room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1)
+        }else{
+            numberOfRow = (roommate.utilityIds.count%2==0 ? roommate.utilityIds.count/2 : roommate.utilityIds.count/2+1)
+        }
+        
+        let heightBaseInformationView:CGFloat  = ((viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? Constants.HEIGHT_VIEW_BASE_INFORMATION : Constants.HEIGHT_VIEW_BASE_INFORMATION-30.0 )
+        let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
+        let totalContentViewHeight = (viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+heightBaseInformationView+Constants.HEIGHT_VIEW_GENDER + Constants.HEIGHT_VIEW_DESCRIPTION + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE) : CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + utilitiesViewHeight - 30)
+        
+        
+        
+        utilitiesViewHeightConstraint?.constant = utilitiesViewHeight
+        contentViewHeightConstraint?.constant = totalContentViewHeight
+        view.layoutIfNeeded()
+    }
     func setData() {
         
         baseInformationView.viewType = viewType
@@ -169,6 +191,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             
             //Data for optionView
             optionView.tvPrice.text =  String(format: "PRICE_OF_ROOM".localized, room.minPrice!.formatString,"MONTH".localized)
+            optionView.tvDate.attributedText = NSAttributedString(string: String(format: "DATE_CREATED_OF_ROOM".localized, (room.date?.string(Constants.SHOW_DATE_FORMAT))!), attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
         }else{
             //Data for horizontalImagesView
             horizontalImagesView.images = [(roommate.userResponseModel?.imageProfile ?? "")]
@@ -186,6 +209,7 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
             
             //Data for optionView
             optionView.tvPrice.text =  String(format: "PRICE_OF_ROOMMATE".localized, roommate.minPrice.formatString,roommate.maxPrice.formatString,"MONTH".localized)
+            optionView.tvDate.attributedText = NSAttributedString(string: String(format: "DATE_CREATED_OF_ROOM".localized, (roommate.date?.string(Constants.SHOW_DATE_FORMAT))!), attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
         }
         
         
@@ -209,19 +233,22 @@ class PostDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,UtilitiesViewD
     
     
     @objc func didReceiveEditPostNotification(_ notification:Notification){
-        if notification.object is RoomPostRequestModel {
-            guard let model = notification.object as? RoomPostRequestModel else{
-                return
+        DispatchQueue.main.async {
+            if notification.object is RoomPostRequestModel {
+                guard let model = notification.object as? RoomPostRequestModel else{
+                    return
+                }
+                self.room.model = model
+                
+            }else{
+                guard let model = notification.object as? RoommatePostRequestModel else{
+                    return
+                }
+                self.roommate.model = model
             }
-            self.room.model = model
-            
-        }else{
-            guard let model = notification.object as? RoommatePostRequestModel else{
-                return
-            }
-            self.roommate.model = model
+            self.updateUI()
+            self.setData()
         }
-        setData()
     }
     
     //MARK: OptionViewDelegate

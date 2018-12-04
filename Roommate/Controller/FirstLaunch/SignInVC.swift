@@ -134,7 +134,7 @@ class SignInVC: BaseVC,UITextFieldDelegate {
                 //200
                 if statusCode == .OK{
                     let userModel = UserModel(userMappedModel: user!)
-                    let istrue = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: userModel)
+                    _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: userModel)
                     _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object: SettingModel())
                     let appdelegate = UIApplication.shared.delegate as! AppDelegate
                     appdelegate.window!.rootViewController = self.mainTabBarVC

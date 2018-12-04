@@ -8,8 +8,7 @@
 
 import UIKit
 import GooglePlaces
-import Realm
-import RealmSwift
+import FirebaseCore
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -20,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        window = UIWindow(frame: UIScreen.main.bounds)
 //        window?.makeKeyAndVisible()
         GMSPlacesClient.provideAPIKey("AIzaSyALHwTQKAUuHGqFmfji7-3U9SF_b04mXds")
+        FirebaseApp.configure()
 //        var config = Realm.Configuration()
         
         // Use the default directory, but replace the filename with the username

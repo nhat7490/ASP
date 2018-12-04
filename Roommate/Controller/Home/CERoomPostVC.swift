@@ -10,7 +10,7 @@ import UIKit
 import MBProgressHUD
 import SkyFloatingLabelTextField
 
-class CERoomPostVC: BaseVC,GenderViewDelegate,NewInputViewDelegate,MaxMemberSelectViewDelegate,DescriptionViewDelegate,BaseInformationViewDelegate{
+class CERoomPostVC: BaseVC,GenderViewDelegate,InputViewDelegate,MaxMemberSelectViewDelegate,DescriptionViewDelegate,BaseInformationViewDelegate{
     
     
 
@@ -243,7 +243,7 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,NewInputViewDelegate,MaxMemberSele
             roomPostRequestModel.minPrice = price
         case tfPhoneNumber:
             if string.isEmpty{return true}
-            guard let phone = Int(string) else{
+            guard let _ = Int(string) else{
                 return false
             }
             roomPostRequestModel.phoneContact = string

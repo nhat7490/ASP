@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import MBProgressHUD
 import CoreLocation
+import FirebaseDatabase
 class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HorizontalRoomViewDelegate,VerticalCollectionViewDelegate,LocationSearchViewDelegate,CLLocationManagerDelegate,UISearchControllerDelegate,UISearchBarDelegate{
     
     lazy var scrollView:UIScrollView = {
@@ -113,7 +114,8 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
         ["Đăng phòng","add-room"],
         ["Quản lý phòng","account"]
     ]
-    lazy var user = DBManager.shared.getUser()
+    lazy var user = UserMappableModel(userModel: DBManager.shared.getUser()!)
+    lazy var ref = Database.database().reference().child("notifications/users").child("\(self.user.userId)")
     var suggestRoomViewHeightConstraint:NSLayoutConstraint?
     var newRoomViewHeightConstraint:NSLayoutConstraint?
     var newRoommateViewHeightConstraint:NSLayoutConstraint?
@@ -123,11 +125,32 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     //MARK:ViewController
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupDelegateAndDataSource()
-        enableLocationServices()
-        loadRemoteData()
-        registerNotification()
+        if !APIConnection.isConnectedInternet(){
+            showErrorView(inView: self.contentView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+                self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+                    DispatchQueue.main.async {
+                        self.setupUI()
+                        self.setupDelegateAndDataSource()
+                        self.enableLocationServices()
+                        self.loadRemoteData()
+                        self.registerNotification()
+                    }
+                }
+            }
+        }else{
+            
+            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+                DispatchQueue.main.async {
+                self.setupUI()
+                self.setupDelegateAndDataSource()
+                self.enableLocationServices()
+                self.loadRemoteData()
+                self.registerNotification()
+                }
+            }
+        }
+        
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -177,7 +200,7 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
         
         
         
-        if user?.roleId != 2{
+        if user.roleId != 2{
             totalContentViewHeight = newRoomViewHeight + newRoommmateViewHeight + Constants.HEIGHT_TOP_CONTAINER_VIEW + suggestRoomViewHeight
             bottomContainerView.addSubview(suggestRoomPostView)
         }else{
@@ -209,7 +232,7 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
         
         _ = bottomContainerView.anchor(topContainerView.bottomAnchor, contentView.leftAnchor, contentView.bottomAnchor, contentView.rightAnchor)
         
-        if user?.roleId != 2{
+        if user.roleId != 2{
             suggestRoomViewHeightConstraint = suggestRoomPostView.anchor(bottomContainerView.topAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height:
                 suggestRoomViewHeight))[3]
             newRoomViewHeightConstraint = newRoomPostView.anchor(suggestRoomPostView.bottomAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: newRoomViewHeight))[3]
@@ -231,7 +254,7 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
         locationSearchView.delegate = self
         newRoommatePostView.delegate = self
         newRoomPostView.delegate = self
-        if user?.roleId != 2{suggestRoomPostView.delegate = self}
+        if user.roleId != 2{suggestRoomPostView.delegate = self}
         
         
         filterForRoomPost.filterRequestModel = nil
@@ -244,61 +267,97 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     }
     
     //MARK: Notification
+    
     func registerNotification(){
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAddBookmarkNotification(_:)), name: Constants.NOTIFICATION_ADD_BOOKMARK, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveBookmarkNotification(_:)), name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAddMemberToRoomNotification(_:)), name: Constants.NOTIFICATION_ADD_MEMBER_TO_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveUpdateMemberInRoomNotification(_:)), name: Constants.NOTIFICATION_UPDATE_MEMBER_IN_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveMemberFromRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_MEMBER_IN_ROOM, object: nil)
     }
     @objc func didReceiveRemoveBookmarkNotification(_ notification:Notification) {
-        if notification.object is RoomPostResponseModel{
-            if let room = notification.object as? RoomPostResponseModel{
-                if let index = newRooms.index(of: room){
-                    newRooms[index].isFavourite = room.isFavourite
-                    newRoomPostView.collectionView.reloadData()
-                }
-                if user?.roleId != 2{
-                    if let index = suggestRooms.index(of: room){
-                        suggestRooms[index].isFavourite = room.isFavourite
-                        suggestRoomPostView.collectionView.reloadData()
+        DispatchQueue.main.async {
+            if notification.object is RoomPostResponseModel{
+                if let room = notification.object as? RoomPostResponseModel{
+                    if let index = self.newRooms.index(of: room){
+                        self.newRooms[index].isFavourite = room.isFavourite
+                        self.newRoomPostView.collectionView.reloadData()
+                    }
+                    if self.user.roleId != 2{
+                        if let index = self.suggestRooms.index(of: room){
+                            self.suggestRooms[index].isFavourite = room.isFavourite
+                            self.suggestRoomPostView.collectionView.reloadData()
+                        }
                     }
                 }
-            }
-        }else{
-            if let roommate = notification.object as? RoommatePostResponseModel{
-                if let index = newRoommates.index(of: roommate){
-                    newRoommates[index].isFavourite = roommate.isFavourite
-                    newRoommatePostView.collectionView.reloadData()
+            }else{
+                if let roommate = notification.object as? RoommatePostResponseModel{
+                    if let index = self.newRoommates.index(of: roommate){
+                        self.newRoommates[index].isFavourite = roommate.isFavourite
+                        self.newRoommatePostView.collectionView.reloadData()
+                    }
                 }
             }
         }
     }
     @objc func didReceiveAddBookmarkNotification(_ notification:Notification) {
-        if notification.object is RoomPostResponseModel{
-            if let room = notification.object as? RoomPostResponseModel{
-                if let index = newRooms.index(of: room){
-                    newRooms[index].isFavourite = room.isFavourite
-                    newRooms[index].favouriteId = room.favouriteId
-                    newRoomPostView.collectionView.reloadData()
+        DispatchQueue.main.async {
+            if notification.object is RoomPostResponseModel{
+                if let room = notification.object as? RoomPostResponseModel{
+                    if let index = self.newRooms.index(of: room){
+                        self.newRooms[index].isFavourite = room.isFavourite
+                        self.newRooms[index].favouriteId = room.favouriteId
+                        self.newRoomPostView.collectionView.reloadData()
+                    }
+                    if self.user.roleId != 2{
+                        if let index = self.suggestRooms.index(of: room){
+                            self.suggestRooms[index].isFavourite = room.isFavourite
+                            self.suggestRooms[index].favouriteId = room.favouriteId
+                            self.suggestRoomPostView.collectionView.reloadData()
+                        }
+                    }
                 }
-                if user?.roleId != 2{
-                    if let index = suggestRooms.index(of: room){
-                        suggestRooms[index].isFavourite = room.isFavourite
-                        suggestRooms[index].favouriteId = room.favouriteId
-                        suggestRoomPostView.collectionView.reloadData()
+            }else{
+                if let roommate = notification.object as? RoommatePostResponseModel{
+                    if let index = self.newRoommates.index(of: roommate){
+                        self.newRoommates[index].isFavourite = roommate.isFavourite
+                        self.newRoommates[index].favouriteId = roommate.favouriteId
+                        self.newRoommatePostView.collectionView.reloadData()
                     }
                 }
             }
-        }else{
-            if let roommate = notification.object as? RoommatePostResponseModel{
-                if let index = newRoommates.index(of: roommate){
-                    newRoommates[index].isFavourite = roommate.isFavourite
-                    newRoommates[index].favouriteId = roommate.favouriteId
-                    newRoommatePostView.collectionView.reloadData()
+        }
+    }
+    @objc func didReceiveAddMemberToRoomNotification(_ notification:Notification){
+        updateUIForRoleInRoomNotification(notification)
+    }
+    @objc func didReceiveRemoveMemberFromRoomNotification(_ notification:Notification){
+        updateUIForRoleInRoomNotification(notification)
+        
+        
+    }
+    @objc func didReceiveUpdateMemberInRoomNotification(_ notification:Notification){
+        updateUIForRoleInRoomNotification(notification)
+    }
+    func updateUIForRoleInRoomNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            if notification.object is NotificationMappableModel {
+                guard let notification = notification.object as? NotificationMappableModel else{
+                    return
                 }
+                
+                self.user.roleId = notification.roleId!
+                _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: UserModel(userMappedModel: self.user))
+                //            ref.child(notification.notificationId).child("status").setValue("\(Constants.NEW_LOADED)")
+                self.topNavigation.reloadData()
+                
+                
             }
         }
     }
     //MARK: Setup UI and Delegate
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        
         let vc = SearchResultsVC()
         presentInNewNavigationController(viewController: vc)
         return false
@@ -306,22 +365,22 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     //MARK: Remote Data
     func loadRemoteData(){
         
-        if !APIConnection.isConnectedInternet(){
-            showErrorView(inView: self.view, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.loadRemoteData()
-            }
-        }else{
-            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+//        if !APIConnection.isConnectedInternet(){
+//            showErrorView(inView: self.view, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+//                self.loadRemoteData()
+//            }
+//        }else{
+//            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
                 self.locationSearchView.location = DBManager.shared.getRecord(id: (self.setting?.cityId)!, ofType: CityModel.self)?.name ?? "LIST_CITY_TITLE".localized
                 self.cities = DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self)
-                if self.user?.roleId != Constants.ROOMOWNER{
+                if self.user.roleId != Constants.ROOMOWNER{
                     self.requestRoom(view: self.suggestRoomPostView.collectionView, apiRouter:
                         APIRouter.suggest(model: self.baseSuggestRequestModel), offset:Constants.MAX_POST)
                 }
                 self.requestRoom(view: self.newRoomPostView.collectionView,  apiRouter: APIRouter.postForAll(model: self.filterForRoomPost), offset:Constants.MAX_POST)
                 self.requestRoommate(view: self.newRoommatePostView.collectionView, apiRouter: APIRouter.postForAll(model: self.filterForRoommatePost), offset:Constants.MAX_POST)
-            }
-        }
+//            }
+//        }
         
         
         
@@ -351,6 +410,7 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
         DispatchQueue.global(qos: .background).async {
             APIConnection.requestArray(apiRouter:apiRouter, returnType:RoomPostResponseModel.self){ (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
+                    print("Hide hub for \(view)")
                     MBProgressHUD.hide(for: view, animated: true)
                 }
                 //404, cant parse
@@ -362,33 +422,38 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
                     }
                 }else{
                     //200
+                    print("Load Data completed for \(apiRouter)")
                     if statusCode == .OK{
                         guard let values = values else{
                             //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
                             //                        self.group.leave()
                             return
                         }
+                        
                         if values.count != 0{
+                            
                             if view == self.suggestRoomPostView.collectionView{
                                 self.suggestRooms.removeAll()
                                 self.suggestRooms.append(contentsOf: values)
                                 self.suggestRoomPostView.rooms = self.suggestRooms
-                                self.suggestRoomPostView.translatesAutoresizingMaskIntoConstraints = false
-                                self.suggestRoomViewHeightConstraint?.constant = Constants.HEIGHT_HORIZONTAL_ROOM_VIEW
+                                DispatchQueue.main.async { self.suggestRoomPostView.translatesAutoresizingMaskIntoConstraints = false
+                                    self.suggestRoomViewHeightConstraint?.constant = Constants.HEIGHT_HORIZONTAL_ROOM_VIEW
+                                    self.updateContentViewHeight()
+                                }
                                 
                             }else if view == self.newRoomPostView.collectionView{
                                 self.newRooms.removeAll()
                                 self.newRooms.append(contentsOf: values)
                                 self.newRoomPostView.rooms = self.newRooms
-                                self.newRoomPostView.translatesAutoresizingMaskIntoConstraints = false
-                                self.newRoomViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_ROOMPOSTCV * CGFloat(Constants.MAX_ROOM_ROW)
-                                self.newRoomPostView.showbtnViewAllButton()
+                                
+                                DispatchQueue.main.async {
+                                    self.newRoomPostView.translatesAutoresizingMaskIntoConstraints = false
+                                    self.newRoomViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_ROOMPOSTCV * CGFloat(Constants.MAX_ROOM_ROW)
+                                    self.newRoomPostView.showbtnViewAllButton()
+                                    self.updateContentViewHeight()
+                                }
                             }
-                            DispatchQueue.main.async {
-                                //                            self.view.layoutIfNeeded()
-                                self.updateContentViewHeight()
-                                view.reloadData()
-                            }
+                            
                         }else{
                             DispatchQueue.main.async {
                                 self.showNoDataView(inView: view, withTitle: "NO_DATA".localized)
@@ -396,7 +461,9 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
                         }
                     }else{
                         DispatchQueue.main.async {
-                            self.showNoDataView(inView: view, withTitle: "NO_DATA".localized)
+                            self.showErrorView(inView: view, withTitle:error == .SERVER_NOT_RESPONSE ?  "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE".localized : "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                                self.requestRoom(view: view, apiRouter: apiRouter, offset:offset)
+                            })
                         }
                     }
                 }
@@ -435,20 +502,26 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
                             //                        self.group.leave()
                             return
                         }
+                        print("Load Data completed for \(apiRouter)")
                         if view == self.newRoommatePostView.collectionView{
-                            self.newRoommates.removeAll()
-                            self.newRoommates.append(contentsOf: values)
-                            self.newRoommatePostView.roommates = self.newRoommates
-                            self.newRoommatePostView.translatesAutoresizingMaskIntoConstraints = false
-                            self.newRoommateViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_ROOMMATEPOSTCV * CGFloat(Constants.MAX_POST)
-                            self.newRoommatePostView.showbtnViewAllButton()
-                            self.updateContentViewHeight()
-                        }else{
+                            if values.count != 0{
+                                self.newRoommates.removeAll()
+                                self.newRoommates.append(contentsOf: values)
+                                self.newRoommatePostView.roommates = self.newRoommates
+                                DispatchQueue.main.async { self.newRoommatePostView.translatesAutoresizingMaskIntoConstraints = false
+                                    self.newRoommateViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_ROOMMATEPOSTCV * CGFloat(Constants.MAX_POST)
+                                    self.newRoommatePostView.showbtnViewAllButton()
+                                    self.updateContentViewHeight()
+                                }
+                                
+                            }
+                            
+                            
                         }
-                        DispatchQueue.main.async {
-                            self.view.layoutIfNeeded()
-                            view.reloadData()
-                        }
+                        //                        DispatchQueue.main.async {
+                        ////                            self.view.layoutIfNeeded()
+                        //                            view.reloadData()
+                        //                        }
                     }
                 }
             }
@@ -456,14 +529,14 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     }
     //MARK: UICollectionView Delegate and DataSource for TopNavigation
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return user?.roleId == Constants.MEMBER ? actionsForMember.count : user?.roleId == Constants.ROOMMASTER ? actionsForRoomMaster.count : actionsForOnwer.count
+        return user.roleId == Constants.MEMBER ? actionsForMember.count : user.roleId == Constants.ROOMMASTER ? actionsForRoomMaster.count : actionsForOnwer.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //        if collectionView ==  topNavigation{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_NAVIGATIONCV, for: indexPath) as! NavigationCVCell
         
-        cell.data = user?.roleId == Constants.MEMBER ? actionsForMember[indexPath.row] : user?.roleId == Constants.ROOMMASTER ? actionsForRoomMaster[indexPath.row] : actionsForOnwer[indexPath.row]
+        cell.data = user.roleId == Constants.MEMBER ? actionsForMember[indexPath.row] : user.roleId == Constants.ROOMMASTER ? actionsForRoomMaster[indexPath.row] : actionsForOnwer[indexPath.row]
         cell.indexPath = indexPath
         return cell
         //        }
@@ -471,7 +544,7 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            if user?.roleId == Constants.ROOMOWNER{
+            if user.roleId == Constants.ROOMOWNER{
                 let vc = CERoomVC()
                 presentInNewNavigationController(viewController: vc)
             }else{
@@ -484,7 +557,7 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
                 allVC.loadRoomData(withNewFilterArgModel: true)
             }
         case 1:
-            if  user?.roleId == Constants.ROOMOWNER{
+            if  user.roleId == Constants.ROOMOWNER{
                 //                let vc = (self.tabBarController?.viewControllers![1] as! UINavigationController)
                 //                self.tabBarController?.selectedViewController = vc
                 //                let allVC = vc.viewControllers.first as! AllVC
@@ -526,7 +599,7 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         //        if collectionView ==  topNavigation{
-        return user?.roleId != 2  ? CGSize(width: topNavigation.frame.width/4, height: Constants.HEIGHT_CELL_NAVIGATIONCV) : CGSize(width: topNavigation.frame.width/4, height: Constants.HEIGHT_CELL_NAVIGATIONCV)
+        return user.roleId != 2  ? CGSize(width: topNavigation.frame.width/4, height: Constants.HEIGHT_CELL_NAVIGATIONCV) : CGSize(width: topNavigation.frame.width/4, height: Constants.HEIGHT_CELL_NAVIGATIONCV)
         //        }
     }
     //MARK: LocationSearchViewDelegate
@@ -560,11 +633,11 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     //MARK: UIScrollviewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        print("OFFSET:\(scrollView.contentOffset.y)")
-        print("ContentframeHeight:\(scrollView.frame.height)")
-        print("ContentContentHeight:\(scrollView.contentSize.height)")
-        
+        //        let contentHeight = scrollView.contentSize.height
+        //        print("OFFSET:\(scrollView.contentOffset.y)")
+        //        print("ContentframeHeight:\(scrollView.frame.height)")
+        //        print("ContentContentHeight:\(scrollView.contentSize.height)")
+        //
         if offset  > 50.0{
             UIView.animate(withDuration: 1.5, delay: 0, options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -758,12 +831,15 @@ class HomeVC:BaseVC,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionVi
     
     //MARK: update constraint
     func updateContentViewHeight(){
+        //        DispatchQueue.main.async {
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
-        if user?.roleId == Constants.ROOMOWNER{
+        if self.user.roleId == Constants.ROOMOWNER{
             self.contentViewHeightConstraint?.constant = self.newRoomViewHeightConstraint!.constant + self.newRoommateViewHeightConstraint!.constant + Constants.HEIGHT_TOP_CONTAINER_VIEW +  Constants.HEIGHT_MEDIUM_SPACE
         }else{
             self.contentViewHeightConstraint?.constant = self.suggestRoomViewHeightConstraint!.constant + self.newRoomViewHeightConstraint!.constant + self.newRoommateViewHeightConstraint!.constant + Constants.HEIGHT_TOP_CONTAINER_VIEW + Constants.HEIGHT_MEDIUM_SPACE
         }
+        self.view.layoutIfNeeded()
+        //        }
         
     }
     

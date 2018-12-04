@@ -30,7 +30,28 @@ class NotificationCVCell: UICollectionViewCell {
         lbl.font.withSize(10)
         return lbl
     }()
-    
+    var notification:NotificationMappableModel!{
+        didSet{
+            let dic = (notification?.status == Constants.NEW || notification?.status == Constants.NEW_LOADED) ? [NSAttributedStringKey.font:UIFont.boldSmall] : [NSAttributedStringKey.font:UIFont.small]
+            var text:String = ""
+            switch notification?.type {
+            case Constants.ROOM_ACCEPT_NOTIFICATION:
+                text = String(format: "ROOM_ACCEPT_NOTIFICATION".localized, notification.roomName)
+            case Constants.ROOM_DENIED_NOTIFICATION:
+                text = String(format: "ROOM_DENIED_NOTIFICATION".localized,notification.roomName )
+            case Constants.ADD_MEMBER_NOTIFICATION:
+                text = String(format: "ADD_MEMBER_NOTIFICATION".localized, notification.roomName)
+            case Constants.REMOVE_MEMBER_NOTIFICATION:
+                text = String(format: "REMOVE_MEMBER_NOTIFICATION".localized,notification.roomName )
+            case Constants.UPDATE_MEMBER_NOTIFICATION:
+                text = String(format: "UPDATE_MEMBER_NOTIFICATION".localized,notification.roomName )
+            default:
+                break
+            }
+            lblTopRight.attributedText = NSAttributedString(string:text, attributes:dic)
+            lblBottomRight.attributedText = NSAttributedString(string: notification.date.string("yyyy/MM/dd HH:mm:ss"), attributes:dic)
+        }
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         print("init")
@@ -52,8 +73,4 @@ class NotificationCVCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setModel(model:NotificationModel?) {
-        lblTopRight.text = model?.title
-        lblBottomRight.text = model?.date?.string(Constants.DD_MM_YY_HH_MM_A)
-    }
 }

@@ -229,11 +229,16 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
     }
     
     @objc func onClickBtnSave(){
-        if roomMaster != nil{
+        if copyRoom.members?.isEmpty ?? true{
             requestEdit()
         }else{
-            APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.requiredRoomMaster)
+            if roomMaster != nil {
+                requestEdit()
+            }else{
+                APIResponseAlert.apiResponseError(controller: self, type: APIResponseAlertType.requiredRoomMaster)
+            }
         }
+        
     }
     //MARK: Others
     

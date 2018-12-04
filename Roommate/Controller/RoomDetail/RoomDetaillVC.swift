@@ -70,7 +70,9 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
     }()
 
     lazy var viewType:ViewType = .detailForOwner
-    
+    var contentViewHeightConstraint:NSLayoutConstraint?
+    var membersViewHeightConstraint:NSLayoutConstraint?
+    var ulititiesViewHeightConstraint:NSLayoutConstraint?
     
     //MARK: RoomDetailVC
     override func viewDidLoad() {
@@ -115,6 +117,7 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
             membersViewHeight = 100.0
             showNoDataView(inView: membersView.tableView, withTitle: "NO_MEMBER_ROOM".localized)
         }else if room.members!.count<5{
+            hideNoDataView(inView: membersView.tableView)
             membersViewHeight = 60.0 + CGFloat(room.members!.count) * Constants.HEIGHT_CELL_MEMBERTVL
             
         }else{
@@ -150,33 +153,52 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         
         _ = contentView.anchor(scrollView.topAnchor, scrollView.leftAnchor, scrollView.bottomAnchor, scrollView.rightAnchor)
         _ = contentView.anchorWidth(equalTo: scrollView.widthAnchor)
-        _ = contentView.anchorHeight(equalToConstrant: CGFloat(totalContentViewHeight))
+        contentViewHeightConstraint = contentView.anchorHeight(equalToConstrant: CGFloat(totalContentViewHeight))
         
         _ = horizontalImagesView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero ,CGSize(width: 0, height: Constants.HEIGHT_CELL_IMAGECV))
         _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_BASE_INFORMATION))
 //        _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
-        _ = membersView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: membersViewHeight))
-        _ = utilitiesView.anchor(membersView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))
+        membersViewHeightConstraint = membersView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: membersViewHeight))[3]
+        ulititiesViewHeightConstraint = utilitiesView.anchor(membersView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
         _ = descriptionsView.anchor(utilitiesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_DESCRIPTION))
         _ = optionView.anchor(nil, view.leftAnchor, view.bottomAnchor, view.rightAnchor,.zero,CGSize(width: 0, height: Constants.HEIGHT_VIEW_OPTION))
     }
     
+    func updateUI(){
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        membersView.translatesAutoresizingMaskIntoConstraints = false
+        utilitiesView.translatesAutoresizingMaskIntoConstraints = false
+        let membersViewHeight:CGFloat
+        if room.members?.count == 0{
+            membersViewHeight = 100.0
+            showNoDataView(inView: membersView.tableView, withTitle: "NO_MEMBER_ROOM".localized)
+        }else if room.members!.count<5{
+            hideNoDataView(inView: membersView.tableView)
+            membersViewHeight = 60.0 + CGFloat(room.members!.count) * Constants.HEIGHT_CELL_MEMBERTVL
+            
+        }else{
+            membersViewHeight =  Constants.HEIGHT_VIEW_MEMBERS
+        }
+        membersViewHeightConstraint?.constant = membersViewHeight
+        let numberOfRow = room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1
+        let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
+        
+        ulititiesViewHeightConstraint?.constant = utilitiesViewHeight
+        
+        let part1 = Constants.HEIGHT_HORIZONTAL_ROOM_VIEW + Constants.HEIGHT_VIEW_BASE_INFORMATION
+        let part2 = membersViewHeight + utilitiesViewHeight
+        let part3 = Constants.HEIGHT_VIEW_DESCRIPTION + Constants.HEIGHT_LARGE_SPACE
+        let totalContentViewHeight = part1 + part2 + part3
+        contentViewHeightConstraint?.constant = totalContentViewHeight
+        view.layoutIfNeeded()
+        
+    }
     func setDelegateAndDataSource() {
-        //Delegate , Datasource and other
-        let status =  NSAttributedString(string: room.statusId == Constants.AUTHORIZED ?  "ROOM_DETAIL_STATUS_AUTHORIZED".localized : room.statusId == Constants.PENDING ? "ROOM_DETAIL_STATUS_PENDING".localized : "ROOM_DETAIL_STATUS_DECLINED".localized, attributes: [NSAttributedStringKey.font : UIFont.boldMedium,
-                                                                                                          NSAttributedStringKey.backgroundColor: UIColor.defaultBlue,
-                                                                                                          NSAttributedStringKey.foregroundColor:UIColor.white])
         //Data for baseInformationView
         horizontalImagesView.images = room.imageUrls
         baseInformationView.viewType = viewType
         baseInformationView.room = room
         
-//        //Data for genderview
-//        genderView.viewType = viewType
-//        genderView.genderSelect = room.requiredGender == 1 ? GenderSelect.male : room.requiredGender == 2 ? GenderSelect.male : GenderSelect.both
-//        genderView.lblTitle.text = "GENDER_ACCEPT".localized
-        
-        //Data for memberview
         membersView.viewType = viewType
         membersView.members = room.members
         membersView.delegate = self
@@ -200,21 +222,58 @@ class RoomDetailVC:BaseVC,UIScrollViewDelegate,OptionViewDelegate,MembersViewDel
         optionView.viewType = viewType
         optionView.delegate = self
         optionView.tvPrice.attributedText = NSAttributedString(string: String(format: "PRICE_OF_ROOM".localized, room.price.formatString,"MONTH".localized), attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
-//        optionView.lblBottom.attributedText = NSAttributedString(string: String(format: "TIME".localized, room.price,"MONTH".localized), attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
+        optionView.tvDate.attributedText = NSAttributedString(string: String(format: "DATE_CREATED_OF_ROOM".localized, (room.date?.string(Constants.SHOW_DATE_FORMAT))!), attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
     }
+    
     //MARK: Notification
     func registerNotification(){
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAcceptRoomNotification(_:)), name: Constants.NOTIFICATION_ACCEPT_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveDeclineRoomNotification(_:)), name: Constants.NOTIFICATION_DECLINE_ROOM, object: nil)
     }
     
     
     @objc func didReceiveEditRoomNotification(_ notification:Notification){
-        if notification.object is RoomMappableModel {
-            
-            guard let room = notification.object as? RoomMappableModel else{
-                return
+        DispatchQueue.main.async {
+            if notification.object is RoomMappableModel {
+                
+                guard let room = notification.object as? RoomMappableModel else{
+                    return
+                }
+                self.room = room
+                self.updateUI()
+                self.setDelegateAndDataSource()
             }
-            self.room = room
+        }
+    }
+    @objc func didReceiveAcceptRoomNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            if notification.object is NotificationMappableModel {
+                guard let notification = notification.object as? NotificationMappableModel else{
+                    return
+                }
+                if notification.roomId == self.room.roomId{
+                    self.room.statusId = Constants.AUTHORIZED
+                    self.setDelegateAndDataSource()
+                }
+                
+            }
+        }
+        
+    }
+    
+    @objc func didReceiveDeclineRoomNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            if notification.object is NotificationMappableModel {
+                guard let notification = notification.object as? NotificationMappableModel else{
+                    return
+                }
+                if notification.roomId == self.room.roomId{
+                    self.room.statusId = Constants.DECLINED
+                    self.setDelegateAndDataSource()
+                }
+                
+            }
         }
     }
     //MARK: MembersViewDelegate

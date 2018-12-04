@@ -79,11 +79,6 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchData()
-    }
-    
-    //MARK: SetupUI And Data
-    func fetchData(){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.contentView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
                 self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
@@ -100,6 +95,8 @@ class FilterVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,GenderVie
             }
         }
     }
+    
+    
     func setupUIAndData(){
         self.utilities = DBManager.shared.getRecords(ofType: UtilityModel.self)?.compactMap({ (utility) -> UtilityMappableModel? in
             UtilityMappableModel(utilityModel: utility)

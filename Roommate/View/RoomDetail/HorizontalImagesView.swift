@@ -51,6 +51,6 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
         pageControl.currentPage = currentPage
     }
     func removePageControl(){
-        pageControl.removeFromSuperview()
+        pageControl.isHidden = true
     }
 }

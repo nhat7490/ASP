@@ -11,6 +11,12 @@ import UIKit
 enum CellSide :Int{
     case left,right
 }
+enum SingleRateViewType{
+    case security,location,utility,behavior,lifestyle,payment
+}
+enum RateVCType{
+    case user,room
+}
 enum CollectionDisplayDataType :Int{
     case Room,Roommate
 }

@@ -16,7 +16,7 @@ import RealmSwift
 import MBProgressHUD
 import AVFoundation
 import PhotosUI
-class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource,DropdownListViewDelegate,UtilityInputVCDelegate,UploadImageViewDelegate{
+class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesViewDelegate,DescriptionViewDelegate ,UIPopoverPresentationControllerDelegate,UITableViewDelegate,UITableViewDataSource,DropdownListViewDelegate,UtilityInputVCDelegate,UploadImageViewDelegate{
     
     
     
@@ -733,7 +733,7 @@ class CERoomVC: BaseVC,NewInputViewDelegate,MaxMemberSelectViewDelegate,Utilitie
                 print(error)
                 self.group.leave()
                 break
-            case .success(let request, let fromDisk, let url):
+            case .success(let request, let _, let _):
                 request.responseObject(completionHandler: { (response:DataResponse<UploadImageResponseModel>) in
                     if response.error != nil{
                         self.group.leave()

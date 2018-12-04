@@ -83,6 +83,10 @@ class RoomMappableModel: Mappable,NSCopying,Equatable,Hashable {
         return roomId.hashValue
     }
     
+    init(roomId:Int){
+        self.roomId = roomId
+    }
+    
     init() {
         
     }

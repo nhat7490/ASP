@@ -7,12 +7,14 @@
 //
 
 import UIKit
-import Foundation
+import ObjectMapper
+import FirebaseDatabase
 class FirstLaunchVC:BaseVC{
     @IBOutlet weak var btnSignIn: RoundButton!
     @IBOutlet weak var btnSignUpAsRoomOwner: RoundButton!
     @IBOutlet weak var btnSignUpAsGuest: RoundButton!
     @IBOutlet weak var imgvIcon: UIImageView!
+    var notis:[NotificationMappableModel] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         imgvIcon.layer.cornerRadius = 15
@@ -20,6 +22,9 @@ class FirstLaunchVC:BaseVC{
         btnSignIn.setTitle("SIGN_IN_TITLE".localized, for: .normal)
         btnSignUpAsGuest.setTitle("SIGN_UP_AS_MEMBER_TITLE".localized, for: .normal)
         btnSignUpAsRoomOwner.setTitle("SIGN_UP_AS_ROOMOWNER_TITLE".localized, for: .normal)
+        
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

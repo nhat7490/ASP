@@ -17,10 +17,11 @@ target 'Roommate' do
 	pod 'ObjectMapper+Realm', '~> 0.6'
 	pod 'SkyFloatingLabelTextField', '~> 3.6.0'
 	pod 'Firebase/Core'
+	pod 'Firebase/Database'
 	pod 'MBProgressHUD', '~> 1.1.0'
 	pod 'SwiftyJSON', '~> 4.2.0'
 	pod 'Cosmos', '~> 16.0'
-
+	
 end
 
 # Workaround for Cocoapods issue #7606

@@ -23,7 +23,9 @@ class UploadImageView: UIView ,UICollectionViewDelegate,UICollectionViewDataSour
     weak var delegate:UploadImageViewDelegate?
     var images:[UploadImageModel]?{
         didSet{
-            collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
     required init?(coder aDecoder: NSCoder) {
@@ -84,6 +86,8 @@ class UploadImageView: UIView ,UICollectionViewDelegate,UICollectionViewDataSour
         delegate?.uploadImageViewDelegate(uploadImageView: self, onClickBtnSelectImage: sender)
     }
     func reloadData(){
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
 }

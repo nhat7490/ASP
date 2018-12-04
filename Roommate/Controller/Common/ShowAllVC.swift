@@ -225,96 +225,129 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditPostNotification(_:)), name: Constants.NOTIFICATION_EDIT_POST, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAcceptRoomNotification(_:)), name: Constants.NOTIFICATION_ACCEPT_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveDeclineRoomNotification(_:)), name: Constants.NOTIFICATION_DECLINE_ROOM, object: nil)
     }
     @objc func didReceiveEditPostNotification(_ notification:Notification){
-        if notification.object is RoomPostRequestModel {
-            guard let model = notification.object as? RoomPostRequestModel, let index = rooms.index(of: RoomPostResponseModel(postId: model.postId)) else{
-                return
+        DispatchQueue.main.async {
+            if notification.object is RoomPostRequestModel {
+                guard let model = notification.object as? RoomPostRequestModel, let index = self.rooms.index(of: RoomPostResponseModel(postId: model.postId)) else{
+                    return
+                }
+                self.rooms[index].model = model
+                
+            }else{
+                guard let model = notification.object as? RoommatePostRequestModel, let index = self.roommates.index(of: RoommatePostResponseModel(postId: model.postId)) else{
+                    return
+                }
+                self.roommates[index].model = model
             }
-            rooms[index].model = model
-            
-        }else{
-            guard let model = notification.object as? RoommatePostRequestModel, let index = roommates.index(of: RoommatePostResponseModel(postId: model.postId)) else{
-                return
-            }
-            roommates[index].model = model
+            self.collectionView.reloadData()
         }
-        collectionView.reloadData()
     }
     @objc func didReceiveRemoveRoomNotification(_ notification:Notification){
         
-        switch showAllVCType{
-        case .roomForOwner:
-            rooms.removeAll()
-            loadRoomForOwnerOrMemberData(withNewFilterArgModel: true)
-        default:
-            break
+        DispatchQueue.main.async {
+            switch self.showAllVCType{
+            case .roomForOwner:
+                self.rooms.removeAll()
+                self.loadRoomForOwnerOrMemberData(withNewFilterArgModel: true)
+            default:
+                break
+            }
         }
     }
     
     @objc func didReceiveEditRoomNotification(_ notification:Notification){
-        switch showAllVCType{
-        case .roomForOwner:
-            if notification.object is RoomMappableModel {
-                guard let room = notification.object as? RoomMappableModel, let index = roomResponseModels.index(of: room) else{
-                    return
+        DispatchQueue.main.async {
+            switch self.showAllVCType{
+            case .roomForOwner:
+                if notification.object is RoomMappableModel {
+                    guard let room = notification.object as? RoomMappableModel, let index = self.roomResponseModels.index(of: room) else{
+                        return
+                    }
+                    self.roomResponseModels[index] = room
+                    self.collectionView.reloadData()
                 }
-                roomResponseModels[index] = room
-                collectionView.reloadData()
+            default:
+                break
             }
-        default:
-            break
         }
         
     }
+    
+    @objc func didReceiveAcceptRoomNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            if notification.object is NotificationMappableModel {
+                guard let notification = notification.object as? NotificationMappableModel, let index = self.roomResponseModels.index(of: RoomMappableModel(roomId: notification.roomId!)) else{
+                    return
+                }
+                self.roomResponseModels[index].statusId = Constants.AUTHORIZED
+                self.collectionView.reloadData()
+            }
+        }
+        
+    }
+    
+    @objc func didReceiveDeclineRoomNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+        if notification.object is NotificationMappableModel {
+            guard let notification = notification.object as? NotificationMappableModel, let index = self.roomResponseModels.index(of: RoomMappableModel(roomId: notification.roomId!)) else{
+                return
+            }
+            
+            self.roomResponseModels[index].statusId = Constants.DECLINED
+            self.collectionView.reloadData()
+        }
+        }
+    }
+    
     //MARK: Remote Data
     
     func loadRoomData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                    
+//                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+                
                     self.requestRoomPost(apiRouter:self.apiRouter,withNewFilterArgModel: withNewFilterArgModel)
-                }
+//                }
             }
         }else{
-            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+//            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
                 self.requestRoomPost(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
-            }
+//            }
         }
     }
     func loadRoommateData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+//                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
                     self.requestRoommatePost(apiRouter: self.apiRouter,withNewFilterArgModel: withNewFilterArgModel)
-                }
+//                }
             }
         }else{
-            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+//            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
                 self.requestRoommatePost(apiRouter:self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
-            }
+//            }
         }
     }
     
     func loadRoomForOwnerOrMemberData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+//                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
                     self.requestRoom(apiRouter:self.apiRouter,withNewFilterArgModel: withNewFilterArgModel)
-                }
+//                }
             }
         }else{
-            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+//            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
                 self.requestRoom(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
-            }
+//            }
         }
     }
     
     func  requestRoomPost(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
-            self.rooms.removeAll()
-            self.collectionView.reloadData()
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
@@ -364,8 +397,6 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     
     func  requestRoommatePost(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
-            self.roommates.removeAll()
-            self.collectionView.reloadData()
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
@@ -450,7 +481,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                         self.roomResponseModels.removeAll()
                         self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
                     }
-
+                    
                 }
             }
         }
@@ -499,33 +530,33 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             
             vc.viewType = showAllVCType == .suggestRoom ? .roomPostDetailForFinder : .roomPostDetailForCreatedUser
             vc.room = rooms[indexPath.row]
-//            let mainVC = UIViewController()
-//            let nv = UINavigationController(rootViewController: mainVC)
-//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            //            let mainVC = UIViewController()
+            //            let nv = UINavigationController(rootViewController: mainVC)
+            //            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
             presentInNewNavigationController(viewController: vc)
         case .roommatePostForCreatedUser:
             let vc = PostDetailVC()
             vc.viewType = showAllVCType == .suggestRoom ? .roommatePostDetailForFinder : .roommatePostDetailForCreatedUser
             vc.roommate = roommates[indexPath.row]
-//            let mainVC = UIViewController()
-//            let nv = UINavigationController(rootViewController: mainVC)
-//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            //            let mainVC = UIViewController()
+            //            let nv = UINavigationController(rootViewController: mainVC)
+            //            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
             presentInNewNavigationController(viewController: vc)
         case .roomForOwner:
             let vc = RoomDetailVC()
             vc.viewType = .detailForOwner
             vc.room = roomResponseModels[indexPath.row]
-//            let mainVC = UIViewController()
-//            let nv = UINavigationController(rootViewController: mainVC)
-//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            //            let mainVC = UIViewController()
+            //            let nv = UINavigationController(rootViewController: mainVC)
+            //            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
             presentInNewNavigationController(viewController: vc)
         case .roomForMember:
             let vc = RoomDetailVC()
             vc.viewType = .detailForMember
             vc.room = roomResponseModels[indexPath.row]
-//            let mainVC = UIViewController()
-//            let nv = UINavigationController(rootViewController: mainVC)
-//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+            //            let mainVC = UIViewController()
+            //            let nv = UINavigationController(rootViewController: mainVC)
+            //            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
             presentInNewNavigationController(viewController: vc)
         }
     }

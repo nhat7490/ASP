@@ -10,11 +10,12 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://192.168.100.126:8080/"
+    static let BASE_URL_API = "http://192.168.100.41:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
-    
+    static let DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
+    static let SHOW_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
     //MARK: Constant for Storyboard name
     static let STORYBOARD_MAIN = "Main"
     static let STORYBOARD_HOME = "Home"
@@ -36,6 +37,16 @@ class Constants{
     static let VC_FIRST_LAUNCH = "FirstLaunchVC"
     static let VC_UTILITY_INPUT = "UtilityInputVC"
     
+    //MARK: Constant for status
+    static let NEW = 1
+    static let NEW_LOADED = 2
+    static let SEEN = 3
+    //MARK: Constant for Notification Type
+    static let ROOM_ACCEPT_NOTIFICATION = 1
+    static let ROOM_DENIED_NOTIFICATION = 2
+    static let ADD_MEMBER_NOTIFICATION = 3
+    static let REMOVE_MEMBER_NOTIFICATION = 4
+    static let UPDATE_MEMBER_NOTIFICATION = 5
     
     //MARK: Constant for Locale
     static let LOCALE_EN = "EN"
@@ -124,6 +135,7 @@ class Constants{
     static let HEIGHT_ROOM_INFOR_TITLE:CGFloat = 30.0
     static let HEIGHT_CELL_ADD_MEMBER_VIEW:CGFloat = 100.0
     static let HEIGHT_SUGGEST_ADDRESS:CGFloat = 150.0
+    static let HEIGHT_SINGLE_RATE_VIEW:CGFloat = 80.0
 
     //MARK: Common Lenght
     static let MAX_MEMBER:Int = 10
@@ -157,10 +169,12 @@ class Constants{
     
 
     //MARK: NSNotification name
-    static let NOTIFICATION_REMOVE_BOOKMARK_OUTSIDE_BOOKMARKTAB:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_BOOKMARK_OUTSIDE_BOOKMARKTAB")
-    static let NOTIFICATION_REMOVE_BOOKMARK_INSIDE_BOOKMARKTAB:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_BOOKMARK_INSIDE_BOOKMARKTAB")
-    static let NOTIFICATION_ADD_BOOKMARK_OUTSIDE_BOOKMARKTAB:NSNotification.Name = NSNotification.Name("NOTIFICATION_ADD_BOOKMARK_OUTSIDE_BOOKMARKTAB")
-    static let NOTIFICATION_ADD_BOOKMARK_INSIDE_BOOKMARKTAB:NSNotification.Name = NSNotification.Name("NOTIFICATION_ADD_BOOKMARK_INSIDE_BOOKMARKTAB")
+    static let NOTIFICATION_ACCEPT_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_ACCEPT_ROOM")
+    static let NOTIFICATION_DECLINE_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_DECLINE_ROOM")
+    static let NOTIFICATION_ADD_MEMBER_TO_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_ADD_MEMBER_TO_ROOM")
+    static let NOTIFICATION_REMOVE_MEMBER_IN_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_MEMBER_IN_ROOM")
+    static let NOTIFICATION_UPDATE_MEMBER_IN_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_UPDATE_MEMBER_IN_ROOM")
+    
     static let NOTIFICATION_ADD_BOOKMARK:NSNotification.Name = NSNotification.Name("NOTIFICATION_ADD_BOOKMARK")
     static let NOTIFICATION_REMOVE_BOOKMARK:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_BOOKMARK")
     static let NOTIFICATION_REMOVE_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_ROOM")

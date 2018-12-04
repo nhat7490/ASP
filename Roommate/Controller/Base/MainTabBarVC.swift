@@ -12,12 +12,21 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        self.navigationController?.navigationBar.isHidden = true
         setupUI();
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 //        checkInitData()
+        viewControllers?.forEach({ (vc) in
+            if vc is UINavigationController{
+                let _ = (vc as! UINavigationController).topViewController?.view
+            }else{
+                let _ = vc.view
+            }
+        })
     }
+    
     func setupUI() {
         self.tabBar.backgroundColor = .white
         self.tabBar.tintColor = .defaultBlue
@@ -48,12 +57,15 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
         vcs.append(notification)
         vcs.append(account)
         viewControllers = vcs.map({
-//            if $0 is AccountVC{
-//                return $0
-//            }else{
+//            let _ = $0.view
+            if $0 is AccountVC || $0 is NotificationVC{
+                return $0
+            }else{
                 return UINavigationController(rootViewController: $0)
-//            }
+            }
+            
         })
+        
     }
     
     override var selectedIndex: Int{

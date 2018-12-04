@@ -57,10 +57,6 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     func setupTFUI(_ tfInput:SkyFloatingLabelTextField,placeholder:String,title:String,keyboardType:UIKeyboardType? = .default,returnKeyType:UIReturnKeyType? = .done){
         //        tfInput.isSecureTextEntry = true
         tfInput.returnKeyType = returnKeyType!

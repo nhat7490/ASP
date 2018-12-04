@@ -149,7 +149,10 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
                         return
                     }
                     DispatchQueue.main.async {
-                        DBManager.shared.addRecords(ofType: T.self, objects: values)
+                        if !DBManager.shared.isExisted(ofType: T.self){
+                            _ = DBManager.shared.addRecords(ofType: T.self, objects: values)
+                        }
+                        
                         
                     }
                     
@@ -172,9 +175,11 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
                         return
                     }
                     DispatchQueue.main.async {
-                        _ = DBManager.shared.addRecords(ofType: UtilityModel.self, objects: values.compactMap({ (utility) -> UtilityModel? in
-                            UtilityModel(utilityMappableModel: utility)
-                        }))
+                        if !DBManager.shared.isExisted(ofType: UtilityModel.self){
+                            _ = DBManager.shared.addRecords(ofType: UtilityModel.self, objects: values.compactMap({ (utility) -> UtilityModel? in
+                                UtilityModel(utilityMappableModel: utility)
+                            }))
+                        }
                         
                     }
                     
@@ -250,6 +255,8 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
                         return
                     }
                     print(DBManager.shared.addSingletonModel(ofType:RoomModel.self, object: RoomModel(roomResponseModel: value)))
+                }else if statusCode == .NotFound{
+                    DBManager.shared.deleteAllRecords(ofType: RoomModel.self)
                 }
             }
             self.group.leave()
@@ -259,7 +266,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
     
     
     //MARK: Process bookmark
-    func processBookmark(view:UICollectionView,model:BasePostResponseModel,row:Int,completed:@escaping (_ model:BasePostResponseModel)->(Void)){
+    func processBookmark(view:UIView,model:BasePostResponseModel,row:Int,completed:@escaping (_ model:BasePostResponseModel)->(Void)){
         let bookmarkRequestModel = BookmarkRequestModel()
         bookmarkRequestModel.postId = model.postId!
         bookmarkRequestModel.userId = DBManager.shared.getUser()!.userId
@@ -267,7 +274,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
         //        imageView.isUserInteractionEnabled = false
         
         DispatchQueue.main.async {
-            let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
+            let hub = MBProgressHUD.showAdded(to: view, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
             hub.contentColor = .defaultBlue
@@ -277,7 +284,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
         }, returnType: CreateResponseModel.self){ (value,error, statusCode) -> (Void) in
             DispatchQueue.main.async {
-                MBProgressHUD.hide(for: self.view, animated: true)
+                MBProgressHUD.hide(for: view, animated: true)
             }
             if error == .SERVER_NOT_RESPONSE{
                 APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
@@ -416,7 +423,7 @@ class BaseVC:UIViewController,UIImagePickerControllerDelegate,UINavigationContro
             let mainVC = UIViewController()
             mainVC.view.backgroundColor = .white
             let nv = UINavigationController(rootViewController: viewController)
-            present(nv, animated: false) {
+            present(nv, animated: animated!) {
 //                nv.pushViewController(viewController, animated: animated!)
             }
         }else{

@@ -65,8 +65,7 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
     //MARK: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setDelegateAndDataSource()
+        
         checkInitData()
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -101,24 +100,33 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
         
     }
     func setDelegateAndDataSource(){
+        
         collectionView.register(UINib(nibName: Constants.CELL_ROOMPOSTCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMPOSTCV)
         collectionView.register(UINib(nibName: Constants.CELL_ICONTITLECV, bundle: Bundle.main),forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: Constants.CELL_ICONTITLECV)
         locationSearchView.delegate = self
         searchController.searchBar.showsCancelButton = true
+        self.locationSearchView.location = DBManager.shared.getRecord(id: (self.setting?.cityId)!, ofType: CityModel.self)?.name ?? "LIST_CITY_TITLE".localized
+        self.cities =  DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self)
         
     }
     func checkInitData(){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.collectionView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
                 self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
-                    self.locationSearchView.location = DBManager.shared.getRecord(id: (self.setting?.cityId)!, ofType: CityModel.self)?.name ?? "LIST_CITY_TITLE".localized
-                    self.cities =  DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self)
+                    DispatchQueue.main.async {
+                        self.setupUI()
+                        self.setDelegateAndDataSource()
+                        
+                    }
                 }
             }
         }else{
             self.checkAndLoadInitData(inView: self.collectionView) { () -> (Void) in
-                self.locationSearchView.location = DBManager.shared.getRecord(id: (self.setting?.cityId)!, ofType: CityModel.self)?.name ?? "LIST_CITY_TITLE".localized
-                self.cities =  DBManager.shared.getRecords(ofType: CityModel.self)?.toArray(type: CityModel.self)
+                DispatchQueue.main.async {
+                    self.setupUI()
+                    self.setDelegateAndDataSource()
+                    
+                }
             }
         }
     }

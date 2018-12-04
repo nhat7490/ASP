@@ -15,6 +15,7 @@ class OptionView: UIView {
 
     @IBOutlet weak var imgvLeft: UIImageView!
     @IBOutlet weak var tvPrice: UITextView!
+    @IBOutlet weak var tvDate: UITextView!
     @IBOutlet weak var btnEdit: UIButton!
     @IBOutlet weak var btnRight: UIButton!
     weak var delegate:OptionViewDelegate?

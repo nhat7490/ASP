@@ -32,7 +32,6 @@ class RoomPostCVCell: UICollectionViewCell {
             guard let favorite = room?.isFavourite ,let genderOfPatner = room?.genderPartner,let numberOfPatner = room?.numberPartner,let name = room?.name,let price = room?.minPrice,let address = room?.address else {
                 return
             }
-            print("Gender of patner:\(genderOfPatner)")
             imgvBookMark.image = favorite ? UIImage(named: "bookmarked") : UIImage(named: "bookmark")
             tvNumberOfPatner.text = genderOfPatner == 1 ? String(format: "NUMBER_OF_PERSON".localized,numberOfPatner,"MALE".localized) :
                 genderOfPatner == 2 ? String(format: "NUMBER_OF_PERSON".localized,numberOfPatner,"FEMALE".localized) : String(format: "NUMBER_OF_PERSON".localized,numberOfPatner,"\("MALE".localized)/\("FEMALE".localized)")

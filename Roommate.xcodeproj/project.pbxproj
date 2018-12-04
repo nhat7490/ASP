@@ -39,6 +39,8 @@
 		6923A8E021621DE300068B4B /* BaseInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6923A8DF21621DE300068B4B /* BaseInformationView.swift */; };
 		6925AA942164B03200232311 /* RoomDetaillVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925AA932164B03100232311 /* RoomDetaillVC.swift */; };
 		6925AA982164F22F00232311 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925AA972164F22F00232311 /* BaseModel.swift */; };
+		69267D9A21B3D22E001B7166 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 69267D9921B3D22E001B7166 /* GoogleService-Info.plist */; };
+		69267D9D21B3DA4E001B7166 /* NotificationMappableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69267D9C21B3DA4E001B7166 /* NotificationMappableModel.swift */; };
 		692C24F721671E5E008C16A7 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692C24F621671E5E008C16A7 /* APIRouter.swift */; };
 		692E8F9F21634EF700AF5927 /* MemberTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692E8F9D21634EF700AF5927 /* MemberTVCell.swift */; };
 		692E8FA021634EF700AF5927 /* MemberTVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 692E8F9E21634EF700AF5927 /* MemberTVCell.xib */; };
@@ -155,6 +157,8 @@
 		69CC883E21934E6D00ADC0FA /* UserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69CC883D21934E6D00ADC0FA /* UserView.xib */; };
 		69CC88472193672400ADC0FA /* ActionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CC88452193672400ADC0FA /* ActionTVCell.swift */; };
 		69CC88482193672400ADC0FA /* ActionTVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69CC88462193672400ADC0FA /* ActionTVCell.xib */; };
+		69CD774B21B3BC040077FD3C /* SingleRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CD774A21B3BC040077FD3C /* SingleRateView.swift */; };
+		69CD774D21B3BC190077FD3C /* SingleRateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69CD774C21B3BC190077FD3C /* SingleRateView.xib */; };
 		69D00EC7216099A400FF034E /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00EC6216099A400FF034E /* ImageModel.swift */; };
 		69D00EC921609A8200FF034E /* CityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00EC821609A8200FF034E /* CityModel.swift */; };
 		69D00ECB21609AF000FF034E /* DistrictModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D00ECA21609AF000FF034E /* DistrictModel.swift */; };
@@ -231,6 +235,8 @@
 		6923A8DF21621DE300068B4B /* BaseInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseInformationView.swift; sourceTree = "<group>"; };
 		6925AA932164B03100232311 /* RoomDetaillVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomDetaillVC.swift; sourceTree = "<group>"; };
 		6925AA972164F22F00232311 /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseModel.swift; sourceTree = "<group>"; };
+		69267D9921B3D22E001B7166 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		69267D9C21B3DA4E001B7166 /* NotificationMappableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationMappableModel.swift; sourceTree = "<group>"; };
 		692C24F621671E5E008C16A7 /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
 		692E8F9D21634EF700AF5927 /* MemberTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberTVCell.swift; sourceTree = "<group>"; };
 		692E8F9E21634EF700AF5927 /* MemberTVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemberTVCell.xib; sourceTree = "<group>"; };
@@ -355,6 +361,8 @@
 		69CC883D21934E6D00ADC0FA /* UserView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserView.xib; sourceTree = "<group>"; };
 		69CC88452193672400ADC0FA /* ActionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionTVCell.swift; sourceTree = "<group>"; };
 		69CC88462193672400ADC0FA /* ActionTVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActionTVCell.xib; sourceTree = "<group>"; };
+		69CD774A21B3BC040077FD3C /* SingleRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleRateView.swift; sourceTree = "<group>"; };
+		69CD774C21B3BC190077FD3C /* SingleRateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SingleRateView.xib; sourceTree = "<group>"; };
 		69D00EC6216099A400FF034E /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		69D00EC821609A8200FF034E /* CityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityModel.swift; sourceTree = "<group>"; };
 		69D00ECA21609AF000FF034E /* DistrictModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictModel.swift; sourceTree = "<group>"; };
@@ -420,6 +428,14 @@
 				69355ED1218CC09D003339E2 /* EditMemberVC.swift */,
 			);
 			path = RoomDetail;
+			sourceTree = "<group>";
+		};
+		69267D9B21B3DA2E001B7166 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				69267D9C21B3DA4E001B7166 /* NotificationMappableModel.swift */,
+			);
+			path = Firebase;
 			sourceTree = "<group>";
 		};
 		692FE3FE21A8749000D3EAF9 /* Object */ = {
@@ -617,7 +633,7 @@
 			children = (
 				69588FE5217330DB00894F0D /* Response */,
 				69588FE4217330CC00894F0D /* Request */,
-				C0D68B3835472FA19ED5477E /* common */,
+				C0D68B3835472FA19ED5477E /* Common */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -720,6 +736,8 @@
 				6953440121A67E9B0027D84B /* IconTitleCVCell.xib */,
 				69FCC85C21AEFE4100D187C1 /* RateCVCell.swift */,
 				69FCC85D21AEFE4100D187C1 /* RateCVCell.xib */,
+				69CD774A21B3BC040077FD3C /* SingleRateView.swift */,
+				69CD774C21B3BC190077FD3C /* SingleRateView.xib */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -779,6 +797,7 @@
 				69A02FE521538D210087897F /* Utilities */,
 				69A02FE821538D530087897F /* Locale */,
 				69A02FB421538C930087897F /* AppDelegate.swift */,
+				69267D9921B3D22E001B7166 /* GoogleService-Info.plist */,
 				69A02FBB21538C950087897F /* Assets.xcassets */,
 				69A02FBD21538C950087897F /* LaunchScreen.storyboard */,
 			);
@@ -822,6 +841,7 @@
 		69A02FE321538D0E0087897F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				69267D9B21B3DA2E001B7166 /* Firebase */,
 				69678D6D21778E59001F4352 /* API */,
 				69678D6C21778E53001F4352 /* Realm */,
 				69588FE6217330E100894F0D /* Common */,
@@ -917,14 +937,14 @@
 			path = RequestModel;
 			sourceTree = "<group>";
 		};
-		C0D68B3835472FA19ED5477E /* common */ = {
+		C0D68B3835472FA19ED5477E /* Common */ = {
 			isa = PBXGroup;
 			children = (
 				C0D689455C5DA7350186190C /* RoomMappableModel.swift */,
 				69F0FAC921B257080005B205 /* BasePostMappableModel.swift */,
 				69F0FACB21B257990005B205 /* RoomPostMappableModel.swift */,
 			);
-			path = common;
+			path = Common;
 			sourceTree = "<group>";
 		};
 		F1B657FA8A188C4B21A24717 /* Pods */ = {
@@ -1004,6 +1024,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69678D6F21779DCA001F4352 /* RoomPostCVCell.xib in Resources */,
+				69267D9A21B3D22E001B7166 /* GoogleService-Info.plist in Resources */,
 				69CC88482193672400ADC0FA /* ActionTVCell.xib in Resources */,
 				69F4EDFB216F629A006998A7 /* InputView.xib in Resources */,
 				6977C7F6216229A6003C58F4 /* Room.storyboard in Resources */,
@@ -1035,6 +1056,7 @@
 				695D346D2166859100DCD6EE /* SliderView.xib in Resources */,
 				691727B0215509D100104A19 /* Localizable.strings in Resources */,
 				6943D96A2153F04A002CFEBB /* Notification.storyboard in Resources */,
+				69CD774D21B3BC190077FD3C /* SingleRateView.xib in Resources */,
 				6943D9662153EBF7002CFEBB /* All.storyboard in Resources */,
 				69BA0D7B2167D16B006AEEDC /* UtilityDetailView.xib in Resources */,
 				6977C7F42162269F003C58F4 /* BaseInformationView.xib in Resources */,
@@ -1114,6 +1136,7 @@
 				"${BUILT_PRODUCTS_DIR}/SkyFloatingLabelTextField/SkyFloatingLabelTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/TTRangeSlider/TTRangeSlider.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1131,6 +1154,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkyFloatingLabelTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TTRangeSlider.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1147,6 +1171,7 @@
 			files = (
 				6953440221A67E9B0027D84B /* IconTitleCVCell.swift in Sources */,
 				69AFA9DD21837F45004244C6 /* GPPlaceResult.swift in Sources */,
+				69267D9D21B3DA4E001B7166 /* NotificationMappableModel.swift in Sources */,
 				69E93101215690310023ADC7 /* Enums.swift in Sources */,
 				692FE3F921A86A1600D3EAF9 /* UserMappableModel.swift in Sources */,
 				69A03005215391130087897F /* SignUpVC.swift in Sources */,
@@ -1157,6 +1182,7 @@
 				6976126321A7D12B00AC2B26 /* SuggestSettingMappableModel.swift in Sources */,
 				698B0A562178D85D005221F9 /* ErrorView.swift in Sources */,
 				6977C7F821627A0C003C58F4 /* DescriptionView.swift in Sources */,
+				69CD774B21B3BC040077FD3C /* SingleRateView.swift in Sources */,
 				69BA0D812167D3A3006AEEDC /* UtilityInputView.swift in Sources */,
 				69225643215B27320040213A /* Protocols.swift in Sources */,
 				69A02FB721538C930087897F /* MainViewVC.swift in Sources */,

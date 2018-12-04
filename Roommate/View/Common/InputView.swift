@@ -8,12 +8,12 @@
 
 import UIKit
 import SkyFloatingLabelTextField
-protocol NewInputViewDelegate:class {
+protocol InputViewDelegate:class {
     func inputViewDelegate(inputView view:InputView,shouldChangeCharactersTo string:String)->Bool
 }
 class InputView: UIView,UITextFieldDelegate {
     @IBOutlet weak var tfInput: SkyFloatingLabelTextField!
-    weak var delegate:NewInputViewDelegate?
+    weak var delegate:InputViewDelegate?
     var text:String?{
         get{
             return self.tfInput.text

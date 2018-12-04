@@ -44,6 +44,7 @@ enum APIRouter:URLRequestConvertible{
     case editRoomPost(model: RoomPostRequestModel)
     case editRoommatePost(model: RoommatePostRequestModel)
     case removePost(postId: Int)
+    case createSuggestSetting(model:SuggestSettingMappableModel)
     
     var httpHeaders:HTTPHeaders{
         switch self{
@@ -55,7 +56,7 @@ enum APIRouter:URLRequestConvertible{
     }
     
     var httpMethod:HTTPMethod{
-        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost,.createRoomPost:
+        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost,.createRoomPost,.createSuggestSetting:
             return .post
         case .removeBookmark,.removeRoom,.removePost:
             return .delete
@@ -127,6 +128,8 @@ enum APIRouter:URLRequestConvertible{
             return "post/updateRoomPost";
         case .editRoommatePost:
             return "post/updateRoommatePost";
+        case .createSuggestSetting:
+            return "reference/create";
         case .removePost(let postId):
             return "post/delete/\(postId)";
         }
@@ -187,6 +190,8 @@ enum APIRouter:URLRequestConvertible{
             return Mapper().toJSON(model)
         case .editRoommatePost(let model):
             return Mapper().toJSON(model)
+        case .createSuggestSetting(let model):
+            return Mapper().toJSON(model)
         default:
             return [:]
         }
@@ -203,7 +208,7 @@ enum APIRouter:URLRequestConvertible{
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.allHTTPHeaderFields = httpHeaders
         urlRequest.httpMethod = httpMethod.rawValue
-        urlRequest.timeoutInterval  = 60
+        urlRequest.timeoutInterval  = 30
         
         do{
             switch self.httpMethod {

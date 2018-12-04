@@ -18,7 +18,11 @@ class HorizontalRoomView: UIView ,UICollectionViewDelegate,UICollectionViewDataS
     @IBOutlet weak var btnViewAll: UIButton!
     @IBOutlet weak var collectionView: BaseHorizontalCollectionView!
     weak var delegate:HorizontalRoomViewDelegate?
-    var rooms:[RoomPostResponseModel] = []
+    var rooms:[RoomPostResponseModel] = []{
+        didSet{
+            collectionView.reloadData()
+        }
+    }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }

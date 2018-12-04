@@ -27,7 +27,7 @@ class UserRateMappableModel: Mappable {
         behaviourRate <- map["behaviourRate"]
         lifeStyleRate <- map["lifeStyleRate"]
         paymentRate <- map["paymentRate"]
-        date <- (map["date"],CustomDateFormatTransform(formatString: "yyyy-MM-dd"))
+        date <- (map["date"],CustomDateFormatTransform(formatString: Constants.DATE_FORMAT))
         comment <- map["comment"]
         userId <- map["userId"]
         ownerId <- map["ownerId"]

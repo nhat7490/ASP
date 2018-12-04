@@ -48,18 +48,25 @@ class VerticalCollectionView: UIView ,UICollectionViewDelegate,UICollectionViewD
     var rooms:[RoomPostResponseModel] = []
     {
         didSet{
-            collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+            
         }
     }
     var roommates:[RoommatePostResponseModel] = []
     {
         didSet{
-            collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
     var roomsOwner:[RoomMappableModel] = []{
         didSet{
-            collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
     

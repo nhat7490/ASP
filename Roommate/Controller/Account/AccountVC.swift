@@ -68,7 +68,15 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     var bottomContainerViewHeightConstraint:NSLayoutConstraint?
     var verticalRoomViewHeightConstraint:NSLayoutConstraint?
     var rooms:[RoomMappableModel] = []
-    var currentRoomOfMember: RoomMappableModel?
+    var currentRoomOfMember: RoomMappableModel?{
+        get{
+            if let room = DBManager.shared.getSingletonModel(ofType: RoomModel.self){
+                return RoomMappableModel(roomModel: room)
+            }else{
+                return nil
+            }
+        }
+    }
     var accountVCType:AccountVCType = .member
     var accountActions = [
         "TITLE_CURRENT_MEMBER_ROOM",
@@ -79,11 +87,26 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     var user:UserModel? = DBManager.shared.getUser()
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupDelegateAndDataSource()
-        registerNotification()
-        checkAndLoadInitData(inView: self.view) {
-
+        self.setupUI()
+        if !APIConnection.isConnectedInternet(){
+            showErrorView(inView: self.bottomContainerView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+                self.checkAndLoadInitData(inView: self.bottomContainerView) { () -> (Void) in
+                    DispatchQueue.main.async {
+                        
+                        self.setupDelegateAndDataSource()
+                        self.registerNotification()
+                    }
+                }
+            }
+        }else{
+            self.checkAndLoadInitData(inView: self.bottomContainerView) { () -> (Void) in
+                DispatchQueue.main.async {
+                    
+                    self.setupDelegateAndDataSource()
+                    self.registerNotification()
+                    
+                }
+            }
         }
     }
     
@@ -156,14 +179,14 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         
     }
     func setupDelegateAndDataSource(){
-//        scrollView.delegate = self
-        horizontalImagesView.images = [DBManager.shared.getUser()!.imageProfile!]
+        //        scrollView.delegate = self
+        horizontalImagesView.images = [DBManager.shared.getUser()?.imageProfile ?? ""]
         btnSetting.addTarget(self, action: #selector(onClickBtnSetting), for: .touchUpInside)
         if accountVCType == .member{
             accountActionTableView.delegate = self
             accountActionTableView.dataSource = self
             accountActionTableView.register(UINib(nibName: Constants.CELL_ACTIONTV, bundle: Bundle.main), forCellReuseIdentifier: Constants.CELL_ACTIONTV)
-            loadRemoteDataForRoomMember()
+            //            loadRemoteDataForRoomMember()
         }else{
             scrollView.delegate = self
             roomForOwnerView.delegate = self
@@ -178,6 +201,10 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAddRoomNotification(_:)), name: Constants.NOTIFICATION_CREATE_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAcceptRoomNotification(_:)), name: Constants.NOTIFICATION_ACCEPT_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveDeclineRoomNotification(_:)), name: Constants.NOTIFICATION_DECLINE_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAddMemberToRoomNotification(_:)), name: Constants.NOTIFICATION_ADD_MEMBER_TO_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveMemberFromRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_MEMBER_IN_ROOM, object: nil)
     }
     //MARK: Notification
     @objc func didReceiveRemoveRoomNotification(_ notification:Notification){
@@ -185,18 +212,77 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
     }
     
     @objc func didReceiveEditRoomNotification(_ notification:Notification){
-        if notification.object is RoomMappableModel {
-            guard let room = notification.object as? RoomMappableModel, let index = rooms.index(of: room) else{
-                return
+        DispatchQueue.main.async {
+            if notification.object is RoomMappableModel {
+                guard let room = notification.object as? RoomMappableModel, let index = self.rooms.index(of: room) else{
+                    return
+                }
+                self.rooms[index] = room
+                self.roomForOwnerView.roomsOwner  = self.rooms
             }
-            rooms[index] = room
-            roomForOwnerView.roomsOwner  = rooms
         }
     }
     @objc func didReceiveAddRoomNotification(_ notification:Notification){
         loadRemoteDataForRoomOwner()
     }
     
+    @objc func didReceiveAcceptRoomNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            if notification.object is NotificationMappableModel {
+                guard let notification = notification.object as? NotificationMappableModel, let index = self.rooms.index(of: RoomMappableModel(roomId: notification.roomId!)) else{
+                    return
+                }
+                self.rooms[index].statusId = Constants.AUTHORIZED
+                self.roomForOwnerView.roomsOwner  = self.rooms
+            }
+        }
+    }
+    
+    @objc func didReceiveDeclineRoomNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            if notification.object is NotificationMappableModel {
+                guard let notification = notification.object as? NotificationMappableModel, let index = self.rooms.index(of: RoomMappableModel(roomId: notification.roomId!)) else{
+                    return
+                }
+                
+                self.rooms[index].statusId = Constants.DECLINED
+                self.roomForOwnerView.roomsOwner  = self.rooms
+            }
+        }
+    }
+    @objc func didReceiveAddMemberToRoomNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            let hub = MBProgressHUD.showAdded(to: self.bottomContainerView, animated: true)
+            hub.mode = .indeterminate
+            hub.bezelView.backgroundColor = .white
+            hub.contentColor = .defaultBlue
+        }
+        DispatchQueue.global(qos: .background).async {
+            self.requestCurrentRoom()
+            DispatchQueue.main.async {
+                MBProgressHUD.hide(for: self.bottomContainerView, animated: true)
+            }
+        }
+    }
+    @objc func didReceiveRemoveMemberFromRoomNotification(_ notification:Notification){
+        _ = DBManager.shared.deleteAllRecords(ofType: RoomModel.self)
+        
+    }
+    //    func updateUIForRoleInRoomNotification(_ notification:Notification){
+    //        DispatchQueue.main.async {
+    //            let hub = MBProgressHUD.showAdded(to: self.bottomContainerView, animated: true)
+    //            hub.mode = .indeterminate
+    //            hub.bezelView.backgroundColor = .white
+    //            hub.contentColor = .defaultBlue
+    //        }
+    //         DispatchQueue.global(qos: .background).async {
+    //            self.requestCurrentRoom()
+    //            DispatchQueue.main.async {
+    //                MBProgressHUD.hide(for: self.bottomContainerView, animated: true)
+    //            }
+    //        }
+    //
+    //    }
     
     //MARK: Load Remote Data for room owner
     
@@ -204,14 +290,14 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         rooms.removeAll()
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomContainerView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-                self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
-                    self.requestRoom(view: self.roomForOwnerView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: self.user!.userId, page: 1, size: Constants.MAX_OFFSET))
-                }
+                //                self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
+                self.requestRoom(view: self.roomForOwnerView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: self.user!.userId, page: 1, size: Constants.MAX_OFFSET))
+                //                }
             }
         }else{
-            self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
-                self.requestRoom(view: self.roomForOwnerView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: self.user!.userId, page: 1, size: Constants.MAX_OFFSET))
-            }
+            //            self.checkAndLoadInitData(inView: self.contentView) { () -> (Void) in
+            self.requestRoom(view: self.roomForOwnerView.collectionView, apiRouter: APIRouter.getRoomsByUserId(userId: self.user!.userId, page: 1, size: Constants.MAX_OFFSET))
+            //            }
         }
     }
     func  requestRoom(view:UICollectionView,apiRouter:APIRouter){
@@ -224,15 +310,15 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         }
         DispatchQueue.global(qos: .background).async {
             APIConnection.requestArray(apiRouter:apiRouter,
-                              errorNetworkConnectedHander: {
-                                DispatchQueue.main.async {
-                                    MBProgressHUD.hide(for: view, animated: true)
-                                    self.updateUIForNoData()
-                                    self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_CONNECTED_ERROR_MESSAGE".localized, onCompleted: { () -> (Void) in
-                                        self.requestRoom(view:view, apiRouter: apiRouter)
-                                    })
-                                }
-                                
+                                       errorNetworkConnectedHander: {
+                                        DispatchQueue.main.async {
+                                            MBProgressHUD.hide(for: view, animated: true)
+                                            self.updateUIForNoData()
+                                            self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_CONNECTED_ERROR_MESSAGE".localized, onCompleted: { () -> (Void) in
+                                                self.requestRoom(view:view, apiRouter: apiRouter)
+                                            })
+                                        }
+                                        
             }, returnType: RoomMappableModel.self, completion: { (values, error, statusCode) -> (Void) in
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: view, animated: true)
@@ -273,57 +359,60 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         }
     }
     //MARK: Load Remote Data for room member
-    func loadRemoteDataForRoomMember(){
-//        if !APIConnection.isConnectedInternet(){
-//            showErrorView(inView: self.view, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-//
-//            }
-//        }else{
-//            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
-//                self.currentRoomOfMember = RoomMappableModel(roomModel: DBManager.shared.getSingletonModel(ofType: RoomModel.self)!)
-//            }
-//        }
-        self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
-            self.currentRoomOfMember = RoomMappableModel(roomModel: DBManager.shared.getSingletonModel(ofType: RoomModel.self)!)
-        }
-
-    }
+    //    func loadRemoteDataForRoomMember(){
+    //        if !APIConnection.isConnectedInternet(){
+    //            showErrorView(inView: self.view, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+    //
+    //            }
+    //        }else{
+    //            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+    //                self.currentRoomOfMember = RoomMappableModel(roomModel: DBManager.shared.getSingletonModel(ofType: RoomModel.self)!)
+    //            }
+    //        }
+    //        self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
+    //            if let room = DBManager.shared.getSingletonModel(ofType: RoomModel.self){
+    //                self.currentRoomOfMember = RoomMappableModel(roomModel: room)
+    //            }
     
-//    func requestCurrentRoom(view:UIView){
-//        DispatchQueue.main.async {
-//            let hub = MBProgressHUD.showAdded(to: view, animated: true)
-//            hub.mode = .indeterminate
-//            hub.bezelView.backgroundColor = .white
-//            hub.contentColor = .defaultBlue
-//        }
-//        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: user!.userId), errorNetworkConnectedHander: {
-//            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-//        }, returnType: RoomMappableModel.self){ (value, error, statusCode) -> (Void) in
-//            DispatchQueue.main.async {
-//                MBProgressHUD.hide(for: view, animated: true)
-//            }
-//            if error == .SERVER_NOT_RESPONSE{
-//                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
-//            }else if error == .PARSE_RESPONSE_FAIL{
-//                APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
-//            }else{
-//                if statusCode == .OK{
-//                    if let value = value{
-//                        self.currentRoomOfMember = value
-//                        DBManager.shared.addSingletonModel(ofType: RoomModel.self, object: RoomModel(roomResponseModel: value))
-//                    }
-//                }
-//            }
-//        }
-//    }
+    //        }
+    
+    //    }
+    
+    //    func requestCurrentRoom(view:UIView){
+    //        DispatchQueue.main.async {
+    //            let hub = MBProgressHUD.showAdded(to: view, animated: true)
+    //            hub.mode = .indeterminate
+    //            hub.bezelView.backgroundColor = .white
+    //            hub.contentColor = .defaultBlue
+    //        }
+    //        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: user!.userId), errorNetworkConnectedHander: {
+    //            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
+    //        }, returnType: RoomMappableModel.self){ (value, error, statusCode) -> (Void) in
+    //            DispatchQueue.main.async {
+    //                MBProgressHUD.hide(for: view, animated: true)
+    //            }
+    //            if error == .SERVER_NOT_RESPONSE{
+    //                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+    //            }else if error == .PARSE_RESPONSE_FAIL{
+    //                APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+    //            }else{
+    //                if statusCode == .OK{
+    //                    if let value = value{
+    //                        self.currentRoomOfMember = value
+    //                        DBManager.shared.addSingletonModel(ofType: RoomModel.self, object: RoomModel(roomResponseModel: value))
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
     
     //MARK: UIScrollviewDelegate
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let offset = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
+        //        let contentHeight = scrollView.contentSize.height
         if offset < -Constants.MAX_Y_OFFSET {
             if accountVCType == .member{
-                loadRemoteDataForRoomMember()
+                //                loadRemoteDataForRoomMember()
             }else{
                 loadRemoteDataForRoomOwner()
             }
@@ -334,17 +423,17 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
         let vc = RoomDetailVC()
         vc.viewType = .detailForOwner
         vc.room = rooms[indexPath!.row]
-//        let mainVC = UIViewController()
-//        let nv = UINavigationController(rootViewController: mainVC)
-//        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+        //        let mainVC = UIViewController()
+        //        let nv = UINavigationController(rootViewController: mainVC)
+        //        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
         presentInNewNavigationController(viewController: vc)
     }
     func verticalCollectionViewDelegate(verticalPostView view:VerticalCollectionView,onClickButton button:UIButton){
         let vc = ShowAllVC()
         vc.showAllVCType = .roomForOwner
-//        let mainVC = UIViewController()
-//        let nv = UINavigationController(rootViewController: mainVC)
-//        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+        //        let mainVC = UIViewController()
+        //        let nv = UINavigationController(rootViewController: mainVC)
+        //        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
         presentInNewNavigationController(viewController: vc)
     }
     
@@ -377,9 +466,9 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
                 let vc = RoomDetailVC()
                 vc.viewType = .detailForMember
                 vc.room = room
-//                let mainVC = UIViewController()
-//                let nv = UINavigationController(rootViewController: mainVC)
-//                present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+                //                let mainVC = UIViewController()
+                //                let nv = UINavigationController(rootViewController: mainVC)
+                //                present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
                 presentInNewNavigationController(viewController: vc)
             }else{
                 AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage:  "TITLE_MEMBER_NO_CURRENT_ROOM".localized, inViewController: self)
@@ -395,18 +484,18 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UIScrollViewDelegate,UITab
             break
             
         }
-//        let mainVC = UIViewController()
-//        let nv = UINavigationController(rootViewController: mainVC)
-//        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+        //        let mainVC = UIViewController()
+        //        let nv = UINavigationController(rootViewController: mainVC)
+        //        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
         presentInNewNavigationController(viewController: vc)
     }
     
     //MARK: Button Event
     @objc func onClickBtnSetting(){
         let vc = SettingVC()
-//        let mainVC = UIViewController()
-//        let nv = UINavigationController(rootViewController: mainVC)
-//        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+        //        let mainVC = UIViewController()
+        //        let nv = UINavigationController(rootViewController: mainVC)
+        //        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
         presentInNewNavigationController(viewController: vc)
     }
     //MARK: Other

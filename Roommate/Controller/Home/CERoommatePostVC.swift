@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import SkyFloatingLabelTextField
 import MBProgressHUD
-class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,SliderViewDelegate,UITextFieldDelegate{
+class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,SliderViewDelegate,InputViewDelegate{
 
     lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
@@ -77,13 +76,11 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
 
         return tv
     }()
-
-    lazy var tfPhoneNumber: SkyFloatingLabelTextField = {
-        let st = SkyFloatingLabelTextField()
-        st.delegate = self
-        st.addToobarButton()
-        st.setupUI(placeholder: "PLACE_HOLDER_PHONE_NUMBER", title: "PLACE_HOLDER_PHONE_NUMBER", keyboardType: .numberPad, delegate: self)
-        return st
+    lazy var phoneNumberInputView:InputView = {
+        let iv:InputView = .fromNib()
+        iv.inputViewType = .price
+        iv.delegate = self
+        return iv
     }()
 
     lazy var btnSave:UIButton = {
@@ -166,7 +163,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
 //        contentView.addSubview(genderView)
         contentView.addSubview(utilitiesView)
         contentView.addSubview(tvContactInformations)
-        contentView.addSubview(tfPhoneNumber)
+        contentView.addSubview(phoneNumberInputView)
         //Add Constrant
         
         if #available(iOS 11.0, *) {
@@ -191,7 +188,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
 
         //Contact
         _ = tvContactInformations.anchor(utilitiesView.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: 30.0))
-        _ = tfPhoneNumber.anchor(tvContactInformations.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
+        _ = phoneNumberInputView.anchor(tvContactInformations.bottomAnchor,contentView.leftAnchor,nil,contentView.rightAnchor,.zero,.init(width: 0, height: Constants.HEIGHT_INPUT_VIEW))
 
         _ = btnSave.anchor(view: bottomView,UIEdgeInsets(top: Constants.MARGIN_6, left: 0, bottom: -Constants.MARGIN_6, right: 0))
         btnSave.layer.cornerRadius = CGFloat(10)
@@ -256,7 +253,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             }
             if let phoneNumber = roommatePostRequestModel.phoneContact{
                 self.phoneNumber = phoneNumber
-                self.tfPhoneNumber.text = phoneNumber
+                self.phoneNumberInputView.text = phoneNumber
             }
         }
         
@@ -309,7 +306,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         }
         
     }
-    //MARK: Handler dropdownListViewDelegate
+    //MARK:DropdownListViewDelegate
     func dropdownListViewDelegate(view dropdownListView: DropdownListView, onClickBtnChangeSelect btnSelect: UIButton) {
         if dropdownListView == cityDropdownListView{
             let data = cities?.map{$0.name!}
@@ -334,24 +331,17 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             
         }
     }
-    //MARK:UITextfieldDelegate
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print(string)
+    //MARK: InputViewDelegate
+    func inputViewDelegate(inputView view: InputView, shouldChangeCharactersTo string: String) -> Bool {
+//        guard let tfInput = textField as? SkyFloatingLabelTextField, let updatedString = (tfInput.text as NSString?)?.replacingCharacters(in: range, with: string) else {
+//            return false
+//        }
         
-        guard let tfInput = textField as? SkyFloatingLabelTextField, let updatedString = (tfInput.text as NSString?)?.replacingCharacters(in: range, with: string) else {
+        if string.isEmpty{return true}
+        guard let _ = Int(string) else{
             return false
         }
-        phoneNumber = updatedString
-        if updatedString.isValidPhoneNumber(){
-            tfInput.errorMessage = ""
-        }else{
-            tfInput.errorMessage = "ERROR_TYPE_PHONE".localized
-        }
-        return true
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        phoneNumber = string
         return true
     }
     //MARK: Handler sliderView
