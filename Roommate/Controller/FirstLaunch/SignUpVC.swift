@@ -10,7 +10,13 @@ import UIKit
 import SkyFloatingLabelTextField
 import MBProgressHUD
 import Alamofire
+import SDWebImage
 class SignUpVC: BaseVC,UITextFieldDelegate {
+    
+    @IBOutlet weak var tfUsernameHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var tfRepeatPasswordHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var tfPasswordHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var vTop: UIView!
     @IBOutlet weak var imgvAvatar: UIImageView!
@@ -27,8 +33,8 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
     lazy var datePicker:UIDatePicker = {
         let dp = UIDatePicker()
         dp.datePickerMode = .date
-        dp.maximumDate = Date()
-        dp.date = Date()
+        dp.maximumDate = Calendar.current.date(byAdding: .year, value: -12, to: Date())
+        dp.date = Calendar.current.date(byAdding: .year, value: -20, to: Date())!
         dp.addTarget(self, action: #selector(onDatePickerValueChanged), for: .valueChanged)
         return dp
     }()
@@ -38,6 +44,8 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
     }()
     var user:UserMappableModel = UserMappableModel()
     var uploadImageModel:UploadImageModel?
+    var signUpVCType:SignUpVCType = .normal
+    var repeatPassord:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -45,13 +53,17 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         registerNotificationForKeyboard()
     }
     func setupUI(){
+        if signUpVCType == .edit{
+            title = "EDIT_USER_INFO".localized
+        }else{
+            title = "TITLE_SIGN_UP".localized
+        }
         setBackButtonForNavigationBar()
         vTop.layer.cornerRadius = 15
         vTop.clipsToBounds = true
-        
         lblDescription.text = "SELECT_IMAGE".localized
         tfFullName.setupUI(placeholder: "PLACE_HOLDER_FULL_NAME", title: "PLACE_HOLDER_FULL_NAME", delegate: self)
-        tfDateOfBirth.text = Date(timeIntervalSince1970: 0.0).string("dd/MM/yyyy")
+        tfDateOfBirth.text = Calendar.current.date(byAdding: .year, value: -20, to: Date())!.string("dd/MM/yyyy")
         user.dob = Date(timeIntervalSince1970: 0.0)
         tfDateOfBirth.addToobarButton()
         tfDateOfBirth.setupUI(placeholder: "PLACE_HOLDER_DOB", title: "PLACE_HOLDER_DOB", keyboardType: .none, returnKeyType: .none, delegate: self)
@@ -59,17 +71,36 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         tfPhoneNumber.addToobarButton()
         tfPhoneNumber.setupUI(placeholder: "PLACE_HOLDER_PHONE_NUMBER", title: "PLACE_HOLDER_PHONE_NUMBER", keyboardType: .numberPad, delegate: self)
         tfEmail.setupUI(placeholder: "PLACE_HOLDER_EMAIL", title: "PLACE_HOLDER_EMAIL", delegate: self)
-        tfUsername.setupUI(placeholder: "PLACE_HOLDER_USERNAME", title: "PLACE_HOLDER_USERNAME", delegate: self)
-        tfUsername.textContentType = UITextContentType("")
-        tfPassword.setupUI(placeholder: "PLACE_HOLDER_PASSWORD", title: "PLACE_HOLDER_PASSWORD",isSecureTextEntry:true, delegate: self)
-        tfPassword.textContentType = UITextContentType("")
-        tfRepeatPassword.setupUI(placeholder: "PLACE_HOLDER_REPEAT_PASSWORD", title: "PLACE_HOLDER_REPEAT_PASSWORD",isSecureTextEntry:true, delegate: self)
-        tfRepeatPassword.textContentType = UITextContentType("")
-        btnNextStep.setTitle(user.roleId == Constants.ROOMOWNER ? "SIGN_UP_AS_ROOMOWNER_TITLE".localized : "SIGN_UP_AS_MEMBER_TITLE".localized, for: .normal)
+        
+        
+        if signUpVCType == .edit{
+            btnNextStep.setTitle("SAVE".localized, for: .normal)
+        }else{
+            btnNextStep.setTitle(user.roleId == Constants.ROOMOWNER ? "SIGN_UP_AS_ROOMOWNER_TITLE".localized : "SIGN_UP_AS_MEMBER_TITLE".localized, for: .normal)
+        }
+//        btnNextStep.setTitleColor(.white, for: .disabled)
+//        btnNextStep.isEnabled = false
+        
         btnNextStep.layer.cornerRadius = 15.0
         btnNextStep.clipsToBounds = true
         sgGender.setTitle("MALE".localized, forSegmentAt: 0)
         sgGender.setTitle("FEMALE".localized, forSegmentAt: 1)
+        if signUpVCType == .edit{
+            tfUsername.translatesAutoresizingMaskIntoConstraints = false
+            tfPassword.translatesAutoresizingMaskIntoConstraints = false
+            tfRepeatPassword.translatesAutoresizingMaskIntoConstraints = false
+            tfUsernameHeightConstraint.constant = 0
+            tfPasswordHeightConstraint.constant = 0
+            tfRepeatPasswordHeightConstraint.constant = 0
+        }else{
+            tfUsername.setupUI(placeholder: "PLACE_HOLDER_USERNAME", title: "PLACE_HOLDER_USERNAME", delegate: self)
+            tfUsername.textContentType = UITextContentType("")
+            tfPassword.setupUI(placeholder: "PLACE_HOLDER_PASSWORD", title: "PLACE_HOLDER_PASSWORD",isSecureTextEntry:true, delegate: self)
+            tfPassword.textContentType = UITextContentType("")
+            tfRepeatPassword.setupUI(placeholder: "PLACE_HOLDER_REPEAT_PASSWORD", title: "PLACE_HOLDER_REPEAT_PASSWORD",isSecureTextEntry:true, delegate: self)
+            tfRepeatPassword.textContentType = UITextContentType("")
+        }
+        
         
     }
     func setDelegateAndDataSource(){
@@ -80,10 +111,25 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         tfDateOfBirth.delegate = self
         tfPhoneNumber.delegate = self
         tfEmail.delegate = self
-        tfUsername.delegate = self
-        tfPassword.delegate = self
-        tfRepeatPassword.delegate = self
         sgGender.addTarget(self, action: #selector(onSegmentControlIndexChange), for: .valueChanged)
+        if signUpVCType == .normal{
+            tfUsername.delegate = self
+            tfPassword.delegate = self
+            tfRepeatPassword.delegate = self
+        }else{
+            imgvAvatar.sd_setImage(with: URL(string: user.imageProfile ?? ""), placeholderImage: UIImage(named: "default_load_room"), options: [.continueInBackground,.retryFailed]) { [weak self] (image, error, cacheType, url) in
+                guard let _ = error else{
+                    return
+                }
+                self?.imgvAvatar.image = image
+            }
+            tfFullName.text = user.fullname
+            tfDateOfBirth.text = user.dob?.string("dd/MM/yyyy")
+            tfEmail.text = user.email
+            tfPhoneNumber.text = user.phone
+            sgGender.selectedSegmentIndex = user.gender == 1 ? 0 : 1
+        }
+        
         
     }
     //MARK: Keyboard Notification handler
@@ -117,7 +163,9 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
                 self.imgvAvatar.image = image
                 self.uploadImageModel =  UploadImageModel(name: self.generateImageName(), image: image)
+                self.lblDescription.textColor = .white
             }
+            
             
         }
     }
@@ -139,7 +187,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         guard let tfInput = textField as? SkyFloatingLabelTextField, let updatedString = (tfInput.text as NSString?)?.replacingCharacters(in: range, with: string) else {
             return false
         }
-//        print(updatedString)
+        //        print(updatedString)
         switch tfInput {
         case tfFullName:
             user.fullname = updatedString
@@ -158,6 +206,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
             }else{
                 tfInput.errorMessage = "ERROR_TYPE_PHONE".localized
             }
+//            checkDataAndUpdateUI()
         case tfEmail:
             user.email = updatedString
             if updatedString.isValidEmail(){
@@ -167,21 +216,39 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
             }
         case tfUsername:
             user.username = updatedString
-            tfInput.errorMessage = updatedString.isValidUsername() ?  "" :  "ERROR_TYPE_USERNAME".localized
+            if updatedString.isValidUsername(){
+                tfInput.errorMessage =  ""
+            }else{
+                tfInput.errorMessage =  "ERROR_TYPE_USERNAME".localized
+            }
         case tfPassword:
             user.password = updatedString
-            tfInput.errorMessage = updatedString.isValidPassword() ?  "" :  "ERROR_TYPE_PASSWORD".localized
-            tfRepeatPassword.errorMessage = updatedString.elementsEqual(updatedString) ? "" : "ERROR_TYPE_PASSWORD_NOT_REPEAT".localized
+            if updatedString.isValidPassword(){
+                tfInput.errorMessage = ""
+            }else{
+                tfInput.errorMessage =  "ERROR_TYPE_PASSWORD".localized
+            }
+            
+            if repeatPassord.elementsEqual(updatedString){
+                tfRepeatPassword.errorMessage = ""
+            }else{
+                tfRepeatPassword.errorMessage = "ERROR_TYPE_PASSWORD_NOT_REPEAT".localized
+            }
         case tfRepeatPassword:
+            repeatPassord = updatedString
             guard let password = tfPassword.text else{
                 return false
             }
-            tfInput.errorMessage = updatedString.elementsEqual(password) ? "" : "ERROR_TYPE_PASSWORD_NOT_REPEAT".localized
-        case tfDateOfBirth:
-            return false
+            if repeatPassord.elementsEqual(password){
+                tfRepeatPassword.errorMessage = ""
+            }else{
+                tfRepeatPassword.errorMessage = "ERROR_TYPE_PASSWORD_NOT_REPEAT".localized
+            }
         default:
+            
             break
         }
+//        checkDataAndUpdateUI()
         return true
     }
     
@@ -193,43 +260,69 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
         print("onClickTextfieldDateOfBirth ")
     }
     //MARK: Validation
-    func checkValidInformation()->Bool{
-        let message = NSMutableAttributedString(string: "")
-        
+//    func checkDataAndUpdateUI(){
+//        if isValidData(){
+//            btnNextStep.isEnabled = true
+//        }else{
+//            btnNextStep.isEnabled = false
+//        }
+//    }
+    func checkDataAndUpdateUI()->Bool{
+//        let message = NSMutableAttributedString(string: "")
+        var isValid = true
         if !(user.fullname?.isValidName() ?? false){
-            message.append(NSAttributedString(string: "\("PLACE_HOLDER_FULL_NAME".localized) :  \("ERROR_TYPE_NAME_MAX_CHAR_50".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+//            message.append(NSAttributedString(string: "\("PLACE_HOLDER_FULL_NAME".localized) :  \("ERROR_TYPE_NAME_MAX_CHAR_50".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            tfFullName.errorMessage = "ERROR_TYPE_NAME_MAX_CHAR_50".localized
+            isValid = false
         }
         
         if !(user.phone?.isValidPhoneNumber() ?? false){
-            message.append(NSAttributedString(string: "\("PLACE_HOLDER_PHONE_NUMBER".localized) :  \("ERROR_TYPE_PHONE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
-        }
-        
-        if !(user.email?.isValidEmail() ?? false){
-            message.append(NSAttributedString(string: "\("PLACE_HOLDER_EMAIL".localized) :  \("ERROR_TYPE_EMAIL".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
-        }
-        
-        if !(user.username?.isValidUsername() ?? false){
-            message.append(NSAttributedString(string: "\("PLACE_HOLDER_USERNAME".localized) :  \("ERROR_TYPE_USERNAME".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
-        }
-        if !(user.password?.isValidPassword() ?? false){
-            message.append(NSAttributedString(string: "\("PLACE_HOLDER_PASSWORD".localized) :  \("ERROR_TYPE_PASSWORD".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
-        }
-        
-        if let repeatPassword  = tfRepeatPassword.text,!repeatPassword.elementsEqual(tfPassword.text ?? ""){
-            message.append(NSAttributedString(string: "\("PLACE_HOLDER_REPEAT_PASSWORD".localized) :  \("ERROR_TYPE_PASSWORD_NOT_REPEAT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
-        }
-        if  uploadImageModel == nil{
-            message.append(NSAttributedString(string: "\("PLACE_HOLDER_AVATAR_IMAGE".localized) :  \("ERROR_TYPE_REQUIRED_IMAGE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            tfPhoneNumber.errorMessage = "ERROR_TYPE_PHONE".localized
+            isValid =  false
+//            message.append(NSAttributedString(string: "\("PLACE_HOLDER_PHONE_NUMBER".localized) :  \("ERROR_TYPE_PHONE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
             
         }
         
-        if message.string.isEmpty{
-            return true
-        }else{
-            let title = NSAttributedString(string: "INFORMATION".localized, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
-            AlertController.showAlertInfoWithAttributeString(withTitle: title, forMessage: message, inViewController: self)
+        if !(user.email?.isValidEmail() ?? false){
+            tfEmail.errorMessage = "ERROR_TYPE_EMAIL".localized
+            isValid =  false
+//            message.append(NSAttributedString(string: "\("PLACE_HOLDER_EMAIL".localized) :  \("ERROR_TYPE_EMAIL".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            
         }
-        return false
+        if signUpVCType == .normal{
+            if !(user.username?.isValidUsername() ?? false){
+                tfUsername.errorMessage = "ERROR_TYPE_USERNAME".localized
+                isValid =  false
+//                message.append(NSAttributedString(string: "\("PLACE_HOLDER_USERNAME".localized) :  \("ERROR_TYPE_USERNAME".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+                
+            }
+            if !(user.password?.isValidPassword() ?? false){
+                tfPassword.errorMessage = "ERROR_TYPE_PASSWORD".localized
+//                message.append(NSAttributedString(string: "\("PLACE_HOLDER_PASSWORD".localized) :  \("ERROR_TYPE_PASSWORD".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+                
+                isValid =  false
+            }
+            
+            if !repeatPassord.elementsEqual(user.password ?? ""){
+//                message.append(NSAttributedString(string: "\("PLACE_HOLDER_REPEAT_PASSWORD".localized) :  \("ERROR_TYPE_PASSWORD_NOT_REPEAT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+                tfRepeatPassword.errorMessage = "ERROR_TYPE_PASSWORD_NOT_REPEAT".localized
+                isValid =  false
+            }
+            if  uploadImageModel == nil{
+//                message.append(NSAttributedString(string: "\("PLACE_HOLDER_AVATAR_IMAGE".localized) :  \("ERROR_TYPE_REQUIRED_IMAGE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+                lblDescription.textColor = .red
+                isValid =  false
+            }
+        }
+        
+//        if message.string.isEmpty{
+//            return true
+//        }else{
+//            let title = NSAttributedString(string: "INFORMATION".localized, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
+//            AlertController.showAlertInfoWithAttributeString(withTitle: title, forMessage: message, inViewController: self)
+//        }
+//        return false
+        return isValid
     }
     
     
@@ -240,16 +333,78 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
     //MARK: Button Next Step event
     
     @IBAction func onClickBtnNextStep(_ sender: Any) {
-        if checkValidInformation()  {
-            checkExistedUser()
+        if checkDataAndUpdateUI()  {
+            if signUpVCType == .normal{
+                checkExistedUser()
+            }else{
+                requestSaveUser()
+            }
+        }else{
+            AlertController.showAlertInfor(withTitle: "NETWORK_STATUS_TITLE".localized, forMessage: "ERROR_TYPE_INPUT".localized, inViewController: self)
         }
     }
     //MARK: Save User
+    func requestSaveUser(){
+        
+        let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hub.mode = .indeterminate
+        hub.bezelView.backgroundColor = .white
+        hub.contentColor = .defaultBlue
+        DispatchQueue.global(qos: .userInteractive).async {
+            if let _ = self.uploadImageModel{
+                DispatchQueue.main.async {
+                    hub.label.text =  "MB_LOAD_UPLOAD_IMAGE".localized
+                }
+                self.group.enter()
+                self.uploadImage(self.uploadImageModel!)
+                self.group.wait()
+            }else{
+                self.uploadImageModel = UploadImageModel()
+                self.uploadImageModel?.linkUrl = self.user.imageProfile
+            }
+            DispatchQueue.main.async {
+                hub.label.text =  "MB_LOAD_SAVE".localized
+            }
+            if let _  = self.uploadImageModel?.linkUrl{
+                APIConnection.request(apiRouter: APIRouter.editUser(model: self.user), completion: { (error, statusCode) -> (Void) in
+                    if error == .SERVER_NOT_RESPONSE{
+                        DispatchQueue.main.async {
+                            APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+                        }
+                    }else if error == .PARSE_RESPONSE_FAIL{
+                        //404
+                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
+                    }else{
+                        //200
+                        if statusCode == .OK{
+                            _ = DBManager.shared.addUser(user: UserModel(userMappedModel: self.user))
+                            AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "EDIT_USER_INFO_SUCCESS".localized, inViewController: self,rhsButtonHandler:{
+                                (action) in
+                                self.popSelfInNavigationController()
+                            })
+                        }else if statusCode == .Conflict {
+                            DispatchQueue.main.async {
+                                APIResponseAlert.apiResponseError(controller: self, type: .exitedUser)
+                            }
+                        }
+                    }
+                })
+            }else{
+                DispatchQueue.main.async {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                }
+                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_UPLOAD_ERROR".localized, inViewController: self)
+            }
+        }
+    }
     func requestCreateUser(hub:MBProgressHUD){
         DispatchQueue.main.async {
             hub.label.text =  "MB_LOAD_UPLOAD_IMAGE".localized
         }
         DispatchQueue.global(qos: .userInteractive).async {
+            if self.signUpVCType == .normal{
+                
+            }
             self.group.enter()
             self.uploadImage(self.uploadImageModel!)
             self.group.wait()
@@ -268,7 +423,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
                     }
                     if error == .SERVER_NOT_RESPONSE{
                         DispatchQueue.main.async {
-                        APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
+                            APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
                         }
                     }else if error == .PARSE_RESPONSE_FAIL{
                         //404

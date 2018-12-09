@@ -7,7 +7,9 @@
 //
 
 import UIKit
-
+protocol HorizontalImagesViewDelegate:class{
+    func horizontalImagesViewDelegate(horizontalImagesView view:HorizontalImagesView,didSelectImageAtIndextPath indexPath:IndexPath)
+}
 class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
 
     @IBOutlet weak var collectionView: BaseHorizontalCollectionView!
@@ -19,6 +21,15 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
             collectionView.dataSource = self
         }
     }
+    weak var delegate:HorizontalImagesViewDelegate?
+    var horizontalImagesViewType:HorizontalImagesViewType = .small{
+        didSet{
+            if horizontalImagesViewType == .full{
+                pageControl.pageIndicatorTintColor = .lightSubTitle
+                pageControl.currentPageIndicatorTintColor = .defaultBlue
+            }
+        }
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         collectionView.showsHorizontalScrollIndicator = false
@@ -26,6 +37,7 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
         pageControl.pageIndicatorTintColor = .lightSubTitle
         pageControl.currentPage = 0
     }
+    
     //MARK: UICollectionView DataSourse and Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images?.count ?? 0
@@ -34,12 +46,16 @@ class HorizontalImagesView: UIView , UICollectionViewDelegate,UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_IMAGECV, for: indexPath) as! ImageCVCell
         cell.link_url = images?[indexPath.row]
+        cell.imageCVCellType = horizontalImagesViewType == .small ? ImageCVCellType.normal : ImageCVCellType.full
 //        cell.backgroundColor = .red
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: frame.width, height: Constants.HEIGHT_CELL_IMAGECV)
+        return CGSize(width: frame.width, height: horizontalImagesViewType == .small ? Constants.HEIGHT_CELL_IMAGECV : frame.height)
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.horizontalImagesViewDelegate(horizontalImagesView: self, didSelectImageAtIndextPath: indexPath)
     }
     
     //MARK: ScrollViewDelegate

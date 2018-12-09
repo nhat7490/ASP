@@ -15,37 +15,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     
     
     
-    //MARK: Data for UICollectionView And UITableView
-    var roommates:[RoommatePostResponseModel] = []
-    var rooms:[RoomPostResponseModel] = []
-    var roomResponseModels:[RoomMappableModel] = []
-    var baseSuggestRequestModel:BaseSuggestRequestModel = BaseSuggestRequestModel()
-    var filterArgumentModel:FilterArgumentModel = {
-        let filter = FilterArgumentModel()
-        return filter
-    }()
-    var currentUserId:Int = DBManager.shared.getUser()!.userId
-    var roomForOwnerAndMemberPage = 1
-    let orders = [
-        OrderType.newest:"NEWEST",
-        OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
-        OrderType.hightToLowPrice:"HIGH_TO_LOW_PRICE"
-    ]
-    var showAllVCType:ShowAllVCType = .roomPostForCreatedUser{
-        didSet{
-            switch showAllVCType{
-            case .suggestRoom:
-                baseSuggestRequestModel.offset = Constants.MAX_OFFSET
-            case .roomPostForCreatedUser:
-                filterArgumentModel.typeId = Constants.ROOM_POST
-            case .roommatePostForCreatedUser:
-                filterArgumentModel.typeId = Constants.ROOMMATE_POST
-            case .roomForOwner,.roomForMember:
-                break
-            }
-        }
-    }
-    var apiRouter:APIRouter!
+    
     
     //MARK: Components for  Orderby
     lazy var lblOrderBy:UILabel = {
@@ -89,9 +59,6 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     }()
     
     
-    var selectedOrder = OrderType.newest//default
-    var tableHeightLayoutConstraint : NSLayoutConstraint?
-    
     
     //MARK: Components for UICollectionView
     lazy var collectionView:BaseVerticalCollectionView = {
@@ -105,6 +72,50 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         return v
     }()
     
+    
+    //MARK: Data for UICollectionView And UITableView
+    
+    var selectedOrder = OrderType.newest//default
+    var tableHeightLayoutConstraint : NSLayoutConstraint?
+    
+    var roomRates:[RoomRateResponseModel] = []
+    var userRates:[UserRateResponseModel] = []
+    var roommates:[RoommatePostResponseModel] = []
+    var rooms:[RoomPostResponseModel] = []
+    var roomResponseModels:[RoomMappableModel] = []
+    var baseSuggestRequestModel:BaseSuggestRequestModel = BaseSuggestRequestModel()
+    var filterArgumentModel:FilterArgumentModel = {
+        let filter = FilterArgumentModel()
+        return filter
+    }()
+    var currentUserId:Int = DBManager.shared.getUser()!.userId
+    var roomForOwnerAndMemberPage = 1
+    var postId:Int = 0
+    var roomId:Int = 0
+    var userId:Int = 0
+    var page:Int = 1
+    let orders = [
+        OrderType.newest:"NEWEST",
+        OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
+        OrderType.hightToLowPrice:"HIGH_TO_LOW_PRICE"
+    ]
+    var showAllVCType:ShowAllVCType = .roomPostForCreatedUser{
+        didSet{
+            switch showAllVCType{
+            case .suggestRoom:
+                baseSuggestRequestModel.offset = Constants.MAX_OFFSET
+            case .roomPostForCreatedUser:
+                filterArgumentModel.typeId = Constants.ROOM_POST
+            case .roommatePostForCreatedUser:
+                filterArgumentModel.typeId = Constants.ROOMMATE_POST
+            case .roomForOwner,.roomForMember,.roomRateForRoomOwner:
+                break
+            default:
+                break
+            }
+        }
+    }
+    var apiRouter:APIRouter!
     //MARK: Viewcontroller
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,6 +137,9 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             title = "TITLE_CREATED_ROOM".localized
         case .roomForMember:
             title = "TITLE_HISTORY_MEMBER_ROOM".localized
+        case .userRate,.roomRate,.roomRateForRoomOwner:
+            title = "RATE_ALL".localized
+            
         }
         automaticallyAdjustsScrollViewInsets = false
         navigationController?.navigationBar.backgroundColor = .white
@@ -173,7 +187,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             }
             tableHeightLayoutConstraint = tableView.anchorTopRight(orderByView.bottomAnchor, btnOrderBy.rightAnchor, 150.0, 1)[3]
             view.bringSubview(toFront: tableView)
-        case .suggestRoom,.roomForOwner,.roomForMember:
+        case .suggestRoom,.roomForOwner,.roomForMember,.userRate,.roomRate,.roomRateForRoomOwner:
             if #available(iOS 11.0, *) {
                 _ = bottomView.anchor(view.safeAreaLayoutGuide.topAnchor, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -2, right: -Constants.MARGIN_10))
             } else {
@@ -195,6 +209,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         collectionView.register(UINib(nibName: Constants.CELL_ROOMMATEPOSTCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMMATEPOSTCV)
         collectionView.register(UINib(nibName: Constants.CELL_ROOMPOSTCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMPOSTCV)
         collectionView.register(UINib(nibName: Constants.CELL_ROOMCV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_ROOMCV)
+        collectionView.register(UINib(nibName: Constants.CELL_RATECV, bundle: Bundle.main), forCellWithReuseIdentifier: Constants.CELL_RATECV)
         
         //Register delegate , datasource & cell tableview
         tableView.delegate = self
@@ -218,6 +233,15 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         case .roommatePostForCreatedUser:
             self.apiRouter = APIRouter.getUserPost(model: filterArgumentModel)
             loadRoommateData(withNewFilterArgModel: true)
+        case .userRate:
+            self.apiRouter = APIRouter.getUserRates(userId: userId, page: page, size: Constants.MAX_OFFSET)
+            loadUserRateData(withNewFilterArgModel:  true)
+        case .roomRate:
+            self.apiRouter = APIRouter.getRoomRatesByPostId(postId: postId, page: page, size: Constants.MAX_OFFSET)
+            loadRoomRateData(withNewFilterArgModel:  true)
+        case .roomRateForRoomOwner:
+            self.apiRouter = APIRouter.getRoomRatesByRoomId(roomId: roomId, page: page, size: Constants.MAX_OFFSET)
+            loadRoomRateData(withNewFilterArgModel:  true)
         }
     }
     //MARK: Notification
@@ -227,6 +251,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAcceptRoomNotification(_:)), name: Constants.NOTIFICATION_ACCEPT_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveDeclineRoomNotification(_:)), name: Constants.NOTIFICATION_DECLINE_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemovePostNotification(_:)), name: Constants.NOTIFICATION_REMOVE_POST, object: nil)
     }
     @objc func didReceiveEditPostNotification(_ notification:Notification){
         DispatchQueue.main.async {
@@ -289,16 +314,35 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         
     }
     
+    @objc func didReceiveRemovePostNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            if notification.object is RoomPostResponseModel {
+                guard let model = notification.object as? RoomPostResponseModel, let index = self.rooms.index(of: RoomPostResponseModel(postId: model.postId)) else{
+                    return
+                }
+                self.rooms[index] = model
+                self.collectionView.reloadData()
+            }else if notification.object is RoommatePostResponseModel {
+                guard let model = notification.object as? RoommatePostResponseModel, let index = self.roommates.index(of: RoommatePostResponseModel(postId: model.postId)) else{
+                    return
+                }
+                self.roommates[index] = model
+                self.collectionView.reloadData()
+            }
+        }
+        
+    }
+    
     @objc func didReceiveDeclineRoomNotification(_ notification:Notification){
         DispatchQueue.main.async {
-        if notification.object is NotificationMappableModel {
-            guard let notification = notification.object as? NotificationMappableModel, let index = self.roomResponseModels.index(of: RoomMappableModel(roomId: notification.roomId!)) else{
-                return
+            if notification.object is NotificationMappableModel {
+                guard let notification = notification.object as? NotificationMappableModel, let index = self.roomResponseModels.index(of: RoomMappableModel(roomId: notification.roomId!)) else{
+                    return
+                }
+                
+                self.roomResponseModels[index].statusId = Constants.DECLINED
+                self.collectionView.reloadData()
             }
-            
-            self.roomResponseModels[index].statusId = Constants.DECLINED
-            self.collectionView.reloadData()
-        }
         }
     }
     
@@ -307,47 +351,69 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     func loadRoomData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-//                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+                //                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
                 
-                    self.requestRoomPost(apiRouter:self.apiRouter,withNewFilterArgModel: withNewFilterArgModel)
-//                }
+                self.requestRoomPost(apiRouter:self.apiRouter,withNewFilterArgModel: withNewFilterArgModel)
+                //                }
             }
         }else{
-//            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                self.requestRoomPost(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
-//            }
+            //            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+            self.requestRoomPost(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
+            //            }
         }
     }
     func loadRoommateData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-//                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                    self.requestRoommatePost(apiRouter: self.apiRouter,withNewFilterArgModel: withNewFilterArgModel)
-//                }
+                //                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+                self.requestRoommatePost(apiRouter: self.apiRouter,withNewFilterArgModel: withNewFilterArgModel)
+                //                }
             }
         }else{
-//            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                self.requestRoommatePost(apiRouter:self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
-//            }
+            //            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+            self.requestRoommatePost(apiRouter:self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
+            //            }
         }
     }
     
     func loadRoomForOwnerOrMemberData(withNewFilterArgModel:Bool){
         if !APIConnection.isConnectedInternet(){
             showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-//                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                    self.requestRoom(apiRouter:self.apiRouter,withNewFilterArgModel: withNewFilterArgModel)
-//                }
+                //                self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+                self.requestRoom(apiRouter:self.apiRouter,withNewFilterArgModel: withNewFilterArgModel)
+                //                }
             }
         }else{
-//            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
-                self.requestRoom(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
-//            }
+            //            self.checkAndLoadInitData(inView: self.bottomView) { () -> (Void) in
+            self.requestRoom(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
+            //            }
         }
     }
     
+    func loadUserRateData(withNewFilterArgModel:Bool){
+        if !APIConnection.isConnectedInternet(){
+            showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+                self.requestUserRate(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
+            }
+        }else{
+            self.requestUserRate(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
+        }
+    }
+    func loadRoomRateData(withNewFilterArgModel:Bool){
+        if !APIConnection.isConnectedInternet(){
+            showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
+                self.requestRoomRate(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
+            }
+        }else{
+            self.requestRoomRate(apiRouter: self.apiRouter, withNewFilterArgModel: withNewFilterArgModel)
+        }
+    }
     func  requestRoomPost(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
+            if newFilterArgModel{
+                self.rooms.removeAll()
+                self.collectionView.reloadData()
+            }
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
@@ -383,11 +449,14 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                         }
                         self.rooms.append(contentsOf: values)
                         DispatchQueue.main.async {
+                            if self.rooms.isEmpty{
+                                self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
+                            }
                             self.collectionView.reloadData()
                             //                            self.isLoadingData = false
                         }
                     }else if statusCode == .NotFound{
-                        self.roomResponseModels.removeAll()
+                        self.rooms.removeAll()
                         self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
                     }
                 }
@@ -397,6 +466,10 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     
     func  requestRoommatePost(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
+            if newFilterArgModel{
+                self.roommates.removeAll()
+                self.collectionView.reloadData()
+            }
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
@@ -429,11 +502,13 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                         }
                         self.roommates.append(contentsOf: values)
                         DispatchQueue.main.async {
+                            if self.roommates.isEmpty{
+                                self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
+                            }
                             self.collectionView.reloadData()
-                            //                            self.isLoadingData = false
                         }
                     }else if statusCode == .NotFound{
-                        self.roomResponseModels.removeAll()
+                        self.roommates.removeAll()
                         self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
                     }
                 }
@@ -442,8 +517,10 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     }
     func  requestRoom(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
         DispatchQueue.main.async {
-            self.roomResponseModels.removeAll()
-            self.collectionView.reloadData()
+            if newFilterArgModel{
+                self.roomResponseModels.removeAll()
+                self.collectionView.reloadData()
+            }
             let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
             hub.mode = .indeterminate
             hub.bezelView.backgroundColor = .white
@@ -474,6 +551,9 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
                         }
                         self.roomResponseModels.append(contentsOf: values)
                         DispatchQueue.main.async {
+                            if self.roomResponseModels.isEmpty{
+                                self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
+                            }
                             self.collectionView.reloadData()
                             //                            self.isLoadingData = false
                         }
@@ -488,6 +568,123 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     }
     
     
+    func  requestUserRate(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
+        DispatchQueue.main.async {
+            if newFilterArgModel{
+                if self.showAllVCType == .userRate{
+                    self.userRates.removeAll()
+                }else{
+                    self.roomRates.removeAll()
+                }
+                
+                self.collectionView.reloadData()
+            }
+            let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
+            hub.mode = .indeterminate
+            hub.bezelView.backgroundColor = .white
+            hub.contentColor = .defaultBlue
+        }
+        
+        DispatchQueue.global(qos: .background).async {
+            APIConnection.requestArray(apiRouter:apiRouter, returnType:UserRateResponseModel.self){ (values, error, statusCode) -> (Void) in
+                DispatchQueue.main.async {
+                    MBProgressHUD.hide(for: self.bottomView, animated: true)
+                }
+                if error != nil {
+                    DispatchQueue.main.async {
+                        self.showErrorView(inView: self.bottomView, withTitle:error == .SERVER_NOT_RESPONSE ?  "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE".localized : "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                            self.requestUserRate(apiRouter: apiRouter,withNewFilterArgModel: newFilterArgModel)
+                        })
+                    }
+                }else{
+                    //200
+                    if statusCode == .OK{
+                        guard let values = values else{
+                            //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+                            //                        self.group.leave()
+                            return
+                        }
+                        if values.count == 0, self.page > 1{
+                            self.page = self.page-1
+                        }
+                        self.userRates.append(contentsOf: values)
+                        
+                        DispatchQueue.main.async {
+                            if self.userRates.isEmpty{
+                                self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
+                            }
+                            self.collectionView.reloadData()
+                            //                            self.isLoadingData = false
+                        }
+                    }else if statusCode == .NotFound{
+                        self.showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                            self.requestUserRate(apiRouter: apiRouter,withNewFilterArgModel: newFilterArgModel)
+                        })
+                    }
+                    
+                }
+            }
+        }
+    }
+    
+    func  requestRoomRate(apiRouter:APIRouter,withNewFilterArgModel newFilterArgModel:Bool){
+        DispatchQueue.main.async {
+            if newFilterArgModel{
+                if self.showAllVCType == .userRate{
+                    self.userRates.removeAll()
+                }else{
+                    self.roomRates.removeAll()
+                }
+                
+                self.collectionView.reloadData()
+            }
+            let hub = MBProgressHUD.showAdded(to: self.bottomView, animated: true)
+            hub.mode = .indeterminate
+            hub.bezelView.backgroundColor = .white
+            hub.contentColor = .defaultBlue
+        }
+        
+        DispatchQueue.global(qos: .background).async {
+            APIConnection.requestArray(apiRouter:apiRouter, returnType:RoomRateResponseModel.self){ (values, error, statusCode) -> (Void) in
+                DispatchQueue.main.async {
+                    MBProgressHUD.hide(for: self.bottomView, animated: true)
+                }
+                if error != nil {
+                    DispatchQueue.main.async {
+                        self.showErrorView(inView: self.bottomView, withTitle:error == .SERVER_NOT_RESPONSE ?  "NETWORK_STATUS_CONNECTED_SERVER_MESSAGE".localized : "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                            self.requestRoomRate(apiRouter: apiRouter,withNewFilterArgModel: newFilterArgModel)
+                        })
+                    }
+                }else{
+                    //200
+                    if statusCode == .OK{
+                        guard let values = values else{
+                            //                        APIResponseAlert.defaultAPIResponseError(controller: self, error: ApiResponseErrorType.PARSE_RESPONSE_FAIL)
+                            //                        self.group.leave()
+                            return
+                        }
+                        if values.count == 0, self.page > 1{
+                            self.page = self.page-1
+                        }
+                        self.roomRates.append(contentsOf: values)
+                        
+                        DispatchQueue.main.async {
+                            if self.roomRates.isEmpty{
+                                self.showNoDataView(inView: self.collectionView, withTitle: "NO_DATA".localized)
+                            }
+                            self.collectionView.reloadData()
+                            //                            self.isLoadingData = false
+                        }
+                    }else if statusCode == .NotFound{
+                        self.showErrorView(inView: self.bottomView, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized, onCompleted: { () -> (Void) in
+                            self.requestRoomRate(apiRouter: apiRouter,withNewFilterArgModel: newFilterArgModel)
+                        })
+                    }
+                    
+                }
+            }
+        }
+    }
     
     //MARK: UICollectionView DataSourse and Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -499,6 +696,10 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             return roommates.count
         case .roomForOwner,.roomForMember:
             return roomResponseModels.count
+        case .roomRate,.roomRateForRoomOwner:
+            return roomRates.count
+        case .userRate:
+            return userRates.count
         }
     }
     
@@ -519,6 +720,14 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
         case .roomForOwner,.roomForMember:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMCV, for: indexPath) as! RoomCVCell
             cell.room = roomResponseModels[indexPath.row]
+            return cell
+        case .roomRate,.roomRateForRoomOwner,.userRate:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_RATECV, for: indexPath) as! RateCVCell
+            if showAllVCType == .userRate{
+                cell.userRateResponseModel = userRates[indexPath.row]
+            }else{
+                cell.roomRateResponseModel = roomRates[indexPath.row]
+            }
             return cell
         }
         
@@ -558,6 +767,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             //            let nv = UINavigationController(rootViewController: mainVC)
             //            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
             presentInNewNavigationController(viewController: vc)
+        case .roomRate,.userRate,.roomRateForRoomOwner:
+            break
         }
     }
     
@@ -569,6 +780,8 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_ROOMMATEPOSTCV)
         case .roomForOwner,.roomForMember:
             return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_ROOMFOROWNERCV)
+        case .roomRate,.roomRateForRoomOwner,.userRate:
+            return CGSize(width: collectionView.frame.width, height: Constants.HEIGHT_CELL_RATECV)
         }
     }
     
@@ -578,6 +791,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
     }
     
     //MARK: UIScrollviewDelegate
+    
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let offset = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
@@ -601,6 +815,12 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             case .roomForOwner,.roomForMember:
                 roomForOwnerAndMemberPage = 1
                 loadRoomData(withNewFilterArgModel: true)
+            case .roomRate,.roomRateForRoomOwner:
+                page = 1
+                loadRoomRateData(withNewFilterArgModel: true)
+            case .userRate:
+                page = 1
+                loadUserRateData(withNewFilterArgModel: true)
             }
             //Load more data
             //because offset = 0 when view loading ==> need to plus scrollView.frame.height
@@ -621,6 +841,12 @@ RoomCVCellDelegate,RoommateCVCellDelegate{
             case .roomForOwner,.roomForMember:
                 roomForOwnerAndMemberPage = roomResponseModels.count/Constants.MAX_OFFSET+2
                 loadRoommateData(withNewFilterArgModel: false)
+            case .userRate:
+                page = showAllVCType == .userRate ? userRates.count/Constants.MAX_OFFSET+2 : roomRates.count/Constants.MAX_OFFSET+2
+                loadUserRateData(withNewFilterArgModel: true)
+            case .roomRate,.roomRateForRoomOwner:
+                page = showAllVCType == .userRate ? userRates.count/Constants.MAX_OFFSET+2 : roomRates.count/Constants.MAX_OFFSET+2
+                loadRoomRateData(withNewFilterArgModel: true)
             }
         }
     }

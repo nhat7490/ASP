@@ -89,20 +89,45 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,InputViewDelegate,MaxMemberSelectV
     var cERoomPostVCType:CEVCType = .create
     var roomPostRequestModel: RoomPostRequestModel = RoomPostRequestModel()
 //    var roomPostResponseModel:RoomPostResponseModel?
-    var currentRoom:RoomMappableModel = RoomMappableModel(roomModel: DBManager.shared.getSingletonModel(ofType: RoomModel.self)!)
+    var roomOfPost:RoomMappableModel!
     //MARK: ViewController
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setData()
-        registerNotificationForKeyboard()
+        setBackButtonForNavigationBar()
+//        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        if cERoomPostVCType == .create{
+            requestCurrentRoom(inView: self.view) { (roomMappableModel) in
+                DispatchQueue.main.async {
+                    self.roomOfPost = roomMappableModel
+                    self.setupUI()
+                    self.setData()
+                    self.registerNotificationForKeyboard()
+                }
+            }
+        }else{
+            if roomOfPost != nil{
+                self.setupUI()
+                self.setData()
+                self.registerNotificationForKeyboard()
+            }else{
+                self.requestRoomOfPost(postId: self.roomPostRequestModel.postId, inView: self.view) { (roomMappableModel) in
+                    self.roomOfPost = roomMappableModel
+                    self.setupUI()
+                    self.setData()
+                    self.registerNotificationForKeyboard()
+                }
+                
+            }
+            
+        }
+       
+        
     }
     
     
     func setupUI(){
         title = cERoomPostVCType == .create ? "CREATE_ROOM_POST".localized : "EDIT_POST".localized
-        setBackButtonForNavigationBar()
-//        translateNavigationBarBottomBorder()
+        
         //Create tempview for bottom button
         let bottomView = UIView()
         let defaultBottomViewHeight:CGFloat = 60.0
@@ -129,12 +154,12 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,InputViewDelegate,MaxMemberSelectV
         
         if #available(iOS 11.0, *) {
             _ = bottomView.anchor(nil, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10),.init(width: 0, height: defaultBottomViewHeight))
-            _ = scrollView.anchor(view.topAnchor, view.leftAnchor, bottomView.topAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
+            _ = scrollView.anchor(view.safeAreaLayoutGuide.topAnchor, view.leftAnchor, bottomView.topAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
             
         } else {
             // Fallback on earlier versions
-            _ = bottomView.anchor(nil, view.leftAnchor,view.bottomAnchor, view.rightAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10),.init(width: 0, height: defaultBottomViewHeight))
-            _ = scrollView.anchor(view.topAnchor, view.leftAnchor, bottomView.topAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
+            _ = bottomView.anchor(nil, view.leftAnchor,bottomLayoutGuide.topAnchor, view.rightAnchor,UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10),.init(width: 0, height: defaultBottomViewHeight))
+            _ = scrollView.anchor(topLayoutGuide.bottomAnchor, view.leftAnchor, bottomView.topAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
             
         }
         
@@ -154,26 +179,29 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,InputViewDelegate,MaxMemberSelectV
         _ = btnSubmit.anchor(view: bottomView,UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0))
         btnSubmit.layer.cornerRadius = CGFloat(10)
         btnSubmit.clipsToBounds = true
-        
+//        btnSubmit.isEnabled = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.bounces = false
+        
+        
     }
     //MARK:Delegate and data
     func setData(){
-        btnSubmit.setTitle("SAVE".localized, for: .normal)
+        btnSubmit.setTitle(cERoomPostVCType == .create ? "CREATE".localized : "SAVE".localized, for: .normal)
+        
         //Delegate
         btnSubmit.addTarget(self, action: #selector(onClickBtnSubmit(btnSubmit:)), for: .touchUpInside)
         
         //Data
         baseInformationView.viewType = .ceRoomPostForMaster
         baseInformationView.btnTitle = "VIEW_DETAIL".localized
-        baseInformationView.room = currentRoom
+        baseInformationView.room = roomOfPost
         baseInformationView.delegate = self
-        maxMemberSelectView.maxMember = currentRoom.maxGuest
-        priceInputView.maxPrice = Double(currentRoom.price)
+        maxMemberSelectView.maxMember = roomOfPost.maxGuest
+        priceInputView.maxPrice = Double(roomOfPost.price)
         if cERoomPostVCType == CEVCType.edit{
             nameInputView.text = roomPostRequestModel.name
-            priceInputView.text = roomPostRequestModel.minPrice?.toString
+            priceInputView.text = Int(roomPostRequestModel.minPrice).toString
             tfPhoneNumber.text = roomPostRequestModel.phoneContact
             genderView.genderSelect = GenderSelect(rawValue: roomPostRequestModel.genderPartner)
             maxMemberSelectView.text = roomPostRequestModel.numberPartner.toString
@@ -252,6 +280,7 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,InputViewDelegate,MaxMemberSelectV
             break
             
         }
+//        checkDataAndUpdateUI()
         return true
     }
     func genderViewDelegate(genderView view: GenderView, onChangeGenderSelect genderSelect: GenderSelect?) {
@@ -259,42 +288,57 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,InputViewDelegate,MaxMemberSelectV
     }
     func baseInformationViewDelegate(baseInformationView: BaseInformationView, onClickBtnViewAll button: UIButton) {
         let vc = RoomDetailVC()
+        vc.hasBackImageButtonInNavigationBar = true
         vc.viewType = .detailForMember
-        vc.room = currentRoom
+        vc.room = roomOfPost
         presentInNewNavigationController(viewController: vc, flag: false)
     }
     //MARK: Handler for save button
     @objc  func onClickBtnSubmit(btnSubmit:UIButton){
-        if checkValidInformation(){
+        if isValidData(){
             saveRoomPost()
+        }else{
+            AlertController.showAlertInfor(withTitle: "NETWORK_STATUS_TITLE".localized, forMessage: "ERROR_TYPE_INPUT".localized, inViewController: self)
+        }
+    }
+    func checkDataAndUpdateUI(){
+        if isValidData(){
+            btnSubmit.isEnabled = true
+        }else{
+            btnSubmit.isEnabled = false
         }
     }
 
-
-    func checkValidInformation()->Bool{
-        let message = NSMutableAttributedString(string: "")
-        
+    func isValidData()->Bool{
+//        let message = NSMutableAttributedString(string: "")
+        var isValid = true
         if !(roomPostRequestModel.name?.isValidName() ?? false){
-            message.append(NSAttributedString(string: "\("ROOM_NAME_TITLE".localized) :  \("ERROR_TYPE_NAME_MAX_CHAR_50".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            isValid = false
+//            message.append(NSAttributedString(string: "\("ROOM_NAME_TITLE".localized) :  \("ERROR_TYPE_NAME_MAX_CHAR_50".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
 
         if !(roomPostRequestModel.phoneContact.isValidPhoneNumber() ){
-            message.append(NSAttributedString(string: "\("PLACE_HOLDER_PHONE_NUMBER".localized) :  \("ERROR_TYPE_PHONE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            tfPhoneNumber.showErrorView()
+            isValid = false
+//            message.append(NSAttributedString(string: "\("PLACE_HOLDER_PHONE_NUMBER".localized) :  \("ERROR_TYPE_PHONE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         if !(roomPostRequestModel.minPrice?.toString.isValidPrice() ?? false){
-            message.append(NSAttributedString(string: "\("PRICE".localized) :  \(String(format: "ERROR_TYPE_PRICE".localized, Int(Constants.MIN_PRICE).formatString,Int(currentRoom.price).formatString))\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+//            message.append(NSAttributedString(string: "\("PRICE".localized) :  \(String(format: "ERROR_TYPE_PRICE".localized, Int(Constants.MIN_PRICE).formatString,Int(roomOfPost.price).formatString))\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            priceInputView.showErrorView()
+            isValid = false
         }
-        if message.string.isEmpty{
-            return true
-        }else{
-            let title = NSAttributedString(string: "INFORMATION".localized, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
-            AlertController.showAlertInfoWithAttributeString(withTitle: title, forMessage: message, inViewController: self)
-        }
-        return false
+//        if message.string.isEmpty{
+//            return true
+//        }else{
+//            let title = NSAttributedString(string: "INFORMATION".localized, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
+//            AlertController.showAlertInfoWithAttributeString(withTitle: title, forMessage: message, inViewController: self)
+//        }
+        
+        return isValid
     }
     
     func saveRoomPost(){
-        self.roomPostRequestModel.roomId = currentRoom.roomId
+        self.roomPostRequestModel.roomId = roomOfPost.roomId
         let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
         hub.mode = .indeterminate
         hub.bezelView.backgroundColor = .white

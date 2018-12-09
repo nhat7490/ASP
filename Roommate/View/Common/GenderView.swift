@@ -78,9 +78,15 @@ class GenderView: UIView {
         if genderSelect == GenderSelect.male{
             select(button: btnMale)
             deselect(button: btnFemale)
+            if  viewType == .detailForMember || viewType == .detailForOwner || viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
+                btnFemale.isHidden = true
+            }
         }else if genderSelect == GenderSelect.female{
             select(button: btnFemale)
             deselect(button: btnMale)
+            if  viewType == .detailForMember || viewType == .detailForOwner || viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
+                btnMale.isHidden = true
+            }
         }else if genderSelect == GenderSelect.both{
             select(button: btnMale)
             select(button: btnFemale)

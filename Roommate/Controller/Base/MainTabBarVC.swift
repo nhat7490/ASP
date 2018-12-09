@@ -29,9 +29,8 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
     
     func setupUI() {
         self.tabBar.backgroundColor = .white
-        self.tabBar.tintColor = .defaultBlue
-//        self.tabBar.barTintColor = .white
-//        self.tabBar.unselectedItemTintColor = .black
+        self.tabBar.tintColor = .black
+        self.tabBar.barTintColor = .white
         var vcs = [UIViewController]()
         
         let home = HomeVC()
@@ -50,7 +49,7 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
         
         let account = AccountVC()
         account.accountVCType =  DBManager.shared.getUser()?.roleId == Constants.ROOMOWNER ? AccountVCType.roomOwner : AccountVCType.member
-        account.tabBarItem = UITabBarItem(title: "ACCOUNT_VC".localized, image: UIImage(named: "account")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "manage-account"))
+        account.tabBarItem = UITabBarItem(title: "ACCOUNT_VC".localized, image: UIImage(named: "account")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "account"))
         vcs.append(home)
         vcs.append(all)
         vcs.append(bookmark)
@@ -86,39 +85,32 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
             hub.bezelView.backgroundColor = .white
             hub.contentColor = .defaultBlue
         }
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: DispatchTime.now() + 5, execute: {
             if !DBManager.shared.isExisted(ofType: UtilityModel.self){self.requestUtilitiesArray()}
             if !DBManager.shared.isExisted(ofType:CityModel.self){self.requestArray(apiRouter: APIRouter.city(), returnType:CityModel.self)}
             if !DBManager.shared.isExisted(ofType:DistrictModel.self){self.requestArray(apiRouter: APIRouter.district(), returnType:DistrictModel.self)}
             let loaded =  self.fetchUserData()
-            if loaded {
-                if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
-                    self.requestCurrentRoom()
-                }
-            }
-            
             
             DispatchQueue.main.async {
                 MBProgressHUD.hide(for: view, animated: true)
                 if !DBManager.shared.isExisted(ofType: UtilityModel.self) || !DBManager.shared.isExisted(ofType: CityModel.self) || !DBManager.shared.isExisted(ofType: DistrictModel.self){
                     BaseVC.successLoaded = false
                 }else{
-                    if DBManager.shared.getSingletonModel(ofType: UserModel.self)?.roleId == Constants.ROOMMASTER{
-                        if !DBManager.shared.isExisted(ofType: RoomModel.self){
-                            BaseVC.successLoaded = false
-                        }else{
-                            BaseVC.successLoaded = true
-                        }
-                    }else{
+                    if loaded{
                         BaseVC.successLoaded = true
+                    }else{
+                        BaseVC.successLoaded = false
                     }
                     
                 }
+                print("Loaded \(loaded)")
+                print("successLoaded \(BaseVC.successLoaded)")
                 self.setupUI()
+                
             }
             
-            
-        }
+        })
+        
     }
     
     //For Objectmapper and realm
@@ -173,8 +165,9 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
                 }else{
                     success = false
                 }
-                self.group.leave()
+                
             }
+            self.group.leave()
         }
         self.group.wait()
         return success
@@ -218,7 +211,7 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
                         self.group.leave()
                         return
                     }
-                    print(DBManager.shared.addSingletonModel(ofType:RoomModel.self, object: RoomModel(roomResponseModel: value)))
+                     _ = DBManager.shared.addSingletonModel(ofType: RoomModel.self, object: RoomModel(roomId:value.roomId,userId:DBManager.shared.getUser()?.userId))
                 }else if statusCode == .NotFound{
                     DBManager.shared.deleteAllRecords(ofType: RoomModel.self)
                 }

@@ -31,7 +31,7 @@ class BasePostResponseModel:Mappable,Equatable,Hashable{
     func mapping(map: Map) {
         postId <- map["postId"]
         phoneContact <- map["phoneContact"]
-        date <- (map["date"],CustomDateFormatTransform(formatString:Constants.DATE_FORMAT))
+        date <- (map["date"],CustomDateFormatTransform(formatString: Constants.DATE_FORMAT))
         userResponseModel <- map["userResponseModel"]
         isFavourite <- map["favourite"]
         favouriteId <- map["favouriteId"]

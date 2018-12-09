@@ -56,7 +56,8 @@ class SearchVC:BaseVC,UITableViewDelegate,UITableViewDataSource,UISearchResultsU
     }
     //MARK: UITableView Delegate and DataSource
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
+//        return sections.count
+        return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {

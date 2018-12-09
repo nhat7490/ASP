@@ -11,8 +11,20 @@ import UIKit
 enum CellSide :Int{
     case left,right
 }
+enum ProfireVCType{
+    case normal,memberInfor
+}
+enum HorizontalImagesViewType{
+    case small,full
+}
+enum SignUpVCType{
+    case normal,edit
+}
 enum SingleRateViewType{
     case security,location,utility,behavior,lifestyle,payment
+}
+enum RateViewType{
+    case roomPost,roommatePost,roomDetail,userDetail
 }
 enum RateVCType{
     case user,room
@@ -49,12 +61,14 @@ enum SystemAppType {
     case phone, message, email
 }
 enum ViewType{
-    case detailForOwner,detailForMember,createForOwner,roomPostDetailForFinder,roomPostDetailForCreatedUser,roommatePostDetailForCreatedUser,roommatePostDetailForFinder,editForOwner,ceRoomPostForMaster
+    case detailForOwner,detailForMember,createForOwner,roomPostDetailForFinder,roomPostDetailForCreatedUser,roommatePostDetailForCreatedUser,roommatePostDetailForFinder,editForOwner,ceRoomPostForMaster,rate,currentDetailForMember
 }
 enum DropdownListViewType{
     case city,district,roomMaster
 }
-
+enum UtilitiesViewType{
+    case normal,required
+}
 enum UtilityCVCellType{
     case detail,interact
 }
@@ -67,7 +81,7 @@ enum AllVCType{
 }
 
 enum ShowAllVCType{
-    case suggestRoom,roomForOwner,roomForMember,roomPostForCreatedUser,roommatePostForCreatedUser
+    case suggestRoom,roomForOwner,roomForMember,roomPostForCreatedUser,roommatePostForCreatedUser,userRate,roomRate,roomRateForRoomOwner
 }
 
 enum AccountVCType{
@@ -78,7 +92,7 @@ enum FilterVCType{
     case room,roommate
 }
 enum InputViewType{
-    case roomName,price,area,address,phone,roomPostName
+    case roomName,price,area,address,phone,roomPostName,password,oldPassword,newPassword,repeatPassword
 }
 
 enum HTTPStatusCode: Int {
@@ -164,12 +178,9 @@ enum FilterType{
     case room,roommmate
 }
 enum ImageCVCellType{
-    case normal,upload
+    case normal,upload,full
 }
 enum RequestType{
-    case room,suggest
-}
-enum RateCVCellType{
     case room,suggest
 }
 

@@ -35,19 +35,17 @@ class BaseInformationView: UIView {
     var room:RoomMappableModel!{
         didSet{
             
-            
             if viewType == .detailForOwner{
                 self.lblMainTitle.text = room.name
-                let status =  NSAttributedString(string: room.statusId == Constants.AUTHORIZED ?  "ROOM_DETAIL_STATUS_AUTHORIZED".localized : room.statusId == Constants.PENDING ? "ROOM_DETAIL_STATUS_PENDING".localized : "ROOM_DETAIL_STATUS_DECLINED".localized, attributes: [NSAttributedStringKey.font : UIFont.boldMedium,
-                                                                                                                                                                                                                                                                                  NSAttributedStringKey.backgroundColor: UIColor.defaultBlue,
-                                                                                                                                                                                                                                                                                  NSAttributedStringKey.foregroundColor:UIColor.white])
+                let status =  NSAttributedString(string: room.statusId == Constants.AUTHORIZED ?  "ROOM_DETAIL_STATUS_AUTHORIZED".localized : room.statusId == Constants.PENDING ? "ROOM_DETAIL_STATUS_PENDING".localized : "ROOM_DETAIL_STATUS_DECLINED".localized, attributes: [NSAttributedStringKey.font : UIFont.boldMedium,NSAttributedStringKey.backgroundColor: UIColor.defaultBlue,NSAttributedStringKey.foregroundColor:UIColor.white])
                 self.lblSubTitle.text = "BASE_INFORMATION".localized
                 self.lblTitleDescription.attributedText = status
-            }else if viewType == .detailForMember{
+            }else if viewType == .detailForMember || viewType == .currentDetailForMember{
+                self.lblMainTitle.text = room.name
                 self.lblSubTitle.text = "ROOM_BASE_INFORMATION".localized
                 
             }else{
-//                self.lblMainTitle.text = "ROOM_BASE_INFORMATION".localized
+                //                self.lblMainTitle.text = "ROOM_BASE_INFORMATION".localized
                 self.lblSubTitle.text = "ROOM_BASE_INFORMATION".localized
                 
             }
@@ -60,7 +58,7 @@ class BaseInformationView: UIView {
     
     var roommatePost:RoommatePostResponseModel!{
         didSet{
-            self.lblMainTitle.text = roommatePost.userResponseModel?.fullname
+            lblMainTitle.addAttributeString(string: roommatePost.userResponseModel?.fullname ?? "", withIcon: (roommatePost.userResponseModel?.gender == 2 ? UIImage(named: "female") : UIImage(named: "male"))!, size: CGSize(width: self.frame.width, height: .infinity))
             let dictrictsString = roommatePost.districtIds?.map({ (districtId) -> String in
                 (DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.name)!
             })
@@ -73,19 +71,19 @@ class BaseInformationView: UIView {
     var roomPost:RoomPostResponseModel!{
         didSet{
             self.lblMainTitle.text = roomPost.name
-            self.lblSubTitle.text = "BASE_INFORMATION".localized
+            self.lblSubTitle.text = "ROOM_BASE_INFORMATION_FOR_POST".localized
             self.tvInfoTop.text = roomPost.address
             self.lblInfoBottom.text = String(format: "AREA".localized,roomPost.area!)
-            self.lblTitleDescription.text  = roomPost.genderPartner == 1 ? String(format: "NUMBER_OF_PERSON".localized,roomPost.genderPartner!,"MALE".localized) :
-                roomPost.genderPartner == 2 ? String(format: "NUMBER_OF_PERSON".localized,roomPost.numberPartner!,"FEMALE".localized) : String(format: "NUMBER_OF_PERSON".localized,roomPost.numberPartner!,"\("MALE".localized)/\("FEMALE".localized)")
+            self.lblTitleDescription.text  = String(format: "NUMBER_OF_PERSON".localized,roomPost.numberPartner!,(roomPost.genderPartner == 1 ? "MALE".localized : roomPost.genderPartner == 2 ? "FEMALE".localized : "\("MALE".localized)/\("FEMALE".localized)"))
+            
         }
     }
     var viewType:ViewType?{
         didSet{
             if  viewType
-                == .roomPostDetailForFinder || viewType == .detailForOwner{
+                == .roomPostDetailForFinder || viewType == .detailForOwner || viewType == .roomPostDetailForCreatedUser{
                 lblTitleDescription.textColor = .lightGray
-            }else if viewType == .ceRoomPostForMaster || viewType == .detailForMember{
+            }else if viewType == .ceRoomPostForMaster{
                 
                 lblSubTitle.textColor = .red
                 lblMainTitleHeightConstraint.constant = 0

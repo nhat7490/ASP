@@ -30,11 +30,11 @@ class SingleRateView: UIView {
                 case .utility:
                     text = "RATE_ROOM_UTILITY"
                 case .behavior:
-                    text = "RATE_POST_BEHAVIOR"
+                    text = "RATE_MEMBER_BEHAVIOR"
                 case .lifestyle:
-                    text = "RATE_ROOM_LIFESTYLE"
+                    text = "RATE_MEMBER_LIFESTYLE"
                 case .payment:
-                    text = "RATE_ROOM_PAYMENT"
+                    text = "RATE_MEMBER_PAYMENT"
             }
             lblTitle.text = text.localized
         }
@@ -44,7 +44,7 @@ class SingleRateView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        lblTitle.font = .small
+        lblTitle.font = .medium
         lblTitle.textColor = .red
         cvRate.settings.emptyBorderWidth = 1
         cvRate.settings.emptyBorderColor = .lightGray

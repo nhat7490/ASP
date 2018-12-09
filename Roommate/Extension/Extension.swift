@@ -533,6 +533,11 @@ extension String{
         let predicate = NSPredicate(format:"SELF MATCHES %@", format)
         return predicate.evaluate(with: self)
     }
+    func isValidDescription() -> Bool{
+        let format = "^[\\w\\s]{6,50}"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", format)
+        return predicate.evaluate(with: self)
+    }
     func isValidBrand() -> Bool{
         let format = "^[\\w\\s]{2,50}"
         let predicate = NSPredicate(format:"SELF MATCHES %@", format)
@@ -636,5 +641,36 @@ extension String {
     }
     func containsIgnoringCase(find: String) -> Bool{
         return self.range(of: find, options: .caseInsensitive) != nil
+    }
+}
+extension UILabel{
+    func addAttributeString(string:String,withIcon icon:UIImage,textColor:UIColor? = UIColor.red,textFont:UIFont? = UIFont.boldMedium,size:CGSize?,rect:CGRect? = nil){
+        let attributes:[NSAttributedStringKey:Any] = [NSAttributedStringKey.foregroundColor:textColor,NSAttributedStringKey.font:textFont]
+        self.text = string
+        let estimateSize = self.sizeThatFits(size ?? CGSize(width: self.frame.width, height: .infinity))
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = icon
+        if let rect = rect{
+            imageAttachment.bounds = rect
+        }else{
+            imageAttachment.bounds = CGRect(x: 10, y: 0, width: estimateSize.height, height: estimateSize.height)
+        }
+        
+        let attributedString = NSMutableAttributedString(string: "")
+        attributedString.append(NSAttributedString(string: string, attributes: attributes))
+        attributedString.append(NSAttributedString(attachment: imageAttachment))
+        self.attributedText = attributedString
+    }
+}
+
+extension UIButton{
+    open override var isEnabled: Bool{
+        didSet{
+            if isEnabled{
+                self.alpha = 1
+            }else{
+                self.alpha = 0.5
+            }
+        }
     }
 }

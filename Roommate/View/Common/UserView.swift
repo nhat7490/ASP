@@ -8,6 +8,9 @@
 
 import UIKit
 import SDWebImage
+protocol UserViewDelegate:class{
+    func userViewDelegate(onSelectedUserView view:UserView)
+}
 class UserView: UIView {
 
     @IBOutlet weak var lbltop: UILabel!
@@ -15,17 +18,10 @@ class UserView: UIView {
     @IBOutlet weak var imgvIcon: UIImageView!
     var user:UserModel?{
         didSet{
-//            self.imgvIcon.sd_setImage(with: URL(string: user!.imageProfile!), placeholderImage: UIImage(named:"default_load_room"), options: [.continueInBackground,.retryFailed]) { (image, error, cacheType, url) in
-//                guard let image = image else{
-//                    return
-//                }
-//                DispatchQueue.main.async {
-//                    self.imgvIcon.image = image
-//                }
-//            }
             lbltop.text = user!.fullname
         }
     }
+    weak var delegage:UserViewDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -35,6 +31,10 @@ class UserView: UIView {
         lblBottom.textColor = .lightGray
         lblBottom.text = "TITLE_USER_DETAIL".localized
         imgvIcon.image = UIImage(named: "right-arrow")
+        self.isUserInteractionEnabled = true
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapSelf)))
     }
-
+    @objc func didTapSelf(){
+        delegage?.userViewDelegate(onSelectedUserView: self)
+    }
 }

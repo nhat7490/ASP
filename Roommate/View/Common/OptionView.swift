@@ -25,7 +25,7 @@ class OptionView: UIView {
             case .detailForOwner:
                 btnEdit.setImage(UIImage(named: "edit"), for: .normal)
                 btnRight.setImage(UIImage(named: "remove"), for: .normal)
-            case .detailForMember,.roomPostDetailForFinder,.roommatePostDetailForFinder:
+            case .detailForMember,.currentDetailForMember,.roomPostDetailForFinder,.roommatePostDetailForFinder:
                 btnEdit.setImage(UIImage(named: "sms"), for: .normal)
                 btnRight.setImage(UIImage(named: "call"), for: .normal)
             default:
@@ -51,6 +51,11 @@ class OptionView: UIView {
         tvPrice.isEditable = false
         tvPrice.isUserInteractionEnabled = false
         tvPrice.textColor = .red
+        tvDate.font = .small
+        tvDate.textContainer.lineBreakMode = .byWordWrapping
+        tvDate.isEditable = false
+        tvDate.isUserInteractionEnabled = false
+        tvDate.textColor = .red
 
         addBorder(side: .Top, color: .lightGray, width: 1.0)
     }

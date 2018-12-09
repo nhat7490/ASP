@@ -10,12 +10,16 @@ import UIKit
 protocol MembersViewDelegate:class{
     func membersViewDelegate(membersView view:MembersView,onDeleteRecordAtIndexPath indexPath:IndexPath?)
     func membersViewDelegate(membersView view:MembersView,onClickBtnEdit button:UIButton)
+    func membersViewDelegate(membersView view:MembersView,onClickBtnRate button:UIButton,atIndexPath indexPath:IndexPath?)
+    func membersViewDelegate(membersView view:MembersView,onSelectRowAtIndexPath indexPath:IndexPath?)
 }
 extension MembersViewDelegate{
     func membersViewDelegate(membersView view:MembersView,onDeleteRecordAtIndexPath indexPath:IndexPath?){}
     func membersViewDelegate(membersView view:MembersView,onClickBtnEdit button:UIButton){}
+    func membersViewDelegate(membersView view:MembersView,onClickBtnRate button:UIButton,atIndexPath indexPath:IndexPath?){}
+    func membersViewDelegate(membersView view:MembersView,onSelectRowAtIndexPath indexPath:IndexPath?){}
 }
-class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
+class MembersView: UIView , UITableViewDelegate,UITableViewDataSource ,MemberTVCellDelegate{
     
 
     @IBOutlet weak var lblLeft: UILabel!
@@ -85,6 +89,8 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .singleLine
+        tableView.allowsSelection = true
+        
         layoutIfNeeded()
     }
     
@@ -96,6 +102,11 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL_MEMBERTV, for: indexPath) as! MemberTVCell
         cell.indexPath = indexPath
+        cell.delegate = self
+        if viewType == .detailForOwner{
+            cell.buttonTitle = "RATE".localized
+        }
+        
         let member = members![indexPath.row]
         if member.roleId == Constants.ROOMMASTER{
             //Master
@@ -105,11 +116,7 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
         }else{
             cell.lblMemberName.attributedText  =  NSMutableAttributedString(string:"\(member.username!) ", attributes: [NSAttributedStringKey.foregroundColor:UIColor.red])
         }
-        if  viewType == ViewType.detailForMember || viewType == ViewType.detailForOwner{
-            cell.selectionStyle = .default
-        }else{
-            cell.selectionStyle = .none
-        }
+        cell.selectionStyle = .none
         return cell
     }
     func setUserGuide(text:String){
@@ -131,10 +138,16 @@ class MembersView: UIView , UITableViewDelegate,UITableViewDataSource {
             return .none
         }
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.membersViewDelegate(membersView: self, onSelectRowAtIndexPath: indexPath)
+    }
     
     @IBAction func onClickBtnEdit(_ sender: Any) {
         delegate?.membersViewDelegate(membersView: self, onClickBtnEdit: sender as! UIButton)
     }
     
+    func memberTVCellDelegate(memberTVCell cell: MemberTVCell, onClickButtonRate button: UIButton, atIndexPath indexPath: IndexPath) {
+        delegate?.membersViewDelegate(membersView: self, onClickBtnRate: button, atIndexPath: indexPath)
+    }
     
 }

@@ -13,10 +13,12 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
     
     var accountSettingsForMemberAndMaster = [
         "PROFILE_SETTING",
+        "TITLE_CHANGE_PASSWORD",
         "SUGGEST_SETTING"
     ]
     var accountSettingsForRoomOwner = [
-        "PROFILE_SETTING"
+        "PROFILE_SETTING",
+        "TITLE_CHANGE_PASSWORD"
     ]
     var languageSettings = [
         "LANGUGE_SETTING"
@@ -117,7 +119,12 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0{
             if indexPath.row == 0{
-                
+                let vc = ProfireVC()
+                vc.profireVCType = .normal
+                presentInNewNavigationController(viewController: vc, flag: false, animated: true)
+            }else if indexPath.row == 1{
+                let vc = ChangePasswordVC()
+                presentInNewNavigationController(viewController: vc, flag: false, animated: true)
             }else{
                 let vc = SuggestSettingVC()
                 presentInNewNavigationController(viewController: vc, flag: false, animated: true)

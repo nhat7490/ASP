@@ -70,7 +70,7 @@ class UserMappableModel: Mappable {
         phone <- map["phone"]
         gender <- map["gender"]
         roleId <- map["roleId"]
-        userRateList <- map["userSuggestSettingModel"]
-        suggestSettingMappedModel <- map["suggestSettingMappedModel"]
+        userRateList <- map["userRateResponseModels"]
+        suggestSettingMappedModel <- map["userSuggestSettingModel"]
     }
 }

@@ -28,6 +28,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         return item
     }()
     
+    
     //MARK: Components for  Orderby
     lazy var lblOrderBy:UILabel = {
         let lbl = UILabel()
@@ -106,15 +107,16 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         OrderType.lowToHightPrice:"LOW_TO_HIGH_PRICE",
         OrderType.hightToLowPrice:"HIGH_TO_LOW_PRICE"
     ]
+    var isLoadedRoomPost = false
+    var isLoadedRoommatePost = false
     var allVCType:AllVCType = .all
     var apiRouter:APIRouter!
     //MARK: Viewcontroller
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkAndLoadInitData(view: self.collectionView){
+        checkAndLoadInitData(view: self.bottomView){
             self.setupUI()
             self.setupDataAndDelegate()
-            self.rooms = []
             self.registerNotification()
             self.loadRoomData(withNewFilterArgModel: true)
         }
@@ -232,14 +234,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(OrderTVCell.self, forCellReuseIdentifier: Constants.CELL_ORDERTV)
-        
-        
-        //        if self.allVCType == .all{
-        //            apiRouter = APIRouter.postForAll(model: roomFilter)
-        //        }else if self.allVCType == .bookmark{
-        //            //            filterArgModel =
-        //            apiRouter = APIRouter.postForBookmark(model: roomFilter)
-        //        }
+        self.rooms = []
         
     }
     
@@ -286,6 +281,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
+                self.isLoadedRoomPost = true
                 //404, cant parse
                 if error != nil{
                     DispatchQueue.main.async {
@@ -336,6 +332,7 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
                 DispatchQueue.main.async {
                     MBProgressHUD.hide(for: self.bottomView, animated: true)
                 }
+                self.isLoadedRoommatePost = true
                 //404, cant parse
                 if error != nil{
                     DispatchQueue.main.async {
@@ -453,15 +450,20 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
     //MARK: UICollectionView DataSourse and Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if segmentControl.selectedSegmentIndex == 0{
-            if rooms?.count == 0{
-                self.showNoDataView(inView: self.bottomView, withTitle: "NO_DATA".localized)
+            if  rooms?.count == 0{
+                if isLoadedRoomPost{
+                    self.showNoDataView(inView: self.bottomView, withTitle: "NO_DATA".localized)
+                }
+                
             }else{
                 self.hideNoDataView(inView: self.bottomView)
             }
             return rooms?.count ?? 0
         }else{
-            if roommates?.count == 0{
-                self.showNoDataView(inView: self.bottomView, withTitle: "NO_DATA".localized)
+            if roommates != nil && roommates?.count == 0{
+                if isLoadedRoommatePost{
+                    self.showNoDataView(inView: self.bottomView, withTitle: "NO_DATA".localized)
+                }
             }else{
                 self.hideNoDataView(inView: self.bottomView)
             }
@@ -476,9 +478,6 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
             cell.delegate = self
             cell.room = rooms?[indexPath.row]
             cell.indexPath = indexPath
-//            let tap = UITapGestureRecognizer(target: self, action: #selector(onClickImgvBookmark))
-//            
-//            cell.imgvBookMark.imgvBookMark.addGestureRecognizer(tap)
             return cell
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:Constants.CELL_ROOMMATEPOSTCV, for: indexPath) as! RoommatePostCVCell
@@ -496,18 +495,11 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
             let vc = PostDetailVC()
             vc.viewType = ViewType.roomPostDetailForFinder
             vc.room = rooms![indexPath.row]
-//            let mainVC = UIViewController()
-//            let nv = UINavigationController(rootViewController: mainVC)
-//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
-            //            present(vc, animated: true, completion: nil)
             presentInNewNavigationController(viewController: vc)
         }else{
             let vc = PostDetailVC()
             vc.viewType = ViewType.roommatePostDetailForFinder
             vc.roommate = roommates![indexPath.row]
-//            let mainVC = UIViewController()
-//            let nv = UINavigationController(rootViewController: mainVC)
-//            present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
             presentInNewNavigationController(viewController: vc)
         }
     }

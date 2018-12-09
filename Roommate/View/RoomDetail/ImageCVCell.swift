@@ -26,6 +26,8 @@ class ImageCVCell:UICollectionViewCell {
                 let tapReconizer = UITapGestureRecognizer(target: self, action: #selector(onClickImageView))
                 imgvTrash.isUserInteractionEnabled = true
                 imgvTrash.addGestureRecognizer(tapReconizer)
+            }else if imageCVCellType == .full{
+                imgvRoom.contentMode = .scaleAspectFit
             }
         }
     }

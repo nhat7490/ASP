@@ -8,7 +8,7 @@
 
 import UIKit
 import MBProgressHUD
-class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITableViewDataSource{
+class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITableViewDataSource,UserViewDelegate{
     
     lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
@@ -68,10 +68,10 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
     var bottomContainerViewHeightConstraint:NSLayoutConstraint?
     var verticalRoomViewHeightConstraint:NSLayoutConstraint?
     var rooms:[RoomMappableModel] = []
-    var currentRoomOfMember: RoomMappableModel?{
+    var currentRoomOfMember: RoomModel?{
         get{
             if let room = DBManager.shared.getSingletonModel(ofType: RoomModel.self){
-                return RoomMappableModel(roomModel: room)
+                return room
             }else{
                 return nil
             }
@@ -82,7 +82,8 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
         "TITLE_CURRENT_MEMBER_ROOM",
         "TITLE_HISTORY_MEMBER_ROOM",
         "TITLE_MEMBER_CREATED_ROOM_POST",
-        "TITLE_MEMBER_CREATED_ROOMMATE_POST"
+        "TITLE_MEMBER_CREATED_ROOMMATE_POST",
+        "TITLE_USER_RATE"
     ]
     var user:UserModel? = DBManager.shared.getUser()
     override func viewDidLoad() {
@@ -128,11 +129,11 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
         }
         
         let verticalRoomViewHeight:CGFloat = Constants.HEIGHT_DEFAULT_BEFORE_LOAD_DATA
-        topContainerViewHeight = Constants.HEIGHT_CELL_IMAGECV
+        topContainerViewHeight = Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES
         
         let bottomContainerViewHeight:CGFloat
         if accountVCType == .member{
-            bottomContainerViewHeight = Constants.HEIGHT_VIEW_USER + 4*Constants.HEIGHT_CELL_ACTIONTV + Constants.MARGIN_10
+            bottomContainerViewHeight = Constants.HEIGHT_VIEW_USER + CGFloat(accountActions.count)*Constants.HEIGHT_CELL_ACTIONTV + Constants.MARGIN_10
         }else{
             bottomContainerViewHeight = Constants.HEIGHT_VIEW_USER + verticalRoomViewHeight + Constants.MARGIN_10
         }
@@ -173,7 +174,7 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
         _ = userView.anchor(bottomContainerView.topAnchor, bottomContainerView.leftAnchor, nil, topContainerView.rightAnchor,.zero,CGSize(width: 0, height: Constants.HEIGHT_VIEW_USER))
         
         if accountVCType == .member{
-            _ = accountActionTableView.anchor(userView.bottomAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: 4*Constants.HEIGHT_CELL_ACTIONTV))
+            _ = accountActionTableView.anchor(userView.bottomAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,.zero,CGSize(width: 0, height: CGFloat(accountActions.count)*Constants.HEIGHT_CELL_ACTIONTV))
         }else{
             verticalRoomViewHeightConstraint = roomForOwnerView.anchor(userView.bottomAnchor, bottomContainerView.leftAnchor, nil, bottomContainerView.rightAnchor,UIEdgeInsets(top: Constants.MARGIN_10, left: 0, bottom: 0, right: 0),CGSize(width: 0, height: verticalRoomViewHeight))[3]
         }
@@ -186,6 +187,7 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
         //        scrollView.delegate = self
         horizontalImagesView.images = [DBManager.shared.getUser()?.imageProfile ?? ""]
         btnSetting.addTarget(self, action: #selector(onClickBtnSetting), for: .touchUpInside)
+        userView.delegage = self
         if accountVCType == .member{
             accountActionTableView.delegate = self
             accountActionTableView.dataSource = self
@@ -196,11 +198,14 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
             roomForOwnerView.delegate = self
             loadRemoteDataForRoomOwner()
         }
+        userView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTabUserView)))
         
         
     }
     
-    
+    @objc func onTabUserView(){
+        print("Touch userview")
+    }
     func registerNotification(){
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
@@ -260,22 +265,22 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
         _ = DBManager.shared.deleteAllRecords(ofType: RoomModel.self)
         
     }
-    //    func updateUIForRoleInRoomNotification(_ notification:Notification){
-    //        DispatchQueue.main.async {
-    //            let hub = MBProgressHUD.showAdded(to: self.bottomContainerView, animated: true)
-    //            hub.mode = .indeterminate
-    //            hub.bezelView.backgroundColor = .white
-    //            hub.contentColor = .defaultBlue
-    //        }
-    //         DispatchQueue.global(qos: .background).async {
-    //            self.requestCurrentRoom()
-    //            DispatchQueue.main.async {
-    //                MBProgressHUD.hide(for: self.bottomContainerView, animated: true)
-    //            }
-    //        }
-    //
-    //    }
-    
+//    func updateUIForRoleInRoomNotification(_ notification:Notification){
+//            DispatchQueue.main.async {
+//                let hub = MBProgressHUD.showAdded(to: self.bottomContainerView, animated: true)
+//                hub.mode = .indeterminate
+//                hub.bezelView.backgroundColor = .white
+//                hub.contentColor = .defaultBlue
+//            }
+//             DispatchQueue.global(qos: .background).async {
+//                self.requestCurrentRoom()
+//                DispatchQueue.main.async {
+//                    MBProgressHUD.hide(for: self.bottomContainerView, animated: true)
+//                }
+//            }
+//
+//        }
+//
     //MARK: Load Remote Data for room owner
     
     func loadRemoteDataForRoomOwner(){
@@ -350,53 +355,6 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
             })
         }
     }
-    //MARK: Load Remote Data for room member
-    //    func loadRemoteDataForRoomMember(){
-    //        if !APIConnection.isConnectedInternet(){
-    //            showErrorView(inView: self.view, withTitle: "NETWORK_STATUS_CONNECTED_REQUEST_ERROR_MESSAGE".localized) {
-    //
-    //            }
-    //        }else{
-    //            self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
-    //                self.currentRoomOfMember = RoomMappableModel(roomModel: DBManager.shared.getSingletonModel(ofType: RoomModel.self)!)
-    //            }
-    //        }
-    //        self.checkAndLoadInitData(inView: self.view) { () -> (Void) in
-    //            if let room = DBManager.shared.getSingletonModel(ofType: RoomModel.self){
-    //                self.currentRoomOfMember = RoomMappableModel(roomModel: room)
-    //            }
-    
-    //        }
-    
-    //    }
-    
-    //    func requestCurrentRoom(view:UIView){
-    //        DispatchQueue.main.async {
-    //            let hub = MBProgressHUD.showAdded(to: view, animated: true)
-    //            hub.mode = .indeterminate
-    //            hub.bezelView.backgroundColor = .white
-    //            hub.contentColor = .defaultBlue
-    //        }
-    //        APIConnection.requestObject(apiRouter: APIRouter.getCurrentRoom(userId: user!.userId), errorNetworkConnectedHander: {
-    //            APIResponseAlert.defaultAPIResponseError(controller: self, error: .HTTP_ERROR)
-    //        }, returnType: RoomMappableModel.self){ (value, error, statusCode) -> (Void) in
-    //            DispatchQueue.main.async {
-    //                MBProgressHUD.hide(for: view, animated: true)
-    //            }
-    //            if error == .SERVER_NOT_RESPONSE{
-    //                APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
-    //            }else if error == .PARSE_RESPONSE_FAIL{
-    //                APIResponseAlert.defaultAPIResponseError(controller: self, error: .PARSE_RESPONSE_FAIL)
-    //            }else{
-    //                if statusCode == .OK{
-    //                    if let value = value{
-    //                        self.currentRoomOfMember = value
-    //                        DBManager.shared.addSingletonModel(ofType: RoomModel.self, object: RoomModel(roomResponseModel: value))
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
     
     //MARK: UIScrollviewDelegate
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -410,6 +368,13 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
             }
         }
     }
+    //MARK: UserViewDelegate
+    func userViewDelegate(onSelectedUserView view: UserView) {
+        let vc = ProfireVC()
+        vc.profireVCType = .normal
+        presentInNewNavigationController(viewController: vc, flag: false, animated: true)
+    }
+    
     //MARK: VerticalPostViewDelegate
     func verticalCollectionViewDelegate(verticalPostView view:VerticalCollectionView,collectionCell cell: UICollectionViewCell, didSelectCellAt indexPath: IndexPath?){
         let vc = RoomDetailVC()
@@ -454,14 +419,11 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
         let vc = ShowAllVC()
         switch indexPath.row {
         case 0:
-            if let room = currentRoomOfMember{
+            if let _ = currentRoomOfMember{
                 let vc = RoomDetailVC()
-                vc.viewType = .detailForMember
-                vc.room = room
-                //                let mainVC = UIViewController()
-                //                let nv = UINavigationController(rootViewController: mainVC)
-                //                present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
+                vc.viewType = .currentDetailForMember
                 presentInNewNavigationController(viewController: vc)
+//
             }else{
                 AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage:  "TITLE_MEMBER_NO_CURRENT_ROOM".localized, inViewController: self)
             }
@@ -472,6 +434,9 @@ class AccountVC:BaseVC,VerticalCollectionViewDelegate,UITableViewDelegate,UITabl
             vc.showAllVCType = .roomPostForCreatedUser
         case 3:
             vc.showAllVCType = .roommatePostForCreatedUser
+        case 4:
+            vc.showAllVCType = .userRate
+            vc.userId = user?.userId ?? 0
         default:
             break
             

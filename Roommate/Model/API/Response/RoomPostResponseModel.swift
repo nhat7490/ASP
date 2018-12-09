@@ -16,6 +16,10 @@ class RoomPostResponseModel:BasePostResponseModel {
     var imageUrls: [String]?
     var numberPartner, genderPartner: Int!
     var postDesription: String?
+    var avarageSecurity = 0.0
+    var avarageLocation = 0.0
+    var avarageUtility = 0.0
+    var roomRateResponseModels:[RoomRateResponseModel]?
     var model:RoomPostRequestModel!{
         didSet{
             self.postId = model.postId
@@ -45,6 +49,10 @@ class RoomPostResponseModel:BasePostResponseModel {
         numberPartner <- map["numberPartner"]
         genderPartner <- map["genderPartner"]
         postDesription <- map["description"]
+        avarageSecurity <- map["avarageSecurity"]
+        avarageLocation <- map["avarageLocation"]
+        avarageUtility <- map["avarageUtility"]
+        roomRateResponseModels <- map["roomRateResponseModels"]
     }
     
     

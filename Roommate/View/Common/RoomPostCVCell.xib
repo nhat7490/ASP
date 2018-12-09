@@ -28,9 +28,6 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aSQ-nj-pSt">
                                         <rect key="frame" x="0.0" y="0.0" width="266" height="120"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="120" id="gAo-Mj-G3x"/>
-                                        </constraints>
                                     </imageView>
                                     <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sWY-m3-Ocl">
                                         <rect key="frame" x="232" y="10" width="24" height="24"/>
@@ -45,6 +42,7 @@
                                     <constraint firstAttribute="bottom" secondItem="aSQ-nj-pSt" secondAttribute="bottom" id="264-cJ-pQr"/>
                                     <constraint firstAttribute="trailing" secondItem="aSQ-nj-pSt" secondAttribute="trailing" id="4H7-pa-WHf"/>
                                     <constraint firstItem="aSQ-nj-pSt" firstAttribute="top" secondItem="gbH-Vk-8lM" secondAttribute="top" id="79E-kL-bym"/>
+                                    <constraint firstAttribute="height" constant="120" id="Csw-GH-UVz"/>
                                     <constraint firstItem="aSQ-nj-pSt" firstAttribute="leading" secondItem="gbH-Vk-8lM" secondAttribute="leading" id="eX5-1W-jtr"/>
                                     <constraint firstAttribute="trailing" secondItem="sWY-m3-Ocl" secondAttribute="trailing" constant="10" id="jtX-C5-fd2"/>
                                     <constraint firstItem="sWY-m3-Ocl" firstAttribute="top" secondItem="gbH-Vk-8lM" secondAttribute="top" constant="10" id="u20-Uh-MfC"/>
@@ -112,10 +110,10 @@
                         <constraints>
                             <constraint firstItem="oNx-mc-Vxj" firstAttribute="leading" secondItem="eY3-Sp-fsz" secondAttribute="leading" id="H5I-KD-t5o"/>
                             <constraint firstItem="gbH-Vk-8lM" firstAttribute="top" secondItem="eY3-Sp-fsz" secondAttribute="top" id="NHs-Tc-s2F"/>
-                            <constraint firstAttribute="bottom" secondItem="oNx-mc-Vxj" secondAttribute="bottom" id="RHi-gb-h85"/>
                             <constraint firstItem="gbH-Vk-8lM" firstAttribute="leading" secondItem="eY3-Sp-fsz" secondAttribute="leading" id="TMj-fC-gMJ"/>
                             <constraint firstAttribute="trailing" secondItem="oNx-mc-Vxj" secondAttribute="trailing" id="tRa-BO-KLY"/>
                             <constraint firstAttribute="trailing" secondItem="gbH-Vk-8lM" secondAttribute="trailing" id="y38-0l-OEd"/>
+                            <constraint firstItem="oNx-mc-Vxj" firstAttribute="top" secondItem="gbH-Vk-8lM" secondAttribute="bottom" id="y86-nH-goZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="oWc-p7-z5u"/>
                     </view>
@@ -128,7 +126,7 @@
                 <constraint firstItem="eY3-Sp-fsz" firstAttribute="leading" secondItem="2SJ-MI-AuK" secondAttribute="leading" id="pzb-ES-9e7"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="EHR-SE-f2R"/>
-            <size key="customSize" width="266" height="171"/>
+            <size key="customSize" width="266" height="153"/>
             <connections>
                 <outlet property="imgvAvatar" destination="aSQ-nj-pSt" id="CWb-t5-q83"/>
                 <outlet property="imgvBookMark" destination="sWY-m3-Ocl" id="K3G-7c-jSQ"/>
@@ -137,7 +135,7 @@
                 <outlet property="tvNumberOfPatner" destination="iLF-fF-CL6" id="XHT-6B-lmS"/>
                 <outlet property="tvPrice" destination="Dnr-NV-M4o" id="Mv0-Cq-Zrq"/>
             </connections>
-            <point key="canvasLocation" x="332" y="-33.5"/>
+            <point key="canvasLocation" x="332" y="-43"/>
         </collectionViewCell>
     </objects>
 </document>

@@ -8,7 +8,7 @@
 
 import UIKit
 import MBProgressHUD
-class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDelegate{
+class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDelegate, RateViewDelegate,HorizontalImagesViewDelegate{
     var room:RoomPostResponseModel!
     var roommate:RoommatePostResponseModel!
     lazy var scrollView:UIScrollView = {
@@ -35,10 +35,10 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
         return bv
     }()
     
-    lazy var genderView:GenderView = {
-        let gv:GenderView = .fromNib()
-        return gv
-    }()
+//    lazy var genderView:GenderView = {
+//        let gv:GenderView = .fromNib()
+//        return gv
+//    }()
     
     //    var membersView:MembersView = {
     //        let mv:MembersView = .fromNib()
@@ -56,6 +56,11 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
         return dv
     }()
     
+    lazy var rateView:RateView = {
+        let rv:RateView = .fromNib()
+        return rv
+    }()
+    
     lazy var optionView:OptionView = {
         let ov:OptionView = .fromNib()
         return ov
@@ -64,6 +69,8 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
     var viewType:ViewType = .roomPostDetailForFinder
     var contentViewHeightConstraint:NSLayoutConstraint?
     var utilitiesViewHeightConstraint:NSLayoutConstraint?
+    var descriptionViewHeightConstraint:NSLayoutConstraint?
+    var rateViewHeightConstraint:NSLayoutConstraint?
     
     
     override func viewDidLoad() {
@@ -72,7 +79,10 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
         setData()
         registerNotification()
     }
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+    }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         print(scrollView.contentSize)
@@ -90,18 +100,7 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
             self.automaticallyAdjustsScrollViewInsets = false
         }
         
-        //Caculator height
-        let padding:UIEdgeInsets = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
-        let numberOfRow:Int
-        if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser{
-            numberOfRow = (room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1)
-        }else{
-            numberOfRow = (roommate.utilityIds.count%2==0 ? roommate.utilityIds.count/2 : roommate.utilityIds.count/2+1)
-        }
         
-        let heightBaseInformationView:CGFloat  = ((viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? Constants.HEIGHT_VIEW_BASE_INFORMATION : Constants.HEIGHT_VIEW_BASE_INFORMATION-30.0 )
-        let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
-        let totalContentViewHeight = (viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+heightBaseInformationView+Constants.HEIGHT_VIEW_GENDER + Constants.HEIGHT_VIEW_DESCRIPTION + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE) : CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + utilitiesViewHeight - 30)
         
         //Add View
         view.addSubview(scrollView)
@@ -110,10 +109,36 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
         contentView.addSubview(horizontalImagesView)
         contentView.addSubview(baseInformationView)
         contentView.addSubview(utilitiesView)
+        contentView.addSubview(rateView)
         if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser {
-            contentView.addSubview(genderView)
+//            contentView.addSubview(genderView)
             contentView.addSubview(descriptionsView)
         }
+        
+        //Caculator height
+        let padding:UIEdgeInsets = UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10)
+        let numberOfRow:Int
+        var descriptionViewHeight:CGFloat = 0.0
+        var rateViewHeight:CGFloat = 0.0
+        if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser{
+            descriptionsView.text = room.postDesription
+            let size = CGSize(width: view.frame.width, height: .infinity)
+            let estimateSize = descriptionsView.tvContent.sizeThatFits(size)
+            descriptionViewHeight  = estimateSize.height + 30.0
+            numberOfRow = (room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1)
+            
+            rateViewHeight = (room.roomRateResponseModels?.count ?? 0) == 0 ? 80.0 : (110+Constants.HEIGHT_CELL_RATECV*CGFloat(room.roomRateResponseModels!.count))
+        }else{
+            numberOfRow = (roommate.utilityIds.count%2==0 ? roommate.utilityIds.count/2 : roommate.utilityIds.count/2+1)
+            rateViewHeight = (roommate.userResponseModel?.userRateResponseModels?.count ?? 0) == 0 ? 80.0 : (110+Constants.HEIGHT_CELL_RATECV*CGFloat(roommate.userResponseModel!.userRateResponseModels!.count))
+        }
+        
+        
+        let heightBaseInformationView:CGFloat  = ((viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? Constants.HEIGHT_VIEW_BASE_INFORMATION : Constants.HEIGHT_VIEW_BASE_INFORMATION-30.0 )
+        
+        
+        let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
+        let totalContentViewHeight = (viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+heightBaseInformationView + descriptionViewHeight  + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE)+rateViewHeight : CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + utilitiesViewHeight - 30)+rateViewHeight
         
         
         
@@ -132,39 +157,57 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
         _ = horizontalImagesView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero ,CGSize(width: 0, height: Constants.HEIGHT_CELL_IMAGECV))
         _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height:heightBaseInformationView ))[3]
         if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser {
-            _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
-            utilitiesViewHeightConstraint = utilitiesView.anchor(genderView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
-            _ = descriptionsView.anchor(utilitiesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_DESCRIPTION))
+//            _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
+            utilitiesViewHeightConstraint = utilitiesView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
+            descriptionViewHeightConstraint = descriptionsView.anchor(utilitiesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: descriptionViewHeight))[3]
+            rateViewHeightConstraint = rateView.anchor(descriptionsView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: rateViewHeight))[3]
         }else{
             utilitiesViewHeightConstraint = utilitiesView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
+            rateViewHeightConstraint = rateView.anchor(utilitiesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: rateViewHeight))[3]
         }
     }
     func updateUI(){
         contentView.translatesAutoresizingMaskIntoConstraints = false
         baseInformationView.translatesAutoresizingMaskIntoConstraints = false
         utilitiesView.translatesAutoresizingMaskIntoConstraints = false
+        descriptionsView.translatesAutoresizingMaskIntoConstraints = false
+        rateView.translatesAutoresizingMaskIntoConstraints = false
         
         let numberOfRow:Int
+        var descriptionViewHeight:CGFloat = 0.0
+        var rateViewHeight:CGFloat = 0.0
         if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser{
+            descriptionsView.text = room.postDesription
+            let size = CGSize(width: view.frame.width, height: .infinity)
+            let estimateSize = descriptionsView.tvContent.sizeThatFits(size)
+            descriptionViewHeight  = estimateSize.height + 30.0
             numberOfRow = (room.utilities.count%2==0 ? room.utilities.count/2 : room.utilities.count/2+1)
+            
+            rateViewHeight = (room.roomRateResponseModels?.count ?? 0) == 0 ? 80.0 : (110+Constants.HEIGHT_CELL_RATECV*CGFloat(room.roomRateResponseModels!.count))
         }else{
             numberOfRow = (roommate.utilityIds.count%2==0 ? roommate.utilityIds.count/2 : roommate.utilityIds.count/2+1)
+            rateViewHeight = (roommate.userResponseModel?.userRateResponseModels?.count ?? 0) == 0 ? 80.0 : (110+Constants.HEIGHT_CELL_RATECV*CGFloat(roommate.userResponseModel!.userRateResponseModels!.count))
         }
+        
         
         let heightBaseInformationView:CGFloat  = ((viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? Constants.HEIGHT_VIEW_BASE_INFORMATION : Constants.HEIGHT_VIEW_BASE_INFORMATION-30.0 )
         let utilitiesViewHeight =  Constants.HEIGHT_CELL_UTILITYCV * CGFloat(numberOfRow) + 60.0
-        let totalContentViewHeight = (viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+heightBaseInformationView+Constants.HEIGHT_VIEW_GENDER + Constants.HEIGHT_VIEW_DESCRIPTION + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE) : CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + utilitiesViewHeight - 30)
+    
+        let totalContentViewHeight = (viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser) ? CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+heightBaseInformationView + descriptionViewHeight + utilitiesViewHeight+Constants.HEIGHT_LARGE_SPACE)+rateViewHeight : CGFloat(Constants.HEIGHT_VIEW_HORIZONTAL_IMAGES+Constants.HEIGHT_VIEW_BASE_INFORMATION + utilitiesViewHeight - 30)+rateViewHeight
         
         
         
         utilitiesViewHeightConstraint?.constant = utilitiesViewHeight
         contentViewHeightConstraint?.constant = totalContentViewHeight
+        descriptionViewHeightConstraint?.constant = descriptionViewHeight
+        rateViewHeightConstraint?.constant = rateViewHeight
         view.layoutIfNeeded()
     }
     func setData() {
-        
+        rateView.delegate = self
         baseInformationView.viewType = viewType
-        genderView.viewType = viewType
+        horizontalImagesView.delegate = self
+//        genderView.viewType = viewType
         if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser {
             //Data for horizontalImagesView
             
@@ -180,7 +223,7 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
             baseInformationView.roomPost = room
             
             //Data for genderview
-            genderView.genderSelect = GenderSelect(rawValue: room.genderPartner!)
+//            genderView.genderSelect = GenderSelect(rawValue: room.genderPartner!)
             
             //Data for descriptionView
             descriptionsView.viewType = viewType
@@ -189,6 +232,10 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
             
             //Data for utilityView
             utilitiesView.utilities = room.utilities
+            
+            //Data for rateView
+            rateView.rateViewType = .roomPost
+            rateView.roomPostResponseModel = room
             
             //Data for optionView
             optionView.tvPrice.text =  String(format: "PRICE_OF_ROOM".localized, room.minPrice!.formatString,"MONTH".localized)
@@ -207,6 +254,9 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
             }
             utilitiesView.utilities = utilities
             
+            //Data for rateView
+            rateView.rateViewType = RateViewType.roommatePost
+            rateView.roommatePostResponseModel = roommate
             
             //Data for optionView
             optionView.tvPrice.text =  String(format: "PRICE_OF_ROOMMATE".localized, roommate.minPrice.formatString,roommate.maxPrice.formatString,"MONTH".localized)
@@ -251,7 +301,34 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
             self.setData()
         }
     }
-    
+    //MARK: HorizontalImagesViewDelegate
+    func horizontalImagesViewDelegate(horizontalImagesView view: HorizontalImagesView, didSelectImageAtIndextPath indexPath: IndexPath) {
+        let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_IMAGES, sbName: Constants.STORYBOARD_MAIN) as! ImagesVC
+        if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser {
+            vc.imageUrls = room.imageUrls
+        }else{
+            vc.imageUrls = [(roommate.userResponseModel?.imageProfile ?? "")]
+        }
+        vc.indexPath = indexPath
+        vc.view.frame.size = self.view.frame.size
+        vc.definesPresentationContext = true
+        vc.modalTransitionStyle  = .crossDissolve
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: true, completion: nil)
+    }
+    //MARK: RateViewDelegate
+    func rateViewDelegate(rateView view: RateView, onClickButton button: UIButton) {
+        let vc = ShowAllVC()
+         if viewType == .roomPostDetailForFinder || viewType == .roomPostDetailForCreatedUser {
+            vc.showAllVCType = .roomRate
+            vc.postId = room.postId
+         }else{
+            vc.showAllVCType = .userRate
+            vc.userId = roommate.userResponseModel!.userId
+        }
+        
+        presentInNewNavigationController(viewController: vc)
+    }
     //MARK: OptionViewDelegate
     func optionViewDelegate(view optionView: OptionView, onClickBtnLeft btnLeft: UIButton) {
         //Valid information at time input. So we dont need to valid here
@@ -260,12 +337,13 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
                 let vc = CERoomPostVC()
                 vc.cERoomPostVCType = .edit
                 vc.roomPostRequestModel = RoomPostRequestModel(model: room)
-                presentInNewNavigationController(viewController: vc,flag: false)
+                self.navigationController?.pushViewController(vc, animated: true)
             }else{
                 let vc = CERoommatePostVC()
                 vc.cERoommateVCType = .edit
                 vc.roommatePostRequestModel = RoommatePostRequestModel(model: roommate)
-                presentInNewNavigationController(viewController: vc,flag: false)
+                self.navigationController?.pushViewController(vc, animated: true)
+//                presentInNewNavigationController(viewController: vc,flag: false)
             }
         }else if viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
             AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_MESSAGE_POST_SMS_ALERT".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_BUTTON_MESSAGE".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in

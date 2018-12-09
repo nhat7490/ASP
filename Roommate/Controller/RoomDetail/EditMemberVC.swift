@@ -86,6 +86,7 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
         
         //Title
         navigationItem.title = "EDIT_MEMBER_VC".localized
+        setBackButtonForNavigationBar()
         
         //Back button on navigation bar
 //        let backImage = UIImage(named: "back")
@@ -175,7 +176,16 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
         }
         membersView.members = copyRoom?.members
     }
-    
+    func membersViewDelegate(membersView view: MembersView, onSelectRowAtIndexPath indexPath: IndexPath?) {
+        guard let row = indexPath?.row, let member = copyRoom.members?[row]  else {
+            return
+        }
+        let vc = ProfireVC()
+        vc.hasBackImageButtonInNavigationBar = true
+        vc.profireVCType = .memberInfor
+        vc.userId = member.userId
+        presentInNewNavigationController(viewController: vc, flag: false, animated: true)
+    }
     //MARK: AddMemberViewDelegate
     func addMemberViewDelegate(addMemberView view: AddMemberView, shouldChangeCharactersTo string: String) -> Bool {
         username = string

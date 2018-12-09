@@ -21,10 +21,15 @@
 		690A61E02176611400BA9564 /* CustomListTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A61DF2176611400BA9564 /* CustomListTransform.swift */; };
 		690A61E221766E9C00BA9564 /* RoomPostResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A61E121766E9C00BA9564 /* RoomPostResponseModel.swift */; };
 		690A61E42176850500BA9564 /* UserResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A61E32176850500BA9564 /* UserResponseModel.swift */; };
+		690A95BC21B781A800D838D2 /* UserRateRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A95BB21B781A800D838D2 /* UserRateRequestModel.swift */; };
+		690A95BE21B7827B00D838D2 /* BaseRateRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A95BD21B7827B00D838D2 /* BaseRateRequestModel.swift */; };
+		690A95C021B7835F00D838D2 /* RoomRateRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A95BF21B7835F00D838D2 /* RoomRateRequestModel.swift */; };
 		690B2065215BA0DE00DAD053 /* RoomDetailForMasterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */; };
 		690B2067215BA14500DAD053 /* PostDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690B2066215BA14500DAD053 /* PostDetailVC.swift */; };
 		690BA6DE218F8FE3003C38F2 /* RoomMemberRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690BA6DD218F8FE3003C38F2 /* RoomMemberRequestModel.swift */; };
 		690BA6E0218F902A003C38F2 /* MemberRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690BA6DF218F902A003C38F2 /* MemberRequestModel.swift */; };
+		690F133B21B8EC8500F4F50D /* RateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690F133A21B8EC8500F4F50D /* RateView.swift */; };
+		690F133D21B8EC9E00F4F50D /* RateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 690F133C21B8EC9E00F4F50D /* RateView.xib */; };
 		6913339F21922BB800AE8A69 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6913339E21922BB800AE8A69 /* Toast.swift */; };
 		691727B0215509D100104A19 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 691727B2215509D100104A19 /* Localizable.strings */; };
 		691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691727B62155122D00104A19 /* NotificationCVCell.swift */; };
@@ -81,10 +86,13 @@
 		6943D99C2153F484002CFEBB /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D99B2153F484002CFEBB /* SettingVC.swift */; };
 		6943D9A02153F55F002CFEBB /* PolicyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D99F2153F55F002CFEBB /* PolicyVC.swift */; };
 		6943D9A22153F572002CFEBB /* IntroduceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A12153F572002CFEBB /* IntroduceVC.swift */; };
-		6943D9A42153F5B8002CFEBB /* FeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A32153F5B8002CFEBB /* FeedbackVC.swift */; };
+		6943D9A42153F5B8002CFEBB /* ImagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A32153F5B8002CFEBB /* ImagesVC.swift */; };
 		6943D9AA2153F65E002CFEBB /* RoleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9A92153F65E002CFEBB /* RoleVC.swift */; };
 		6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943D9AD2153FA14002CFEBB /* LocalizationPreferences.swift */; };
 		6943EE5D21AFDCEC00A61DDE /* RateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943EE5C21AFDCEC00A61DDE /* RateVC.swift */; };
+		6949498D21B865F200669E1E /* BaseRateResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6949498C21B865F200669E1E /* BaseRateResponseModel.swift */; };
+		6949498F21B866F000669E1E /* UserRateResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6949498E21B866F000669E1E /* UserRateResponseModel.swift */; };
+		6949499121B8678500669E1E /* RoomRateResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6949499021B8678500669E1E /* RoomRateResponseModel.swift */; };
 		6953440221A67E9B0027D84B /* IconTitleCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953440021A67E9B0027D84B /* IconTitleCVCell.swift */; };
 		6953440321A67E9B0027D84B /* IconTitleCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6953440121A67E9B0027D84B /* IconTitleCVCell.xib */; };
 		695B1A2D21898BA900C004DB /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695B1A2C21898BA900C004DB /* SettingModel.swift */; };
@@ -99,6 +107,7 @@
 		69678D7121779E52001F4352 /* RoomPostCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69678D7021779E52001F4352 /* RoomPostCVCell.swift */; };
 		696BF5C421A706940045438A /* CERoommatePostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696BF5C321A706940045438A /* CERoommatePostVC.swift */; };
 		696BF5C621A707120045438A /* SuggestSettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696BF5C521A707120045438A /* SuggestSettingModel.swift */; };
+		696D338F21BA110A003E1564 /* EditProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696D338E21BA110A003E1564 /* EditProfileVC.swift */; };
 		6976126321A7D12B00AC2B26 /* SuggestSettingMappableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976126221A7D12B00AC2B26 /* SuggestSettingMappableModel.swift */; };
 		6977C7F42162269F003C58F4 /* BaseInformationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6977C7F32162269F003C58F4 /* BaseInformationView.xib */; };
 		6977C7F6216229A6003C58F4 /* Room.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6977C7F5216229A6003C58F4 /* Room.storyboard */; };
@@ -135,6 +144,8 @@
 		69AD7640218B591C0073CD27 /* MemberResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD763F218B591C0073CD27 /* MemberResponseModel.swift */; };
 		69AD7644218B5F8E0073CD27 /* RoomCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69AD7642218B5F8E0073CD27 /* RoomCVCell.xib */; };
 		69AD7646218B66850073CD27 /* RoomCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD7645218B66850073CD27 /* RoomCVCell.swift */; };
+		69AE2E9021BCB76C006B7428 /* ChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE2E8F21BCB76C006B7428 /* ChangePasswordVC.swift */; };
+		69AE2E9221BCBCAD006B7428 /* ChangePasswordRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE2E9121BCBCAD006B7428 /* ChangePasswordRequestModel.swift */; };
 		69AEE78521A9B9980016C9E1 /* RoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AEE78421A9B9980016C9E1 /* RoomModel.swift */; };
 		69AFA9D921837C3D004244C6 /* GPAutocompletePrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AFA9D821837C3D004244C6 /* GPAutocompletePrediction.swift */; };
 		69AFA9DB21837CC2004244C6 /* GPPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AFA9DA21837CC2004244C6 /* GPPrediction.swift */; };
@@ -215,10 +226,15 @@
 		690A61DF2176611400BA9564 /* CustomListTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListTransform.swift; sourceTree = "<group>"; };
 		690A61E121766E9C00BA9564 /* RoomPostResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPostResponseModel.swift; sourceTree = "<group>"; };
 		690A61E32176850500BA9564 /* UserResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponseModel.swift; sourceTree = "<group>"; };
+		690A95BB21B781A800D838D2 /* UserRateRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRateRequestModel.swift; sourceTree = "<group>"; };
+		690A95BD21B7827B00D838D2 /* BaseRateRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRateRequestModel.swift; sourceTree = "<group>"; };
+		690A95BF21B7835F00D838D2 /* RoomRateRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomRateRequestModel.swift; sourceTree = "<group>"; };
 		690B2064215BA0DE00DAD053 /* RoomDetailForMasterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailForMasterVC.swift; sourceTree = "<group>"; };
 		690B2066215BA14500DAD053 /* PostDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailVC.swift; sourceTree = "<group>"; };
 		690BA6DD218F8FE3003C38F2 /* RoomMemberRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberRequestModel.swift; sourceTree = "<group>"; };
 		690BA6DF218F902A003C38F2 /* MemberRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberRequestModel.swift; sourceTree = "<group>"; };
+		690F133A21B8EC8500F4F50D /* RateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateView.swift; sourceTree = "<group>"; };
+		690F133C21B8EC9E00F4F50D /* RateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RateView.xib; sourceTree = "<group>"; };
 		6913339E21922BB800AE8A69 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		691727AC2155099700104A19 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		691727AD2155099C00104A19 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -278,10 +294,13 @@
 		6943D99B2153F484002CFEBB /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6943D99F2153F55F002CFEBB /* PolicyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyVC.swift; sourceTree = "<group>"; };
 		6943D9A12153F572002CFEBB /* IntroduceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceVC.swift; sourceTree = "<group>"; };
-		6943D9A32153F5B8002CFEBB /* FeedbackVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackVC.swift; sourceTree = "<group>"; };
+		6943D9A32153F5B8002CFEBB /* ImagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesVC.swift; sourceTree = "<group>"; };
 		6943D9A92153F65E002CFEBB /* RoleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleVC.swift; sourceTree = "<group>"; };
 		6943D9AD2153FA14002CFEBB /* LocalizationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationPreferences.swift; sourceTree = "<group>"; };
 		6943EE5C21AFDCEC00A61DDE /* RateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateVC.swift; sourceTree = "<group>"; };
+		6949498C21B865F200669E1E /* BaseRateResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRateResponseModel.swift; sourceTree = "<group>"; };
+		6949498E21B866F000669E1E /* UserRateResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRateResponseModel.swift; sourceTree = "<group>"; };
+		6949499021B8678500669E1E /* RoomRateResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomRateResponseModel.swift; sourceTree = "<group>"; };
 		694F2FF8216BF00E0005323A /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		694F2FFA216BF00E0005323A /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6953440021A67E9B0027D84B /* IconTitleCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTitleCVCell.swift; sourceTree = "<group>"; };
@@ -299,6 +318,7 @@
 		69678D7021779E52001F4352 /* RoomPostCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPostCVCell.swift; sourceTree = "<group>"; };
 		696BF5C321A706940045438A /* CERoommatePostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CERoommatePostVC.swift; sourceTree = "<group>"; };
 		696BF5C521A707120045438A /* SuggestSettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestSettingModel.swift; sourceTree = "<group>"; };
+		696D338E21BA110A003E1564 /* EditProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileVC.swift; sourceTree = "<group>"; };
 		6976126221A7D12B00AC2B26 /* SuggestSettingMappableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestSettingMappableModel.swift; sourceTree = "<group>"; };
 		6977C7F32162269F003C58F4 /* BaseInformationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseInformationView.xib; sourceTree = "<group>"; };
 		6977C7F5216229A6003C58F4 /* Room.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Room.storyboard; sourceTree = "<group>"; };
@@ -339,6 +359,8 @@
 		69AD763F218B591C0073CD27 /* MemberResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberResponseModel.swift; sourceTree = "<group>"; };
 		69AD7642218B5F8E0073CD27 /* RoomCVCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RoomCVCell.xib; sourceTree = "<group>"; };
 		69AD7645218B66850073CD27 /* RoomCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCVCell.swift; sourceTree = "<group>"; };
+		69AE2E8F21BCB76C006B7428 /* ChangePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordVC.swift; sourceTree = "<group>"; };
+		69AE2E9121BCBCAD006B7428 /* ChangePasswordRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordRequestModel.swift; sourceTree = "<group>"; };
 		69AEE78421A9B9980016C9E1 /* RoomModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoomModel.swift; path = ../../../../../../../Downloads/RoomModel.swift; sourceTree = "<group>"; };
 		69AFA9D821837C3D004244C6 /* GPAutocompletePrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPAutocompletePrediction.swift; sourceTree = "<group>"; };
 		69AFA9DA21837CC2004244C6 /* GPPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPPrediction.swift; sourceTree = "<group>"; };
@@ -513,13 +535,15 @@
 		6943D9922153F2F2002CFEBB /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				696D338E21BA110A003E1564 /* EditProfileVC.swift */,
 				6943D96D2153F07C002CFEBB /* AccountVC.swift */,
 				6943D9972153F462002CFEBB /* SuggestSettingVC.swift */,
 				6943D9992153F46E002CFEBB /* ProfileVC.swift */,
 				6943D99B2153F484002CFEBB /* SettingVC.swift */,
 				6943D99F2153F55F002CFEBB /* PolicyVC.swift */,
 				6943D9A12153F572002CFEBB /* IntroduceVC.swift */,
-				6943D9A32153F5B8002CFEBB /* FeedbackVC.swift */,
+				6943D9A32153F5B8002CFEBB /* ImagesVC.swift */,
+				69AE2E8F21BCB76C006B7428 /* ChangePasswordVC.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -567,6 +591,10 @@
 				C0D684229EE8897A226ADC20 /* RoomPostRequestModel.swift */,
 				C0D687CC03309A09A15B6DCA /* BasePostRequestModel.swift */,
 				C0D68E80AC0B1DB9F607C64C /* RoommatePostRequestModel.swift */,
+				690A95BB21B781A800D838D2 /* UserRateRequestModel.swift */,
+				690A95BD21B7827B00D838D2 /* BaseRateRequestModel.swift */,
+				690A95BF21B7835F00D838D2 /* RoomRateRequestModel.swift */,
+				69AE2E9121BCBCAD006B7428 /* ChangePasswordRequestModel.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -585,6 +613,9 @@
 				690A61E121766E9C00BA9564 /* RoomPostResponseModel.swift */,
 				6993A72B217CBC3B00E8112C /* RoommatePostResponseModel.swift */,
 				692EE6712181F70B004E5D10 /* BasePostResponseModel.swift */,
+				6949498C21B865F200669E1E /* BaseRateResponseModel.swift */,
+				6949498E21B866F000669E1E /* UserRateResponseModel.swift */,
+				6949499021B8678500669E1E /* RoomRateResponseModel.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -740,6 +771,8 @@
 				69FCC85D21AEFE4100D187C1 /* RateCVCell.xib */,
 				69CD774A21B3BC040077FD3C /* SingleRateView.swift */,
 				69CD774C21B3BC190077FD3C /* SingleRateView.xib */,
+				690F133A21B8EC8500F4F50D /* RateView.swift */,
+				690F133C21B8EC9E00F4F50D /* RateView.xib */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1062,6 +1095,7 @@
 				69CD774D21B3BC190077FD3C /* SingleRateView.xib in Resources */,
 				6943D9662153EBF7002CFEBB /* All.storyboard in Resources */,
 				69BA0D7B2167D16B006AEEDC /* UtilityDetailView.xib in Resources */,
+				690F133D21B8EC9E00F4F50D /* RateView.xib in Resources */,
 				6977C7F42162269F003C58F4 /* BaseInformationView.xib in Resources */,
 				695B1A362189C6D000C004DB /* Info.plist in Resources */,
 				69D00ED92160B93100FF034E /* PopupSelectListTVCell.xib in Resources */,
@@ -1191,8 +1225,10 @@
 				69A02FB721538C930087897F /* MainViewVC.swift in Sources */,
 				6943D9782153F0C9002CFEBB /* FirstLaunchVC.swift in Sources */,
 				69AFA9DB21837CC2004244C6 /* GPPrediction.swift in Sources */,
+				69AE2E9021BCB76C006B7428 /* ChangePasswordVC.swift in Sources */,
 				695B1A2D21898BA900C004DB /* SettingModel.swift in Sources */,
 				04D77E452158AFD70045C45C /* CustomSegmentedControl.swift in Sources */,
+				6949498F21B866F000669E1E /* UserRateResponseModel.swift in Sources */,
 				6943D9982153F462002CFEBB /* SuggestSettingVC.swift in Sources */,
 				692268CF21B701AC00598A98 /* BaseAutoHideNavigationVC.swift in Sources */,
 				69F0FACC21B257990005B205 /* RoomPostMappableModel.swift in Sources */,
@@ -1202,6 +1238,7 @@
 				692E8F9F21634EF700AF5927 /* MemberTVCell.swift in Sources */,
 				69D2D11B216C8E780067288A /* NetworkStatus.swift in Sources */,
 				69F0FACA21B257080005B205 /* BasePostMappableModel.swift in Sources */,
+				6949499121B8678500669E1E /* RoomRateResponseModel.swift in Sources */,
 				6943D9942153F3BE002CFEBB /* ResetPasswordVC.swift in Sources */,
 				692E8FAA2163823F00AF5927 /* MaxMemberSelectView.swift in Sources */,
 				69A67F0E216CEC5D0020F09F /* APIConnection.swift in Sources */,
@@ -1210,9 +1247,11 @@
 				692EE6722181F70B004E5D10 /* BasePostResponseModel.swift in Sources */,
 				69DC86E02188AEF600D776A2 /* UploadImageModel.swift in Sources */,
 				6943D9822153F121002CFEBB /* CERoomPostVC.swift in Sources */,
+				69AE2E9221BCBCAD006B7428 /* ChangePasswordRequestModel.swift in Sources */,
 				690660562180883D00E446F9 /* FilterRequestModel.swift in Sources */,
 				6943EE5D21AFDCEC00A61DDE /* RateVC.swift in Sources */,
 				690A61E42176850500BA9564 /* UserResponseModel.swift in Sources */,
+				690A95BE21B7827B00D838D2 /* BaseRateRequestModel.swift in Sources */,
 				692E8FA2216371BD00AF5927 /* GenderView.swift in Sources */,
 				697F05B5218AD8AB0010C681 /* NoDataView.swift in Sources */,
 				6940E14521A52A6900ABB2A7 /* SearchRequestModel.swift in Sources */,
@@ -1225,10 +1264,11 @@
 				69D00EC921609A8200FF034E /* CityModel.swift in Sources */,
 				6943D99C2153F484002CFEBB /* SettingVC.swift in Sources */,
 				69D00ED32160B0D700FF034E /* AlertController.swift in Sources */,
+				690F133B21B8EC8500F4F50D /* RateView.swift in Sources */,
 				04D77E432158A3060045C45C /* RoundButotn.swift in Sources */,
 				69225641215B27100040213A /* OrderTVCell.swift in Sources */,
 				6943D9722153F0A6002CFEBB /* AllVC.swift in Sources */,
-				6943D9A42153F5B8002CFEBB /* FeedbackVC.swift in Sources */,
+				6943D9A42153F5B8002CFEBB /* ImagesVC.swift in Sources */,
 				69D00ED82160B93100FF034E /* PopupSelectListTVCell.swift in Sources */,
 				69ECD518217DEC9600976B33 /* HorizontalRoomView.swift in Sources */,
 				69A67F12216D341A0020F09F /* BaseResponseModel.swift in Sources */,
@@ -1243,12 +1283,14 @@
 				69BA0D7F2167D398006AEEDC /* UtilityDetailView.swift in Sources */,
 				69A0300A2153923E0087897F /* Extension.swift in Sources */,
 				690BA6E0218F902A003C38F2 /* MemberRequestModel.swift in Sources */,
+				6949498D21B865F200669E1E /* BaseRateResponseModel.swift in Sources */,
 				690B2065215BA0DE00DAD053 /* RoomDetailForMasterVC.swift in Sources */,
 				6943D96E2153F07C002CFEBB /* AccountVC.swift in Sources */,
 				69D00ED52160B6A400FF034E /* Generic.swift in Sources */,
 				690BA6DE218F8FE3003C38F2 /* RoomMemberRequestModel.swift in Sources */,
 				691727B72155122D00104A19 /* NotificationCVCell.swift in Sources */,
 				69859C77217EC5F80022AB3B /* VerticalCollectionView.swift in Sources */,
+				690A95C021B7835F00D838D2 /* RoomRateRequestModel.swift in Sources */,
 				6943D9A22153F572002CFEBB /* IntroduceVC.swift in Sources */,
 				6943D9AE2153FA14002CFEBB /* LocalizationPreferences.swift in Sources */,
 				690660582180886900E446F9 /* FilterArgumentModel.swift in Sources */,
@@ -1291,6 +1333,7 @@
 				6943D9A02153F55F002CFEBB /* PolicyVC.swift in Sources */,
 				69AD7646218B66850073CD27 /* RoomCVCell.swift in Sources */,
 				6943D9742153F0AE002CFEBB /* NotificationVC.swift in Sources */,
+				696D338F21BA110A003E1564 /* EditProfileVC.swift in Sources */,
 				69A67F10216D25C80020F09F /* APIResponseAlert.swift in Sources */,
 				696219072163FF4300044EB4 /* DropdownListView.swift in Sources */,
 				69CAE6BD21855A83003D3399 /* UploadImageView.swift in Sources */,
@@ -1310,6 +1353,7 @@
 				C0D68DBD37B4599E10E32FD0 /* RoomMappableModel.swift in Sources */,
 				C0D680F821FFA53DBD73EC50 /* BasePostRequestModel.swift in Sources */,
 				C0D682615994038C055616A3 /* RoommatePostRequestModel.swift in Sources */,
+				690A95BC21B781A800D838D2 /* UserRateRequestModel.swift in Sources */,
 				C0D689C9E5A349C80D1AE74D /* UtilityModel.swift in Sources */,
 				C0D68FF82F4AE42D02704528 /* ListRoommateVC.swift in Sources */,
 				C0D683BC9CD0AD78093FAA33 /* ListRoomVC.swift in Sources */,

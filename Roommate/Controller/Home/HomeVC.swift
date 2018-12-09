@@ -729,9 +729,6 @@ class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewD
     func horizontalRoomViewDelegate(horizontalRoomView view:HorizontalRoomView,onClickButton button: UIButton) {
         let vc = ShowAllVC()
         vc.showAllVCType = .suggestRoom
-        //        let mainVC = UIViewController()
-        //        let nv = UINavigationController(rootViewController: mainVC)
-        //        present(nv, animated: false) {nv.pushViewController(vc, animated: false)}
         presentInNewNavigationController(viewController: vc)
     }
     //MARK: VerticalPostViewDelegate

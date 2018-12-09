@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://192.168.1.91:8080/"
+    static let BASE_URL_API = "http://192.168.100.174:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
@@ -37,6 +37,7 @@ class Constants{
     static let VC_RESET_PASSWORD = "ResetPasswordVC"
     static let VC_FIRST_LAUNCH = "FirstLaunchVC"
     static let VC_UTILITY_INPUT = "UtilityInputVC"
+    static let VC_IMAGES = "ImagesVC"
     
     //MARK: Constant for status
     static let NEW = 1
@@ -66,6 +67,7 @@ class Constants{
     static let CELL_ICONTITLETV = "IconTitleTVCell"
     static let CELL_ICONTITLECV = "IconTitleCVCell"
     static let CELL_DEFAULT = "DefaultCell"
+    static let CELL_RATECV = "RateCVCell"
     
     //MARK: Constant for UITableViewCell
     static let CELL_POPUP_SELECT_LISTTV = "PopupSelectListTVCell"
@@ -112,6 +114,7 @@ class Constants{
     static let HEIGHT_CELL_MEMBERTVL:CGFloat = 40.0
     static let HEIGHT_CELL_ACTIONTV:CGFloat = 50.0
     static let HEIGHT_VIEW_USER:CGFloat = 70.0
+    static let HEIGHT_CELL_RATECV:CGFloat = 170.0
     
     
     //MARK: HomeVC
@@ -136,7 +139,7 @@ class Constants{
     static let HEIGHT_ROOM_INFOR_TITLE:CGFloat = 30.0
     static let HEIGHT_CELL_ADD_MEMBER_VIEW:CGFloat = 100.0
     static let HEIGHT_SUGGEST_ADDRESS:CGFloat = 150.0
-    static let HEIGHT_SINGLE_RATE_VIEW:CGFloat = 80.0
+    static let HEIGHT_SINGLE_RATE_VIEW:CGFloat = 100.0
 
     //MARK: Common Lenght
     static let MAX_MEMBER:Int = 10
@@ -183,7 +186,8 @@ class Constants{
     static let NOTIFICATION_EDIT_ROOM_MEMBER:NSNotification.Name = NSNotification.Name("NOTIFICATION_EDIT_ROOM_MEMBER")
     static let NOTIFICATION_CREATE_ROOM:NSNotification.Name = NSNotification.Name("NOTIFICATION_CREATE_ROOM")
     
-    static let NOTIFICATION_REMOVE_POST:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_POST")
+    static let NOTIFICATION_REMOVE_POST:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_ROOM_POST")
+    static let NOTIFICATION_REMOVE_ROOMMATE_POST:NSNotification.Name = NSNotification.Name("NOTIFICATION_REMOVE_ROOMMATE_POST")
     static let NOTIFICATION_EDIT_POST:NSNotification.Name = NSNotification.Name("NOTIFICATION_EDIT_POST")
     
     static let NOTIFICATION_SIGNOUT:NSNotification.Name = NSNotification.Name("NOTIFICATION_SIGNOUT")

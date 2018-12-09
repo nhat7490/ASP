@@ -18,6 +18,7 @@ class DropdownListView: UIView {
     var text:String?{
         didSet{
             lblSelectTitle.text = text
+            lblSelectTitle.textColor = .lightSubTitle
         }
     }
     var dropdownListViewType:DropdownListViewType?{
@@ -30,6 +31,7 @@ class DropdownListView: UIView {
                 lblTitle.text = "EDIT_MEMBER_ROOM_MASTER".localized
             }
             lblSelectTitle.text = "SELECT".localized
+            lblSelectTitle.textColor = .red
         }
     }
     var  lblSelectTitle:UILabel = {

@@ -25,11 +25,10 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     
     lazy var tvSettingDesription:UITextView={
         let tv = UITextView()
-        tv.font  = .medium
+        tv.font  = .small
         tv.textColor = .red
         tv.text = "ROOM_POST_SETTING_TITLE".localized
         tv.isEditable = false
-        tv.isUserInteractionEnabled = false
         tv.isScrollEnabled = false
 //        tv.textContainerInset = .zero
         tv.textContainer.lineBreakMode = .byWordWrapping
@@ -58,6 +57,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     lazy var utilitiesView:UtilitiesView = {
         let uv:UtilitiesView = .fromNib()
         //        uv.utilityForSC = .filter
+        uv.utilitiesViewType = .required
         return uv
     }()
     
@@ -71,6 +71,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         tv.isEditable = false
         tv.isUserInteractionEnabled = false
         tv.isScrollEnabled = false
+        tv.textContainer.maximumNumberOfLines = 2
 //        tv.textContainerInset = .zero
         tv.textContainer.lineBreakMode = .byWordWrapping
 
@@ -78,7 +79,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     }()
     lazy var phoneNumberInputView:InputView = {
         let iv:InputView = .fromNib()
-        iv.inputViewType = .price
+        iv.inputViewType = .phone
         iv.delegate = self
         return iv
     }()
@@ -168,10 +169,10 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         
         if #available(iOS 11.0, *) {
             _ = scrollView.anchor(view.safeAreaLayoutGuide.topAnchor, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -defaultBottomViewHeight, right: -Constants.MARGIN_10))
-            _ = bottomView.anchor(scrollView.bottomAnchor, view.leftAnchor, nil, view.rightAnchor,defaultPadding,.init(width: 0, height: defaultBottomViewHeight))
+            _ = bottomView.anchor(scrollView.bottomAnchor, view.leftAnchor,view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor,defaultPadding,.init(width: 0, height: defaultBottomViewHeight))
         } else {
             // Fallback on earlier versions
-            _ = scrollView.anchor(view.topAnchor, view.leftAnchor, bottomLayoutGuide.bottomAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -defaultBottomViewHeight, right: -Constants.MARGIN_10))
+            _ = scrollView.anchor(topLayoutGuide.bottomAnchor, view.leftAnchor, bottomLayoutGuide.bottomAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: -defaultBottomViewHeight, right: -Constants.MARGIN_10))
             _ = bottomView.anchor(scrollView.bottomAnchor, view.leftAnchor,bottomLayoutGuide.bottomAnchor, view.rightAnchor,defaultPadding,.init(width: 0, height: defaultBottomViewHeight))
         }
         
@@ -194,6 +195,8 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         btnSave.layer.cornerRadius = CGFloat(10)
         btnSave.clipsToBounds = true
         btnSave.addTarget(self, action: #selector(onClickBtnSave), for: .touchUpInside)
+        
+        
         
         
     }
@@ -261,10 +264,11 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         priceSliderView.setSelectedRange(leftSelectedValue: selectedPrice![0], rightSelectedValue: selectedPrice![1])
         utilitiesView.selectedUtilities = selectedUtilities!
 //        genderView.genderSelect = selectedGender
+//        btnSave.isEnabled = false
     }
     func setupDelegateAndDataSource(){
         title = "CREATE_ROOMMATE_POST".localized
-        btnSave.setTitle("APPLY".localized, for: .normal)
+        btnSave.setTitle("CREATE".localized, for: .normal)
         utilitiesView.utilities = utilities
         
         utilitiesView.delegate = self
@@ -304,7 +308,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             utilitiesView.setState(isSelected: true, atIndexPath: indexPath)
             selectedUtilities?.append(utility.utilityId)
         }
-        
+//        checkDataAndUpdateUI()
     }
     //MARK:DropdownListViewDelegate
     func dropdownListViewDelegate(view dropdownListView: DropdownListView, onClickBtnChangeSelect btnSelect: UIButton) {
@@ -342,6 +346,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             return false
         }
         phoneNumber = string
+//        checkDataAndUpdateUI()
         return true
     }
     //MARK: Handler sliderView
@@ -361,10 +366,16 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             guard let city = cities?[(indexs.first?.row)!]  else{
                 return
             }
-            selectedCity = city
-            selectedDistricts =  []
-            self.cityDropdownListView.text = self.selectedCity?.name
-            self.districtDropdownListView.dropdownListViewType = .district
+            if selectedCity?.cityId != city.cityId{
+                selectedCity = city
+                selectedDistricts =  []
+                self.cityDropdownListView.text = self.selectedCity?.name
+                self.districtDropdownListView.dropdownListViewType = .district
+            }else{
+                selectedCity = city
+                self.cityDropdownListView.text = self.selectedCity?.name
+            }
+//            checkDataAndUpdateUI()
         }else if type == AlertType.district{
             guard let districtOfCity = districts?.filter({ (district) -> Bool in
                 district.cityId == self.selectedCity?.cityId
@@ -379,11 +390,12 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                 district.name!
             })
             self.districtDropdownListView.text  = dictrictsString?.joined(separator: ",")
+//            checkDataAndUpdateUI()
         }
     }
     //MARK: Handler for save button
     @objc  func onClickBtnSave(){
-        if checkValidInformation() {
+        if checkData() {
             if suggestSettingMappableModel == nil {
                 suggestSettingMappableModel = SuggestSettingMappableModel()
             }
@@ -392,9 +404,14 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             }
             suggestSettingMappableModel?.utilities = selectedUtilities
             suggestSettingMappableModel?.price = selectedPrice
-            roommatePostRequestModel = RoommatePostRequestModel(cityId: selectedCity!.cityId, suggestSettingMappableModel: suggestSettingMappableModel!, phoneContact: phoneNumber)
+            if cERoommateVCType == .create{
+                roommatePostRequestModel = RoommatePostRequestModel(cityId: selectedCity!.cityId, suggestSettingMappableModel: suggestSettingMappableModel!, phoneContact: phoneNumber)
+            }
+            
             ceRoommatePost()
             
+        }else{
+            AlertController.showAlertInfor(withTitle: "NETWORK_STATUS_TITLE".localized, forMessage: "ERROR_TYPE_INPUT".localized, inViewController: self)
         }
     }
     func ceRoommatePost(){
@@ -402,7 +419,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         hub.mode = .indeterminate
         hub.bezelView.backgroundColor = .white
         hub.contentColor = .defaultBlue
-        hub.label.text = "MB_LOAD_CREATE_POST".localized
+        hub.label.text = self.cERoommateVCType == .create ? "MB_LOAD_CREATE_POST".localized : "MB_LOAD_EDIT_POST".localized
         DispatchQueue.global(qos: .userInteractive).async {
             APIConnection.request(apiRouter:self.cERoommateVCType == .create ? APIRouter.createRoommatePost(model: self.roommatePostRequestModel) : APIRouter.editRoommatePost(model: self.roommatePostRequestModel) ,  errorNetworkConnectedHander: {
             DispatchQueue.main.async {
@@ -451,26 +468,40 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         utilitiesView.resetView()
     }
     //MARK: Others method
-    func checkValidInformation()->Bool{
-        let message = NSMutableAttributedString(string: "")
-
+    func checkDataAndUpdateUI(){
+        if checkData(){
+            btnSave.isEnabled = true
+        }else{
+            btnSave.isEnabled = false
+        }
+        
+        
+    }
+    func checkData()->Bool{
+//        let message = NSMutableAttributedString(string: "")
+        var isValid = true
         if selectedDistricts!.isEmpty{
-            message.append(NSAttributedString(string: "\("DISTRICT".localized) :  \("ERROR_TYPE_DISTRICT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+//            message.append(NSAttributedString(string: "\("DISTRICT".localized) :  \("ERROR_TYPE_DISTRICT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            isValid = false
         }
 
         if selectedUtilities!.count < 5{
-            message.append(NSAttributedString(string: "\("UTILITY_TITLE".localized) :  \("ERROR_TYPE_UTILITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+//            message.append(NSAttributedString(string: "\("UTILITY_TITLE".localized) :  \("ERROR_TYPE_UTILITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            isValid = false
         }
         if !phoneNumber.isValidPhoneNumber(){
-            message.append(NSAttributedString(string: "\("PLACE_HOLDER_PHONE_NUMBER".localized) :  \("ERROR_TYPE_PHONE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+//            message.append(NSAttributedString(string: "\("PLACE_HOLDER_PHONE_NUMBER".localized) :  \("ERROR_TYPE_PHONE".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            phoneNumberInputView.showErrorView()
+            isValid = false
         }
+        
 
-        if message.string.isEmpty{
-            return true
-        }else{
-            let title = NSAttributedString(string: "INFORMATION".localized, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
-            AlertController.showAlertInfoWithAttributeString(withTitle: title, forMessage: message, inViewController: self)
-        }
-        return false
+//        if message.string.isEmpty{
+//            return true
+//        }else{
+//            let title = NSAttributedString(string: "INFORMATION".localized, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
+//            AlertController.showAlertInfoWithAttributeString(withTitle: title, forMessage: message, inViewController: self)
+//        }
+        return isValid
     }
 }

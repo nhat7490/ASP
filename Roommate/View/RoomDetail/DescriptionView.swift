@@ -21,7 +21,7 @@ class DescriptionView: UIView,UITextViewDelegate{
             return self.tvContent.text
         }
         set{
-            self.tvContent.text = newValue
+            self.tvContent.text = (newValue == nil || newValue!.isEmpty) ? "DESCRIPTION_EMPTY".localized : newValue
         }
     }
     
@@ -30,7 +30,8 @@ class DescriptionView: UIView,UITextViewDelegate{
     }
     var viewType:ViewType?{
         didSet{
-            if  viewType == .detailForMember || viewType == .detailForOwner || viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder{
+            if  viewType == .detailForMember || viewType == .detailForOwner || viewType == .currentDetailForMember || viewType == .roomPostDetailForFinder || viewType == .roommatePostDetailForFinder || viewType == .roomPostDetailForCreatedUser || viewType == .roommatePostDetailForCreatedUser{
+                tvContent.layer.borderWidth = 0
                 tvContent.isEditable = false
             }else{
                 tvContent.addToobarButton()
@@ -47,11 +48,14 @@ class DescriptionView: UIView,UITextViewDelegate{
         tvContent.layer.cornerRadius = 5
         tvContent.isEditable = false
         tvContent.delegate = self
-        tvContent.returnKeyType = .done
+        tvContent.returnKeyType = .default
+        tvContent.isScrollEnabled = false
+        
         
         lblTitle.text = "DESCRIPTION".localized
     }
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
         return true
     }
     func textViewDidEndEditing(_ textView: UITextView) {

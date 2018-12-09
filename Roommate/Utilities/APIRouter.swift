@@ -31,6 +31,7 @@ enum APIRouter:URLRequestConvertible{
     case getRoomsByUserId(userId:Int,page:Int,size:Int)
     case getHistoryRoom(userId:Int,page:Int,size:Int)
     case getCurrentRoom(userId:Int)
+    case getRoomOfPost(postId:Int)
     case getUserPost(model:FilterArgumentModel)
     case findExitedUserInRoom(username:String)
     case editMember(roomMemberRequestModel:RoomMemberRequestModel)
@@ -38,6 +39,7 @@ enum APIRouter:URLRequestConvertible{
     case updateRoom(model: RoomMappableModel)
     case findByUsername(username:String)
     case createUser(model:UserMappableModel)
+    case editUser(model:UserMappableModel)
     case searchPostByAddress(model:SearchRequestModel)
     case createRoommatePost(model: RoommatePostRequestModel)
     case createRoomPost(model: RoomPostRequestModel)
@@ -45,7 +47,14 @@ enum APIRouter:URLRequestConvertible{
     case editRoommatePost(model: RoommatePostRequestModel)
     case removePost(postId: Int)
     case saveSuggestSetting(model:SuggestSettingMappableModel)
-    
+    case saveRoomRate(model:RoomRateRequestModel)
+    case saveUserRate(model:UserRateRequestModel)
+    case getRoomRatesByPostId(postId:Int,page:Int,size:Int)
+    case getRoomRatesByRoomId(roomId:Int,page:Int,size:Int)
+    case getUserRates(userId:Int,page:Int,size:Int)
+    case findUserByUserId(userId:Int)
+    case resetPassword(email:String)
+    case changePassowrd(model:ChangePasswordRequestModel)
     var httpHeaders:HTTPHeaders{
         switch self{
         case .search:
@@ -56,7 +65,7 @@ enum APIRouter:URLRequestConvertible{
     }
     
     var httpMethod:HTTPMethod{
-        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost,.createRoomPost,.saveSuggestSetting:
+        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost,.createRoomPost,.saveSuggestSetting,.saveRoomRate,.saveUserRate,.editUser,.changePassowrd:
             return .post
         case .removeBookmark,.removeRoom,.removePost:
             return .delete
@@ -107,31 +116,52 @@ enum APIRouter:URLRequestConvertible{
         case .removeRoom(let roomId):
             return "room/deleteRoom/\(roomId)"
         case .updateRoom:
-            return "room/update";
+            return "room/update"
         case .getCurrentRoom(let userId):
-            return "room/user/currentRoom/\(userId)";
+            return "room/user/currentRoom/\(userId)"
         case .getHistoryRoom(let userId,_,_):
-            return "room/user/history/\(userId)";
+            return "room/user/history/\(userId)"
         case .getUserPost:
             return "post/userPost"
         case .findByUsername(let username):
             return "user/findByUsername/\(username)"
         case .createUser:
-            return "user/createUser";
+            return "user/createUser"
         case .searchPostByAddress:
-            return "post/search";
+            return "post/search"
         case .createRoommatePost:
-            return "post/createRoommatePost";
+            return "post/createRoommatePost"
         case .createRoomPost:
-            return "post/createRoomPost";
+            return "post/createRoomPost"
         case .editRoomPost:
-            return "post/updateRoomPost";
+            return "post/updateRoomPost"
         case .editRoommatePost:
-            return "post/updateRoommatePost";
+            return "post/updateRoommatePost"
         case .saveSuggestSetting:
-            return "reference/save";
+            return "reference/save"
         case .removePost(let postId):
-            return "post/delete/\(postId)";
+            return "post/delete/\(postId)"
+        case .saveRoomRate:
+            return "room/rate/save"
+        case .saveUserRate:
+            return "user/rate/save"
+        case .getUserRates(let userId,_,_):
+            return "user/findAllUserRate/\(userId)"
+        case .getRoomRatesByPostId(let postId,_,_):
+            return "room/getRoomRatesOfPost/\(postId)"
+        case .getRoomRatesByRoomId(let roomId,_,_):
+            return "room/getRoomRates/\(roomId)"
+        case .findUserByUserId(let userId):
+            return "user/findById/\(userId)"
+        case .editUser:
+            return "user/updateUser"
+        case .getRoomOfPost(let postId):
+            return "post/room/\(postId)"
+        case .resetPassword(let email):
+            return "user/resetPassword/\(email)"
+        case .changePassowrd:
+            return "user/changePassword"
+            
         }
     }
     
@@ -192,6 +222,23 @@ enum APIRouter:URLRequestConvertible{
             return Mapper().toJSON(model)
         case .saveSuggestSetting(let model):
             return Mapper().toJSON(model)
+        case .saveRoomRate(let model):
+            return Mapper().toJSON(model)
+        case .saveUserRate(let model):
+            return Mapper().toJSON(model)
+        case .editUser(let model):
+            return Mapper().toJSON(model)
+        case .changePassowrd(let model):
+            return Mapper().toJSON(model)
+        case .getUserRates(_,let page,let size):
+            return ["page":page,
+                    "size":size]
+        case .getRoomRatesByPostId(_,let page,let size):
+            return ["page":page,
+                    "size":size]
+        case .getRoomRatesByRoomId(_,let page,let size):
+            return ["page":page,
+                    "size":size]
         default:
             return [:]
         }
@@ -211,7 +258,9 @@ enum APIRouter:URLRequestConvertible{
         
         switch self{
         case .getCurrentRoom,.utility(),.district(),.city():
-            urlRequest.timeoutInterval  = 10
+            urlRequest.timeoutInterval  = 5
+        case .login:
+            urlRequest.timeoutInterval  = 7
         default:
             urlRequest.timeoutInterval  = 30
             

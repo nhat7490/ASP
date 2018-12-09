@@ -55,6 +55,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
     lazy var cityDropdownListView:DropdownListView = {
         let lv:DropdownListView = .fromNib()
         lv.dropdownListViewType = .city
+        
         return lv
     }()
     
@@ -88,6 +89,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
     
     lazy var utilitiesView:UtilitiesView = {
         let uv:UtilitiesView = .fromNib()
+        uv.utilitiesViewType = .required
         //        uv.utilityForSC = UtilityForSC.create
         return uv
     }()
@@ -134,7 +136,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
         loadLocalData()
         setupUI()
         setData()
-//        setNotificationObserver()
+        //        setNotificationObserver()
         registerNotificationForKeyboard()
     }
     
@@ -150,7 +152,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
         title = cERoomVCType == .create ? "CREATE_ROOM".localized : "ROOM_EDIT".localized
         
         setBackButtonForNavigationBar()
-//        translateNavigationBarBottomBorder()
+        //        translateNavigationBarBottomBorder()
         //Create tempview for bottom button
         let bottomView = UIView()
         
@@ -181,9 +183,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
         contentView.addSubview(districtDropdownListView)
         contentView.addSubview(addressInputView)
         contentView.addSubview(tableView)
-        //        contentView.addSubview(phoneInputView)
         contentView.addSubview(maxMemberSelectView)
-        //        contentView.addSubview(genderView)
         contentView.addSubview(utilitiesView)
         contentView.addSubview(descriptionsView)
         contentView.addSubview(uploadImageView)
@@ -192,12 +192,12 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
         
         if #available(iOS 11.0, *) {
             _ = bottomView.anchor(nil, view.leftAnchor, view.safeAreaLayoutGuide.bottomAnchor, view.rightAnchor,defaultPadding,.init(width: 0, height: defaultBottomViewHeight))
-            _ = scrollView.anchor(view.topAnchor, view.leftAnchor, bottomView.topAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
+            _ = scrollView.anchor(view.safeAreaLayoutGuide.topAnchor, view.leftAnchor, bottomView.topAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
             
         } else {
             // Fallback on earlier versions
-            _ = bottomView.anchor(nil, view.leftAnchor,view.bottomAnchor, view.rightAnchor,defaultPadding,.init(width: 0, height: defaultBottomViewHeight))
-            _ = scrollView.anchor(view.topAnchor, view.leftAnchor, bottomView.topAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
+            _ = bottomView.anchor(nil, view.leftAnchor,bottomLayoutGuide.topAnchor, view.rightAnchor,defaultPadding,.init(width: 0, height: defaultBottomViewHeight))
+            _ = scrollView.anchor(bottomLayoutGuide.bottomAnchor, view.leftAnchor, bottomView.topAnchor, view.rightAnchor, UIEdgeInsets(top: 0, left: Constants.MARGIN_10, bottom: 0, right: -Constants.MARGIN_10))
             
         }
         
@@ -295,32 +295,32 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
             scrollView.contentInset = .zero
         }
     }
-//    func setNotificationObserver(){
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-//    }
-//
-//    deinit {
-//
-//        //Not need from ios 9
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-//    }
-//
-//    //MARK: Handler for Keyboard
-//    @objc func keyboardWillShow(notification:Notification){
-//        let userInfor = notification.userInfo!
-//        let keyboardFrame:CGRect = (userInfor[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-//        print(scrollView.contentInset)
-//        print(scrollView.contentOffset)
-//        scrollView.contentInset.bottom = keyboardFrame.size.height
-//        scrollView.scrollIndicatorInsets = scrollView.contentInset
-//        print(scrollView.contentInset)
-//        print(scrollView.contentOffset)
-//    }
-//    @objc func keyboardWillHide(notification:Notification){
-//        scrollView.contentInset = .zero
-//    }
+    //    func setNotificationObserver(){
+    //        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+    //        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    //    }
+    //
+    //    deinit {
+    //
+    //        //Not need from ios 9
+    //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+    //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    //    }
+    //
+    //    //MARK: Handler for Keyboard
+    //    @objc func keyboardWillShow(notification:Notification){
+    //        let userInfor = notification.userInfo!
+    //        let keyboardFrame:CGRect = (userInfor[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+    //        print(scrollView.contentInset)
+    //        print(scrollView.contentOffset)
+    //        scrollView.contentInset.bottom = keyboardFrame.size.height
+    //        scrollView.scrollIndicatorInsets = scrollView.contentInset
+    //        print(scrollView.contentInset)
+    //        print(scrollView.contentOffset)
+    //    }
+    //    @objc func keyboardWillHide(notification:Notification){
+    //        scrollView.contentInset = .zero
+    //    }
     
     
     
@@ -358,6 +358,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
             return
         }
         roomMappableModel.maxGuest = maxMember
+//        checkDataAndUpdateUI()
     }
     
     func maxMemberSelectViewDelegate(view maxMemberSelectView: MaxMemberSelectView, onClickBtnPlus btnPlus: UIButton) {
@@ -365,6 +366,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
             return
         }
         roomMappableModel.maxGuest = maxMember
+//        checkDataAndUpdateUI()
     }
     func inputViewDelegate(inputView view: InputView, shouldChangeCharactersTo string: String) -> Bool{
         switch view {
@@ -390,13 +392,14 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
                 addressInputView.isSelectedFromSuggest = false
                 addressInputView.tfInput.setupUI(placeholder: "ROOM_ADDRESS_TITLE", title: "ROOM_ADDRESS_TITLE", delegate: addressInputView)
                 search(text: string)
-//                newRoomModel.address = string
-//                view.layoutIfNeeded()
+                //                newRoomModel.address = string
+                //                view.layoutIfNeeded()
             }
         default:
             break
             
         }
+//        checkDataAndUpdateUI()
         return true
     }
     func dropdownListViewDelegate(view dropdownListView: DropdownListView, onClickBtnChangeSelect btnSelect: UIButton) {
@@ -448,6 +451,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
             self.cityDropdownListView.text = self.cityName
             self.districtDropdownListView.text = self.districtName
         }
+//        checkDataAndUpdateUI()
     }
     
     override func alertControllerDelegate(alertController: AlertController, onSelected selectedIndexs: [IndexPath]?) {
@@ -468,6 +472,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
     func utilityInputVCDelegate(onCompletedInputUtility utility: UtilityMappableModel, atIndexPath indexPath:IndexPath?) {
         roomMappableModel.utilities.append(utility)
         utilitiesView.setState(isSelected: true, atIndexPath: indexPath!)
+//        checkDataAndUpdateUI()
     }
     func utilityInputVCDelegate(onDeletedInputUtility utility: UtilityMappableModel, atIndexPath indexPath:IndexPath?){
         guard let index = roomMappableModel.utilities.index(where: { (record) -> Bool in
@@ -477,6 +482,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
         }
         roomMappableModel.utilities.remove(at: index)
         utilitiesView.setState(isSelected: false, atIndexPath: indexPath!)
+//        checkDataAndUpdateUI()
     }
     
     //MARK: UITableview Delegate and Datasource
@@ -510,6 +516,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
             suggestAddress?.removeAll()
             reloadTableViewUI()
         }
+//        checkDataAndUpdateUI()
         
     }
     
@@ -525,6 +532,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
     
     //MARK: UploadImageViewDelegate
     func uploadImageViewDelegate(uploadImageView view: UploadImageView, onClickBtnSelectImage button: UIButton) {
+//        checkDataAndUpdateUI()
         if uploadImageModels.count < 12{
             alertController = AlertController.showAlertList(withTitle: "ROOM_UPLOAD_SELECT".localized, andMessage: nil, alertStyle: .alert, forViewController: self, data: ["CAMERA".localized,"PHOTO".localized], rhsButtonTitle: nil)
             alertController?.delegate = self
@@ -537,11 +545,12 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
         guard let row = indexPath?.row else {
             return
         }
-//        images.remove(at: row)
-//        uploadImageView.images = uploadImageFiles
-//        self.uploadImageFiles.remove(at:row)
+        //        images.remove(at: row)
+        //        uploadImageView.images = uploadImageFiles
+        //        self.uploadImageFiles.remove(at:row)
         self.uploadImageModels.remove(at: row)
         self.calculatorHeight()
+//        checkDataAndUpdateUI()
     }
     //MARK: UIImagePickerControllerDelegate
     override func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -549,14 +558,22 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
                 self.uploadImageModels.append(UploadImageModel(name: self.generateImageName(), image: image))
                 self.calculatorHeight()
+//                self.checkDataAndUpdateUI()
             }
         }
     }
     
     
     //MARK: Handler for save button
+    
     @objc  func onClickBtnSubmit(btnSubmit:UIButton){
-        saveRoom()
+        
+        if isValidData(){
+            roomMappableModel.userId = DBManager.shared.getUser()!.userId
+            saveRoom()
+        }else{
+            AlertController.showAlertInfor(withTitle: "NETWORK_STATUS_TITLE".localized, forMessage: "ERROR_TYPE_INPUT".localized, inViewController: self)
+        }
     }
     
     //MARK: Custom method
@@ -564,26 +581,26 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
         self.suggestAddress?.removeAll()
         self.reloadTableViewUI()
         DispatchQueue.global(qos: .userInteractive).async {
-        APIConnection.requestObject(apiRouter: APIRouter.search(input:text), errorNetworkConnectedHander: nil, returnType: GPAutocompletePrediction.self) { (predictions, error, statusCode) -> (Void) in
-            if predictions?.status == "OK",let predictions = predictions?.predictions,predictions.count>0{
-                
-                predictions.forEach({ (prediction) in
-                    if prediction.address.lowercased().containsIgnoringCase(find: self.districtName),
-                        prediction.address.containsIgnoringCase(find: self.cityName){
-                        print("Add :\(prediction.address)")
-                        APIConnection.requestObject(apiRouter: APIRouter.placeDetail(id:prediction.place_id), errorNetworkConnectedHander: nil, returnType: GPPlaceResult.self) { (place, error, statusCode) -> (Void) in
-                            if place?.status == "OK",let place = place{
-                                DispatchQueue.main.async {
-                                    self.suggestAddress?.append([prediction:place])
-                                    self.reloadTableViewUI()
+            APIConnection.requestObject(apiRouter: APIRouter.search(input:text), errorNetworkConnectedHander: nil, returnType: GPAutocompletePrediction.self) { (predictions, error, statusCode) -> (Void) in
+                if predictions?.status == "OK",let predictions = predictions?.predictions,predictions.count>0{
+                    
+                    predictions.forEach({ (prediction) in
+                        if prediction.address.lowercased().containsIgnoringCase(find: self.districtName),
+                            prediction.address.containsIgnoringCase(find: self.cityName){
+                            print("Add :\(prediction.address)")
+                            APIConnection.requestObject(apiRouter: APIRouter.placeDetail(id:prediction.place_id), errorNetworkConnectedHander: nil, returnType: GPPlaceResult.self) { (place, error, statusCode) -> (Void) in
+                                if place?.status == "OK",let place = place{
+                                    DispatchQueue.main.async {
+                                        self.suggestAddress?.append([prediction:place])
+                                        self.reloadTableViewUI()
+                                    }
                                 }
                             }
                         }
-                    }
-                })
+                    })
+                }
+                
             }
-            
-        }
         }
     }
     
@@ -601,81 +618,104 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
                                    coordinate: southWest)
         
     }
-    func checkValidInformation()->Bool{
+//    func checkDataAndUpdateUI(){
+//        if isValidData(){
+//            btnSubmit.isEnabled = true
+//        }else{
+//            btnSubmit.isEnabled = false
+//        }
+//    }
+    
+    func isValidData()->Bool{
         let message = NSMutableAttributedString(string: "")
-        
+        var isValid = true
         if !roomMappableModel.name.isValidName(){
-            message.append(NSAttributedString(string: "\("ROOM_NAME_TITLE".localized) :  \("ERROR_TYPE_NAME_MAX_CHAR_50".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            //            message.append(NSAttributedString(string: "\("ROOM_NAME_TITLE".localized) :  \("ERROR_TYPE_NAME_MAX_CHAR_50".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+//            return false
+            nameInputView.showErrorView()
+            isValid = false
         }
         
         if !roomMappableModel.price.toString.isValidPrice(){
-            message.append(NSAttributedString(string: "\("PRICE".localized) :  \(String(format: "ERROR_TYPE_PRICE".localized, Int(Constants.MIN_PRICE).formatString,Int(Constants.MAX_PRICE).formatString))\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            //            message.append(NSAttributedString(string: "\("PRICE".localized) :  \(String(format: "ERROR_TYPE_PRICE".localized, Int(Constants.MIN_PRICE).formatString,Int(Constants.MAX_PRICE).formatString))\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            priceInputView.showErrorView()
+            isValid = false
             
         }
         if !roomMappableModel.area.toString.isValidArea(){
-            message.append(NSAttributedString(string: "\("AREA_TITLE".localized) :  \("ERROR_TYPE_AREA".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            //            message.append(NSAttributedString(string: "\("AREA_TITLE".localized) :  \("ERROR_TYPE_AREA".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            areaInputView.showErrorView()
+            isValid = false
         }
         if roomMappableModel.cityId == 0 {
-            message.append(NSAttributedString(string: "\("CITY".localized) :  \("ERROR_TYPE_CITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            //            message.append(NSAttributedString(string: "\("CITY".localized) :  \("ERROR_TYPE_CITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            
+            isValid = false
         }
         if roomMappableModel.districtId == 0{
-            message.append(NSAttributedString(string: "\("AREA_TITLE".localized) :  \("ERROR_TYPE_DISTRICT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            //            message.append(NSAttributedString(string: "\("AREA_TITLE".localized) :  \("ERROR_TYPE_DISTRICT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            
+            isValid = false
         }
         if !addressInputView.isSelectedFromSuggest || roomMappableModel.longitude == 0 || roomMappableModel.latitude == 0{
-            message.append(NSAttributedString(string: "\("ROOM_ADDRESS_TITLE".localized) :  \("ERROR_TYPE_ADDRESS_SUGGEST".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            //            message.append(NSAttributedString(string: "\("ROOM_ADDRESS_TITLE".localized) :  \("ERROR_TYPE_ADDRESS_SUGGEST".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            addressInputView.showErrorView()
+            isValid = false
             
         }
         if roomMappableModel.utilities.count<5{
-            message.append(NSAttributedString(string: "\("UTILITY_TITLE".localized) :  \("ERROR_TYPE_UTILITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            //            message.append(NSAttributedString(string: "\("UTILITY_TITLE".localized) :  \("ERROR_TYPE_UTILITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            isValid = false
         }
         if uploadImageModels.count<2{
-            message.append(NSAttributedString(string: "\("ROOM_UPLOAD_IMAGE_TITLE".localized) :  \("ROOM_UPLOAD_LIMIT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            //            message.append(NSAttributedString(string: "\("ROOM_UPLOAD_IMAGE_TITLE".localized) :  \("ROOM_UPLOAD_LIMIT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
+            isValid = false
         }
         if cERoomVCType == .edit{
             if let members = roomMappableModel.members, members.count > roomMappableModel.maxGuest{
                 message.append(NSAttributedString(string: "\("ROOM_MEMBER_LESSTHAN_MAXGUEST".localized).\n \(String(format: "ROOM_CURRENT_MEMBER_NUMBER".localized, members.count))", attributes: [NSAttributedStringKey.font:UIFont.small]))
+                isValid = false
             }
         }
         if message.string.isEmpty{
-            return true
+            return isValid
         }else{
             let title = NSAttributedString(string: "INFORMATION".localized, attributes: [NSAttributedStringKey.font:UIFont.boldMedium,NSAttributedStringKey.foregroundColor:UIColor.defaultBlue])
             AlertController.showAlertInfoWithAttributeString(withTitle: title, forMessage: message, inViewController: self)
+            isValid = false
         }
-        return false
+        return isValid
     }
     
     func saveRoom(){
-        roomMappableModel.userId = DBManager.shared.getUser()!.userId
-        if checkValidInformation(){
+        
+        
+        let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hub.mode = .indeterminate
+        hub.bezelView.backgroundColor = .white
+        hub.contentColor = .defaultBlue
+        hub.label.text = "MB_LOAD_UPLOAD_IMAGE".localized
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.uploadImageModels.filter{$0.linkUrl==nil}.forEach({ (model) in
+                self.group.enter()
+                self.uploadImage(model)
+            })
             
-            let hub = MBProgressHUD.showAdded(to: self.view, animated: true)
-            hub.mode = .indeterminate
-            hub.bezelView.backgroundColor = .white
-            hub.contentColor = .defaultBlue
-            hub.label.text = "MB_LOAD_UPLOAD_IMAGE".localized
-            DispatchQueue.global(qos: .userInteractive).async {
-                self.uploadImageModels.filter{$0.linkUrl==nil}.forEach({ (model) in
-                    self.group.enter()
-                    self.uploadImage(model)
-                })
-                
-                self.group.notify(queue: DispatchQueue.global(qos: .userInteractive), execute: {
+            self.group.notify(queue: DispatchQueue.global(qos: .userInteractive), execute: {
+                DispatchQueue.main.async {
+                    hub.label.text = self.cERoomVCType == .create ?  "MB_LOAD_CREATE_ROOM".localized : "MB_LOAD_EDIT_ROOM".localized
+                }
+                if (self.uploadImageModels.filter{$0.linkUrl==nil}).count == 0{
+                    self.roomMappableModel.imageUrls = self.uploadImageModels.compactMap{$0.linkUrl}
+                    self.ceRoom()
+                }else{
                     DispatchQueue.main.async {
-                        hub.label.text = self.cERoomVCType == .create ?  "MB_LOAD_CREATE_ROOM".localized : "MB_LOAD_EDIT_ROOM".localized
+                        MBProgressHUD.hide(for: self.view, animated: true)
                     }
-                    if (self.uploadImageModels.filter{$0.linkUrl==nil}).count == 0{
-                        self.roomMappableModel.imageUrls = self.uploadImageModels.compactMap{$0.linkUrl}
-                        self.ceRoom()
-                    }else{
-                        DispatchQueue.main.async {
-                            MBProgressHUD.hide(for: self.view, animated: true)
-                        }
-                        
-                        AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_UPLOAD_ERROR".localized, inViewController: self)
-                    }
-                })
-            }
+                    
+                    AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_UPLOAD_ERROR".localized, inViewController: self)
+                }
+            })
         }
     }
     func ceRoom(){

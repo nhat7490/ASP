@@ -23,6 +23,15 @@ class UtilitiesView : UIView,UICollectionViewDelegate,UICollectionViewDataSource
             self.collectionView.reloadData()
         }
     }
+    var utilitiesViewType:UtilitiesViewType = .normal{
+        didSet{
+            if utilitiesViewType == .required{
+                let string = NSMutableAttributedString(string: "UTILITY_TITLE".localized)
+                string.append(NSAttributedString(string: "UTILITY_TITLE_REQUIRED".localized, attributes: [NSAttributedStringKey.foregroundColor:UIColor.red]))
+                lblTitle.attributedText = string
+            }
+        }
+    }
     var selectedUtilities:[Int] = []
     
     weak var delegate:UtilitiesViewDelegate?

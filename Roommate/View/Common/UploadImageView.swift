@@ -44,6 +44,7 @@ class UploadImageView: UIView ,UICollectionViewDelegate,UICollectionViewDataSour
         lblTitle.text = "ROOM_UPLOAD_IMAGE_TITLE".localized
         lblDesription.font = .small
         lblDesription.text  = "ROOM_UPLOAD_LIMIT".localized
+        lblDesription.textColor = .red
         
         btnSelectImage.setTitle("ROOM_UPLOAD_SELECT_IMAGE".localized, for: .normal)
         btnSelectImage.backgroundColor = .defaultBlue

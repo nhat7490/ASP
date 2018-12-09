@@ -28,9 +28,6 @@
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="isx-0v-ccA">
                     <rect key="frame" x="0.0" y="30" width="538" height="150"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="150" id="hwi-YR-1w7"/>
-                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
@@ -42,6 +39,7 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="isx-0v-ccA" secondAttribute="trailing" id="Lru-kz-Lbb"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="EYX-wm-Eao" secondAttribute="trailing" id="cqy-fi-Ou0"/>
                 <constraint firstItem="isx-0v-ccA" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="hIV-eH-vFF"/>
+                <constraint firstItem="isx-0v-ccA" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="lTj-B3-ZYM"/>
                 <constraint firstItem="EYX-wm-Eao" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="uDM-kV-JzZ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
