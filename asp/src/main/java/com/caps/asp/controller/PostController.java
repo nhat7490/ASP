@@ -400,7 +400,7 @@ public class PostController {
 
     @PostMapping("/post/suggest")
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
-        try {
+//        try {
             TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
             TbPost checkPost = postService.findAllByUserIdAndTypeIdOrderByDatePostDesc(baseSuggestRequestModel.getUserId(), MASTER_POST);
             boolean checkDate = false;
@@ -478,11 +478,10 @@ public class PostController {
                 GoogleAPI googleAPI = new GoogleAPI();
                 GeocodingResult geocodingResult = googleAPI.getLocationName(baseSuggestRequestModel.getLatitude(), baseSuggestRequestModel.getLongitude());
 
-//                String cityName = googleAPI.getCity(geocodingResult);
-//                TbCity city = cityService.findByNameLike(cityName);
-                Optional<TbCity> optionalTbCity = cityService.findAll().stream().filter(tbCity -> geocodingResult.formattedAddress.toLowerCase().contains(tbCity.getName().toLowerCase())).findFirst();
-                if(optionalTbCity.isPresent()) {
-                    TbCity city = optionalTbCity.get();
+                String cityName = googleAPI.getCity(geocodingResult);
+                TbCity city = cityService.findByNameLike(cityName);
+//                Optional<TbCity> optionalTbCity = cityService.findAll().stream().filter(tbCity -> geocodingResult.formattedAddress.toLowerCase().contains(tbCity.getName().toLowerCase())).findFirst();
+                if(city!=null) {
                     int cityId = city.getCityId();
                     List<TbPost> postList = postService.getSuggestedListForMember(Float.parseFloat(baseSuggestRequestModel.getLatitude().toString())
                             , Float.parseFloat(baseSuggestRequestModel.getLongitude().toString())
@@ -506,9 +505,9 @@ public class PostController {
                     return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
                 }
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(NOT_FOUND).build();
+//        }
     }
     @GetMapping("post/room/{postId}")
     public ResponseEntity getRoomByPostId(@PathVariable int postId){
