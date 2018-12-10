@@ -262,7 +262,7 @@ enum APIRouter:URLRequestConvertible{
         case .login:
             urlRequest.timeoutInterval  = 7
         default:
-            urlRequest.timeoutInterval  = 30
+            urlRequest.timeoutInterval  = 45
             
         }
         

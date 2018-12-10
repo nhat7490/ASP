@@ -10,7 +10,8 @@ import Foundation
 import UIKit
 class Constants{
     //MARK: Base URL
-    static let BASE_URL_API = "http://192.168.100.174:8080/"
+//    static let BASE_URL_API = "http://172.20.10.6:8080/"
+    static let BASE_URL_API = "http://54.169.103.49:8080/"
     static let BASE_URL_GOOGLE_PLACE_API = "https://maps.googleapis.com/"
     //MARK: Google API Key
     static let GOOGLE_PLACE_API_KEY = "AIzaSyCOgT-ZG2h-mTHElFEiv_3EJXFTppNgIAk"
