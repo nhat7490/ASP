@@ -17,6 +17,10 @@ class SuggestSettingMappableModel: Mappable {
     
     init(){
         userId = DBManager.shared.getSingletonModel(ofType: UserModel.self)!.userId
+        self.utilities = []
+        self.districts = []
+        self.price = []
+        
     }
     
     convenience init(suggestSettingModel:SuggestSettingModel){
