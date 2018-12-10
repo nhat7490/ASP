@@ -30,7 +30,7 @@ public class ReferenceController {
         this.referenceService = referenceService;
     }
 
-    @Transactional
+//    @Transactional
     @PostMapping("/reference/save")
     public ResponseEntity createReference(@RequestBody SuggestSettingRequestModel suggestSettingRequestModel) {
         try {
