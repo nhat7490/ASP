@@ -101,7 +101,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(userLoginModel),
                 dataType: 'json',
-                url: "http://localhost:8080/user/login",
+                url: "/user/login",
                 timeout: 600000,
                 success: function (data) {
                     alert("success");

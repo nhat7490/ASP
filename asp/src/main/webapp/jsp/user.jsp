@@ -407,7 +407,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(TbUser),
                 dataType: 'json',
-                url: "http://localhost:8080/user/admin/createUser",
+                url: "/user/admin/createUser",
                 timeout: 600000,
                 success: function (data) {
                     window.location = "/users";

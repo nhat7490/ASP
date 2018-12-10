@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -91,17 +93,15 @@
                     contentType: "application/json",
                     data: JSON.stringify(userLoginModel),
                     dataType: 'json',
-                    url: "http://localhost:8080/user/admin",
+                    url: "/user/admin",
                     timeout: 600000,
                     success: function (data) {
-                        alert("success");
-                        console.log("success");
+
                         window.location= "/room";
                         //...
                     },
                     error: function (e) {
-                        alert("fail");
-                        console.log("fail error");
+
                         document.getElementById("error").style.display = "block";
                         //...
                     }
