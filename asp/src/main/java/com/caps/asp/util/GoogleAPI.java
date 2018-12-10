@@ -17,7 +17,7 @@ public class GoogleAPI {
         String name = "(Unknown)";
         try {
             GeocodingResult[] results = GeocodingApi
-                    .reverseGeocode(context, new LatLng(latitudeDeg, longitudeDeg)).await();
+                    .reverseGeocode(context, new LatLng(latitudeDeg, longitudeDeg)).language("vi").await();
 
             // There may be multiple results with sequentially less data in each;
             // just return the first one, since it should have the most info.
@@ -36,6 +36,7 @@ public class GoogleAPI {
     }
 
     public String getCity(GeocodingResult gr) {
+        System.out.println("RESULT-LOCATION:"+gr.formattedAddress);
         return gr.formattedAddress.split(",")[3].trim().replaceAll("([0-9])","").trim();
     }
 }
