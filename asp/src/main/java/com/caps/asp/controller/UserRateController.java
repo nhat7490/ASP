@@ -32,8 +32,8 @@ public class UserRateController {
     }
 
 
-    @PostMapping("/userrate/create")
-    public ResponseEntity createUserRate(@RequestBody UserRateRequestModel userRateRequestModel) {
+    @PostMapping("/user/rate/save")
+    public ResponseEntity saveUserRate(@RequestBody UserRateRequestModel userRateRequestModel) {
         TbUserRate userRate = userRateService.findByUserIdAndOwnerId(userRateRequestModel.getUserId(), userRateRequestModel.getOwnerId());
             TbRoomHasUser roomHasUser = roomHasUserService.getCurrentRoom(userRateRequestModel.getUserId());
             if (roomHasUser != null) {
@@ -42,28 +42,21 @@ public class UserRateController {
                 int ownerId = room.getUserId();
                 if (userRateRequestModel.getOwnerId() == ownerId) {
                     if (userRate == null) {
-                        TbUserRate rate = new TbUserRate();
-                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                        rate.setDate(timestamp);
-                        rate.setBehaviourRate(userRateRequestModel.getBehaviourRate());
-                        rate.setLifeStyleRate(userRateRequestModel.getLifeStyleRate());
-                        rate.setPaymentRate(userRateRequestModel.getPaymentRate());
-                        rate.setComment(userRateRequestModel.getComment());
-                        rate.setUserId(userRateRequestModel.getUserId());
-                        rate.setOwnerId(userRateRequestModel.getOwnerId());
-                        rate.setId(0);
-                        userRateService.saveUserRate(rate);
-                        return ResponseEntity.status(CREATED).build();
-                    } else {
-                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                        userRate.setDate(timestamp);
-                        userRate.setPaymentRate(userRateRequestModel.getPaymentRate());
-                        userRate.setLifeStyleRate(userRateRequestModel.getLifeStyleRate());
-                        userRate.setBehaviourRate(userRateRequestModel.getBehaviourRate());
-                        userRate.setComment(userRateRequestModel.getComment());
-                        userRateService.saveUserRate(userRate);
-                        return ResponseEntity.status(CREATED).build();
+                        userRate = new TbUserRate();
+                        userRate.setId(0);
+
                     }
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    userRate.setDate(timestamp);
+                    userRate.setBehaviourRate(userRateRequestModel.getBehaviourRate());
+                    userRate.setLifeStyleRate(userRateRequestModel.getLifeStyleRate());
+                    userRate.setPaymentRate(userRateRequestModel.getPaymentRate());
+                    userRate.setComment(userRateRequestModel.getComment());
+                    userRate.setUserId(userRateRequestModel.getUserId());
+                    userRate.setOwnerId(userRateRequestModel.getOwnerId());
+
+                    userRateService.saveUserRate(userRate);
+                    return ResponseEntity.ok().build();
                 }
                 return ResponseEntity.status(CONFLICT).build();
             }

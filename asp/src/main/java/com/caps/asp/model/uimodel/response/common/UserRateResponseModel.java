@@ -1,39 +1,38 @@
 package com.caps.asp.model.uimodel.response.common;
 
-import com.caps.asp.model.TbRoomRate;
 import com.caps.asp.model.TbUser;
 import com.caps.asp.model.TbUserRate;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
-public class RoomRateResponseModel {
-    private Double security;
-    private Double location;
-    private Double utility;
+public class UserRateResponseModel {
+
+    private Double behaviourRate;
+    private Double lifeStyleRate;
+    private Double paymentRate;
     private String username;
     private int userId;
     private String imageProfile;
     private String comment;
     private Timestamp date;
 
-    public RoomRateResponseModel() {
+    public UserRateResponseModel() {
+    }
+    public UserRateResponseModel(TbUserRate userRate, TbUser user) {
+        this.behaviourRate = userRate.getBehaviourRate();
+        this.lifeStyleRate = userRate.getLifeStyleRate();
+        this.paymentRate = userRate.getPaymentRate();
+        this.username = user.getUsername();
+        this.userId = userRate.getOwnerId();
+        this.imageProfile = user.getImageProfile();
+        this.comment = userRate.getComment();
+        this.date = userRate.getDate();
     }
 
-    public RoomRateResponseModel(TbRoomRate tbRoomrate, TbUser user) {
-        this.security = tbRoomrate.getSecurityRate();
-        this.location = tbRoomrate.getLocationRate();
-        this.utility = tbRoomrate.getUtilityRate();
-        this.username = user.getUsername();
-        this.userId = user.getUserId();
-        this.imageProfile = user.getImageProfile();
-        this.comment = tbRoomrate.getComment();
-        this.date = tbRoomrate.getDate();
-    }
-    public RoomRateResponseModel(Double security, Double location, Double utility, String username, int userId, String imageProfile, String comment, Timestamp date) {
-        this.security = security;
-        this.location = location;
-        this.utility = utility;
+    public UserRateResponseModel(Double behaviourRate, Double lifeStyleRate, Double paymentRate, String username, int userId, String imageProfile, String comment, Timestamp date) {
+        this.behaviourRate = behaviourRate;
+        this.lifeStyleRate = lifeStyleRate;
+        this.paymentRate = paymentRate;
         this.username = username;
         this.userId = userId;
         this.imageProfile = imageProfile;
@@ -41,28 +40,28 @@ public class RoomRateResponseModel {
         this.date = date;
     }
 
-    public Double getSecurity() {
-        return security;
+    public Double getBehaviourRate() {
+        return behaviourRate;
     }
 
-    public void setSecurity(Double security) {
-        this.security = security;
+    public void setBehaviourRate(Double behaviourRate) {
+        this.behaviourRate = behaviourRate;
     }
 
-    public Double getLocation() {
-        return location;
+    public Double getLifeStyleRate() {
+        return lifeStyleRate;
     }
 
-    public void setLocation(Double location) {
-        this.location = location;
+    public void setLifeStyleRate(Double lifeStyleRate) {
+        this.lifeStyleRate = lifeStyleRate;
     }
 
-    public Double getUtility() {
-        return utility;
+    public Double getPaymentRate() {
+        return paymentRate;
     }
 
-    public void setUtility(Double utility) {
-        this.utility = utility;
+    public void setPaymentRate(Double paymentRate) {
+        this.paymentRate = paymentRate;
     }
 
     public String getUsername() {

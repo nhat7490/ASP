@@ -26,4 +26,7 @@ public class PostHasUtilityService {
     public List<TbPostHasUtility> findAllByPostId(int postId) {
         return postHasUtilityRepository.findAllByPostId(postId);
     }
+    public void removeAllByPostId(int postId){
+        postHasUtilityRepository.removeAllByPostId(postId);
+    }
 }

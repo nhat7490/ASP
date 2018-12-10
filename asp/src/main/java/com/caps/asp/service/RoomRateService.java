@@ -30,6 +30,9 @@ public class RoomRateService {
     public List<TbRoomRate> findAllByRoomId (int roomId) {
         return roomRateRepository.findAllByRoomId(roomId);
     }
+    public Page<TbRoomRate> findAllByRoomId (int roomId,Pageable pageable) {
+        return roomRateRepository.findAllByRoomId(roomId,pageable);
+    }
 
     public void removeByRoomId(int roomId){
         roomRateRepository.removeAllByRoomId(roomId);

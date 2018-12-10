@@ -22,7 +22,7 @@ public class UserResponseModel {
     private Double avgBehaviourRate;
     private Double avgLifeStyleRate;
     private Double avgPaymentRate;
-    private List<TbUserRate> userRateList;
+    private List<UserRateResponseModel> userRateResponseModels;
     private UserSuggestSettingModel userSuggestSettingModel;
 
     public UserResponseModel() {
@@ -39,31 +39,7 @@ public class UserResponseModel {
         this.username = user.getUsername();
     }
 
-    public Double getAvgBehaviourRate() {
-        return avgBehaviourRate;
-    }
-
-    public void setAvgBehaviourRate(Double avgBehaviourRate) {
-        this.avgBehaviourRate = avgBehaviourRate;
-    }
-
-    public Double getAvgLifeStyleRate() {
-        return avgLifeStyleRate;
-    }
-
-    public void setAvgLifeStyleRate(Double avgLifeStyleRate) {
-        this.avgLifeStyleRate = avgLifeStyleRate;
-    }
-
-    public Double getAvgPaymentRate() {
-        return avgPaymentRate;
-    }
-
-    public void setAvgPaymentRate(Double avgPaymentRate) {
-        this.avgPaymentRate = avgPaymentRate;
-    }
-
-    public UserResponseModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender, int roleId, String email, String username, Double avgBehaviourRate, Double avgLifeStyleRate, Double avgPaymentRate, List<TbUserRate> userRateList, UserSuggestSettingModel userSuggestSettingModel) {
+    public UserResponseModel(Integer userId, String fullname, String imageProfile, Date dob, String phone, int gender, int roleId, String email, String username, Double avgBehaviourRate, Double avgLifeStyleRate, Double avgPaymentRate, List<UserRateResponseModel> userRateResponseModels, UserSuggestSettingModel userSuggestSettingModel) {
         this.userId = userId;
         this.fullname = fullname;
         this.imageProfile = imageProfile;
@@ -76,48 +52,8 @@ public class UserResponseModel {
         this.avgBehaviourRate = avgBehaviourRate;
         this.avgLifeStyleRate = avgLifeStyleRate;
         this.avgPaymentRate = avgPaymentRate;
-        this.userRateList = userRateList;
+        this.userRateResponseModels = userRateResponseModels;
         this.userSuggestSettingModel = userSuggestSettingModel;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public UserSuggestSettingModel getUserSuggestSettingModel() {
-        return userSuggestSettingModel;
-    }
-
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setUserSuggestSettingModel(UserSuggestSettingModel userSuggestSettingModel) {
-        this.userSuggestSettingModel = userSuggestSettingModel;
-    }
-
-    public List<TbUserRate> getUserRateList() {
-        return userRateList;
-    }
-
-    public void setUserRateList(List<TbUserRate> userRateList) {
-        this.userRateList = userRateList;
     }
 
     public Integer getUserId() {
@@ -166,5 +102,69 @@ public class UserResponseModel {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Double getAvgBehaviourRate() {
+        return avgBehaviourRate;
+    }
+
+    public void setAvgBehaviourRate(Double avgBehaviourRate) {
+        this.avgBehaviourRate = avgBehaviourRate;
+    }
+
+    public Double getAvgLifeStyleRate() {
+        return avgLifeStyleRate;
+    }
+
+    public void setAvgLifeStyleRate(Double avgLifeStyleRate) {
+        this.avgLifeStyleRate = avgLifeStyleRate;
+    }
+
+    public Double getAvgPaymentRate() {
+        return avgPaymentRate;
+    }
+
+    public void setAvgPaymentRate(Double avgPaymentRate) {
+        this.avgPaymentRate = avgPaymentRate;
+    }
+
+    public List<UserRateResponseModel> getUserRateResponseModels() {
+        return userRateResponseModels;
+    }
+
+    public void setUserRateResponseModels(List<UserRateResponseModel> userRateResponseModels) {
+        this.userRateResponseModels = userRateResponseModels;
+    }
+
+    public UserSuggestSettingModel getUserSuggestSettingModel() {
+        return userSuggestSettingModel;
+    }
+
+    public void setUserSuggestSettingModel(UserSuggestSettingModel userSuggestSettingModel) {
+        this.userSuggestSettingModel = userSuggestSettingModel;
     }
 }

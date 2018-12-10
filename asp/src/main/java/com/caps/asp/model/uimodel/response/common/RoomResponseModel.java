@@ -26,9 +26,15 @@ public class RoomResponseModel {
     private String  phoneNumber;
     private Double latitude;
     private Double longitude;
+    private Double avarageSecurity;
+    private Double avarageLocation;
+    private Double avarageUtility;
     private List<RoomRateResponseModel> roomRateResponseModels;
 
-    public RoomResponseModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, Integer currentMember, int userId, int cityId, int districtId, Timestamp dateCreated, int statusId, List<TbRoomHasUtility> utilities, List<String> imageUrls, List<MemberResponseModel> members, String description, String phoneNumber, Double latitude, Double longitude, List<RoomRateResponseModel> roomRateResponseModels) {
+    public RoomResponseModel() {
+    }
+
+    public RoomResponseModel(int roomId, String name, Double price, Integer area, String address, Integer maxGuest, Integer currentMember, int userId, int cityId, int districtId, Timestamp dateCreated, int statusId, List<TbRoomHasUtility> utilities, List<String> imageUrls, List<MemberResponseModel> members, String description, String phoneNumber, Double latitude, Double longitude, Double avarageSecurity, Double avarageLocation, Double avarageUtility, List<RoomRateResponseModel> roomRateResponseModels) {
         this.roomId = roomId;
         this.name = name;
         this.price = price;
@@ -48,10 +54,10 @@ public class RoomResponseModel {
         this.phoneNumber = phoneNumber;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.avarageSecurity = avarageSecurity;
+        this.avarageLocation = avarageLocation;
+        this.avarageUtility = avarageUtility;
         this.roomRateResponseModels = roomRateResponseModels;
-    }
-
-    public RoomResponseModel() {
     }
 
     public int getRoomId() {
@@ -204,6 +210,30 @@ public class RoomResponseModel {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Double getAvarageSecurity() {
+        return avarageSecurity;
+    }
+
+    public void setAvarageSecurity(Double avarageSecurity) {
+        this.avarageSecurity = avarageSecurity;
+    }
+
+    public Double getAvarageLocation() {
+        return avarageLocation;
+    }
+
+    public void setAvarageLocation(Double avarageLocation) {
+        this.avarageLocation = avarageLocation;
+    }
+
+    public Double getAvarageUtility() {
+        return avarageUtility;
+    }
+
+    public void setAvarageUtility(Double avarageUtility) {
+        this.avarageUtility = avarageUtility;
     }
 
     public List<RoomRateResponseModel> getRoomRateResponseModels() {

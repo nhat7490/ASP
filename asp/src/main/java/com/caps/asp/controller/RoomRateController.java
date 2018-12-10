@@ -7,6 +7,7 @@ import com.caps.asp.service.RoomHasUserService;
 import com.caps.asp.service.RoomRateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,34 +30,26 @@ public class RoomRateController {
     }
 
 
-    @PostMapping("/roomrate/create")
-    public ResponseEntity createRoomRate(@RequestBody RoomRateRequestModel roomRateRequestModel) {
+    @PostMapping("/room/rate/save")
+    public ResponseEntity saveRoomRate(@RequestBody RoomRateRequestModel roomRateRequestModel) {
         TbRoomRate roomRate = roomRateService.findAllByRoomIdAndUserId(roomRateRequestModel.getRoomId(), roomRateRequestModel.getUserId());
         TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomIdAndDateOutIsNull(roomRateRequestModel.getUserId(), roomRateRequestModel.getRoomId());
         if (roomHasUser != null ){
             if (roomRate == null) {
-                TbRoomRate rate = new TbRoomRate();
-                rate.setComment(roomRateRequestModel.getComment());
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                rate.setDate(timestamp);
-                rate.setLocationRate(roomRateRequestModel.getLocationRate());
-                rate.setSecurityRate(roomRateRequestModel.getSecurityRate());
-                rate.setUtilityRate(roomRateRequestModel.getUtilityRate());
-                rate.setRoomId(roomRateRequestModel.getRoomId());
-                rate.setUserId(roomRateRequestModel.getUserId());
-                rate.setId(0);
-                roomRateService.saveRoomRate(rate);
-                return ResponseEntity.status(CREATED).build();
-            }else{
-                roomRate.setComment(roomRateRequestModel.getComment());
-                roomRate.setLocationRate(roomRateRequestModel.getLocationRate());
-                roomRate.setSecurityRate(roomRateRequestModel.getSecurityRate());
-                roomRate.setUtilityRate(roomRateRequestModel.getUtilityRate());
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                roomRate.setDate(timestamp);
-                roomRateService.saveRoomRate(roomRate);
-                return ResponseEntity.status(CREATED).build();
+                roomRate = new TbRoomRate();
+                roomRate.setId(0);
             }
+            roomRate.setComment(roomRateRequestModel.getComment());
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            roomRate.setDate(timestamp);
+            roomRate.setLocationRate(roomRateRequestModel.getLocationRate());
+            roomRate.setSecurityRate(roomRateRequestModel.getSecurityRate());
+            roomRate.setUtilityRate(roomRateRequestModel.getUtilityRate());
+            roomRate.setRoomId(roomRateRequestModel.getRoomId());
+            roomRate.setUserId(roomRateRequestModel.getUserId());
+
+            roomRateService.saveRoomRate(roomRate);
+            return ResponseEntity.ok().build();
         }
        return ResponseEntity.status(CONFLICT).build();
     }

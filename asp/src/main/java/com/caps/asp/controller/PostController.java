@@ -7,9 +7,7 @@ import com.caps.asp.model.uimodel.request.SearchRequestModel;
 import com.caps.asp.model.uimodel.request.post.RoomPostRequestModel;
 import com.caps.asp.model.uimodel.request.post.RoommatePostRequestModel;
 import com.caps.asp.model.uimodel.request.common.BaseSuggestRequestModel;
-import com.caps.asp.model.uimodel.response.common.UserResponseModel;
-import com.caps.asp.model.uimodel.response.common.RoomRateResponseModel;
-import com.caps.asp.model.uimodel.response.common.SearchResponseModel;
+import com.caps.asp.model.uimodel.response.common.*;
 import com.caps.asp.model.uimodel.response.post.RoomPostResponseModel;
 import com.caps.asp.model.uimodel.response.post.RoommatePostResponseModel;
 import com.caps.asp.service.*;
@@ -24,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -86,155 +85,14 @@ public class PostController {
                 Page<TbPost> posts = postService.findByUserIdAndTypeId(filterArgumentModel.getPage(), filterArgumentModel.getOffset(),
                         filterArgumentModel.getUserId(), filterArgumentModel.getTypeId());
 
-                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> {
-                    RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
-//                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
-                    TbFavourite favourite = favouriteService
-                            .findByUserIdAndPostId(filterArgumentModel.getUserId(), tbPost.getPostId());
-                    List<TbPostHasUtility> utilitiesReferences = postHasUtilityService.findAllByPostId(tbPost.getPostId());
-                    List<TbPostHasTbDistrict> districtReferences = postHasDistrictService.findAllByPostId(tbPost.getPostId());
-                    TbDistrict district = new TbDistrict();
-
-                    if (districtReferences != null && districtReferences.size() != 0) {
-                        roommatePostResponseModel.setDistrictIds(districtReferences
-                                .stream()
-                                .map(tbDistrictReference -> tbDistrictReference.getDistrictId())
-                                .collect(Collectors.toList()));
-                        district = districtService.findByDistrictId(districtReferences.get(0).getDistrictId());
-                        roommatePostResponseModel.setCityId(district.getCityId());
-                    }
-
-                    if (utilitiesReferences != null && utilitiesReferences.size() != 0) {
-                        roommatePostResponseModel.setUtilityIds(utilitiesReferences
-                                .stream()
-                                .map(tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
-                                .collect(Collectors.toList()));
-                    }
-
-                    roommatePostResponseModel.setPostId(tbPost.getPostId());
-                    roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
-                    roommatePostResponseModel.setDate(tbPost.getDatePost());
-
-                    UserResponseModel userResponseModel = new UserResponseModel();
-                    TbUser userDb = userService.findById(tbPost.getUserId());
-                    userResponseModel.setDob(userDb.getDob());
-                    userResponseModel.setPhone(userDb.getPhone());
-                    userResponseModel.setGender(userDb.getGender());
-                    userResponseModel.setUserId(userDb.getUserId());
-                    userResponseModel.setFullname(userDb.getFullname());
-                    userResponseModel.setImageProfile(userDb.getImageProfile());
-                    List<TbUserRate> userRates = userRateService.findAllByUserId(tbPost.getUserId());
-                    userResponseModel.setUserRateList(userRates);
-
-                    roommatePostResponseModel.setUserResponseModel(userResponseModel);
-
-                    if (favourite != null) {
-                        roommatePostResponseModel.setFavourite(true);
-                        roommatePostResponseModel.setFavouriteId(favourite.getId());
-                    } else {
-                        roommatePostResponseModel.setFavourite(false);
-                    }
-
-                    roommatePostResponseModel.setMinPrice(tbPost.getMinPrice());
-                    roommatePostResponseModel.setMaxPrice(tbPost.getMaxPrice());
-                    return roommatePostResponseModel;
-                });
+                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> utilsService.getRoommatePostResponseModel(filterArgumentModel.getUserId(),tbPost));
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
             } else {
                 Page<TbPost> posts = postService.findByUserIdAndTypeId(filterArgumentModel.getPage(), filterArgumentModel.getOffset(),
                         filterArgumentModel.getUserId(), filterArgumentModel.getTypeId());
-                Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> {
-                    RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
-                    TbRoom room = roomService.findRoomById(tbPost.getRoomId());
-                    List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-//                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
-                    TbFavourite favourite = favouriteService
-                            .findByUserIdAndPostId(filterArgumentModel.getUserId(), tbPost.getPostId());
-                    roomPostResponseModel.setName(tbPost.getName());
-                    roomPostResponseModel.setPostId(tbPost.getPostId());
-                    roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
-                    roomPostResponseModel.setDate(tbPost.getDatePost());
-
-                    UserResponseModel userResponseModel = new UserResponseModel();
-                    TbUser userDb = userService.findById(tbPost.getUserId());
-                    userResponseModel.setDob(userDb.getDob());
-                    userResponseModel.setPhone(userDb.getPhone());
-                    userResponseModel.setGender(userDb.getGender());
-                    userResponseModel.setUserId(userDb.getUserId());
-                    userResponseModel.setFullname(userDb.getFullname());
-                    userResponseModel.setImageProfile(userDb.getImageProfile());
-                    List<TbUserRate> userRates = userRateService.findAllByUserId(tbPost.getUserId());
-                    userResponseModel.setUserRateList(userRates);
-
-                    roomPostResponseModel.setUserResponseModel(userResponseModel);
-
-                    if (favourite != null) {
-                        roomPostResponseModel.setFavourite(true);
-                        roomPostResponseModel.setFavouriteId(favourite.getId());
-                    } else {
-                        roomPostResponseModel.setFavourite(false);
-                    }
-
-                    roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
-                    roomPostResponseModel.setAddress(room.getAddress());
-                    roomPostResponseModel.setArea(room.getArea());
-                    roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
-                    roomPostResponseModel.setDescription(tbPost.getDescription());
-
-                    //missing
-                    List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
-                    roomPostResponseModel.setImageUrls(images
-                            .stream()
-                            .map(image -> image.getLinkUrl())
-                            .collect(Collectors.toList()));
-                    roomPostResponseModel.setUtilities(roomHasUtilities);
-                    roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
-
-                    List<TbRoomRate> roomRateList = roomRateService.findAllByRoomId(tbPost.getRoomId());
-                    List<RoomRateResponseModel> roomRateResponseModels = new ArrayList<>();
-                    if (roomRateList != null) {
-                        Double avarageSecurity = 0.0;
-                        Double avarageLocation = 0.0;
-                        Double avarageUtility = 0.0;
-                        int count = 0;
-
-                        for (TbRoomRate tbRoomRate : roomRateList) {
-                            if (count < 6) {
-                                RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
-                                roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
-                                roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
-                                roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
-                                UserResponseModel user = new UserResponseModel();
-                                TbUser tbUser = userService.findById(tbRoomRate.getUserId());
-                                user.setUserId(tbUser.getUserId());
-                                user.setFullname(tbUser.getFullname());
-                                user.setImageProfile(tbUser.getImageProfile());
-                                List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
-                                user.setUserRateList(tbUserRates);
-                                roomRateResponseModel.setUserResponseModel(user);
-                                roomRateResponseModel.setComment(tbRoomRate.getComment());
-                                roomRateResponseModel.setDate(tbRoomRate.getDate());
-
-                                roomRateResponseModels.add(roomRateResponseModel);
-                                count++;
-                            }
-                            avarageSecurity += tbRoomRate.getSecurityRate();
-                            avarageLocation += tbRoomRate.getLocationRate();
-                            avarageUtility += tbRoomRate.getUtilityRate();
-                        }
-
-                        avarageSecurity = Double.parseDouble(Math.round((avarageSecurity / roomRateList.size()) * 10) + "");
-                        avarageLocation = Double.parseDouble(Math.round((avarageLocation / roomRateList.size()) * 10) + "");
-                        avarageUtility = Double.parseDouble(Math.round((avarageUtility / roomRateList.size()) * 10) + "");
-
-                        roomPostResponseModel.setAvarageSecurity(avarageSecurity / 10);
-                        roomPostResponseModel.setAvarageLocation(avarageLocation / 10);
-                        roomPostResponseModel.setAvarageUtility(avarageUtility / 10);
-                    }
-                    roomPostResponseModel.setRoomRateResponseModels(roomRateResponseModels);
-
-                    return roomPostResponseModel;
-                });
+                Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost ->
+                    utilsService.getRoomPostResponseModel(filterArgumentModel.getUserId(),tbPost)
+                );
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             }
         } catch (Exception e) {
@@ -313,6 +171,7 @@ public class PostController {
         }
     }
 
+    @Transactional
     @PutMapping("/post/updateRoommatePost")
     public ResponseEntity updateRoommatePost(@RequestBody RoommatePostRequestModel roommatePostRequestModel) {
         try {
@@ -324,12 +183,15 @@ public class PostController {
                 post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
                 post.setMaxPrice(roommatePostRequestModel.getMaxPrice());
                 post.setMinPrice(roommatePostRequestModel.getMinPrice());
-
+                int postId = postService.savePost(post);
                 TbPost newestPost = postService.findAllByUserIdAndTypeIdOrderByDatePostDesc(roommatePostRequestModel.getUserId(),
                         MEMBER_POST);
+
+                postHasDistrictService.removeAllByPostId(roommatePostRequestModel.getPostId());
+                postHasUtilityService.deleteAllPostHasUtilityByPostId(roommatePostRequestModel.getPostId());
                 if (newestPost.getPostId().equals(roommatePostRequestModel.getPostId())) {
 
-                    int postId = postService.savePost(post);
+
 
                     TbReference reference = referenceService.getByUserId(user.getUserId());
                     reference.setMaxPrice(roommatePostRequestModel.getMaxPrice());
@@ -337,6 +199,7 @@ public class PostController {
                     referenceService.save(reference);
 
                     utilityReferenceService.removeAllByUserId(user.getUserId());
+
 
                     for (Integer utilityId : roommatePostRequestModel.getUtilityIds()) {
                         TbPostHasUtility postHasUtility = new TbPostHasUtility();
@@ -370,7 +233,7 @@ public class PostController {
 
                 } else {
 
-                    postService.savePost(post);
+
 
                     for (Integer utilityId : roommatePostRequestModel.getUtilityIds()) {
                         TbPostHasUtility postHasUtility = new TbPostHasUtility();
@@ -402,7 +265,6 @@ public class PostController {
             TbUser user = userService.findById(roomPostRequestModel.getUserId());
             TbRoom room = roomService.findRoomById(roomPostRequestModel.getRoomId());
             TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomIdAndDateOutIsNull(user.getUserId(), room.getRoomId());
-//        TbPost excistedPost = postService.findByRoomId(room.getRoomId());
 
             if (user.getRoleId() == ROOM_MASTER && roomHasUser != null) {
                 TbPost post = new TbPost();
@@ -454,23 +316,26 @@ public class PostController {
     @PutMapping("/post/updateRoomPost")
     public ResponseEntity updateRoomPost(@RequestBody RoomPostRequestModel roomPostRequestModel) {
         try {
-            TbRoom room = roomService.findRoomById(roomPostRequestModel.getRoomId());
+
             TbPost post = postService.findByPostId(roomPostRequestModel.getPostId());
-            if (post != null && post.getTypeId() == MASTER_POST
-                    && post.getUserId().equals(roomPostRequestModel.getUserId())) {
+            TbRoom room = roomService.findRoomById(post.getRoomId());
+            if(room!=null){
+                if (post != null && post.getTypeId() == MASTER_POST
+                        && post.getUserId().equals(roomPostRequestModel.getUserId())) {
 
-                post.setLongtitude(room.getLongtitude());
-                post.setLattitude(room.getLattitude());
-                post.setNumberPartner(roomPostRequestModel.getNumberPartner());
-                post.setPhoneContact(roomPostRequestModel.getPhoneContact());
-                post.setName(roomPostRequestModel.getName());
-                post.setGenderPartner(roomPostRequestModel.getGenderPartner());
-                post.setDescription(roomPostRequestModel.getDescription());
-                postService.savePost(post);
-                return ResponseEntity.status(OK).build();
+                    post.setLongtitude(room.getLongtitude());
+                    post.setLattitude(room.getLattitude());
+                    post.setNumberPartner(roomPostRequestModel.getNumberPartner());
+                    post.setPhoneContact(roomPostRequestModel.getPhoneContact());
+                    post.setName(roomPostRequestModel.getName());
+                    post.setGenderPartner(roomPostRequestModel.getGenderPartner());
+                    post.setDescription(roomPostRequestModel.getDescription());
+                    postService.savePost(post);
+                    return ResponseEntity.status(OK).build();
+                }
+                return ResponseEntity.status(CONFLICT).build();
             }
-            return ResponseEntity.status(CONFLICT).build();
-
+            return ResponseEntity.status(NOT_FOUND).build();
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
         }
@@ -498,155 +363,10 @@ public class PostController {
             Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage()
                     , filterArgumentModel.getOffset(), filter);
             if (filter.getFilterArgumentModel().getTypeId() == MEMBER_POST) {//get member post
-                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> {
-                    RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
-//                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
-                    TbFavourite favourite = favouriteService
-                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
-                    List<TbUtilitiesReference> utilitiesReferences = utilityReferenceService.findAllByUserId(tbPost.getUserId());
-                    List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(tbPost.getUserId());
-                    TbDistrict district = new TbDistrict();
-
-                    if (districtReferences != null && districtReferences.size() != 0) {
-                        roommatePostResponseModel.setDistrictIds(districtReferences
-                                .stream()
-                                .map(tbDistrictReference -> tbDistrictReference.getDistrictId())
-                                .collect(Collectors.toList()));
-                        district = districtService.findByDistrictId(districtReferences.get(0).getDistrictId());
-                        roommatePostResponseModel.setCityId(district.getCityId());
-                    }
-
-                    if (utilitiesReferences != null && utilitiesReferences.size() != 0) {
-                        roommatePostResponseModel.setUtilityIds(utilitiesReferences
-                                .stream()
-                                .map(tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
-                                .collect(Collectors.toList()));
-                    }
-
-                    roommatePostResponseModel.setPostId(tbPost.getPostId());
-                    roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
-                    roommatePostResponseModel.setDate(tbPost.getDatePost());
-
-                    UserResponseModel userResponseModel = new UserResponseModel();
-                    TbUser userDb = userService.findById(tbPost.getUserId());
-                    userResponseModel.setDob(userDb.getDob());
-                    userResponseModel.setPhone(userDb.getPhone());
-                    userResponseModel.setGender(userDb.getGender());
-                    userResponseModel.setUserId(userDb.getUserId());
-                    userResponseModel.setFullname(userDb.getFullname());
-                    userResponseModel.setImageProfile(userDb.getImageProfile());
-                    List<TbUserRate> userRates = userRateService.findAllByUserId(tbPost.getUserId());
-                    userResponseModel.setUserRateList(userRates);
-
-                    roommatePostResponseModel.setUserResponseModel(userResponseModel);
-
-                    if (favourite != null) {
-                        roommatePostResponseModel.setFavourite(true);
-                        roommatePostResponseModel.setFavouriteId(favourite.getId());
-                    } else {
-                        roommatePostResponseModel.setFavourite(false);
-                    }
-
-                    roommatePostResponseModel.setMinPrice(tbPost.getMinPrice());
-                    roommatePostResponseModel.setMaxPrice(tbPost.getMaxPrice());
-                    return roommatePostResponseModel;
-                });
+                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost ->utilsService.getRoommatePostResponseModel(filterArgumentModel.getUserId(),tbPost));
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
             } else if (filter.getFilterArgumentModel().getTypeId() == MASTER_POST) {//get room master post
-                Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> {
-                    RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
-
-                    TbRoom room = roomService.findRoomById(tbPost.getRoomId());
-                    List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-//                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
-                    TbFavourite favourite = favouriteService
-                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
-
-                    roomPostResponseModel.setName(tbPost.getName());
-                    roomPostResponseModel.setPostId(tbPost.getPostId());
-                    roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
-                    roomPostResponseModel.setDate(tbPost.getDatePost());
-
-                    UserResponseModel userResponseModel = new UserResponseModel();
-                    TbUser userDb = userService.findById(tbPost.getUserId());
-                    userResponseModel.setDob(userDb.getDob());
-                    userResponseModel.setPhone(userDb.getPhone());
-                    userResponseModel.setGender(userDb.getGender());
-                    userResponseModel.setUserId(userDb.getUserId());
-                    userResponseModel.setFullname(userDb.getFullname());
-                    userResponseModel.setImageProfile(userDb.getImageProfile());
-                    List<TbUserRate> userRates = userRateService.findAllByUserId(tbPost.getUserId());
-                    userResponseModel.setUserRateList(userRates);
-
-                    roomPostResponseModel.setUserResponseModel(userResponseModel);
-
-                    if (favourite != null) {
-                        roomPostResponseModel.setFavourite(true);
-                        roomPostResponseModel.setFavouriteId(favourite.getId());
-                    } else {
-                        roomPostResponseModel.setFavourite(false);
-                    }
-
-                    roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
-                    roomPostResponseModel.setAddress(room.getAddress());
-                    roomPostResponseModel.setArea(room.getArea());
-                    roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
-                    roomPostResponseModel.setDescription(tbPost.getDescription());
-
-                    //missing
-                    List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
-                    roomPostResponseModel.setImageUrls(images
-                            .stream()
-                            .map(image -> image.getLinkUrl())
-                            .collect(Collectors.toList()));
-                    roomPostResponseModel.setUtilities(roomHasUtilities);
-                    roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
-
-                    List<TbRoomRate> roomRateList = roomRateService.findAllByRoomId(tbPost.getRoomId());
-                    List<RoomRateResponseModel> roomRateResponseModels = new ArrayList<>();
-                    if (roomRateList != null) {
-                        Double avarageSecurity = 0.0;
-                        Double avarageLocation = 0.0;
-                        Double avarageUtility = 0.0;
-                        int count = 0;
-
-                        for (TbRoomRate tbRoomRate : roomRateList) {
-                            if (count < 6) {
-                                RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
-                                roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
-                                roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
-                                roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
-                                UserResponseModel user = new UserResponseModel();
-                                TbUser tbUser = userService.findById(tbRoomRate.getUserId());
-                                user.setUserId(tbUser.getUserId());
-                                user.setFullname(tbUser.getFullname());
-                                user.setImageProfile(tbUser.getImageProfile());
-                                List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
-                                user.setUserRateList(tbUserRates);
-                                roomRateResponseModel.setUserResponseModel(user);
-                                roomRateResponseModel.setComment(tbRoomRate.getComment());
-                                roomRateResponseModel.setDate(tbRoomRate.getDate());
-
-                                roomRateResponseModels.add(roomRateResponseModel);
-                                count++;
-                            }
-                            avarageSecurity += tbRoomRate.getSecurityRate();
-                            avarageLocation += tbRoomRate.getLocationRate();
-                            avarageUtility += tbRoomRate.getUtilityRate();
-                        }
-
-                        avarageSecurity = Double.parseDouble(Math.round((avarageSecurity / roomRateList.size()) * 10) + "");
-                        avarageLocation = Double.parseDouble(Math.round((avarageLocation / roomRateList.size()) * 10) + "");
-                        avarageUtility = Double.parseDouble(Math.round((avarageUtility / roomRateList.size()) * 10) + "");
-
-                        roomPostResponseModel.setAvarageSecurity(avarageSecurity / 10);
-                        roomPostResponseModel.setAvarageLocation(avarageLocation / 10);
-                        roomPostResponseModel.setAvarageUtility(avarageUtility / 10);
-                    }
-                    roomPostResponseModel.setRoomRateResponseModels(roomRateResponseModels);
-
-                    return roomPostResponseModel;
-                });
+                Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> utilsService.getRoomPostResponseModel(filterArgumentModel.getUserId(),tbPost));
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             }
             return ResponseEntity.status(NOT_FOUND).build();
@@ -664,145 +384,12 @@ public class PostController {
             if (filter.getFilterArgumentModel().getTypeId() == MEMBER_POST) {//get member post
                 Page<TbPost> posts = postService.finAllBookmarkByFilter(filterArgumentModel.getPage()
                         , filterArgumentModel.getOffset(), filter);
-                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> {
-                    RoommatePostResponseModel roommatePostResponseModel = new RoommatePostResponseModel();
-                    TbFavourite favourite = favouriteService
-                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
-                    List<TbUtilitiesReference> utilitiesReferences = utilityReferenceService.findAllByUserId(tbPost.getUserId());
-                    List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(tbPost.getUserId());
-                    TbDistrict district = new TbDistrict();
-
-                    if (districtReferences != null) {
-                        roommatePostResponseModel.setDistrictIds(districtReferences
-                                .stream()
-                                .map(tbDistrictReference -> tbDistrictReference.getDistrictId())
-                                .collect(Collectors.toList()));
-                        district = districtService.findByDistrictId(districtReferences.get(0).getDistrictId());
-                        roommatePostResponseModel.setCityId(district.getCityId());
-                    }
-
-                    if (utilitiesReferences != null) {
-                        roommatePostResponseModel.setUtilityIds(utilitiesReferences
-                                .stream()
-                                .map(tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
-                                .collect(Collectors.toList()));
-                    }
-
-//                    UserResponseModel userResponseModel = new UserResponseModel(userService.findById(tbPost.getUserId()));
-
-                    roommatePostResponseModel.setPostId(tbPost.getPostId());
-                    roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
-                    roommatePostResponseModel.setDate(tbPost.getDatePost());
-
-                    UserResponseModel userResponseModel = new UserResponseModel();
-                    TbUser userDb = userService.findById(tbPost.getUserId());
-                    userResponseModel.setDob(userDb.getDob());
-                    userResponseModel.setPhone(userDb.getPhone());
-                    userResponseModel.setGender(userDb.getGender());
-                    userResponseModel.setUserId(userDb.getUserId());
-                    userResponseModel.setFullname(userDb.getFullname());
-                    userResponseModel.setImageProfile(userDb.getImageProfile());
-                    List<TbUserRate> userRates = userRateService.findAllByUserId(tbPost.getUserId());
-                    userResponseModel.setUserRateList(userRates);
-
-                    roommatePostResponseModel.setUserResponseModel(userResponseModel);
-                    roommatePostResponseModel.setFavourite(true);
-                    roommatePostResponseModel.setFavouriteId(favourite.getId());
-                    roommatePostResponseModel.setMinPrice(tbPost.getMinPrice());
-                    roommatePostResponseModel.setMaxPrice(tbPost.getMaxPrice());
-                    return roommatePostResponseModel;
-                });
+                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost ->utilsService.getRoommatePostResponseModel(filterArgumentModel.getUserId(),tbPost));
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
             } else if (filter.getFilterArgumentModel().getTypeId() == MASTER_POST) {//get room master post
                 Page<TbPost> posts = postService.finAllBookmarkByFilter(filterArgumentModel.getPage()
                         , filterArgumentModel.getOffset(), filter);
-                Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> {
-                    RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
-                    TbRoom room = roomService.findRoomById(tbPost.getRoomId());
-                    List<TbRoomHasUtility> roomHasUtilities = roomHasUtilityService.findAllByRoomId(room.getRoomId());
-                    TbFavourite favourite = favouriteService
-                            .findByUserIdAndPostId(filter.getFilterArgumentModel().getUserId(), tbPost.getPostId());
-
-                    roomPostResponseModel.setName(tbPost.getName());
-                    roomPostResponseModel.setPostId(tbPost.getPostId());
-                    roomPostResponseModel.setPhoneContact(tbPost.getPhoneContact());
-                    roomPostResponseModel.setDate(tbPost.getDatePost());
-
-                    UserResponseModel userResponseModel = new UserResponseModel();
-                    TbUser userDb = userService.findById(tbPost.getUserId());
-                    userResponseModel.setDob(userDb.getDob());
-                    userResponseModel.setPhone(userDb.getPhone());
-                    userResponseModel.setGender(userDb.getGender());
-                    userResponseModel.setUserId(userDb.getUserId());
-                    userResponseModel.setFullname(userDb.getFullname());
-                    userResponseModel.setImageProfile(userDb.getImageProfile());
-                    List<TbUserRate> userRates = userRateService.findAllByUserId(tbPost.getUserId());
-                    userResponseModel.setUserRateList(userRates);
-
-                    roomPostResponseModel.setUserResponseModel(userResponseModel);
-                    roomPostResponseModel.setFavourite(true);
-                    roomPostResponseModel.setFavouriteId(favourite.getId());
-                    roomPostResponseModel.setMinPrice(tbPost.getMinPrice());//price for room post
-                    roomPostResponseModel.setAddress(room.getAddress());
-                    roomPostResponseModel.setArea(room.getArea());
-                    roomPostResponseModel.setGenderPartner(tbPost.getGenderPartner());
-                    roomPostResponseModel.setDescription(tbPost.getDescription());
-
-                    //missing
-                    List<TbImage> images = imageService.findAllByRoomId(room.getRoomId());
-                    roomPostResponseModel.setImageUrls(images
-                            .stream()
-                            .map(image -> image.getLinkUrl())
-                            .collect(Collectors.toList()));
-
-                    roomPostResponseModel.setUtilities(roomHasUtilities);
-                    roomPostResponseModel.setNumberPartner(tbPost.getNumberPartner());
-
-                    List<TbRoomRate> roomRateList = roomRateService.findAllByRoomId(tbPost.getRoomId());
-                    List<RoomRateResponseModel> roomRateResponseModels = new ArrayList<>();
-                    if (roomRateList != null) {
-                        Double avarageSecurity = 0.0;
-                        Double avarageLocation = 0.0;
-                        Double avarageUtility = 0.0;
-                        int count = 0;
-
-                        for (TbRoomRate tbRoomRate : roomRateList) {
-                            if (count < 6) {
-                                RoomRateResponseModel roomRateResponseModel = new RoomRateResponseModel();
-                                roomRateResponseModel.setSecurity(tbRoomRate.getSecurityRate());
-                                roomRateResponseModel.setLocation(tbRoomRate.getLocationRate());
-                                roomRateResponseModel.setUtility(tbRoomRate.getUtilityRate());
-                                UserResponseModel user = new UserResponseModel();
-                                TbUser tbUser = userService.findById(tbRoomRate.getUserId());
-                                user.setUserId(tbUser.getUserId());
-                                user.setFullname(tbUser.getFullname());
-                                user.setImageProfile(tbUser.getImageProfile());
-                                List<TbUserRate> tbUserRates = userRateService.findAllByUserId(tbRoomRate.getUserId());
-                                user.setUserRateList(tbUserRates);
-                                roomRateResponseModel.setUserResponseModel(user);
-                                roomRateResponseModel.setComment(tbRoomRate.getComment());
-                                roomRateResponseModel.setDate(tbRoomRate.getDate());
-
-                                roomRateResponseModels.add(roomRateResponseModel);
-                                count++;
-                            }
-                            avarageSecurity += tbRoomRate.getSecurityRate();
-                            avarageLocation += tbRoomRate.getLocationRate();
-                            avarageUtility += tbRoomRate.getUtilityRate();
-                        }
-
-                        avarageSecurity = Double.parseDouble(Math.round((avarageSecurity / roomRateList.size()) * 10) + "");
-                        avarageLocation = Double.parseDouble(Math.round((avarageLocation / roomRateList.size()) * 10) + "");
-                        avarageUtility = Double.parseDouble(Math.round((avarageUtility / roomRateList.size()) * 10) + "");
-
-                        roomPostResponseModel.setAvarageSecurity(avarageSecurity / 10);
-                        roomPostResponseModel.setAvarageLocation(avarageLocation / 10);
-                        roomPostResponseModel.setAvarageUtility(avarageUtility / 10);
-                    }
-                    roomPostResponseModel.setRoomRateResponseModels(roomRateResponseModels);
-
-                    return roomPostResponseModel;
-                });
+                Page<RoomPostResponseModel> roomPostResponseModels =  posts.map(tbPost -> utilsService.getRoomPostResponseModel(filterArgumentModel.getUserId(),tbPost));
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             }
             return ResponseEntity.status(NOT_FOUND).build();
@@ -813,7 +400,7 @@ public class PostController {
 
     @PostMapping("/post/suggest")
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
-//        try {
+        try {
             TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
             TbPost checkPost = postService.findAllByUserIdAndTypeIdOrderByDatePostDesc(baseSuggestRequestModel.getUserId(), MASTER_POST);
             boolean checkDate = false;
@@ -891,30 +478,49 @@ public class PostController {
                 GoogleAPI googleAPI = new GoogleAPI();
                 GeocodingResult geocodingResult = googleAPI.getLocationName(baseSuggestRequestModel.getLatitude(), baseSuggestRequestModel.getLongitude());
 
-                String city = googleAPI.getCity(geocodingResult);
-                int cityId = cityService.findByNameLike(city).getCityId();
+//                String cityName = googleAPI.getCity(geocodingResult);
+//                TbCity city = cityService.findByNameLike(cityName);
+                Optional<TbCity> optionalTbCity = cityService.findAll().stream().filter(tbCity -> geocodingResult.formattedAddress.toLowerCase().contains(tbCity.getName().toLowerCase())).findFirst();
+                if(optionalTbCity.isPresent()) {
+                    TbCity city = optionalTbCity.get();
+                    int cityId = city.getCityId();
+                    List<TbPost> postList = postService.getSuggestedListForMember(Float.parseFloat(baseSuggestRequestModel.getLatitude().toString())
+                            , Float.parseFloat(baseSuggestRequestModel.getLongitude().toString())
+                            , cityId
+                            , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
 
-                List<TbPost> postList = postService.getSuggestedListForMember(Float.parseFloat(baseSuggestRequestModel.getLatitude().toString())
-                        , Float.parseFloat(baseSuggestRequestModel.getLongitude().toString())
-                        , cityId
-                        , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
+                    if (postList == null || postList.size() == 0) {
+                        return ResponseEntity
+                                .status(OK)
+                                .body(utilsService.getNewPost(baseSuggestRequestModel)
+                                        .getContent());
+                    }
 
-                if (postList == null || postList.size() == 0) {
+                    List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
                     return ResponseEntity
                             .status(OK)
-                            .body(utilsService.getNewPost(baseSuggestRequestModel)
-                                    .getContent());
+                            .body(utilsService.mappingRoomPost(postList, roomPostResponseModels
+                                    , baseSuggestRequestModel.getUserId()));
+                }else{
+                    Page<RoomPostResponseModel> roomPostResponseModels = utilsService.getNewPost(baseSuggestRequestModel);
+                    return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
                 }
-
-                List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
-                return ResponseEntity
-                        .status(OK)
-                        .body(utilsService.mappingRoomPost(postList, roomPostResponseModels
-                                , baseSuggestRequestModel.getUserId()));
             }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(NOT_FOUND).build();
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
+    }
+    @GetMapping("post/room/{postId}")
+    public ResponseEntity getRoomByPostId(@PathVariable int postId){
+        try {
+            TbPost tbPost = postService.findByPostId(postId);
+            if(tbPost!= null){
+                return ResponseEntity.status(OK).body(utilsService.getRoomResponseModel(tbPost.getRoomId()));
+            }
+            return ResponseEntity.status(NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
 
     @PostMapping("post/search")

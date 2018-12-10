@@ -3,14 +3,17 @@ package com.caps.asp.controller;
 import com.caps.asp.model.*;
 import com.caps.asp.model.uimodel.common.UserSuggestSettingModel;
 import com.caps.asp.model.uimodel.request.UserLoginModel;
+import com.caps.asp.model.uimodel.request.common.ChangePasswordRequestModel;
 import com.caps.asp.model.uimodel.response.common.CreateResponseModel;
 import com.caps.asp.model.uimodel.response.common.MemberResponseModel;
+import com.caps.asp.model.uimodel.response.common.UserRateResponseModel;
 import com.caps.asp.model.uimodel.response.common.UserResponseModel;
 import com.caps.asp.service.*;
 //import com.caps.asp.util.ResetPassword;
 //import com.caps.asp.util.ResetPassword;
 import com.caps.asp.util.ResetPassword;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.caps.asp.constant.Constant.ADMIN;
+import static com.caps.asp.constant.Constant.HOUSE_OWNER;
 import static com.caps.asp.constant.Constant.MEMBER;
 import static org.springframework.http.HttpStatus.*;
 
@@ -37,8 +41,9 @@ public class UserController {
     public final UtilityReferenceService utilityReferenceService;
     public final DistrictReferenceService districtReferenceService;
     public final UserRateService userRateService;
+    public final UtilsService utilsService;
 
-    public UserController(UserService userService, PostService postService, RoomService roomService, RoomHasUserService roomHasUserService, BCryptPasswordEncoder passwordEncoder, ReferenceService referenceService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService, UserRateService userRateService) {
+    public UserController(UserService userService, PostService postService, RoomService roomService, RoomHasUserService roomHasUserService, BCryptPasswordEncoder passwordEncoder, ReferenceService referenceService, UtilityReferenceService utilityReferenceService, DistrictReferenceService districtReferenceService, UserRateService userRateService, UtilsService utilsService) {
         this.userService = userService;
         this.postService = postService;
         this.roomService = roomService;
@@ -48,6 +53,7 @@ public class UserController {
         this.utilityReferenceService = utilityReferenceService;
         this.districtReferenceService = districtReferenceService;
         this.userRateService = userRateService;
+        this.utilsService = utilsService;
     }
 
     @PostMapping(value = "/user/login", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -62,6 +68,7 @@ public class UserController {
 
                 TbReference  reference = referenceService.getByUserId(user.getUserId());
                 if(reference != null) {
+
                     userSuggestSettingModel.setPrice(Arrays.asList(reference.getMinPrice(), reference.getMaxPrice()));
 
                     List<TbUtilitiesReference> utilitiesReference = utilityReferenceService.findAllByUserId(user.getUserId());
@@ -105,17 +112,17 @@ public class UserController {
     }
 
     @GetMapping("/user/findExitedUserInRoom/{username}")
-    public ResponseEntity<TbUser> findExitedUserInRoom(@PathVariable String username) {
+    public ResponseEntity findExitedUserInRoom(@PathVariable String username) {
         try {
             TbUser user = userService.findByUsername(username);
 
-            if (user != null) {
+            if (user != null && user.getRoleId() != HOUSE_OWNER) {
                 MemberResponseModel memberResponseModel = new MemberResponseModel(user.getUserId()
                         , MEMBER, user.getUsername(), user.getPhone());
 
                 if (roomHasUserService.findTbRoomHasUserByUserIdAnAndDateOutIsNull(user.getUserId()) == null) {
                     return ResponseEntity.status(OK)
-                            .body(user);
+                            .body(memberResponseModel);
                 } else {
                     return ResponseEntity.status(CONFLICT)
                             .build();
@@ -145,45 +152,7 @@ public class UserController {
     @GetMapping("/user/findById/{userId}")
     public ResponseEntity findById(@PathVariable int userId) {
         try {
-            UserResponseModel userResponseModel = new UserResponseModel();
-            TbUser userDb = userService.findById(userId);
-            userResponseModel.setDob(userDb.getDob());
-            userResponseModel.setPhone(userDb.getPhone());
-            userResponseModel.setGender(userDb.getGender());
-            userResponseModel.setUserId(userDb.getUserId());
-            userResponseModel.setFullname(userDb.getFullname());
-            userResponseModel.setImageProfile(userDb.getImageProfile());
-            List<TbUserRate> userRates = userRateService.findAllByUserIdOrderByDateDesc(userId);
-
-            List<TbUserRate> userRateResponses = new ArrayList<>();
-            if (userRates != null) {
-                Double avgBehaviourRate = 0.0;
-                Double avgLifeStyleRate = 0.0;
-                Double avgPaymentRate = 0.0;
-
-                int count = 0;
-                for (TbUserRate tbUserRate: userRates) {
-                    if (count < 6) {
-                        userRateResponses.add(tbUserRate);
-                        count++;
-                    }
-                     avgBehaviourRate += tbUserRate.getBehaviourRate();;
-                     avgLifeStyleRate += tbUserRate.getLifeStyleRate();;
-                     avgPaymentRate += tbUserRate.getPaymentRate();;
-                }
-
-                avgBehaviourRate = Double.parseDouble(Math.round((avgBehaviourRate / userRates.size()) * 10) + "");
-                avgLifeStyleRate = Double.parseDouble(Math.round((avgLifeStyleRate / userRates.size()) * 10) + "");
-                avgPaymentRate = Double.parseDouble(Math.round((avgPaymentRate / userRates.size()) * 10) + "");
-
-                userResponseModel.setAvgBehaviourRate(avgBehaviourRate / 10);
-                userResponseModel.setAvgLifeStyleRate(avgLifeStyleRate / 10);
-                userResponseModel.setAvgPaymentRate(avgPaymentRate / 10);
-            }
-
-            userResponseModel.setUserRateList(userRateResponses);
-
-            return ResponseEntity.status(OK).body(userResponseModel);
+            return ResponseEntity.status(OK).body(utilsService.getUserResponseModel(userId));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }
@@ -192,8 +161,7 @@ public class UserController {
     @GetMapping("/user/findAllUserRate/{userId}")
     public ResponseEntity findById(@PathVariable int userId, Pageable pageable) {
         try {
-            Page<TbUserRate> userRates = userRateService.findAllByUserId(userId, pageable.getPageNumber(), pageable.getPageSize());
-            return ResponseEntity.status(OK).body(userRates.getContent());
+            return ResponseEntity.status(OK).body(utilsService.getUserRateResponseModels(userId, PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize())).getContent());
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }
@@ -202,7 +170,13 @@ public class UserController {
     @PutMapping("/user/updateUser")
     public ResponseEntity updateUserById(@RequestBody TbUser user) {
         try {
-            userService.updateUserById(user);
+            TbUser tbUser = userService.findById(user.getUserId());
+            tbUser.setDob(user.getDob());
+            tbUser.setFullname(user.getFullname());
+            tbUser.setEmail(user.getEmail());
+            tbUser.setImageProfile(user.getImageProfile());
+            tbUser.setGender(user.getGender());
+            tbUser.setPhone(user.getPhone());
             return ResponseEntity.status(OK).build();
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
@@ -248,7 +222,23 @@ public class UserController {
             }
             return ResponseEntity.status(NOT_FOUND).build();
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).build();
+            return ResponseEntity.status(CONFLICT).build();
+        }
+    }
+    @PostMapping("/user/changePassword")
+    public ResponseEntity changePassword(@RequestBody ChangePasswordRequestModel changePasswordRequestModel) {
+        try {
+            TbUser user = userService.findById(changePasswordRequestModel.getUserId());
+            boolean isRight = this.passwordEncoder.matches(changePasswordRequestModel.getOldPassword(), user.getPassword());
+
+            if (isRight){
+                user.setPassword(passwordEncoder.encode(changePasswordRequestModel.getNewPassword()));
+                userService.saveUser(user);
+                return ResponseEntity.status(OK).build();
+            }
+            return ResponseEntity.status(FORBIDDEN).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT).build();
         }
     }
 }

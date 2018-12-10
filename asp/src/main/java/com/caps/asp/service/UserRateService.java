@@ -38,4 +38,7 @@ public class UserRateService {
     public List<TbUserRate> findAllByUserIdOrderByDateDesc(int userId) {
         return userRateRepository.findAllByUserIdOrderByDateDesc(userId);
     }
+    public Page<TbUserRate> findAllByUserIdOrderByDateDesc(int userId, Pageable pageable) {
+        return userRateRepository.findAllByUserIdOrderByDateDesc(userId,pageable);
+    }
 }
