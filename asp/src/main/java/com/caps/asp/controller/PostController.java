@@ -476,6 +476,7 @@ public class PostController {
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             } else { //access location, common nearby post
                 GoogleAPI googleAPI = new GoogleAPI();
+
                 GeocodingResult geocodingResult = googleAPI.getLocationName(baseSuggestRequestModel.getLatitude(), baseSuggestRequestModel.getLongitude());
 
                 String cityName = googleAPI.getCity(geocodingResult);
