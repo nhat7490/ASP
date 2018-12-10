@@ -128,6 +128,8 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         self.districts = (DBManager.shared.getRecords(ofType: DistrictModel.self)?.toArray(type: DistrictModel.self))!
         if let userModel = DBManager.shared.getUser(), let suggestSettingModel = userModel.suggestSettingModel{
             self.suggestSettingMappableModel = SuggestSettingMappableModel(suggestSettingModel: suggestSettingModel)
+        }else{
+            self.suggestSettingMappableModel = SuggestSettingMappableModel()
         }
         
     }
@@ -215,7 +217,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         }
         if cERoommateVCType == .create{
             if let suggestSettingMappableModel = currentUser.suggestSettingMappedModel{
-                self.suggestSettingMappableModel = suggestSettingMappableModel
+                
                 if let districtId = suggestSettingMappableModel.districts?.first, let cityId = DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.cityId{
                     selectedCity = DBManager.shared.getRecord(id: cityId, ofType: CityModel.self)
                     if let districts = suggestSettingMappableModel.districts,districts.count != 0{
@@ -268,7 +270,14 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     }
     func setupDelegateAndDataSource(){
         title = "CREATE_ROOMMATE_POST".localized
+<<<<<<< .mine
+        btnSave.setTitle(cERoommateVCType == .create ? "CREATE".localized : "SAVE".localized, for: .normal)
+        
+||||||| .r441
+        btnSave.setTitle("APPLY".localized, for: .normal)
+=======
         btnSave.setTitle("CREATE".localized, for: .normal)
+>>>>>>> .r456
         utilitiesView.utilities = utilities
         
         utilitiesView.delegate = self
@@ -399,15 +408,29 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             if suggestSettingMappableModel == nil {
                 suggestSettingMappableModel = SuggestSettingMappableModel()
             }
-            suggestSettingMappableModel?.districts = selectedDistricts?.compactMap {
+            suggestSettingMappableModel?.districts = selectedDistricts?.uniqueElements.compactMap {
                 $0.districtId
             }
-            suggestSettingMappableModel?.utilities = selectedUtilities
+            suggestSettingMappableModel?.utilities = selectedUtilities?.uniqueElements
             suggestSettingMappableModel?.price = selectedPrice
+<<<<<<< .mine
+            if cERoommateVCType == .create{
+                roommatePostRequestModel = RoommatePostRequestModel(cityId: selectedCity!.cityId, suggestSettingMappableModel: suggestSettingMappableModel!, phoneContact: phoneNumber)
+            }else{
+                roommatePostRequestModel.districtIds  = suggestSettingMappableModel?.districts
+                roommatePostRequestModel.utilityIds = suggestSettingMappableModel?.utilities
+                roommatePostRequestModel.minPrice = suggestSettingMappableModel?.price?.first
+                roommatePostRequestModel.maxPrice = suggestSettingMappableModel?.price?.last
+            }
+            
+||||||| .r441
+            roommatePostRequestModel = RoommatePostRequestModel(cityId: selectedCity!.cityId, suggestSettingMappableModel: suggestSettingMappableModel!, phoneContact: phoneNumber)
+=======
             if cERoommateVCType == .create{
                 roommatePostRequestModel = RoommatePostRequestModel(cityId: selectedCity!.cityId, suggestSettingMappableModel: suggestSettingMappableModel!, phoneContact: phoneNumber)
             }
             
+>>>>>>> .r456
             ceRoommatePost()
             
         }else{
@@ -441,12 +464,15 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                         hub.hide(animated: true)
                         self.currentUser.suggestSettingMappedModel = self.suggestSettingMappableModel
                         _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: UserModel(userMappedModel: self.currentUser))
+                        if self.cERoommateVCType == .edit{
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_POST, object: self.roommatePostRequestModel)
+                        }
                         AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: self.cERoommateVCType == .create ? "POST_CREATE_SUCCESS".localized : "POST_EDIT_SUCCESS".localized, inViewController: self,rhsButtonHandler: {
                             (action) in
                             if self.cERoommateVCType == .create{
                                 self.dimissEntireNavigationController()
                             }else{
-                                NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_POST, object: self.roommatePostRequestModel)
+                                
                                 self.popSelfInNavigationController()
                             }
                         })

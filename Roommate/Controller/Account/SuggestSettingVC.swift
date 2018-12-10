@@ -88,6 +88,8 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         self.districts = (DBManager.shared.getRecords(ofType: DistrictModel.self)?.toArray(type: DistrictModel.self))!
         if let userModel = DBManager.shared.getUser(), let suggestSettingModel = userModel.suggestSettingModel{
             self.suggestSettingMappableModel = SuggestSettingMappableModel(suggestSettingModel: suggestSettingModel)
+        }else{
+            self.suggestSettingMappableModel = SuggestSettingMappableModel()
         }
         
     }
@@ -164,7 +166,6 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             cityDropdownListView.text = selectedCity?.name
         }
         if let suggestSettingMappableModel = currentUser.suggestSettingMappedModel{
-            self.suggestSettingMappableModel = suggestSettingMappableModel
             if let districtId = suggestSettingMappableModel.districts?.first, let cityId = DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.cityId{
                 selectedCity = DBManager.shared.getRecord(id: cityId, ofType: CityModel.self)
                 if let districts = suggestSettingMappableModel.districts,districts.count != 0{
@@ -301,11 +302,18 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             if suggestSettingMappableModel == nil {
                 suggestSettingMappableModel = SuggestSettingMappableModel()
             }
-            suggestSettingMappableModel?.districts = selectedDistricts?.compactMap {
+            suggestSettingMappableModel?.districts = selectedDistricts?.uniqueElements.compactMap {
                 $0.districtId
             }
+<<<<<<< .mine
+            suggestSettingMappableModel?.userId = currentUser.userId
+            suggestSettingMappableModel?.utilities = selectedUtilities?.uniqueElements
+||||||| .r446
+            suggestSettingMappableModel?.utilities = selectedUtilities
+=======
             suggestSettingMappableModel?.userId = currentUser.userId
             suggestSettingMappableModel?.utilities = selectedUtilities
+>>>>>>> .r456
             suggestSettingMappableModel?.price = selectedPrice
             requestSaveSuggest()
         }

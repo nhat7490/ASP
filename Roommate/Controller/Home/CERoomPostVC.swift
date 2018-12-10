@@ -365,12 +365,15 @@ class CERoomPostVC: BaseVC,GenderViewDelegate,InputViewDelegate,MaxMemberSelectV
                     if statusCode == .Created || statusCode == .OK{
                         DispatchQueue.main.async {
                             hub.hide(animated: true)
+                            if self.cERoomPostVCType == .edit{
+                                NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_POST, object: self.roomPostRequestModel)
+                            }
                             AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: self.cERoomPostVCType == .create ? "POST_CREATE_SUCCESS".localized : "POST_EDIT_SUCCESS".localized, inViewController: self,rhsButtonHandler: {
                                 (action) in
                                 if self.cERoomPostVCType == .create{
                                     self.dimissEntireNavigationController()
                                 }else{
-                                    NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_POST, object: self.roomPostRequestModel)
+                                    
                                     self.popSelfInNavigationController()
                                 }
                             })
