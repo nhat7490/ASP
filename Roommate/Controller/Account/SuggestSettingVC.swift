@@ -305,15 +305,8 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             suggestSettingMappableModel?.districts = selectedDistricts?.uniqueElements.compactMap {
                 $0.districtId
             }
-<<<<<<< .mine
             suggestSettingMappableModel?.userId = currentUser.userId
             suggestSettingMappableModel?.utilities = selectedUtilities?.uniqueElements
-||||||| .r446
-            suggestSettingMappableModel?.utilities = selectedUtilities
-=======
-            suggestSettingMappableModel?.userId = currentUser.userId
-            suggestSettingMappableModel?.utilities = selectedUtilities
->>>>>>> .r456
             suggestSettingMappableModel?.price = selectedPrice
             requestSaveSuggest()
         }

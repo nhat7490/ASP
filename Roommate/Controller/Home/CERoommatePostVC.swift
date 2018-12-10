@@ -270,14 +270,8 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     }
     func setupDelegateAndDataSource(){
         title = "CREATE_ROOMMATE_POST".localized
-<<<<<<< .mine
         btnSave.setTitle(cERoommateVCType == .create ? "CREATE".localized : "SAVE".localized, for: .normal)
         
-||||||| .r441
-        btnSave.setTitle("APPLY".localized, for: .normal)
-=======
-        btnSave.setTitle("CREATE".localized, for: .normal)
->>>>>>> .r456
         utilitiesView.utilities = utilities
         
         utilitiesView.delegate = self
@@ -413,7 +407,6 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             }
             suggestSettingMappableModel?.utilities = selectedUtilities?.uniqueElements
             suggestSettingMappableModel?.price = selectedPrice
-<<<<<<< .mine
             if cERoommateVCType == .create{
                 roommatePostRequestModel = RoommatePostRequestModel(cityId: selectedCity!.cityId, suggestSettingMappableModel: suggestSettingMappableModel!, phoneContact: phoneNumber)
             }else{
@@ -423,14 +416,6 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                 roommatePostRequestModel.maxPrice = suggestSettingMappableModel?.price?.last
             }
             
-||||||| .r441
-            roommatePostRequestModel = RoommatePostRequestModel(cityId: selectedCity!.cityId, suggestSettingMappableModel: suggestSettingMappableModel!, phoneContact: phoneNumber)
-=======
-            if cERoommateVCType == .create{
-                roommatePostRequestModel = RoommatePostRequestModel(cityId: selectedCity!.cityId, suggestSettingMappableModel: suggestSettingMappableModel!, phoneContact: phoneNumber)
-            }
-            
->>>>>>> .r456
             ceRoommatePost()
             
         }else{

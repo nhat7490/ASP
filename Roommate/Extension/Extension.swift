@@ -643,6 +643,17 @@ extension String {
         return self.range(of: find, options: .caseInsensitive) != nil
     }
 }
+public extension Sequence where Element: Equatable {
+    var uniqueElements: [Element] {
+        return self.reduce(into: []) {
+            uniqueElements, element in
+            
+            if !uniqueElements.contains(element) {
+                uniqueElements.append(element)
+            }
+        }
+    }
+}
 extension UILabel{
     func addAttributeString(string:String,withIcon icon:UIImage,textColor:UIColor? = UIColor.red,textFont:UIFont? = UIFont.boldMedium,size:CGSize?,rect:CGRect? = nil){
         let attributes:[NSAttributedStringKey:Any] = [NSAttributedStringKey.foregroundColor:textColor,NSAttributedStringKey.font:textFont]
