@@ -30,15 +30,16 @@ public class ReferenceController {
         this.referenceService = referenceService;
     }
 
-//    @Transactional
+    @Transactional
     @PostMapping("/reference/save")
     public ResponseEntity createReference(@RequestBody SuggestSettingRequestModel suggestSettingRequestModel) {
-//        try {
+        try {
             List<Double> prices = suggestSettingRequestModel.getPrice();
 
             TbReference checkReference = referenceService.getByUserId(suggestSettingRequestModel.getUserId());
             if (checkReference == null){
                 checkReference = new TbReference();
+                checkReference.setUserId(suggestSettingRequestModel.getUserId());
             }
             checkReference.setMinPrice(prices.get(0));
             checkReference.setMaxPrice(prices.get(1));
@@ -62,8 +63,8 @@ public class ReferenceController {
                 districtReferenceService.save(tbDistrictReference);
             }
             return ResponseEntity.ok().build();
-//        } catch (Exception e) {
-//            return ResponseEntity.status(CONFLICT).build();
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT).build();
+        }
     }
 }
