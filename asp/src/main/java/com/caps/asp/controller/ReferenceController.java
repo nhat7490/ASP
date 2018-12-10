@@ -33,7 +33,7 @@ public class ReferenceController {
 //    @Transactional
     @PostMapping("/reference/save")
     public ResponseEntity createReference(@RequestBody SuggestSettingRequestModel suggestSettingRequestModel) {
-        try {
+//        try {
             List<Double> prices = suggestSettingRequestModel.getPrice();
 
             TbReference checkReference = referenceService.getByUserId(suggestSettingRequestModel.getUserId());
@@ -62,8 +62,8 @@ public class ReferenceController {
                 districtReferenceService.save(tbDistrictReference);
             }
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(CONFLICT).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(CONFLICT).build();
+//        }
     }
 }

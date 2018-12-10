@@ -17,7 +17,7 @@ public class GoogleAPI {
         String name = "(Unknown)";
         try {
             GeocodingResult[] results = GeocodingApi
-                    .reverseGeocode(context, new LatLng(latitudeDeg, longitudeDeg)).language("vi").await();
+                    .reverseGeocode(context, new LatLng(latitudeDeg, longitudeDeg)).language("en").await();
 
             // There may be multiple results with sequentially less data in each;
             // just return the first one, since it should have the most info.
