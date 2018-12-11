@@ -143,9 +143,8 @@ public class Filter implements Specification<TbPost> {
                 List<Predicate> userList = new ArrayList<>();
 
                 Root<TbUser> userRoot = criteriaQuery.from(TbUser.class);
-//                Root<TbReference> referenceRoot = criteriaQuery.from(TbReference.class);
                 Root<TbPostHasUtility> utilitiesReferenceRoot = criteriaQuery.from(TbPostHasUtility.class);
-//                Root<TbUtilities> utilitiesRoot = criteriaQuery.from(TbUtilities.class);
+                Root<TbUtilities> utilitiesRoot = criteriaQuery.from(TbUtilities.class);
                 Root<TbPostHasTbDistrict> districtReferenceRoot = criteriaQuery.from(TbPostHasTbDistrict.class);
                 Root<TbDistrict> districtRoot = criteriaQuery.from(TbDistrict.class);
 
@@ -157,21 +156,21 @@ public class Filter implements Specification<TbPost> {
                     criteriaQuery.orderBy(cb.desc(postRoot.get("minPrice")));
                 }
 
-//                if (filterArgumentModel.getFilterRequestModel().getDistricts() != null) {
-//                    for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
-//                        districtList.add(cb.equal(districtRoot.get("districtId"), districtId));
-//                    }
-//                } else {
-//                    districtList.add(cb.conjunction());
-//                }
+                if (filterArgumentModel.getFilterRequestModel().getDistricts() != null) {
+                    for (Integer districtId : filterArgumentModel.getFilterRequestModel().getDistricts()) {
+                        districtList.add(cb.equal(districtRoot.get("districtId"), districtId));
+                    }
+                } else {
+                    districtList.add(cb.conjunction());
+                }
 
-//                if (filterArgumentModel.getFilterRequestModel().getUtilities() != null) {
-//                    for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
-//                        utilityList.add(cb.equal(utilitiesRoot.get("utilityId"), utilityId));
-//                    }
-//                } else {
-//                    utilityList.add(cb.conjunction());
-//                }
+                if (filterArgumentModel.getFilterRequestModel().getUtilities() != null) {
+                    for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
+                        utilityList.add(cb.equal(utilitiesRoot.get("utilityId"), utilityId));
+                    }
+                } else {
+                    utilityList.add(cb.conjunction());
+                }
 
                 if (filterArgumentModel.getFilterRequestModel().getGender() != null
                         &&(filterArgumentModel.getFilterRequestModel().getGender() == 1
@@ -188,8 +187,6 @@ public class Filter implements Specification<TbPost> {
                             cb.between(postRoot.get("minPrice")
                                     , filterArgumentModel.getFilterRequestModel().getPrice().get(0)
                                     , filterArgumentModel.getFilterRequestModel().getPrice().get(1))));
-                }else{
-                    priceList.add(cb.conjunction());
                 }
 
                 if (filterArgumentModel.getTypeId() != null) {
@@ -210,6 +207,12 @@ public class Filter implements Specification<TbPost> {
                 if (priceList.size() == 0) priceList.add(cb.conjunction());
 
                 return cb.and(
+                        cb.equal(postRoot.get("userId"), userRoot.get("userId")),
+                        cb.equal(postRoot.get("postId"), utilitiesReferenceRoot.get("postId")),
+                        cb.equal(utilitiesReferenceRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
+                        cb.equal(postRoot.get("postId"), districtReferenceRoot.get("postId")),
+                        cb.equal(districtReferenceRoot.get("districtId"), districtRoot.get("districtId")),
+                        cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId()),
 
                         cb.or(typeList.toArray(new Predicate[typeList.size()])),
                         cb.or(districtList.toArray(new Predicate[districtList.size()])),

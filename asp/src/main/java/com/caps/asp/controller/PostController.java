@@ -359,7 +359,7 @@ public class PostController {
 
     @PostMapping("/post/filter")
     public ResponseEntity getPostByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
-        try {
+//        try {
             Filter filter = new Filter();
             filter.setFilterArgumentModel(filterArgumentModel);
             Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage()
@@ -372,9 +372,9 @@ public class PostController {
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             }
             return ResponseEntity.status(NOT_FOUND).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).build();
-        }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(NOT_FOUND).build();
+//        }
     }
 
     @PostMapping("/post/favouriteFilter")

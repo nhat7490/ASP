@@ -158,7 +158,7 @@ public class UserController {
     @GetMapping("/user/findById/{userId}")
     public ResponseEntity findById(@PathVariable int userId) {
         try {
-            return ResponseEntity.status(OK).body(utilsService.getUserResponseModel(userId));
+            return ResponseEntity.status(OK).body(utilsService.getUserResponseModel(userId,false));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).build();
         }
