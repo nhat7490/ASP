@@ -65,7 +65,7 @@ public class Filter implements Specification<TbPost> {
 
                 if (filterArgumentModel.getFilterRequestModel().getUtilities() != null) {
                     for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
-                        utilityList.add(cb.equal(utilitiesRoot.get("utilityId"), utilityId));
+                        utilityList.add(cb.equal(roomHasUtilityRoot.get("utilityId"), utilityId));
                     }
                 } else {
                     utilityList.add(cb.conjunction());
@@ -166,7 +166,7 @@ public class Filter implements Specification<TbPost> {
 
                 if (filterArgumentModel.getFilterRequestModel().getUtilities() != null) {
                     for (Integer utilityId : filterArgumentModel.getFilterRequestModel().getUtilities()) {
-                        utilityList.add(cb.equal(utilitiesRoot.get("utilityId"), utilityId));
+                        utilityList.add(cb.equal(utilitiesReferenceRoot.get("utilityId"), utilityId));
                     }
                 } else {
                     utilityList.add(cb.conjunction());
