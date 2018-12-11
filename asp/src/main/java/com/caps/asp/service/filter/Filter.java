@@ -110,7 +110,7 @@ public class Filter implements Specification<TbPost> {
                         cb.notEqual(postRoot.get("userId"),filterArgumentModel.getUserId()),
                         cb.or(typeList.toArray(new Predicate[typeList.size()])),
                         cb.or(districtList.toArray(new Predicate[districtList.size()])),
-                        cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
+                        cb.and(utilityList.toArray(new Predicate[utilityList.size()])),
                         cb.or(genderList.toArray(new Predicate[genderList.size()])),
                         cb.or(priceList.toArray(new Predicate[priceList.size()]))
 
@@ -214,7 +214,7 @@ public class Filter implements Specification<TbPost> {
                         cb.equal(districtRoot.get("cityId"), filterArgumentModel.getCityId()),
 
                         cb.or(typeList.toArray(new Predicate[typeList.size()])),
-                        cb.or(districtList.toArray(new Predicate[districtList.size()])),
+                        cb.and(districtList.toArray(new Predicate[districtList.size()])),
                         cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
                         cb.or(genderList.toArray(new Predicate[genderList.size()])),
                         cb.or(priceList.toArray(new Predicate[priceList.size()]))
