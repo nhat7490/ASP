@@ -95,6 +95,7 @@ public class UserController {
     @PostMapping("/test")
     public ResponseEntity test(@RequestBody String test){
         System.out.println(test);
+        System.out.println("Hồ Chí Minh");
         return ResponseEntity.ok().build();
     }
 
