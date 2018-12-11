@@ -92,6 +92,11 @@ public class UserController {
             return ResponseEntity.status(NOT_FOUND).build();
         }
     }
+    @PostMapping("/test")
+    public ResponseEntity test(@RequestBody String test){
+        System.out.println(test);
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping(value = "/user/admin", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity adminLogin(HttpServletRequest request,
