@@ -57,6 +57,10 @@ public class UtilsService {
         this.referenceService = referenceService;
     }
     public UserResponseModel getUserResponseModel(int userId){
+        return getUserResponseModel(userId,true);
+    }
+
+    public UserResponseModel getUserResponseModel(int userId,boolean isGetUserReference){
         UserResponseModel userResponseModel = new UserResponseModel();
         TbUser userDb = userService.findById(userId);
         userResponseModel.setDob(userDb.getDob());
@@ -68,22 +72,23 @@ public class UtilsService {
         userResponseModel.setEmail(userDb.getEmail());
         userResponseModel.setImageProfile(userDb.getImageProfile());
         List<TbUserRate> userRates = userRateService.findAllByUserIdOrderByDateDesc(userId);
+        if(isGetUserReference){
+            UserSuggestSettingModel userSuggestSettingModel = new UserSuggestSettingModel();
+            TbReference  reference = referenceService.getByUserId(userId);
+            if(reference != null) {
+                userSuggestSettingModel.setPrice(Arrays.asList(reference.getMinPrice(), reference.getMaxPrice()));
 
-        UserSuggestSettingModel userSuggestSettingModel = new UserSuggestSettingModel();
-        TbReference  reference = referenceService.getByUserId(userId);
-        if(reference != null) {
-            userSuggestSettingModel.setPrice(Arrays.asList(reference.getMinPrice(), reference.getMaxPrice()));
+                List<TbUtilitiesReference> utilitiesReference = utilityReferenceService.findAllByUserId(userId);
+                userSuggestSettingModel.setUtilities(utilitiesReference.stream().map(
+                        tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
+                        .collect(Collectors.toList()));
 
-            List<TbUtilitiesReference> utilitiesReference = utilityReferenceService.findAllByUserId(userId);
-            userSuggestSettingModel.setUtilities(utilitiesReference.stream().map(
-                    tbUtilitiesReference -> tbUtilitiesReference.getUtilityId())
-                    .collect(Collectors.toList()));
-
-            List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(userId);
-            userSuggestSettingModel.setDistricts(districtReferences.stream().map(
-                    tbDistrictReference -> tbDistrictReference.getDistrictId())
-                    .collect(Collectors.toList()));
-            userResponseModel.setUserSuggestSettingModel(userSuggestSettingModel);
+                List<TbDistrictReference> districtReferences = districtReferenceService.findAllByUserId(userId);
+                userSuggestSettingModel.setDistricts(districtReferences.stream().map(
+                        tbDistrictReference -> tbDistrictReference.getDistrictId())
+                        .collect(Collectors.toList()));
+                userResponseModel.setUserSuggestSettingModel(userSuggestSettingModel);
+            }
         }
         List<UserRateResponseModel> userRateResponses = new ArrayList<>();
         if (userRates != null) {
@@ -115,6 +120,7 @@ public class UtilsService {
         userResponseModel.setUserRateResponseModels(userRateResponses);
         return userResponseModel;
     }
+
     public RoomPostResponseModel getRoomPostResponseModel(int userId,TbPost tbPost){
         RoomPostResponseModel roomPostResponseModel = new RoomPostResponseModel();
         TbRoom room = roomService.findRoomById(tbPost.getRoomId());
@@ -298,7 +304,7 @@ public class UtilsService {
         roommatePostResponseModel.setPhoneContact(tbPost.getPhoneContact());
         roommatePostResponseModel.setDate(tbPost.getDatePost());
 
-        roommatePostResponseModel.setUserResponseModel(this.getUserResponseModel(tbPost.getUserId()));
+        roommatePostResponseModel.setUserResponseModel(this.getUserResponseModel(tbPost.getUserId(),false));
 
         if (favourite != null) {
             roommatePostResponseModel.setFavourite(true);
