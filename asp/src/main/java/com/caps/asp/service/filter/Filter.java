@@ -188,6 +188,8 @@ public class Filter implements Specification<TbPost> {
                             cb.between(postRoot.get("minPrice")
                                     , filterArgumentModel.getFilterRequestModel().getPrice().get(0)
                                     , filterArgumentModel.getFilterRequestModel().getPrice().get(1))));
+                }else{
+                    priceList.add(cb.conjunction());
                 }
 
                 if (filterArgumentModel.getTypeId() != null) {

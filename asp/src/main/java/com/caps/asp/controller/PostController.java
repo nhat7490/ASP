@@ -113,6 +113,7 @@ public class PostController {
                 post.setPostId(0);
                 post.setDatePost(timestamp);
                 post.setName(user.getUsername());
+
                 post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
                 post.setTypeId(MEMBER_POST);
                 post.setUserId(user.getUserId());
