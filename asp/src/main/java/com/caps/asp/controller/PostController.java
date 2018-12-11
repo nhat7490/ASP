@@ -112,6 +112,7 @@ public class PostController {
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 post.setPostId(0);
                 post.setDatePost(timestamp);
+                post.setName(user.getUsername());
                 post.setPhoneContact(roommatePostRequestModel.getPhoneContact());
                 post.setTypeId(MEMBER_POST);
                 post.setUserId(user.getUserId());
@@ -486,6 +487,8 @@ public class PostController {
                 System.out.println("Longitute:"+baseSuggestRequestModel.getLongitude());
                 System.out.println("Laditude:"+baseSuggestRequestModel.getLatitude());
                 if(city!=null) {
+
+
                     System.out.println("CityNameFound:"+city.getName());
                     int cityId = city.getCityId();
                     List<TbPost> postList = postService.getSuggestedListForMember(Float.parseFloat(baseSuggestRequestModel.getLatitude().toString())
