@@ -215,7 +215,7 @@ public class Filter implements Specification<TbPost> {
 
                         cb.or(typeList.toArray(new Predicate[typeList.size()])),
                         cb.or(districtList.toArray(new Predicate[districtList.size()])),
-                        cb.and(utilityList.toArray(new Predicate[utilityList.size()])),
+                        cb.and(cb.and(utilityList.toArray(new Predicate[utilityList.size()]))),
                         cb.or(genderList.toArray(new Predicate[genderList.size()])),
                         cb.or(priceList.toArray(new Predicate[priceList.size()]))
                 );
