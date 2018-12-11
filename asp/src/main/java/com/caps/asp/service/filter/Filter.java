@@ -207,7 +207,6 @@ public class Filter implements Specification<TbPost> {
                 if (priceList.size() == 0) priceList.add(cb.conjunction());
 
                 return cb.and(
-                        cb.equal(postRoot.get("userId"), userRoot.get("userId")),
                         cb.equal(postRoot.get("postId"), utilitiesReferenceRoot.get("postId")),
                         cb.equal(utilitiesReferenceRoot.get("utilityId"), utilitiesRoot.get("utilityId")),
                         cb.equal(postRoot.get("postId"), districtReferenceRoot.get("postId")),
