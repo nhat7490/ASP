@@ -362,6 +362,7 @@ public class PostController {
 //        try {
             Filter filter = new Filter();
             filter.setFilterArgumentModel(filterArgumentModel);
+
             Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage()
                     , filterArgumentModel.getOffset(), filter);
             if (filter.getFilterArgumentModel().getTypeId() == MEMBER_POST) {//get member post
@@ -402,8 +403,11 @@ public class PostController {
 
     @PostMapping("/post/suggest")
     public ResponseEntity suggestPost(@RequestBody BaseSuggestRequestModel baseSuggestRequestModel) {
-//        try {
+        try {
+
             TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
+            System.out.println("Suggest For user: "+tbUser.getUsername()+" with name : "+tbUser.getFullname());
+
             TbPost checkPost = postService.findAllByUserIdAndTypeIdOrderByDatePostDesc(baseSuggestRequestModel.getUserId(), MASTER_POST);
             boolean checkDate = false;
             if (checkPost != null) {
@@ -417,6 +421,7 @@ public class PostController {
             //sugesst for room master
             if (tbUser.getRoleId() == ROOM_MASTER
                     && checkDate) {
+                System.out.println("User is Room master suggest post nearby");
                 List<TbPost> postList = postService.getSuggestedList(baseSuggestRequestModel.getUserId()
                         , baseSuggestRequestModel.getPage(), baseSuggestRequestModel.getOffset());
 
@@ -430,6 +435,7 @@ public class PostController {
                 List<RoomPostResponseModel> roomPostResponseModels = new ArrayList<>();
                 return ResponseEntity.status(OK).body(utilsService.mappingRoomPost(postList, roomPostResponseModels, baseSuggestRequestModel.getUserId()));
             } else if (referenceService.getByUserId(baseSuggestRequestModel.getUserId()) != null) {//sugesst for room master
+                System.out.println("User has reference so suggest by reference");
                 FilterRequestModel filterRequestModel = new FilterRequestModel();
                 List<TbUtilitiesReference> utilitiesReference = utilityReferenceService
                         .findAllByUserId(baseSuggestRequestModel.getUserId());
@@ -474,9 +480,11 @@ public class PostController {
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             } else if (baseSuggestRequestModel.getLatitude() == null
                     && baseSuggestRequestModel.getLongitude() == null) { //not access location, common new post
+                System.out.println("User hasn't logitude and latitude suggest new post");
                 Page<RoomPostResponseModel> roomPostResponseModels = utilsService.getNewPost(baseSuggestRequestModel);
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             } else { //access location, common nearby post
+                System.out.println("User hasn logitude and latitude suggest nearby location of user");
                 GoogleAPI googleAPI = new GoogleAPI();
 
                 GeocodingResult geocodingResult = googleAPI.getLocationName(baseSuggestRequestModel.getLatitude(), baseSuggestRequestModel.getLongitude());
@@ -514,9 +522,9 @@ public class PostController {
                     return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
                 }
             }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(NOT_FOUND).build();
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
     }
     @GetMapping("post/room/{postId}")
     public ResponseEntity getRoomByPostId(@PathVariable int postId){
