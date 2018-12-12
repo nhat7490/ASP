@@ -108,7 +108,7 @@ public class BookmarkFilter implements Specification<TbPost> {
                         cb.or(userList.toArray(new Predicate[userList.size()])),
                         cb.or(typeList.toArray(new Predicate[typeList.size()])),
                         cb.or(districtList.toArray(new Predicate[districtList.size()])),
-                        cb.and(utilityList.toArray(new Predicate[utilityList.size()])),
+                        cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
                         cb.or(genderList.toArray(new Predicate[genderList.size()])),
                         cb.or(priceList.toArray(new Predicate[priceList.size()]))
 
@@ -214,7 +214,7 @@ public class BookmarkFilter implements Specification<TbPost> {
                         cb.equal(postRoot.get("typeId"), filterArgumentModel.getTypeId()),
                         cb.equal(userRoot.get("userId"), filterArgumentModel.getUserId()),
                         cb.or(districtList.toArray(new Predicate[districtList.size()])),
-                        cb.and(utilityList.toArray(new Predicate[utilityList.size()])),
+                        cb.or(utilityList.toArray(new Predicate[utilityList.size()])),
                         cb.or(genderList.toArray(new Predicate[genderList.size()])),
                         cb.or(priceList.toArray(new Predicate[priceList.size()]))
                 );
