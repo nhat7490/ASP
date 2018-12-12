@@ -493,8 +493,8 @@ public class PostController {
                 TbCity city = cityService.findByNameLike(cityName);
 //                Optional<TbCity> optionalTbCity = cityService.findAll().stream().filter(tbCity -> geocodingResult.formattedAddress.toLowerCase().contains(tbCity.getName().toLowerCase())).findFirst();
                 System.out.println("CityNameRequest:"+cityName);
-                System.out.println(cityName.equalsIgnoreCase("Hồ Chí Minh"));
-                
+                System.out.println("Check Equal:"+cityName.equalsIgnoreCase("Hồ Chí Minh"));
+
                 System.out.println("Longitute:"+baseSuggestRequestModel.getLongitude());
                 System.out.println("Laditude:"+baseSuggestRequestModel.getLatitude());
                 if(city!=null) {
