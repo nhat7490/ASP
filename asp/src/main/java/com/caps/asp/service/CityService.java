@@ -21,6 +21,6 @@ public class CityService {
     }
 
     public TbCity findByNameLike(String cityName) {
-        return cityRepository.findByNameLike(cityName);
+        return cityRepository.findByNameLike("%"+cityName+"%");
     }
 }
