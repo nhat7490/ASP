@@ -495,7 +495,7 @@ public class PostController {
 //                System.out.println("CityNameRequest:"+city.getName());
 
                 System.out.println("Longitute:"+baseSuggestRequestModel.getLongitude());
-                System.out.println("Laditude:"+baseSuggestRequestModel.getLatitude());
+                System.out.println("Latitude:"+baseSuggestRequestModel.getLatitude());
                 if(city!=null) {
                     System.out.println("CityNameFound:"+city.getName());
                     int cityId = city.getCityId();

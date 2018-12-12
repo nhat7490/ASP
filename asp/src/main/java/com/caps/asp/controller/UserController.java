@@ -96,7 +96,7 @@ public class UserController {
     public ResponseEntity test(@RequestBody String test){
         System.out.println(test);
         System.out.println("Hồ Chí Minh");
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(test);
     }
 
     @PostMapping(value = "/user/admin", consumes = MediaType.APPLICATION_JSON_VALUE)
