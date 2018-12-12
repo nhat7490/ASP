@@ -484,7 +484,7 @@ public class PostController {
                 Page<RoomPostResponseModel> roomPostResponseModels = utilsService.getNewPost(baseSuggestRequestModel);
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             } else { //access location, common nearby post
-                System.out.println("User hasn logitude and latitude suggest nearby location of user");
+                System.out.println("User has logitude and latitude suggest nearby location of user");
                 GoogleAPI googleAPI = new GoogleAPI();
 
                 GeocodingResult geocodingResult = googleAPI.getLocationName(baseSuggestRequestModel.getLatitude(), baseSuggestRequestModel.getLongitude());
@@ -493,11 +493,10 @@ public class PostController {
                 TbCity city = cityService.findByNameLike(cityName);
 //                Optional<TbCity> optionalTbCity = cityService.findAll().stream().filter(tbCity -> geocodingResult.formattedAddress.toLowerCase().contains(tbCity.getName().toLowerCase())).findFirst();
                 System.out.println("CityNameRequest:"+cityName);
+
                 System.out.println("Longitute:"+baseSuggestRequestModel.getLongitude());
                 System.out.println("Laditude:"+baseSuggestRequestModel.getLatitude());
                 if(city!=null) {
-
-
                     System.out.println("CityNameFound:"+city.getName());
                     int cityId = city.getCityId();
                     List<TbPost> postList = postService.getSuggestedListForMember(Float.parseFloat(baseSuggestRequestModel.getLatitude().toString())
