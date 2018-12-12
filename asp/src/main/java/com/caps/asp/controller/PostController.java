@@ -492,7 +492,8 @@ public class PostController {
                 String cityName = googleAPI.getCity(geocodingResult);
                 TbCity city = cityService.findByNameLike(cityName);
 //                Optional<TbCity> optionalTbCity = cityService.findAll().stream().filter(tbCity -> geocodingResult.formattedAddress.toLowerCase().contains(tbCity.getName().toLowerCase())).findFirst();
-                System.out.println("CityNameRequest:"+city.getName());
+//                System.out.println("CityNameRequest:"+city.getName());
+
                 System.out.println("Longitute:"+baseSuggestRequestModel.getLongitude());
                 System.out.println("Laditude:"+baseSuggestRequestModel.getLatitude());
                 if(city!=null) {
