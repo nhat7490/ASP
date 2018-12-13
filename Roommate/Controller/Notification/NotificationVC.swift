@@ -47,6 +47,7 @@ class NotificationVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,
     }
     func setupUI() {
         //For collectionView
+        
         navigationController?.navigationBar.isHidden = true
         view.addSubview(collectionView)
         _ = collectionView.anchorTopLeft( view.topAnchor,  view.leftAnchor,  view.widthAnchor,  view.heightAnchor)
@@ -57,9 +58,13 @@ class NotificationVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,
         //For top right title of notification
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = true
+    }
     //MARK: Notification
     func observeNotification(){
-//        ref.child("notifications/users").child("\(user?.userId)").observe(.childAdded)
+        BaseVC.refToObserveNotification = ref
         ref.observe(.childAdded)
                 { (snapshot) in
                     if let dic = snapshot.value as? [String:AnyObject],let model = Mapper<NotificationMappableModel>().map(JSON: dic){
@@ -128,6 +133,9 @@ class NotificationVC:BaseVC,UICollectionViewDelegate,UICollectionViewDataSource,
                 }
             }
         }
+        let vc = NotificationDetailVC()
+        vc.notification = cell.notification
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     //MARK: Custom
     func updateUI(){

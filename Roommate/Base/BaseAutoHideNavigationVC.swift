@@ -30,13 +30,13 @@ class BaseAutoHideNavigationVC: BaseVC {
         if offset  > 50.0{
             UIView.animate(withDuration: 1.5, delay: 0, options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(true, animated: true)
-                print("Hide")
+//                print("Hide")
             }, completion: nil)
         }else{
             
             UIView.animate(withDuration: 1.5, delay: 0, options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
-                print("Unhide")
+//                print("Unhide")
             }, completion: nil)
         }
     }

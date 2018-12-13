@@ -51,7 +51,7 @@
 "ERROR_LOAD_ROOM_OF_POST_NON_EXIST" = "Không tìm thấy thông tin phòng của bài đăng.";
 "ERROR_LOAD_USER" = "Không thể tải thông tin người dùng";
 "LOAD_CURRENT_ROOM" = "Đang tải thông tin phòng";
-"LOAD_USER_INFO" = "Đang tải thông tin người dùng";
+"LOAD_USER_ORMAO" = "Đang tải thông tin người dùng";
 "LOAD_REMOVE_ROOM" = "Đang xoá phòng";
 
 //MARK: SettingVC
@@ -109,6 +109,7 @@
 "24-hours"="Giờ giấc tự do";
 "aircondition"="Máy lạnh";
 "closet"="Tủ quần áo";
+"security"="An ninh";
 "cooking"="Cho nấu ăn";
 "fan"="Quạt";
 "bed"="Giường ngủ";
@@ -128,6 +129,7 @@
 "ROOM_DETAIL_STATUS_DECLINED"="Đã từ chối";
 "ROOM_DETAIL_STATUS_PENDING"="Đang xem xét";
 "ROOM_DETAIL_MAX_NUMBER_OF_MEMBER"="Số người tối đa : %d";
+"ROOM_DETAIL_REACH_MAX_NUMBER_OF_MEMBER"="Phòng đã đầy người";
 "ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER"="Hiện tại : %d";
 "ROOM_DETAIL_ADDED_NUMBER_OF_MEMBER"="Đã thêm : %d";
 "GENDER_ACCEPT"="Giới tính";
@@ -229,7 +231,7 @@
 "ERROR_TYPE_UTILITY"="Chọn tối thiểu 5 tiện ích";
 "ERROR_TYPE_EMAIL"="Địa chỉ email không đúng";
 "PLACE_HOLDER_AVATAR_IMAGE"="Ảnh đại diện";
-"PLACE_HOLDER_FULL_NAME"="Tên đầy đủ của bạn";
+"PLACE_HOLDER_FULL_NAME"="Tên đầy đủ";
 "PLACE_HOLDER_DOB"="Ngày sinh";
 "PLACE_HOLDER_PHONE_NUMBER"="Số điện thoại";
 "PLACE_HOLDER_EMAIL"="Địa chỉ email";
@@ -242,7 +244,7 @@
 
 
 
-"PLACE_HOLDER_FULL_NAME_VALUE"="Tên đầy đủ của bạn : %@";
+"PLACE_HOLDER_FULL_NAME_VALUE"="Tên đầy đủ : %@";
 "PLACE_HOLDER_DOB_VALUE"="Ngày sinh : %@";
 "PLACE_HOLDER_PHONE_NUMBER_VALUE"="Số điện thoại : %@";
 "PLACE_HOLDER_EMAIL_VALUE"="Địa chỉ email : %@";
@@ -356,11 +358,13 @@
 "MB_LOAD_EDIT_ROOM" = "Đang cập nhập thông tin phòng";
 
 "SEARCH_LOADING"="Đang tìm kiếm...";
+
 //MARK:Utility
 "Camera"="Camera an ninh";
 "Freetime"="Giờ giấc tự do";
 "Airconditioner"="Máy lạnh";
 "Cooking"="Nấu ăn";
+"Closet"="Tủ quần áo";
 "Fan"="Quạt";
 "Bed"="Giường";
 "Internet"="Internet";
@@ -410,4 +414,5 @@
 "ADD_MEMBER_NOTIFICATION"="Bạn đã được thêm vào phòng %@";
 "REMOVE_MEMBER_NOTIFICATION"="Bạn đã bị chủ phòng %@ xoá ra khỏi danh sách thành viên";
 "UPDATE_MEMBER_NOTIFICATION"="Chủ phòng %@ đã cập nhập thông tin thành viên.";
+"NOTIFICATION_DETAIL"="Thông báo";
 

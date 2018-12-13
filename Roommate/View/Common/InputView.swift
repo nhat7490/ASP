@@ -79,7 +79,7 @@ class InputView: UIView,UITextFieldDelegate {
         guard let updatedString = (tfInput.text as NSString?)?.replacingCharacters(in: range, with: string) else {
             return false
         }
-        print(updatedString)
+        
         if !validInformation(updatedString: updatedString){
             return false
         }else{

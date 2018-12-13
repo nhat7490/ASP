@@ -8,12 +8,15 @@
 
 import UIKit
 import ObjectMapper
-class BaseRateResponseModel: Mappable {
+class BaseRateResponseModel: Mappable,Equatable,Hashable {
     var username:String!
     var userId:Int!
     var imageProfile:String?
     var comment:String!
     var date:Date?
+    var hashValue: Int{
+        return userId.hashValue
+    }
     public init(comment: String!, userId: Int!) {
         self.comment = comment
         self.userId = userId
@@ -24,7 +27,6 @@ class BaseRateResponseModel: Mappable {
         self.comment = ""
         self.userId = 0
     }
-    
     required init?(map: Map) {
         
     }
@@ -36,5 +38,8 @@ class BaseRateResponseModel: Mappable {
         comment <- map["comment"]
         date <- (map["date"],CustomDateFormatTransform(formatString:Constants.DATE_FORMAT))
         
+    }
+    static func ==(lhs:BaseRateResponseModel,rhs:BaseRateResponseModel)->Bool{
+        return lhs.userId == rhs.userId
     }
 }

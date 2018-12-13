@@ -14,6 +14,7 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
         super.viewDidLoad()
 //        self.navigationController?.navigationBar.isHidden = true
 //        setupUI();
+        self.tabBar.isHidden = true
         view.backgroundColor = .white
         if APIConnection.isConnectedInternet(){
             checkAndLoadInitData(view: self.view)
@@ -28,6 +29,7 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
     }
     
     func setupUI() {
+        self.tabBar.isHidden = false
         self.tabBar.backgroundColor = .white
         self.tabBar.tintColor = .black
         self.tabBar.barTintColor = .white
@@ -57,7 +59,7 @@ class MainTabBarVC: BaseTabBarVC,UITabBarControllerDelegate{
         vcs.append(account)
         viewControllers = vcs.map({
 //            let _ = $0.view
-            if $0 is AccountVC || $0 is NotificationVC{
+            if $0 is AccountVC {
                 return $0
             }else{
                 return UINavigationController(rootViewController: $0)

@@ -13,9 +13,10 @@ import MBProgressHUD
 import AVFoundation
 import PhotosUI
 import CoreLocation
+import FirebaseDatabase
 class BaseVC:UIViewController,UIScrollViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,AlertControllerDelegate{
     var hasBackImageButtonInNavigationBar:Bool? = false
-    
+    static var refToObserveNotification:DatabaseReference?
     let locationManager = CLLocationManager()
     static var successLoaded = false
     let group = DispatchGroup()
@@ -121,19 +122,25 @@ class BaseVC:UIViewController,UIScrollViewDelegate,UIImagePickerControllerDelega
                     }else{
                         if loaded{
                             BaseVC.successLoaded = true
+                            DispatchQueue.main.async {
+                                MBProgressHUD.hide(for: view, animated: true)
+                                completed()
+                            }
                         }else{
                             BaseVC.successLoaded = false
+                            MBProgressHUD.hide(for: view, animated: true)
+                            self.showErrorView(inView: view, withTitle: "NETWORK_STATUS_PARSE_RESPONSE_FAIL_MESSAGE".localized) {
+                                self.checkAndLoadInitData(view: view){
+                                    completed()
+                                }
+                            }
+                            
                         }
                         
                         
                     }
                     
-                    DispatchQueue.main.async {
-                        MBProgressHUD.hide(for: view, animated: true)
-                        self.checkAndLoadInitData(view: view){
-                            completed()
-                        }
-                    }
+                    
                     
                     
                 }

@@ -125,6 +125,7 @@ class RateView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,UICo
         btnTopRigh.setTitle("TITLE_VIEW_ALL".localized, for: .normal)
         
         collectionView.addBorder(side: .Top, color: .lightGray, width: 1.0)
+        
     }
     //MARK: UICollectionVIewDelegate and DataSource
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

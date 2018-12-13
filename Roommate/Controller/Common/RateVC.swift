@@ -204,6 +204,9 @@ class RateVC: BaseVC,DescriptionViewDelegate {
                 }else{
                     if statusCode == .OK{
                         DispatchQueue.main.async {
+                            if self.rateVCType == .room{
+                                NotificationCenter.default.post(name: Constants.NOTIFICATION_CREATE_RATE, object: RoomRateResponseModel(roomRateRequestModel: self.roomRateRequestModel) )
+                            }
                             AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "RATE_SAVE_SUCCESS".localized, inViewController: self,rhsButtonHandler:{
                                 (action) in
                                 self.popSelfInNavigationController()

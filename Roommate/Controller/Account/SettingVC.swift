@@ -140,16 +140,15 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
             }else if indexPath.row == 2{
                 
             }else{
-                Database.database().reference().child("notifications/users").child("\(self.user!.userId)").removeAllObservers()
+//                Database.database().reference().child("notifications/users").child("\(self.user!.userId)").removeAllObservers()
+                if let ref = BaseVC.refToObserveNotification{
+                    ref.removeAllObservers()
+                }
                 let appdelegate = UIApplication.shared.delegate as! AppDelegate
                 appdelegate.window!.rootViewController?.dismiss(animated: true, completion: {
-                    DBManager.shared.deleteAllRecords(ofType: UserModel.self)
+                    DBManager.shared.deleteAllRealmDB()
                     let appdelegate = UIApplication.shared.delegate as! AppDelegate
                     appdelegate.window!.rootViewController = UINavigationController(rootViewController: Utilities.vcFromStoryBoard(vcName: Constants.VC_FIRST_LAUNCH, sbName: Constants.STORYBOARD_MAIN) )
-//                    NotificationCenter.default.post(name: Constants.NOTIFICATION_SIGNOUT, object: nil)
-//                    self.navigationController?.dismiss(animated: true, completion: {
-//
-//                    })
                 })
                 
             }

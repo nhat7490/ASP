@@ -24,6 +24,7 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     var utilityModel = UtilityMappableModel()
     var indexPath:IndexPath?
     var delegate:UtilityInputVCDelegate?
+    var quantity:String = "1"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,16 +74,16 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let updatedString = (textField.text as NSString?)?.replacingCharacters(in: range, with: string){
             if textField == tfBrand{
+                utilityModel.brand = updatedString
                 if updatedString.isValidBrand(){
                     tfBrand.errorMessage = ""
-                    utilityModel.brand = updatedString
                 }else{
                     tfBrand.errorMessage = "ERROR_TYPE_BRAND".localized
                 }
             }else{
+                quantity = updatedString
                 if updatedString.isValidQuantity(){
                     tfQuantity.errorMessage = ""
-                    utilityModel.quantity = updatedString.toInt()!
                 }else{
                     tfQuantity.errorMessage = "ERROR_TYPE_QUANTITY".localized
                 }
@@ -111,6 +112,7 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
     
     @IBAction func onclickBtnRight(_ sender: Any) {
         if checkValidInformation(){
+            self.utilityModel.quantity = quantity.toInt()!
             self.delegate?.utilityInputVCDelegate(onCompletedInputUtility: utilityModel,atIndexPath:indexPath)
             self.dismiss(animated: true, completion: nil)
         }
@@ -123,7 +125,7 @@ class UtilityInputVC: BaseVC ,UITextFieldDelegate,UITextViewDelegate{
             message.append(NSAttributedString(string: "\("BRAND_PLACE_HOLDER".localized) :  \("ERROR_TYPE_BRAND".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         
-        if !utilityModel.quantity.toString.isValidQuantity(){
+        if !quantity.isValidQuantity(){
             message.append(NSAttributedString(string: "\("QUANTITY_PLACE_HOLDER".localized) :  \("ERROR_TYPE_QUANTITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         

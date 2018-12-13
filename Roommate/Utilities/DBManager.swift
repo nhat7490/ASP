@@ -100,7 +100,7 @@ class DBManager {
     func addUser(user:UserModel)->Bool{
         let realm = try! Realm()
         do{
-            self.deleteAllUsers()//delete all relative data when logout
+            self.deleteAllRealmDB()//delete all relative data when logout
             guard let _ = getUser() else{
                 try realm.write {
                     realm.add(user)
@@ -136,7 +136,7 @@ class DBManager {
             return false
         }
     }
-    func deleteAllUsers() {
+    func deleteAllRealmDB() {
         let realm = try! Realm()
         do {
             try realm.write {

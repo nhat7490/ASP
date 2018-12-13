@@ -385,6 +385,11 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
             }
             roomMappableModel.area = int
         case addressInputView:
+            if addressInputView.isSelectedFromSuggest && (string.count<self.roomMappableModel.address.count){
+                self.addressInputView.isSelectedFromSuggest = false
+                self.addressInputView.text = ""
+                self.roomMappableModel.address = ""
+            }
             if roomMappableModel.districtId == 0{
                 addressInputView.tfInput.setupUI(placeholder: "ROOM_ADDRESS_TITLE_REQUIRED_DISTRICT", title: "ROOM_ADDRESS_TITLE", delegate: addressInputView)
                 return false

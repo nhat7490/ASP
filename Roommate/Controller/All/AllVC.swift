@@ -747,15 +747,19 @@ RoomCVCellDelegate,RoommateCVCellDelegate,FilterVCDelegate{
     //MARK: FilterVCDelegate
     
     func filterVCDelegate(filterVC: FilterVC, onCompletedWithFilter filter: FilterArgumentModel) {
-        
-        if segmentControl.selectedSegmentIndex == 0{
-            self.roomFilter = filter
-            rooms?.removeAll()
-            loadRoomData(withNewFilterArgModel: true)
-        }else{
-            self.roommateFilter = filter
-            roommates?.removeAll()
-            loadRoommateData(withNewFilterArgModel: true)
+        DispatchQueue.main.async {
+            MBProgressHUD.hide(for: self.collectionView, animated: true)
+        }
+        checkAndLoadInitData(view: self.collectionView) {
+            if self.segmentControl.selectedSegmentIndex == 0{
+                self.roomFilter = filter
+                self.rooms?.removeAll()
+                self.loadRoomData(withNewFilterArgModel: true)
+            }else{
+                self.roommateFilter = filter
+                self.roommates?.removeAll()
+                self.loadRoommateData(withNewFilterArgModel: true)
+            }
         }
     }
     

@@ -252,7 +252,7 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
             roommate.utilityIds.forEach { (utilityId) in
                 utilities.append(UtilityMappableModel(utilityModel: DBManager.shared.getRecord(id: utilityId, ofType: UtilityModel.self)!))
             }
-            utilitiesView.utilities = utilities
+            utilitiesView.utilities = utilities.uniqueElements
             
             //Data for rateView
             rateView.rateViewType = RateViewType.roommatePost
@@ -280,6 +280,7 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
     //MARK: Notification
     func registerNotification(){
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditPostNotification(_:)), name: Constants.NOTIFICATION_EDIT_POST, object: nil)
+        
     }
     
     
@@ -301,6 +302,7 @@ class PostDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,UtilitiesViewDele
             self.setData()
         }
     }
+    
     //MARK: HorizontalImagesViewDelegate
     func horizontalImagesViewDelegate(horizontalImagesView view: HorizontalImagesView, didSelectImageAtIndextPath indexPath: IndexPath) {
         let vc = Utilities.vcFromStoryBoard(vcName: Constants.VC_IMAGES, sbName: Constants.STORYBOARD_MAIN) as! ImagesVC

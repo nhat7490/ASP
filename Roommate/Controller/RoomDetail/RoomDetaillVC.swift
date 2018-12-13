@@ -17,7 +17,7 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
             }
         }
     }
-
+    
     lazy var scrollView:UIScrollView = {
         let sv = UIScrollView()
         sv.bounces = false
@@ -42,28 +42,28 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
         let bv:BaseInformationView = .fromNib()
         return bv
     }()
-//
-//    var genderView:GenderView = {
-//        let gv:GenderView = .fromNib()
-//        return gv
-//    }()
-
+    //
+    //    var genderView:GenderView = {
+    //        let gv:GenderView = .fromNib()
+    //        return gv
+    //    }()
+    
     lazy var membersView:MembersView = {
         let mv:MembersView = .fromNib()
         return mv
     }()
-
+    
     lazy var utilitiesView:UtilitiesView = {
         let uv:UtilitiesView = .fromNib()
         return uv
     }()
-
-
+    
+    
     lazy var descriptionsView:DescriptionView = {
         let dv:DescriptionView = .fromNib()
         return dv
     }()
-
+    
     lazy var optionView:OptionView = {
         let ov:OptionView = .fromNib()
         return ov
@@ -74,7 +74,7 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
         return rv
     }()
     
-
+    
     lazy var viewType:ViewType = .detailForOwner
     var contentViewHeightConstraint:NSLayoutConstraint?
     var membersViewHeightConstraint:NSLayoutConstraint?
@@ -93,17 +93,18 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
     //MARK: RoomDetailVC
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.navigationController?.isNavigationBarHidden = true
+        //        self.navigationController?.isNavigationBarHidden = true
         setBackButtonForNavigationBar()
         if viewType == .currentDetailForMember{
             
             requestCurrentRoom(inView: view) { (roomMappableModel) in
                 DispatchQueue.main.async {
-                    //                    self.navigationController?.isNavigationBarHidden = false
+                    
                     self.room = roomMappableModel
                     self.setupUI()
                     self.setDelegateAndDataSource()
                     self.registerNotification()
+                    MBProgressHUD.hide(for: self.view, animated: true)
                 }
                 
             }
@@ -126,15 +127,15 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
     
     func setupUI() {
         //Navigation bar
-//        title = "ROOM_INFOR_TITLE".localized
+        //        title = "ROOM_INFOR_TITLE".localized
         
         transparentNavigationBarBottomBorder()
-//        let backImage = UIImage(named: "back")
-//
-//
-//        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-//        navigationController?.navigationBar.shadowImage = UIImage()
-//        navigationController?.navigationBar.backgroundColor = .clear
+        //        let backImage = UIImage(named: "back")
+        //
+        //
+        //        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        //        navigationController?.navigationBar.shadowImage = UIImage()
+        //        navigationController?.navigationBar.backgroundColor = .clear
         if #available(iOS 11, *){
             scrollView.contentInsetAdjustmentBehavior = .never
         }else{
@@ -196,7 +197,7 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
         
         _ = horizontalImagesView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero ,CGSize(width: 0, height: Constants.HEIGHT_CELL_IMAGECV))
         _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: baseInformationViewHeight))
-//        _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
+        //        _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
         membersViewHeightConstraint = membersView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: membersViewHeight))[3]
         ulititiesViewHeightConstraint = utilitiesView.anchor(membersView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
         
@@ -257,17 +258,17 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
         }
         
         membersView.viewType = viewType
-        membersView.members = room.members
+        membersView.members = room.members?.uniqueElements
         membersView.delegate = self
         membersView.lblTitle.text = "ROOM_DETAIL_MEMBER_TITLE".localized
         membersView.lblLeft.text = String(format: "ROOM_DETAIL_MAX_NUMBER_OF_MEMBER".localized,room.maxGuest)
-//        membersView.lblCenter.text = String(format: "ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER".localized,room.currentMember)
+        //        membersView.lblCenter.text = String(format: "ROOM_DETAIL_CURRENT_NUMBER_OF_MEMBER".localized,room.currentMember)
         membersView.lblCenter.text = String(format: "ROOM_DETAIL_ADDED_NUMBER_OF_MEMBER".localized,room.members?.count ?? 0)
         
         
         //Data for utilityView
         utilitiesView.lblTitle.text = "UTILITY_TITLE".localized
-        utilitiesView.utilities = room.utilities
+        utilitiesView.utilities = room.utilities.uniqueElements
         utilitiesView.delegate = self
         
         //Data for descriptionView
@@ -291,6 +292,7 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditRoomNotification(_:)), name: Constants.NOTIFICATION_EDIT_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAcceptRoomNotification(_:)), name: Constants.NOTIFICATION_ACCEPT_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveDeclineRoomNotification(_:)), name: Constants.NOTIFICATION_DECLINE_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveCreateRateNotification(_:)), name: Constants.NOTIFICATION_CREATE_RATE, object: nil)
     }
     
     
@@ -335,6 +337,30 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
                 }
                 
             }
+        }
+    }
+    
+    
+    @objc func didReceiveCreateRateNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            if notification.object is RoomRateResponseModel {
+                guard let model = notification.object as? RoomRateResponseModel else{
+                    return
+                }
+                if self.room.roomRateResponseModels == nil{
+                    self.room.roomRateResponseModels = []
+                }
+                self.requestCurrentRoom(inView: self.view) { (roomMappableModel) in
+                    DispatchQueue.main.async {
+                        self.room = roomMappableModel
+                        self.updateUI()
+                        self.setDelegateAndDataSource()
+                        MBProgressHUD.hide(for: self.view, animated: true)
+                    }
+                    
+                }
+            }
+            
         }
     }
     //MARK: HorizontalImagesViewDelegate
@@ -410,7 +436,7 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
     //MARK: OptionViewDelegate
     func optionViewDelegate(view optionView: OptionView, onClickBtnLeft btnLeft: UIButton) {
         //Valid information at time input. So we dont need to valid here
-        switch viewType { 
+        switch viewType {
         case .detailForOwner:
             AlertController.showAlertConfirm(withTitle: "CONFIRM_TITLE".localized, andMessage: "CONFIRM_TITLE_EDIT_ROOM".localized, alertStyle: .alert, forViewController: self,  lhsButtonTitle: "CANCEL".localized, rhsButtonTitle: "CONFIRM_TITLE_EDIT_ROOM_OK".localized, lhsButtonHandler: nil, rhsButtonHandler: { (action) in
                 let vc = CERoomVC()

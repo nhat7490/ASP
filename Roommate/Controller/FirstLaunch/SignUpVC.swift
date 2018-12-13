@@ -435,6 +435,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
                             guard let id = createResponseModel?.id else{
                                 return
                             }
+                            DBManager.shared.deleteAllRealmDB()
                             self.user.userId = id
                             _ = DBManager.shared.addUser(user: UserModel(userMappedModel: self.user))
                             _ = DBManager.shared.addSingletonModel(ofType:SettingModel.self, object:SettingModel())

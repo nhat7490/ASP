@@ -153,9 +153,9 @@ class SignInVC: BaseVC,UITextFieldDelegate {
                 }else{
                     //200
                     if statusCode == .OK{
+                        DBManager.shared.deleteAllRealmDB()
                         user?.password = self.password
                         let userModel = UserModel(userMappedModel: user!)
-                        
                         _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: userModel)
                         _ = DBManager.shared.addSingletonModel(ofType: SettingModel.self, object: SettingModel())
                         let appdelegate = UIApplication.shared.delegate as! AppDelegate

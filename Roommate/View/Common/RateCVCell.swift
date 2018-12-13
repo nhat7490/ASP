@@ -77,7 +77,7 @@ class RateCVCell: UICollectionViewCell {
         imgvIcon.layer.cornerRadius = imgvIcon.frame.height/2
         imgvIcon.clipsToBounds = true
         
-        
+        addBorder(side: .Bottom, color: .lightGray, width: 0.5)
     }
 
 }

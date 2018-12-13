@@ -61,7 +61,7 @@ class BaseInformationView: UIView {
             lblMainTitle.addAttributeString(string: roommatePost.userResponseModel?.fullname ?? "", withIcon: (roommatePost.userResponseModel?.gender == 2 ? UIImage(named: "female") : UIImage(named: "male"))!, size: CGSize(width: self.frame.width, height: .infinity))
             let dictrictsString = roommatePost.districtIds?.map({ (districtId) -> String in
                 (DBManager.shared.getRecord(id: districtId, ofType: DistrictModel.self)?.name)!
-            })
+            }).uniqueElements
             self.imgvBottom.image = UIImage(named: "city")
             self.lblSubTitle.text = "BASE_INFORMATION".localized
             self.tvInfoTop.text = dictrictsString?.joined(separator: ",")

@@ -56,8 +56,6 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
     
     lazy var utilitiesView:UtilitiesView = {
         let uv:UtilitiesView = .fromNib()
-        //        uv.utilityForSC = .filter
-        uv.utilitiesViewType = .required
         return uv
     }()
     
@@ -273,6 +271,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         btnSave.setTitle(cERoommateVCType == .create ? "CREATE".localized : "SAVE".localized, for: .normal)
         
         utilitiesView.utilities = utilities
+        utilitiesView.utilitiesViewType = .normal
         
         utilitiesView.delegate = self
         districtDropdownListView.delegate = self

@@ -277,6 +277,8 @@ class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewD
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveAddMemberToRoomNotification(_:)), name: Constants.NOTIFICATION_ADD_MEMBER_TO_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveUpdateMemberInRoomNotification(_:)), name: Constants.NOTIFICATION_UPDATE_MEMBER_IN_ROOM, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(didReceiveRemoveMemberFromRoomNotification(_:)), name: Constants.NOTIFICATION_REMOVE_MEMBER_IN_ROOM, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveSaveReferenceNotification(_:)), name: Constants.NOTIFICATION_SAVE_REFERENCE, object: nil)
+        
     }
     @objc func didReceiveRemoveBookmarkNotification(_ notification:Notification) {
         DispatchQueue.global(qos: .userInteractive).async   {
@@ -344,17 +346,23 @@ class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewD
         }
     }
     @objc func didReceiveAddMemberToRoomNotification(_ notification:Notification){
-        updateUIForRoleInRoomNotification(notification)
+        updateUIForRoleInRoomNotification(notification,isRequestCurrentRoom: true)
     }
     @objc func didReceiveRemoveMemberFromRoomNotification(_ notification:Notification){
         updateUIForRoleInRoomNotification(notification)
         
-        
     }
+    
     @objc func didReceiveUpdateMemberInRoomNotification(_ notification:Notification){
         updateUIForRoleInRoomNotification(notification)
     }
-    func updateUIForRoleInRoomNotification(_ notification:Notification){
+    
+    @objc func didReceiveSaveReferenceNotification(_ notification:Notification){
+        self.baseSuggestRequestModel = BaseSuggestRequestModel()
+        self.requestRoom(view: self.suggestRoomPostView.collectionView, apiRouter:
+            APIRouter.suggest(model: self.baseSuggestRequestModel), offset:Constants.MAX_POST)
+    }
+    func updateUIForRoleInRoomNotification(_ notification:Notification,isRequestCurrentRoom:Bool = false){
         DispatchQueue.global(qos: .userInteractive).async {
             if notification.object is NotificationMappableModel {
                 guard let notification = notification.object as? NotificationMappableModel else{
@@ -362,7 +370,7 @@ class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewD
                 }
                 
                 
-                if notification.roleId == Constants.ROOMMASTER{
+                if isRequestCurrentRoom{
                     self.requestCurrentRoom()
                 }
                 self.user.roleId = notification.roleId!
@@ -415,8 +423,6 @@ class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewD
                 }
                 self.requestRoom(view: self.newRoomPostView.collectionView,  apiRouter: APIRouter.postForAll(model: self.filterForRoomPost), offset:Constants.MAX_POST)
                 self.requestRoommate(view: self.newRoommatePostView.collectionView, apiRouter: APIRouter.postForAll(model: self.filterForRoommatePost), offset:Constants.MAX_POST)
-//            }
-//        }
         
         
         
@@ -486,6 +492,8 @@ class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewD
                                     self.newRoomPostView.translatesAutoresizingMaskIntoConstraints = false
                                     self.newRoomViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_ROOMPOSTCV * CGFloat(Constants.MAX_ROOM_ROW)
                                     self.newRoomPostView.showbtnViewAllButton()
+                                    
+                                    self.newRoomViewHeightConstraint?.constant = (CGFloat(self.newRooms.count)*Constants.HEIGHT_CELL_ROOMPOSTCV)/2+80.0
                                     self.updateContentViewHeight()
                                 }
                             }
@@ -547,6 +555,7 @@ class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewD
                                 DispatchQueue.main.async { self.newRoommatePostView.translatesAutoresizingMaskIntoConstraints = false
                                     self.newRoommateViewHeightConstraint?.constant = 80 + Constants.HEIGHT_CELL_ROOMMATEPOSTCV * CGFloat(Constants.MAX_POST)
                                     self.newRoommatePostView.showbtnViewAllButton()
+                                    self.newRoommateViewHeightConstraint!.constant = CGFloat(self.newRoommates.count)*Constants.HEIGHT_CELL_ROOMMATEPOSTCV+80.0
                                     self.updateContentViewHeight()
                                 }
                                 
@@ -620,6 +629,7 @@ class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewD
             //                break
             //            }
             let vc = CERoommatePostVC()
+            vc.cERoommateVCType = .create
             presentInNewNavigationController(viewController: vc)
         case 3:
             //            if user.roleId == Constants.ROOMMASTER{
@@ -869,6 +879,8 @@ class HomeVC:BaseAutoHideNavigationVC,UICollectionViewDelegate,UICollectionViewD
         if self.user.roleId == Constants.ROOMOWNER{
             self.contentViewHeightConstraint?.constant = self.newRoomViewHeightConstraint!.constant + self.newRoommateViewHeightConstraint!.constant + Constants.HEIGHT_TOP_CONTAINER_VIEW +  Constants.HEIGHT_MEDIUM_SPACE
         }else{
+            
+            
             self.contentViewHeightConstraint?.constant = self.suggestRoomViewHeightConstraint!.constant + self.newRoomViewHeightConstraint!.constant + self.newRoommateViewHeightConstraint!.constant + Constants.HEIGHT_TOP_CONTAINER_VIEW + Constants.HEIGHT_MEDIUM_SPACE
         }
         self.view.layoutIfNeeded()

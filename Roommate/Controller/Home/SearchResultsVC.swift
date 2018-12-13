@@ -237,22 +237,18 @@ class SearchResultsVC: BaseVC,UICollectionViewDelegate,UICollectionViewDataSourc
     }
     //MARK: NewRoomCVCellDelegate
     func roomCVCellDelegate(roomCVCell cell: RoomPostCVCell, onClickUIImageView imgvBookmark: UIImageView, atIndextPath indexPath: IndexPath?) {
-        //        processBookmark(view: self.collectionView,  model: indexPath?.section == 0 ? searchResults?.roomPostResponseModel[indexPath?.row] : searchResults?.nearByRoomPostResponseModels[indexPath?.row] , row: row){model in
-        //            if self.allVCType == .all{
-        //                if model.isFavourite!{
-        //                    NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_BOOKMARK, object: model)
-        //                }else{
-        //                    NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
-        //                }
-        //            }else if self.allVCType == .bookmark{
-        //                //                model.isFavourite =  false//for api
-        //                self.rooms?.remove(at: row)
-        //                NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
-        //            }
-        //            DispatchQueue.main.async {
-        //                self.collectionView.reloadData()
-        //            }
-        //        }
+        if let row = indexPath?.row,let section = indexPath?.section{
+            processBookmark(view: self.collectionView, model:section == 0 ? searchResults!.roomPostResponseModel![row] : searchResults!.nearByRoomPostResponseModels![row], row: row) { (model) -> (Void) in
+                if model.isFavourite!{
+                    NotificationCenter.default.post(name: Constants.NOTIFICATION_ADD_BOOKMARK, object: model)
+                }else{
+                    NotificationCenter.default.post(name: Constants.NOTIFICATION_REMOVE_BOOKMARK, object: model)
+                }
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
     //MARK: Remote Data
     func  requestSearchData(){
