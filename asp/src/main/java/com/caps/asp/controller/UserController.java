@@ -183,6 +183,7 @@ public class UserController {
             tbUser.setImageProfile(user.getImageProfile());
             tbUser.setGender(user.getGender());
             tbUser.setPhone(user.getPhone());
+            userService.saveUser(tbUser);
             return ResponseEntity.status(OK).build();
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).build();
