@@ -128,6 +128,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
             tfEmail.text = user.email
             tfPhoneNumber.text = user.phone
             sgGender.selectedSegmentIndex = user.gender == 1 ? 0 : 1
+            
         }
         
         
@@ -367,6 +368,9 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
             }
             if let _  = self.uploadImageModel?.linkUrl{
                 APIConnection.request(apiRouter: APIRouter.editUser(model: self.user), completion: { (error, statusCode) -> (Void) in
+                    DispatchQueue.main.async {
+                        hub.hide(animated: true)
+                    }
                     if error == .SERVER_NOT_RESPONSE{
                         DispatchQueue.main.async {
                             APIResponseAlert.defaultAPIResponseError(controller: self, error: .SERVER_NOT_RESPONSE)
@@ -378,6 +382,7 @@ class SignUpVC: BaseVC,UITextFieldDelegate {
                         //200
                         if statusCode == .OK{
                             _ = DBManager.shared.addUser(user: UserModel(userMappedModel: self.user))
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_USER, object: self.user)
                             AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "EDIT_USER_INFO_SUCCESS".localized, inViewController: self,rhsButtonHandler:{
                                 (action) in
                                 self.popSelfInNavigationController()

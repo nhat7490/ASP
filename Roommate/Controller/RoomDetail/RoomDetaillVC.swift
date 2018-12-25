@@ -81,15 +81,6 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
     var ulititiesViewHeightConstraint:NSLayoutConstraint?
     var descriptionViewHeightConstraint:NSLayoutConstraint?
     var rateViewHeightConstraint:NSLayoutConstraint?
-    var currentRoomOfMember: RoomModel?{
-        get{
-            if let room = DBManager.shared.getSingletonModel(ofType: RoomModel.self){
-                return room
-            }else{
-                return nil
-            }
-        }
-    }
     //MARK: RoomDetailVC
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -130,12 +121,6 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
         //        title = "ROOM_INFOR_TITLE".localized
         
         transparentNavigationBarBottomBorder()
-        //        let backImage = UIImage(named: "back")
-        //
-        //
-        //        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        //        navigationController?.navigationBar.shadowImage = UIImage()
-        //        navigationController?.navigationBar.backgroundColor = .clear
         if #available(iOS 11, *){
             scrollView.contentInsetAdjustmentBehavior = .never
         }else{
@@ -197,7 +182,6 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
         
         _ = horizontalImagesView.anchor(contentView.topAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, .zero ,CGSize(width: 0, height: Constants.HEIGHT_CELL_IMAGECV))
         _ = baseInformationView.anchor(horizontalImagesView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: baseInformationViewHeight))
-        //        _ = genderView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: Constants.HEIGHT_VIEW_GENDER))
         membersViewHeightConstraint = membersView.anchor(baseInformationView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: membersViewHeight))[3]
         ulititiesViewHeightConstraint = utilitiesView.anchor(membersView.bottomAnchor, contentView.leftAnchor, nil, contentView.rightAnchor, padding,CGSize(width: 0, height: utilitiesViewHeight))[3]
         
@@ -253,10 +237,9 @@ class RoomDetailVC:BaseAutoHideNavigationVC,OptionViewDelegate,MembersViewDelega
         baseInformationView.viewType = viewType
         baseInformationView.delegate = self
         baseInformationView.room = room
-        if (viewType == .detailForMember || viewType == .currentDetailForMember) && currentRoomOfMember?.roomId == room.roomId{
+        if (viewType == .detailForMember || viewType == .currentDetailForMember){
             baseInformationView.btnTitle = "RATE_ROOM".localized
         }
-        
         membersView.viewType = viewType
         membersView.members = room.members?.uniqueElements
         membersView.delegate = self

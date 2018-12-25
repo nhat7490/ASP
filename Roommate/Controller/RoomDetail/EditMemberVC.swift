@@ -181,7 +181,7 @@ class EditMemberVC: BaseVC,MembersViewDelegate,AddMemberViewDelegate,DropdownLis
             return
         }
         let vc = ProfireVC()
-        vc.hasBackImageButtonInNavigationBar = true
+        vc.hasBackImageButtonInNavigationBar = false
         vc.profireVCType = .memberInfor
         vc.userId = member.userId
         presentInNewNavigationController(viewController: vc, flag: false, animated: true)

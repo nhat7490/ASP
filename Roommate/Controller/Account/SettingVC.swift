@@ -131,14 +131,14 @@ class SettingVC: BaseVC ,UITableViewDataSource,UITableViewDelegate{
             }
             
         }else if indexPath.section == 1{
-            
+            AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "LANGUAGE_SETTING_VIETNAME".localized, inViewController: self)
         }else{
             if indexPath.row == 0{
-                
+                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ABOUT_US_SETTING_MESSAGE".localized, inViewController: self)
             }else if indexPath.row == 1{
-                
+                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "PRIVACY_SETTING_MESSAGE".localized, inViewController: self)
             }else if indexPath.row == 2{
-                
+                AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "FEEDBACK_SETTING_MESSAGE".localized, inViewController: self)
             }else{
 //                Database.database().reference().child("notifications/users").child("\(self.user!.userId)").removeAllObservers()
                 if let ref = BaseVC.refToObserveNotification{

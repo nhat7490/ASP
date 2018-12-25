@@ -98,12 +98,14 @@ class ProfireVC:BaseVC,UITableViewDelegate,UITableViewDataSource,RateViewDelegat
                         self.userResponseModel = userResponseModel
                         self.setupUI()
                         self.setupDelegateAndDataSource()
+                        self.registerNotification()
                     }
                 })
             }else{
                 DispatchQueue.main.async {
                     self.setupUI()
                     self.setupDelegateAndDataSource()
+                    self.registerNotification()
                 }
             }
             
@@ -183,8 +185,14 @@ class ProfireVC:BaseVC,UITableViewDelegate,UITableViewDataSource,RateViewDelegat
         
     }
     
-    
-    
+    func registerNotification(){
+        NotificationCenter.default.addObserver(self, selector:#selector(didReceiveEditUserNotification(_:)), name: Constants.NOTIFICATION_EDIT_USER, object: nil)
+    }
+    @objc func didReceiveEditUserNotification(_ notification:Notification){
+        DispatchQueue.main.async {
+            self.accountActionTableView.reloadData()
+        }
+    }
     //MARK: RateViewDelegate
     func rateViewDelegate(rateView view: RateView, onClickButton button: UIButton) {
         let vc = ShowAllVC()

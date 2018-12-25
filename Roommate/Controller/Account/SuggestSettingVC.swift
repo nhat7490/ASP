@@ -191,7 +191,7 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         //        genderView.genderSelect = selectedGender
     }
     func setupDelegateAndDataSource(){
-        
+        utilitiesView.utilitiesViewType = .required
         
         utilitiesView.utilities = utilities
         
@@ -335,6 +335,7 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                         DispatchQueue.main.async {
                             self.currentUser.suggestSettingMappedModel = self.suggestSettingMappableModel
                             _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: UserModel(userMappedModel: self.currentUser))
+                            NotificationCenter.default.post(name: Constants.NOTIFICATION_SAVE_REFERENCE, object: self.suggestSettingMappableModel)
                             AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "SUGGEST_SETTING_CREATE_SUCCESS".localized, inViewController: self,rhsButtonHandler:{
                                 (action) in
                                 self.popSelfInNavigationController()
@@ -364,7 +365,7 @@ class SuggestSettingVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             message.append(NSAttributedString(string: "\("DISTRICT".localized) :  \("ERROR_TYPE_DISTRICT".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         
-        if selectedUtilities!.count < 5{
+        if selectedUtilities!.count < 1{
             message.append(NSAttributedString(string: "\("UTILITY_TITLE".localized) :  \("ERROR_TYPE_UTILITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
         }
         

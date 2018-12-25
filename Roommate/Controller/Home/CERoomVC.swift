@@ -365,6 +365,9 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
         guard let text = maxMemberSelectView.text,let maxMember = Int(text) else {
             return
         }
+        if (areaInputView.tfInput.text?.isValidArea() ?? false) && maxMember*7 > roomMappableModel.area{
+            AlertController.showAlertInfor(withTitle: "INFORMATION".localized, forMessage: "ROOM_MEMBER_MAX_CAPACITY".localized, inViewController: self)
+        }
         roomMappableModel.maxGuest = maxMember
 //        checkDataAndUpdateUI()
     }
@@ -397,8 +400,6 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
                 addressInputView.isSelectedFromSuggest = false
                 addressInputView.tfInput.setupUI(placeholder: "ROOM_ADDRESS_TITLE", title: "ROOM_ADDRESS_TITLE", delegate: addressInputView)
                 search(text: string)
-                //                newRoomModel.address = string
-                //                view.layoutIfNeeded()
             }
         default:
             break
@@ -668,7 +669,7 @@ class CERoomVC: BaseVC,InputViewDelegate,MaxMemberSelectViewDelegate,UtilitiesVi
             isValid = false
             
         }
-        if roomMappableModel.utilities.count<5{
+        if roomMappableModel.utilities.count<1{
             //            message.append(NSAttributedString(string: "\("UTILITY_TITLE".localized) :  \("ERROR_TYPE_UTILITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
             isValid = false
         }

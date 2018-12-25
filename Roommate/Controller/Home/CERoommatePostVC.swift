@@ -271,7 +271,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
         btnSave.setTitle(cERoommateVCType == .create ? "CREATE".localized : "SAVE".localized, for: .normal)
         
         utilitiesView.utilities = utilities
-        utilitiesView.utilitiesViewType = .normal
+        utilitiesView.utilitiesViewType = .required
         
         utilitiesView.delegate = self
         districtDropdownListView.delegate = self
@@ -448,6 +448,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
                         hub.hide(animated: true)
                         self.currentUser.suggestSettingMappedModel = self.suggestSettingMappableModel
                         _ = DBManager.shared.addSingletonModel(ofType: UserModel.self, object: UserModel(userMappedModel: self.currentUser))
+                        NotificationCenter.default.post(name: Constants.NOTIFICATION_SAVE_REFERENCE, object: self.roommatePostRequestModel)
                         if self.cERoommateVCType == .edit{
                             NotificationCenter.default.post(name: Constants.NOTIFICATION_EDIT_POST, object: self.roommatePostRequestModel)
                         }
@@ -495,7 +496,7 @@ class CERoommatePostVC: BaseVC ,DropdownListViewDelegate,UtilitiesViewDelegate,S
             isValid = false
         }
 
-        if selectedUtilities!.count < 5{
+        if selectedUtilities!.count < 1{
 //            message.append(NSAttributedString(string: "\("UTILITY_TITLE".localized) :  \("ERROR_TYPE_UTILITY".localized)\n", attributes: [NSAttributedStringKey.font:UIFont.small]))
             isValid = false
         }

@@ -65,11 +65,11 @@ enum APIRouter:URLRequestConvertible{
     }
     
     var httpMethod:HTTPMethod{
-        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost,.createRoomPost,.saveSuggestSetting,.saveRoomRate,.saveUserRate,.editUser,.changePassowrd:
+        switch self{ case .login,.createRoom,.postForAll,.postForBookmark,.createBookmark,.suggestBestMatch,.suggest,.getUserPost,.createUser,.searchPostByAddress,.createRoommatePost,.createRoomPost,.saveSuggestSetting,.saveRoomRate,.saveUserRate,.changePassowrd:
             return .post
         case .removeBookmark,.removeRoom,.removePost:
             return .delete
-        case .updateRoom,.editRoomPost,.editMember,.editRoommatePost:
+        case .updateRoom,.editRoomPost,.editMember,.editRoommatePost,.editUser:
             return .put
         default:
             return .get

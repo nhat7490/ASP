@@ -68,6 +68,10 @@
 "PRIVACY_SETTING"="Quy định";
 "FEEDBACK_SETTING"="Phản hồi";
 "SUGGEST_SETTING_CREATE_SUCCESS" = "Lưu cài đặt gợi ý thành công";
+"LANGUAGE_SETTING_VIETNAME" = "Hiện tại ứng dụng chỉ hỗ trợ tiếng việt";
+"ABOUT_US_SETTING_MESSAGE" = "Roommate version 0.0.1";
+"PRIVACY_SETTING_MESSAGE" = "Vui lòng không đăng thông tin nhạy cảm lên ứng dụng của chúng tôi";
+"FEEDBACK_SETTING_MESSAGE" = "Mọi thắc mắc vui lòng gửi email về địa chỉ asp@fpt.edu.vn";
 
 
 //MARK: Roommate cell
@@ -179,7 +183,7 @@
 "BACK"="Quay lại";
 "BASE_INFORMATION"="Thông tin cơ bản";
 "UTILITY_TITLE"="Tiện ích";
-"UTILITY_TITLE_REQUIRED"="(Vui lòng chọn ít nhất 5)";
+"UTILITY_TITLE_REQUIRED"="(Vui lòng chọn ít nhất 1)";
 "UTILITY_INFOR_TITLE"="Thông tin tiện ích";
 "DESCRIPTION"="Mô Tả";
 "DESCRIPTION_EMPTY"="Không có mô tả";
@@ -228,7 +232,7 @@
 "ERROR_TYPE_ADDRESS_SUGGEST"="Địa chỉ phải chọn từ gợi ý";
 "ERROR_TYPE_INPUT"="Vui lòng nhập thông tin hợp lệ";
 "ERROR_TYPE_DESCRIPTION"="Mô tả từ 5 đến 250 ký tự";
-"ERROR_TYPE_UTILITY"="Chọn tối thiểu 5 tiện ích";
+"ERROR_TYPE_UTILITY"="Chọn tối thiểu 1 tiện ích";
 "ERROR_TYPE_EMAIL"="Địa chỉ email không đúng";
 "PLACE_HOLDER_AVATAR_IMAGE"="Ảnh đại diện";
 "PLACE_HOLDER_FULL_NAME"="Tên đầy đủ";
@@ -256,7 +260,7 @@
 "ROOM_POST_NAME"="Tên bài viết";
 "ROOM_BASE_INFORMATION"="Thông tin phòng hiện tại của bạn";
 "ROOM_BASE_INFORMATION_FOR_POST"="Thông tin phòng";
-
+"ROOM_REACH_MAX_MEMBER"="Thành viên trong phòng bạn đã đầy";
 "VIEW_DETAIL" = "Xem chi tiết";
 
 
@@ -306,6 +310,7 @@
 "ROOM_CURRENT_MEMBER_NUMBER"="Số thành viên hiện tại: %d";
 
 "ROOM_MEMBER_LESSTHAN_MAXGUEST"="Số người tối đa không được nhỏ hơn số thành viên được thêm vào phòng";
+"ROOM_MEMBER_MAX_CAPACITY"="Bạn nên cân nhắc vì diện tích phòng không đủ cho số người bạn vừa nhập. Diện tích tối thiểu là 7m2/người";
 
 
 
@@ -368,6 +373,7 @@
 "Fan"="Quạt";
 "Bed"="Giường";
 "Internet"="Internet";
+"Security"="Bảo vệ";
 "Notcommonowner"="Không chung chủ";
 "Parking"="Chỗ đậu xe";
 "Police"="Bảo vệ";
@@ -381,7 +387,7 @@
 "RATE_ROOM"="Đánh giá phòng";
 "RATE_MEMBER"="Đánh giá thành viên";
 "RATE_ROOM_DETAIL"="Đánh giá của những người từng ở đây";
-"RATE_MEMBER_DETAIL"="Đánh giá của chủ nhà";
+"RATE_MEMBER_DETAIL"="Đánh giá của chủ nhà và thành viên";
 "RATE_AVG"="Điểm trung bình";
 "RATE_ALL"="Tất cả đánh giá";
 
