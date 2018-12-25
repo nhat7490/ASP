@@ -35,16 +35,35 @@ public class UserRateController {
     @PostMapping("/user/rate/save")
     public ResponseEntity saveUserRate(@RequestBody UserRateRequestModel userRateRequestModel) {
         TbUserRate userRate = userRateService.findByUserIdAndOwnerId(userRateRequestModel.getUserId(), userRateRequestModel.getOwnerId());
-            TbRoomHasUser roomHasUser = roomHasUserService.getCurrentRoom(userRateRequestModel.getUserId());
-            if (roomHasUser != null) {
-                int roomId = roomHasUser.getRoomId();
-                TbRoom room = roomService.findRoomById(roomId);
-                int ownerId = room.getUserId();
-                if (userRateRequestModel.getOwnerId() == ownerId) {
+        TbRoomHasUser user = roomHasUserService.getCurrentRoom(userRateRequestModel.getUserId());
+        TbRoomHasUser rater = roomHasUserService.getCurrentRoom(userRateRequestModel.getOwnerId());
+        if (user != null) {
+            int roomId = user.getRoomId();
+            TbRoom room = roomService.findRoomById(roomId);
+            int ownerId = room.getUserId();
+            if (userRateRequestModel.getOwnerId() == ownerId) {
+                if (userRate == null) {
+                    userRate = new TbUserRate();
+                    userRate.setId(0);
+
+                }
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                userRate.setDate(timestamp);
+                userRate.setBehaviourRate(userRateRequestModel.getBehaviourRate());
+                userRate.setLifeStyleRate(userRateRequestModel.getLifeStyleRate());
+                userRate.setPaymentRate(userRateRequestModel.getPaymentRate());
+                userRate.setComment(userRateRequestModel.getComment());
+                userRate.setUserId(userRateRequestModel.getUserId());
+                userRate.setOwnerId(userRateRequestModel.getOwnerId());
+
+                userRateService.saveUserRate(userRate);
+                return ResponseEntity.ok().build();
+            }
+            if (rater != null && user.getUserId() != rater.getUserId()) {
+                if (user.getRoomId() == rater.getRoomId()) {
                     if (userRate == null) {
                         userRate = new TbUserRate();
                         userRate.setId(0);
-
                     }
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                     userRate.setDate(timestamp);
@@ -58,11 +77,9 @@ public class UserRateController {
                     userRateService.saveUserRate(userRate);
                     return ResponseEntity.ok().build();
                 }
-                return ResponseEntity.status(CONFLICT).build();
             }
-
+            return ResponseEntity.status(CONFLICT).build();
+        }
         return ResponseEntity.status(CONFLICT).build();
     }
-
-
 }

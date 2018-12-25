@@ -121,7 +121,7 @@ public class RoomController {
     @Transactional
     @PutMapping("/room/update")
     public ResponseEntity updateRoom(@RequestBody RoomRequestModel roomRequestModel) {
-//        try {
+        try {
             //update room info
             TbRoom room = roomService.findRoomById(roomRequestModel.getRoomId());
             TbUser user = userService.findById(roomRequestModel.getUserId());
@@ -198,15 +198,15 @@ public class RoomController {
                 }
             }
             return ResponseEntity.status(CONFLICT).build();
-//        } catch (Exception e) {
-//            return ResponseEntity.status(CONFLICT).build();
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT).build();
+        }
     }
 
     @Transactional
     @DeleteMapping("room/deleteRoom/{roomId}")
     public ResponseEntity deleteRoom(@PathVariable int roomId) {
-//        try {
+        try {
             roomHasUtilityService.deleteAllRoomHasUtilityByRoomId(roomId);
             imageService.deleteAllImageByRoomId(roomId);
 
@@ -246,9 +246,9 @@ public class RoomController {
             roomRateService.removeByRoomId(roomId);
             roomService.deleteRoom(roomId);
             return ResponseEntity.status(OK).build();
-//        } catch (Exception e) {
-//            return ResponseEntity.status(CONFLICT).build();
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT).build();
+        }
     }
 
     @GetMapping("room/viewRoom/{roomId}")

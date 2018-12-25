@@ -85,13 +85,13 @@ public class PostController {
                 Page<TbPost> posts = postService.findByUserIdAndTypeId(filterArgumentModel.getPage(), filterArgumentModel.getOffset(),
                         filterArgumentModel.getUserId(), filterArgumentModel.getTypeId());
 
-                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> utilsService.getRoommatePostResponseModel(filterArgumentModel.getUserId(),tbPost));
+                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> utilsService.getRoommatePostResponseModel(filterArgumentModel.getUserId(), tbPost));
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
             } else {
                 Page<TbPost> posts = postService.findByUserIdAndTypeId(filterArgumentModel.getPage(), filterArgumentModel.getOffset(),
                         filterArgumentModel.getUserId(), filterArgumentModel.getTypeId());
                 Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost ->
-                    utilsService.getRoomPostResponseModel(filterArgumentModel.getUserId(),tbPost)
+                        utilsService.getRoomPostResponseModel(filterArgumentModel.getUserId(), tbPost)
                 );
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             }
@@ -194,7 +194,6 @@ public class PostController {
                 if (newestPost.getPostId().equals(roommatePostRequestModel.getPostId())) {
 
 
-
                     TbReference reference = referenceService.getByUserId(user.getUserId());
                     reference.setMaxPrice(roommatePostRequestModel.getMaxPrice());
                     reference.setMinPrice(roommatePostRequestModel.getMinPrice());
@@ -236,7 +235,6 @@ public class PostController {
                 } else {
 
 
-
                     for (Integer utilityId : roommatePostRequestModel.getUtilityIds()) {
                         TbPostHasUtility postHasUtility = new TbPostHasUtility();
                         postHasUtility.setId(0);
@@ -267,8 +265,12 @@ public class PostController {
             TbUser user = userService.findById(roomPostRequestModel.getUserId());
             TbRoom room = roomService.findRoomById(roomPostRequestModel.getRoomId());
             TbRoomHasUser roomHasUser = roomHasUserService.findByUserIdAndRoomIdAndDateOutIsNull(user.getUserId(), room.getRoomId());
+            List<TbRoomHasUser> roomHasUsers = roomHasUserService.findByRoomIdAndDateOutIsNull(room.getRoomId());
 
-            if (user.getRoleId() == ROOM_MASTER && roomHasUser != null) {
+            if (user.getRoleId() == ROOM_MASTER && roomHasUser != null
+                    && roomHasUsers.size() < room.getMaxGuest()
+                    && roomPostRequestModel.getNumberPartner() <= (room.getMaxGuest() - roomHasUsers.size())
+                    && room.getMaxGuest() >= roomPostRequestModel.getNumberPartner()) {
                 TbPost post = new TbPost();
                 post.setTypeId(MASTER_POST);
                 post.setLongtitude(room.getLongtitude());
@@ -321,7 +323,7 @@ public class PostController {
 
             TbPost post = postService.findByPostId(roomPostRequestModel.getPostId());
             TbRoom room = roomService.findRoomById(post.getRoomId());
-            if(room!=null){
+            if (room != null) {
                 if (post != null && post.getTypeId() == MASTER_POST
                         && post.getUserId().equals(roomPostRequestModel.getUserId())) {
 
@@ -360,19 +362,19 @@ public class PostController {
     @PostMapping("/post/filter")
     public ResponseEntity getPostByFilter(@RequestBody FilterArgumentModel filterArgumentModel) {
 //        try {
-            Filter filter = new Filter();
-            filter.setFilterArgumentModel(filterArgumentModel);
+        Filter filter = new Filter();
+        filter.setFilterArgumentModel(filterArgumentModel);
 
-            Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage()
-                    , filterArgumentModel.getOffset(), filter);
-            if (filter.getFilterArgumentModel().getTypeId() == MEMBER_POST) {//get member post
-                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost ->utilsService.getRoommatePostResponseModel(filterArgumentModel.getUserId(),tbPost));
-                return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
-            } else if (filter.getFilterArgumentModel().getTypeId() == MASTER_POST) {//get room master post
-                Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> utilsService.getRoomPostResponseModel(filterArgumentModel.getUserId(),tbPost));
-                return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
-            }
-            return ResponseEntity.status(NOT_FOUND).build();
+        Page<TbPost> posts = postService.finAllByFilter(filterArgumentModel.getPage()
+                , filterArgumentModel.getOffset(), filter);
+        if (filter.getFilterArgumentModel().getTypeId() == MEMBER_POST) {//get member post
+            Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> utilsService.getRoommatePostResponseModel(filterArgumentModel.getUserId(), tbPost));
+            return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
+        } else if (filter.getFilterArgumentModel().getTypeId() == MASTER_POST) {//get room master post
+            Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> utilsService.getRoomPostResponseModel(filterArgumentModel.getUserId(), tbPost));
+            return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
+        }
+        return ResponseEntity.status(NOT_FOUND).build();
 //        } catch (Exception e) {
 //            return ResponseEntity.status(NOT_FOUND).build();
 //        }
@@ -387,12 +389,12 @@ public class PostController {
             if (filter.getFilterArgumentModel().getTypeId() == MEMBER_POST) {//get member post
                 Page<TbPost> posts = postService.finAllBookmarkByFilter(filterArgumentModel.getPage()
                         , filterArgumentModel.getOffset(), filter);
-                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost ->utilsService.getRoommatePostResponseModel(filterArgumentModel.getUserId(),tbPost));
+                Page<RoommatePostResponseModel> roommatePostResponseModels = posts.map(tbPost -> utilsService.getRoommatePostResponseModel(filterArgumentModel.getUserId(), tbPost));
                 return ResponseEntity.status(OK).body(roommatePostResponseModels.getContent());
             } else if (filter.getFilterArgumentModel().getTypeId() == MASTER_POST) {//get room master post
                 Page<TbPost> posts = postService.finAllBookmarkByFilter(filterArgumentModel.getPage()
                         , filterArgumentModel.getOffset(), filter);
-                Page<RoomPostResponseModel> roomPostResponseModels =  posts.map(tbPost -> utilsService.getRoomPostResponseModel(filterArgumentModel.getUserId(),tbPost));
+                Page<RoomPostResponseModel> roomPostResponseModels = posts.map(tbPost -> utilsService.getRoomPostResponseModel(filterArgumentModel.getUserId(), tbPost));
                 return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
             }
             return ResponseEntity.status(NOT_FOUND).build();
@@ -406,14 +408,14 @@ public class PostController {
         try {
 
             TbUser tbUser = userService.findById(baseSuggestRequestModel.getUserId());
-            System.out.println("Suggest For user: "+tbUser.getUsername()+" with name : "+tbUser.getFullname());
+            System.out.println("Suggest For user: " + tbUser.getUsername() + " with name : " + tbUser.getFullname());
 
             TbPost checkPost = postService.findAllByUserIdAndTypeIdOrderByDatePostDesc(baseSuggestRequestModel.getUserId(), MASTER_POST);
             boolean checkDate = false;
             if (checkPost != null) {
                 TbRoomHasUser roomHasUser = roomHasUserService
                         .findByUserIdAndRoomIdAndDateOutIsNull(baseSuggestRequestModel.getUserId(), checkPost.getRoomId());
-                if (roomHasUser!=null){
+                if (roomHasUser != null) {
                     checkDate = checkPost.getDatePost().getTime() > roomHasUser.getDateIn().getTime();
                 }
             }
@@ -494,10 +496,10 @@ public class PostController {
 //                Optional<TbCity> optionalTbCity = cityService.findAll().stream().filter(tbCity -> geocodingResult.formattedAddress.toLowerCase().contains(tbCity.getName().toLowerCase())).findFirst();
 //                System.out.println("CityNameRequest:"+city.getName());
 
-                System.out.println("Longitute:"+baseSuggestRequestModel.getLongitude());
-                System.out.println("Latitude:"+baseSuggestRequestModel.getLatitude());
-                if(city!=null) {
-                    System.out.println("CityNameFound:"+city.getName());
+                System.out.println("Longitute:" + baseSuggestRequestModel.getLongitude());
+                System.out.println("Latitude:" + baseSuggestRequestModel.getLatitude());
+                if (city != null) {
+                    System.out.println("CityNameFound:" + city.getName());
                     int cityId = city.getCityId();
                     List<TbPost> postList = postService.getSuggestedListForMember(Float.parseFloat(baseSuggestRequestModel.getLatitude().toString())
                             , Float.parseFloat(baseSuggestRequestModel.getLongitude().toString())
@@ -516,7 +518,7 @@ public class PostController {
                             .status(OK)
                             .body(utilsService.mappingRoomPost(postList, roomPostResponseModels
                                     , baseSuggestRequestModel.getUserId()));
-                }else{
+                } else {
                     Page<RoomPostResponseModel> roomPostResponseModels = utilsService.getNewPost(baseSuggestRequestModel);
                     return ResponseEntity.status(OK).body(roomPostResponseModels.getContent());
                 }
@@ -525,11 +527,12 @@ public class PostController {
             return ResponseEntity.status(NOT_FOUND).build();
         }
     }
+
     @GetMapping("post/room/{postId}")
-    public ResponseEntity getRoomByPostId(@PathVariable int postId){
+    public ResponseEntity getRoomByPostId(@PathVariable int postId) {
         try {
             TbPost tbPost = postService.findByPostId(postId);
-            if(tbPost!= null){
+            if (tbPost != null) {
                 return ResponseEntity.status(OK).body(utilsService.getRoomResponseModel(tbPost.getRoomId()));
             }
             return ResponseEntity.status(NOT_FOUND).build();
